@@ -1,0 +1,213 @@
+#-----------------------------------------------------------------------
+# Get variables we can determine from the system
+#-----------------------------------------------------------------------
+
+TOOLSDIR := $(shell pwd)
+OS       := $(shell uname -s)
+
+ifneq ($(OS),Darwin)
+  PROC := $(shell uname -i)
+  ifeq ($(strip $(PROC)),i386)
+    COMPILE_FOR_64BIT = 0
+  else
+    COMPILE_FOR_64BIT = 1
+  endif
+else
+    COMPILE_FOR_64BIT = 0
+endif
+
+SCRIPTDIR = $(TOOLSDIR)/scripts
+
+#-----------------------------------------------------------------------
+# All targets
+#-----------------------------------------------------------------------
+
+all: dirs tcl tk pgplot fftw
+
+#-----------------------------------------------------------------------
+# Dirs
+#-----------------------------------------------------------------------
+
+dirs:
+	@if [ ! -d lib ] ; then mkdir lib ; fi ;
+	@if [ ! -d include ] ; then mkdir include ; fi ;
+	@if [ ! -d src ] ; then mkdir src ; fi ;
+
+dirs_clean:
+	@if [ -d lib ] ; then \rm -rf lib ; fi ;
+	@if [ -d include ] ; then \rm -rf include ; fi ;
+	@if [ -d share ] ; then \rm -rf share ; fi ;
+	@if [ -d man ] ; then \rm -rf man ; fi ;
+	@if [ -d bin ] ; then \rm -rf bin ; fi ;
+	@if [ -d src ] ; then \rm -rf src ; fi ;
+
+#-----------------------------------------------------------------------
+# PGPLOT 
+#-----------------------------------------------------------------------
+
+PGPLOTVERS   = 5.2
+PGPLOTPREFIX = archive/pgplot$(PGPLOTVERS)
+PGPLOTDIR    = pgplot
+
+ifneq ($(OS),Darwin)
+ifeq ($(COMPILE_FOR_64BIT),0)
+pgplot: dirs
+	@if [ -f $(PGPLOTPREFIX).tar.gz ] ; then cp $(PGPLOTPREFIX).tar.gz $(PGPLOTPREFIX)Copy.tar.gz ; fi ;
+	@if [ -f $(PGPLOTPREFIX)Copy.tar.gz ] ; then gunzip $(PGPLOTPREFIX)Copy.tar.gz ; fi ;
+	@if [ -f $(PGPLOTPREFIX)Copy.tar ] ; then tar xvf $(PGPLOTPREFIX)Copy.tar ; rm $(PGPLOTPREFIX)Copy.tar ; mv $(PGPLOTDIR) src ; fi ;
+	@if [ -d src/$(PGPLOTDIR) ] ; then \
+	  mv src/$(PGPLOTDIR) src/pgplot_src ; \
+	  mkdir src/$(PGPLOTDIR) ; cp src/pgplot_src/drivers.list src/$(PGPLOTDIR); \
+	  $(SCRIPTDIR)/replace 'GRIMAX = 8' 'GRIMAX = 100' src/pgplot_src/src/grpckg1.inc ; \
+	  $(SCRIPTDIR)/replace 'PGMAXD=8' 'PGMAXD=100' src/pgplot_src/src/pgplot.inc ; \
+	  $(SCRIPTDIR)/replace '! XWDRIV' '  XWDRIV' src/$(PGPLOTDIR)/drivers.list ; \
+	  $(SCRIPTDIR)/replace '! TKDRIV' '  TKDRIV' src/$(PGPLOTDIR)/drivers.list ; \
+	  $(SCRIPTDIR)/replace '! GIDRIV' '  GIDRIV' src/$(PGPLOTDIR)/drivers.list ; \
+	  $(SCRIPTDIR)/replace '! PSDRIV' '  PSDRIV' src/$(PGPLOTDIR)/drivers.list ; \
+	  cd src/$(PGPLOTDIR); ../pgplot_src/makemake ../pgplot_src linux g77_gcc ; \
+	  $(SCRIPTDIR)/replace 'TK_INCL=-I/usr/include' 'TK_INCL=-I$(TOOLSDIR)/include' -- makefile ; \
+	  $(SCRIPTDIR)/replace 'TK_LIBS=-L/usr/lib' 'TK_LIBS=-L$(TOOLSDIR)/lib' -- makefile ; \
+	  make ; cp lib* ../../lib ; cp *.h ../../include ; cp grfont.dat ../../lib ; cd ../../ ; \
+	fi ;
+else
+pgplot: dirs
+	@if [ -f $(PGPLOTPREFIX).tar.gz ] ; then cp $(PGPLOTPREFIX).tar.gz $(PGPLOTPREFIX)Copy.tar.gz ; fi ;
+	@if [ -f $(PGPLOTPREFIX)Copy.tar.gz ] ; then gunzip $(PGPLOTPREFIX)Copy.tar.gz ; fi ;
+	@if [ -f $(PGPLOTPREFIX)Copy.tar ] ; then tar xvf $(PGPLOTPREFIX)Copy.tar ; rm $(PGPLOTPREFIX)Copy.tar ; mv $(PGPLOTDIR) src ; fi ;
+	@if [ -d src/$(PGPLOTDIR) ] ; then \
+	  mv src/$(PGPLOTDIR) src/pgplot_src ; \
+	  mkdir src/$(PGPLOTDIR) ; cp src/pgplot_src/drivers.list src/$(PGPLOTDIR); \
+	  $(SCRIPTDIR)/replace 'GRIMAX = 8' 'GRIMAX = 100' src/pgplot_src/src/grpckg1.inc ; \
+	  $(SCRIPTDIR)/replace 'PGMAXD=8' 'PGMAXD=100' src/pgplot_src/src/pgplot.inc ; \
+	  $(SCRIPTDIR)/replace '! XWDRIV' '  XWDRIV' src/$(PGPLOTDIR)/drivers.list ; \
+	  $(SCRIPTDIR)/replace '! TKDRIV' '  TKDRIV' src/$(PGPLOTDIR)/drivers.list ; \
+	  $(SCRIPTDIR)/replace '! GIDRIV' '  GIDRIV' src/$(PGPLOTDIR)/drivers.list ; \
+	  $(SCRIPTDIR)/replace '! PSDRIV' '  PSDRIV' src/$(PGPLOTDIR)/drivers.list ; \
+	  cd src/$(PGPLOTDIR); ../pgplot_src/makemake ../pgplot_src linux g77_gcc ; \
+	  $(SCRIPTDIR)/replace 'TK_INCL=-I/usr/include' 'TK_INCL=-I$(TOOLSDIR)/include' -- makefile ; \
+	  $(SCRIPTDIR)/replace 'TK_LIBS=-L/usr/lib' 'TK_LIBS=-L$(TOOLSDIR)/lib' -- makefile ; \
+	  $(SCRIPTDIR)/replace '-L/usr/X11R6/lib' '-L/usr/X11R6/lib64' -- makefile ; \
+	  make ; cp lib* ../../lib ; cp *.h ../../include ; cp grfont.dat ../../lib ; cd ../../ ; \
+	fi ;
+endif
+else
+pgplot: dirs
+	@if [ -f $(PGPLOTPREFIX).tar.gz ] ; then cp $(PGPLOTPREFIX).tar.gz $(PGPLOTPREFIX)Copy.tar.gz ; fi ;
+	@if [ -f $(PGPLOTPREFIX)Copy.tar.gz ] ; then gunzip $(PGPLOTPREFIX)Copy.tar.gz ; fi ;
+	@if [ -f $(PGPLOTPREFIX)Copy.tar ] ; then tar xvf $(PGPLOTPREFIX)Copy.tar ; rm $(PGPLOTPREFIX)Copy.tar ; mv $(PGPLOTDIR) src ; fi ;
+	@if [ -d src/$(PGPLOTDIR) ] ; then \
+	  mv src/$(PGPLOTDIR) src/pgplot_src ; \
+	  mkdir src/$(PGPLOTDIR) ; cp src/pgplot_src/drivers.list src/$(PGPLOTDIR); \
+	  $(SCRIPTDIR)/replace 'GRIMAX = 8' 'GRIMAX = 100' src/pgplot_src/src/grpckg1.inc ; \
+	  $(SCRIPTDIR)/replace 'PGMAXD=8' 'PGMAXD=100' src/pgplot_src/src/pgplot.inc ; \
+	  $(SCRIPTDIR)/replace '! XWDRIV' '  XWDRIV' src/$(PGPLOTDIR)/drivers.list ; \
+	  $(SCRIPTDIR)/replace '! TKDRIV' '  TKDRIV' src/$(PGPLOTDIR)/drivers.list ; \
+	  $(SCRIPTDIR)/replace '! GIDRIV' '  GIDRIV' src/$(PGPLOTDIR)/drivers.list ; \
+	  $(SCRIPTDIR)/replace '! PSDRIV' '  PSDRIV' src/$(PGPLOTDIR)/drivers.list ; \
+	  cd src/$(PGPLOTDIR); ../pgplot_src/makemake ../pgplot_src linux g77_gcc ; \
+	  $(SCRIPTDIR)/replace 'TK_INCL=-I/usr/include' 'TK_INCL=-I$(TOOLSDIR)/include' -- makefile ; \
+	  $(SCRIPTDIR)/replace 'TK_LIBS=-L/usr/lib' 'TK_LIBS=-L$(TOOLSDIR)/lib' -- makefile ; \
+	  $(SCRIPTDIR)/replace '-L/usr/X11R6/lib' '-L/usr/X11R6/lib64' -- makefile ; \
+	  make ; cp lib* ../../lib ; cp *.h ../../include ; cp grfont.dat ../../lib ; cd ../../ ; \
+	fi ;
+endif
+else
+pgplot: dirs
+	@if [ -f $(PGPLOTPREFIX).tar.gz ] ; then cp $(PGPLOTPREFIX).tar.gz $(PGPLOTPREFIX)Copy.tar.gz ; fi ;
+	@if [ -f $(PGPLOTPREFIX)Copy.tar.gz ] ; then gunzip $(PGPLOTPREFIX)Copy.tar.gz ; fi ;
+	@if [ -f $(PGPLOTPREFIX)Copy.tar ] ; then tar xvf $(PGPLOTPREFIX)Copy.tar ; rm $(PGPLOTPREFIX)Copy.tar ; mv $(PGPLOTDIR) src ; fi ;
+	@if [ -d src/$(PGPLOTDIR) ] ; then \
+	  mv src/$(PGPLOTDIR) src/pgplot_src ; \
+	  mkdir src/$(PGPLOTDIR) ; cp src/pgplot_src/drivers.list src/$(PGPLOTDIR); \
+	  $(SCRIPTDIR)/replace '! XWDRIV' '  XWDRIV' src/$(PGPLOTDIR)/drivers.list ; \
+	  $(SCRIPTDIR)/replace '! TKDRIV' '  TKDRIV' src/$(PGPLOTDIR)/drivers.list ; \
+	  $(SCRIPTDIR)/replace '! GIDRIV' '  GIDRIV' src/$(PGPLOTDIR)/drivers.list ; \
+	  $(SCRIPTDIR)/replace '! PSDRIV' '  PSDRIV' src/$(PGPLOTDIR)/drivers.list ; \
+	  cd src/$(PGPLOTDIR); ../pgplot_src/makemake ../pgplot_src linux g77_gcc ; \
+	  $(SCRIPTDIR)/replace 'TK_INCL=-I/usr/include' 'TK_INCL=-I$(TOOLSDIR)/include' -- makefile ; \
+	  $(SCRIPTDIR)/replace 'TK_LIBS=-L/usr/lib -ltk -ltcl -L/usr/X11R6/lib -lX11 -ldl' 'TK_LIBS=-L$(TOOLSDIR)/lib -ltk8.4 -ltcl8.4 -L/usr/X11R6/lib -lX11 -L/usr/lib -lgcc -ldl' -- makefile ; \
+	  $(SCRIPTDIR)/replace 'SHARED_LD=gcc -shared  -o libpgplot.so' 'SHARED_LD=gcc  -bundle -flat_namespace -undefined suppress -o libpgplot.so' makefile ; \
+	  $(SCRIPTDIR)/replace 'FFLAGC=-u -Wall -fPIC -O' 'FFLAGC=-fPIC -O -Wno-globals' makefile ; \
+	  make ; cp lib* ../../lib ; cp *.h ../../include ; cp grfont.dat ../../lib ; cd ../../ ; \
+	fi ;
+endif
+
+pgplot_clean:
+	@if [ -d src/pgplot ] ; then \rm -rf src/pgplot ; fi ;
+	@if [ -d src/pgplot_src ] ; then \rm -rf src/pgplot_src ; fi ;
+
+#-----------------------------------------------------------------------
+# TCL
+#-----------------------------------------------------------------------
+
+TCLVERS   = 8.4.19
+TCLPREFIX = archive/tcl$(TCLVERS)-src
+TCLDIR    = tcl$(TCLVERS)
+
+TCLCONF = 
+ifeq ($(OS),Darwin)
+  TCLCONF = --enable-frameworks
+endif
+
+tcl: dirs
+	@if [ -f $(TCLPREFIX).tar.gz ] ; then cp $(TCLPREFIX).tar.gz $(TCLPREFIX)Copy.tar.gz ; fi ;
+	@if [ -f $(TCLPREFIX)Copy.tar.gz ] ; then gunzip $(TCLPREFIX)Copy.tar.gz ; fi ;
+	@if [ -f $(TCLPREFIX)Copy.tar ] ; then tar xvf $(TCLPREFIX)Copy.tar ; rm $(TCLPREFIX)Copy.tar ; mv $(TCLDIR) src ; fi ;
+	@if [ -d src/$(TCLDIR) ] ; then \
+	  cd src/$(TCLDIR)/unix ; ./configure --prefix=$(TOOLSDIR) --exec_prefix=$(TOOLSDIR) --enable-shared $(TCLCONF) ; \
+	  make ; make install ; cd ../../../ ; ln -s lib/libtcl8.4.so lib/libtcl.so ; \
+	fi ;
+
+tcl_clean:
+	@if [ -d src/$(TCLDIR) ] ; then \rm -rf src/$(TCLDIR) ; fi ;
+
+#-----------------------------------------------------------------------
+# TK
+#-----------------------------------------------------------------------
+
+TKVERS    = 8.4.19
+TKPREFIX  = archive/tk$(TKVERS)-src
+TKDIR     = tk$(TKVERS)
+
+TKCONF = 
+ifeq ($(OS),Darwin)
+  TKCONF = --enable-frameworks
+endif
+
+tk: dirs
+	@if [ -f $(TKPREFIX).tar.gz ] ; then cp $(TKPREFIX).tar.gz $(TKPREFIX)Copy.tar.gz ; fi ;
+	@if [ -f $(TKPREFIX)Copy.tar.gz ] ; then gunzip $(TKPREFIX)Copy.tar.gz ; fi ;
+	@if [ -f $(TKPREFIX)Copy.tar ] ; then tar xvf $(TKPREFIX)Copy.tar ; rm $(TKPREFIX)Copy.tar ; mv $(TKDIR) src ; fi ;
+	@if [ -d src/$(TKDIR) ] ; then \
+	  cd src/$(TKDIR)/unix ; ./configure --prefix=$(TOOLSDIR) --exec_prefix=$(TOOLSDIR) --enable-shared $(TKCONF) ; \
+	  make ; make install ; cd ../../../ ; ln -s lib/libtk8.4.so lib/libtk.so ; \
+	fi ;
+
+tk_clean:
+	@if [ -d src/$(TKDIR) ] ; then \rm -rf src/$(TKDIR) ; fi ;
+
+#-----------------------------------------------------------------------
+# FFTW
+#-----------------------------------------------------------------------
+
+FFTWVERS    = 3.2.1
+FFTWPREFIX  = archive/fftw-$(FFTWVERS)
+FFTWDIR     = fftw-$(FFTWVERS)
+
+fftw: dirs
+	@if [ -f $(FFTWPREFIX).tar.gz ] ; then cp $(FFTWPREFIX).tar.gz $(FFTWPREFIX)Copy.tar.gz ; fi ;
+	@if [ -f $(FFTWPREFIX)Copy.tar.gz ] ; then gunzip $(FFTWPREFIX)Copy.tar.gz ; fi ;
+	@if [ -f $(FFTWPREFIX)Copy.tar ] ; then tar xvf $(FFTWPREFIX)Copy.tar ; rm $(FFTWPREFIX)Copy.tar ; mv $(FFTWDIR) src ; fi ;
+	@if [ -d src/$(FFTWDIR) ] ; then \
+	  cd src/$(FFTWDIR) ; ./configure --prefix=$(TOOLSDIR) --exec_prefix=$(TOOLSDIR) --enable-shared ; \
+	  make ; make install ; cd ../../ ; \
+	fi ;
+
+fftw_clean:
+	@if [ -d src/$(FFTWDIR) ] ; then \rm -rf src/$(FFTWDIR) ; fi ;
+
+#-----------------------------------------------------------------------
+# Clean directive
+#-----------------------------------------------------------------------
+
+clean: dirs_clean tcl_clean tk_clean pgplot_clean fftw_clean
