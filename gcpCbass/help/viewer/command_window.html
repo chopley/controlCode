@@ -1,0 +1,123 @@
+<center><a href=index.html>Index</a></center>
+<HEAD><TITLE>The log display window</TITLE></HEAD>
+<BODY bgcolor=add8e6>
+<HR>
+<H1>The Command-input window</H1>
+
+<P>
+
+The command-input window is used for sending commands to the
+control-system. The available commands can be seen by typing
+
+<pre>
+  help
+</pre>
+
+in this window. To see help on a particular command, type:
+
+<pre>
+  help <u>command_name</u>
+</pre>
+
+When one types in a command that results in a reply message, or
+an error message, this is displayed in the command-input window
+in a different color.
+
+<H2>Cut and paste</H2>
+
+The command-input window supports cut and paste operations. To
+select the text to be cut, click and hold the left mouse button
+over the first character of the text that you want to select,
+and drag until you have selected everything that is of interest.
+
+<P>
+
+If your selection extends over more than one line, you will notice
+that the prompts are not included in the selected text. If there are
+any command output messages within your selected area, you will also
+notice that they are not included in the selected text. This was
+designed to allow one to just cut and paste the commands without also
+getting extraneous text. Similarly, if your selection starts within
+output text, command input won't be included in the selected text.  To
+be more specific, if one starts a selection in a particular type, of
+text, such as within a prompt, a command, or a reply message, the
+selection will only include similar text.
+
+<P>
+
+Pasting text within the window is simply a matter of pressing the
+middle mouse button within the command window.
+
+<H2>Command-line editing</H2>
+
+The command-line editing options are modelled on those of tcsh. For
+example the arrow keys can be used for recalling previous commands and
+moving the cursor left or right within a given command. In the
+following list of key bindings, the prefix <code>Control-</code> means
+that you should hold down the Control key while pressing the key that
+follows it. Similarly, the prefix <code>Meta-</code> means that you
+should hold down the Meta key while pressing the key that follows
+it. The Meta key on a Sun keyboard is marked with a black
+diamond. Finally, a prefix of <code>Escape-</code> means that one
+should press the escape key momentarily, then press the key that
+follows it.
+
+
+<DL>
+<DT> <b>Control-b</b> or <b>LeftArrow</b>
+<DD> Move the cursor one character to the left.
+<DT> <b>Control-f</b> or <b>RightArrow</b>
+<DD> Move the cursor one character to the left.
+<DT> <b>Control-LeftArrow</b>  or  <b>Meta-b</b>  or  <b>Escape-b</b>
+<DD> Move one word to the left.
+<DT> <b>Control-RightArrow</b>  or  <b>Meta-f</b>  or  <b>Escape-b</b>
+<DD> Move one word to the right.
+<DT> <b>Control-a</b>
+<DD> Move the cursor to the start of the line.
+<DT> <b>Control-e</b>
+<DD> Move the cursor to the end of the line.
+<DT> <b>BackSpace</b>  <b>Delete</b> or <b>Control-h</b>  or <b>Control-?</b>
+<DD> Delete the character that precedes the cursor.
+<DT> <b>Control-d</b>
+<DD> Delete the character that follows the cursor.
+<DT> <b>Meta-Delete</b>  or <b>Escape-Delete</b>
+<DD> Delete the word that precedes the cursor.
+<DT> <b>Meta-d</b> or <b>Escape-d</b>
+<DD> Delete the word that follows the cursor.
+<DT> <b>Control-u</b>
+<DD> Delete the whole line.
+<DT> <b>Control-k</b>
+<DD> Delete everything to the right of the cursor.
+<DT> <b>Meta-p</b>  or <b>Escape-p</b>
+<DD> Search backwards for the previous command that started with the
+     text that currently precedes the cursor. You can keep hitting
+     this key sequence multiple times to find older matches.
+<DT> <b>Meta-n</b>  or <b>Escape-n</b>
+<DD> After having searched backwards, this key-binding will switch to
+     searching forwards for the next command that started with the
+     text that currently precedes the cursor. You can keep hitting
+     this key sequence multiple times to find newer matches.
+<DT> <b>Home</b> or <b>Escape-&lt;</b>
+<DD> Scroll back to the first line in the window.
+<DT> <b>End</b> or <b>Meta-&gt;</b> or <b>Escape-&gt;</b>
+<DD> Scroll forward to the last line in the window.
+<DT> <b>Prior</b> or <b>Meta-v</b> or <b>Escape-v</b>
+<DD> Scroll back one page.
+<DT> <b>Next</b> or <b>Control-v</b>
+<DD> Scroll forward one page.
+<DT> <b>Control-Space</b> or <b>Control-@</b>
+<DD> Set a mark at the character position that is currently under the cursor.
+<DT> <b>Control-w</b>
+<DD> Cut the text between the cursor and the mark (previously
+     set by <b>Control-Space</b> or <b>Control-@</b>) to
+     the clipboard.
+<DT> <b>Meta-w</b> or <b>Escape-w</b>
+<DD> Copy the text between the cursor and the mark to the clipboard,
+     without deleting it first.
+<DT> <b>Control-y</b>
+<DD> Copy text from the clipboard into the current line.
+</UL>
+
+<HR>
+Erik Leitch (4-Nov-1999)
+</BODY>

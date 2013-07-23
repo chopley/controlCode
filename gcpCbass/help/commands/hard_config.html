@@ -1,0 +1,52 @@
+<HEAD><TITLE>BICEP Setup Commands.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<H1>BICEP Hardware Configuration Commands.</H1>
+
+When the control program is started it reads and compiles a script
+called:
+
+<pre>
+ $BICEP_DIR/bicepAntennaControl.init
+</pre>
+
+Where <code>BICEP_DIR</code> is an environment variable defined by the
+caller's shell. Then when communication between the antenna control CPU and
+the control program is first established, and thereafter after each
+reboot of the antenna control CPU, the control program executes this script
+to configure the BICEP hardware.
+
+<P>
+The commands that were designed with this script in mind are listed in
+the contents page under the title &quot;<a
+href="../index.html#hard_conf_list">Hardware Configuration Commands</a>
+&quot;.
+<P>
+The following is an anemic example of a hardware configuration script.
+
+<pre>
+ # This schedule is executed by the control program whenever communication
+ # is (re-)established with the antenna control CPU.
+
+ print "Hardware initialization script started.\n"
+
+ # Set the number of hardware intervals per hardware readout.
+
+ integrate 11
+
+ # Set the noise-calibration power-readout.
+
+ noise_readout_interval 1m
+
+ # Tell the antenna control scanner that it can start taking data.
+
+ inhibit false
+
+ print "The hardware initialization script completed.\n"
+
+</pre>
+
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:11 PST 2004)
+</BODY>

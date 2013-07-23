@@ -1,0 +1,328 @@
+AntennaControl.cc:  // the control program at a time, arrange not to listen for
+AntennaControl.cc:  // Only send a message to reenable the connect timer if it was
+AntennaControl.cc:  // connect timer.
+AntennaControl.cc:  // And send a message to reenable the connect timer.
+AntennaDrive.cc:#include <ctime>
+AntennaDrive.cc:#include <sys/time.h>
+AntennaGpib.cc:  // And try to connect.  On failure, the parent will set a timer to
+AntennaGpib.cc:  static TimeVal time;
+AntennaGpib.cc:  time.setToCurrentTime();
+AntennaGpib.cc:  unsigned index = time.getMilliSeconds() / MS_PER_THERMAL_SAMPLE;
+AntennaGpib.cc:  regDate = time;
+AntennaGpib.cc:    // Only read out the lakeshore once per time period
+AntennaGpib.cc:  static TimeVal time;
+AntennaGpib.cc:  time.setToCurrentTime();
+AntennaGpib.cc:  unsigned index = time.getMilliSeconds() / MS_PER_THERMAL_SAMPLE;
+AntennaGpib.cc:  regDate = time;
+AntennaMaster.cc:#include <time.h>
+AntennaMaster.cc:#include <sys/time.h>
+AntennaMaster.cc:  // Install timers of interest to us.  Do this before we start up our
+AntennaMaster.cc:  // threads, that way we ensure all timers are defined before a
+AntennaMaster.cc:  // Restart timers.
+AntennaMaster.cc:  DBPRINT(false, Debug::DEBUG31, "Just about to re-install timers");
+AntennaMaster.cc:					 // the connect timer in
+AntennaMaster.cc:					 // the connect timer in
+AntennaMaster.cc:  case AntennaMasterMsg::ROACH_TIMER:   // Turn Receiver timers on/off
+AntennaMaster.cc:    DBPRINT(true, Debug::DEBUG3, "Got a receiver timer message: "
+AntennaMaster.cc:    COUT("roach timers turning on");
+AntennaMaster.cc:  case AntennaMasterMsg::RX_TIMER:   // Turn Receiver timers on/off
+AntennaMaster.cc:    DBPRINT(true, Debug::DEBUG3, "Got a receiver timer message: "
+AntennaMaster.cc:					 // the connect timer in      
+AntennaMaster.cc:					 // the connect timer in      
+AntennaMaster.cc:    // the connect timer.
+AntennaMaster.cc:					 // the connect timer in      
+AntennaMaster.cc:  nanosleep(shutdownWait.timeSpec(), NULL);
+AntennaMaster.cc: * Install timers of interest to us.
+AntennaMaster.cc:  // Install and enable the heartbeat timer.
+AntennaMaster.cc:  COUT("installing timers");
+AntennaMaster.cc:  // Finally, enable the timer
+AntennaMaster.cc:  // Install a timer to generate the 1-second tick which will drive
+AntennaMaster.cc:  // Install a timer to generate the 1-second tick which will cause us
+AntennaMaster.cc:  // Install a timer to generate the 1-second tick which will cause us
+AntennaMaster.cc:  // Install a timer to generate the 200 ms tick which will cause us
+AntennaMaster.cc:  // Install a timer to generate the 50 ms tick which will cause us
+AntennaMaster.cc:  //Install a timer so that every second at 300ms the data from the
+AntennaMaster.cc:  // Install a timer to generate the 50 ms tick which will cause us
+AntennaMaster.cc:  //Install a timer so that every second at 300ms the data from the
+AntennaMaster.cc:  //Install a timer so that every second at 50ms the LNA gets read out
+AntennaMonitor.cc:#include <sys/time.h>
+AntennaMonitor.cc:    // timer.
+AntennaMonitor.cc:  // connect timer.
+AntennaRoach.cc:#include <sys/time.h>
+AntennaRoach.cc:void AntennaRoach::sendRoachTimerMsg(bool timeOn)
+AntennaRoach.cc:  msg.packRoachTimerMsg(timeOn);
+AntennaRx.cc:#include <sys/time.h>
+AntennaRx.cc:  struct timespec delay;
+AntennaRx.cc:  // First, we need to tell the timers to shut off in the main thread.
+AntennaRx.cc:  // lastly we reset the timers on in the Master thread.
+AntennaRx.cc:void AntennaRx::sendRxTimerMsg(bool timeOn)
+AntennaRx.cc:  msg.packRxTimerMsg(timeOn);
+Backend.cc:  Board(share, name), timeBuffer_(MAX_BUFFER_LENGTH), flagBuffer_(MAX_BUFFER_LENGTH), dataBuffer_(MAX_BUFFER_LENGTH, std::vector<float>(NUM_RECEIVER_SWITCH_CHANNELS)), diagnosticsBuffer_(MAX_BUFFER_LENGTH, std::vector<float>(NUM_RECEIVER_DIAGNOSTICS)) ,versionBuffer_(MAX_BUFFER_LENGTH), avgSecBuffer_(MAX_BUFFER_LENGTH), regDataBuffer_(MAX_BUFFER_LENGTH, std::vector<float>(NUM_RECEIVER_CHANNELS)), alphaBuffer_(MAX_BUFFER_LENGTH, std::vector<float>(NUM_ALPHA_CORRECTIONS)), nonlinBuffer_(MAX_BUFFER_LENGTH, std::vector<float>(NUM_RECEIVER_SWITCH_CHANNELS))
+Backend.cc:   Board(), timeBuffer_(MAX_BUFFER_LENGTH), flagBuffer_(MAX_BUFFER_LENGTH), dataBuffer_(MAX_BUFFER_LENGTH, std::vector<float>(NUM_RECEIVER_CHANNELS)),diagnosticsBuffer_(MAX_BUFFER_LENGTH, std::vector<float>(NUM_RECEIVER_DIAGNOSTICS)), versionBuffer_(MAX_BUFFER_LENGTH), avgSecBuffer_(MAX_BUFFER_LENGTH), regDataBuffer_(MAX_BUFFER_LENGTH, std::vector<float>(NUM_RECEIVER_CHANNELS)), alphaBuffer_(MAX_BUFFER_LENGTH, std::vector<float>(NUM_ALPHA_CORRECTIONS)), nonlinBuffer_(MAX_BUFFER_LENGTH, std::vector<float>(NUM_RECEIVER_SWITCH_CHANNELS))
+Backend.cc:      // first the time
+Backend.cc:      timeBuffer_[currentIndex_] = thisTime;
+Backend.cc:      // set the previous time
+Backend.cc:    // timeBuffer_ ranges from 0 to 1 (it's a fraction of a secon)
+Backend.cc:    dataTime.incrementSeconds(timeBuffer_[index]);
+Backend.cc:  // set the times to sensible things and set the flag to high.
+Backend.cc:    // set the other values in time to something.
+Backend.cc:  // write the time register
+Backend.cc:    // timeBuffer_ ranges from 0 to 1 (it's a fraction of a secon)
+Backend.cc:    dataTime.incrementSeconds(timeBuffer_[index]);
+Backend.cc:  // set the times to sensible things and set the flag to high.
+Backend.cc:    // set the other values in time to something.
+Backend.cc:  // write the time register
+FrameBoard.cc: * Record the time in the register database
+FrameBoard.cc: * Record the time in the register database
+FrameBoard.cc:                     // number and the time of day in milli-seconds.
+FrameBoard.cc:  unsigned lst;      // The local sidereal time in milliseconds
+GpsIntHandler.cc:  struct timeval* timeOut = 0;
+GpsIntHandler.cc:		    timeOut);
+GpsIntHandler.cc:	// Increment the timestamp by two seconds.  This will be the
+GpsIntHandler.cc:	// time used in calculating the next position commanded of
+GpsIntHandler.cc:	timeOut = halfSec.timeVal();
+GpsIntHandler.cc:	timeOut = 0;
+GpsIntHandler.cc:  TimeVal timeOut(1, 0);
+GpsIntHandler.cc:		  timeOut.timeVal());
+GpsIntHandler.cc:    timeOut.reset();
+PmacComms.cc:  TimeVal timeout(0, PMAC_TIMEOUT_USEC, 0);
+PmacComms.cc:  // timeout.  This is not documented, so it appears to be a bug.
+PmacComms.cc:  int nready = select(fd_+1, &read_fds, NULL, NULL, timeout.timeVal());
+PmacComms.cc:	      << timeout.getElapsedTimeInMicroSeconds() 
+PmacComms.cc:      DBPRINT(true, DEBUG_PMAC, "Pmac timed out after: " 
+Pointing.cc: * Record the current time as days and seconds of UTC
+Pointing.cc: * Record the current time as days and seconds of UTC
+Pointing.cc: *  lst      double   The local apparent sidereal time.
+Pointing.cc:  // Give the slew the timestamp of the next 1-second boundary. This
+Pointing.cc:  // Give the slew the timestamp of the next 1-second boundary. This
+Pointing.cc:  // Give the slew the timestamp of the next 1-second boundary. This
+RoachBackend.cc:  roachLLtime_    = 0; 
+RoachBackend.cc:  roachRRtime_    = 0; 
+RoachBackend.cc:  roachQtime_     = 0;  
+RoachBackend.cc:  roachUtime_     = 0;  
+RoachBackend.cc:  roachTL1time_   = 0;
+RoachBackend.cc:  roachTL2time_   = 0;
+RoachBackend.cc:  roachLLtime_    = findReg("LLtime"); 
+RoachBackend.cc:  roachRRtime_    = findReg("RRtime");  
+RoachBackend.cc:  roachQtime_     = findReg("Qtime");    
+RoachBackend.cc:  roachUtime_     = findReg("Utime");    
+RoachBackend.cc:  roachTL1time_   = findReg("load1time");
+RoachBackend.cc:  roachTL2time_   = findReg("load2time");
+RoachBackend.cc:  struct timespec delay;
+RoachBackend.cc:  TimeVal timeout(0, ROACH_TIMEOUT_USEC, 0);
+RoachBackend.cc:  // Now wait in select until the fd becomes readable, or we time out
+RoachBackend.cc:  int nready = select(fdSet_.size(), fdSet_.readFdSet(), NULL, fdSet_.exceptionFdSet(), timeout.timeVal());
+RoachBackend.cc:  struct timespec delay;
+RoachBackend.cc:      //COUT("Serial port timeout warning: " << diff.getTimeInMicroSeconds());
+RoachBackend.cc:      ThrowError("Roach Port timeout on response");
+RoachBackend.cc:    COUT("WRONG NUMBER OF FRAMES RETURNED FROM THE ROACH BOARD-ignoring it for this time");
+RoachBackend.cc:    //    COUT("this time, index: " << thisTime << ", " << currentIndex_);
+RoachBackend.cc:    // set the previous time
+RoachBackend.cc:  // next the time average values
+RoachBackend.cc:  static float LLtimeAvg[CHANNELS_PER_ROACH];
+RoachBackend.cc:  static float RRtimeAvg[CHANNELS_PER_ROACH];
+RoachBackend.cc:  static float QtimeAvg[CHANNELS_PER_ROACH];
+RoachBackend.cc:  static float UtimeAvg[CHANNELS_PER_ROACH];
+RoachBackend.cc:  static float TL1timeAvg[CHANNELS_PER_ROACH];
+RoachBackend.cc:  static float TL2timeAvg[CHANNELS_PER_ROACH];
+RoachBackend.cc:    LLtimeAvg[i]  = 0;
+RoachBackend.cc:    RRtimeAvg[i]  = 0;
+RoachBackend.cc:    QtimeAvg[i]   = 0;
+RoachBackend.cc:    UtimeAvg[i]   = 0;
+RoachBackend.cc:    TL1timeAvg[i] = 0;
+RoachBackend.cc:    TL2timeAvg[i] = 0;
+RoachBackend.cc:  // now the time
+RoachBackend.cc:      LLtimeAvg[i]  += (LL_[index][i]/RECEIVER_SAMPLES_PER_FRAME);
+RoachBackend.cc:      RRtimeAvg[i]  += (RR_[index][i]/RECEIVER_SAMPLES_PER_FRAME);
+RoachBackend.cc:      QtimeAvg[i]   += (Q_[index][i]/RECEIVER_SAMPLES_PER_FRAME);
+RoachBackend.cc:      UtimeAvg[i]   += (U_[index][i]/RECEIVER_SAMPLES_PER_FRAME);
+RoachBackend.cc:      TL1timeAvg[i] += (TL1_[index][i]/RECEIVER_SAMPLES_PER_FRAME);
+RoachBackend.cc:      TL2timeAvg[i] += (TL2_[index][i]/RECEIVER_SAMPLES_PER_FRAME);
+RoachBackend.cc:  share_->writeReg(roachLLtime_,  &LLtimeAvg[0]);
+RoachBackend.cc:  share_->writeReg(roachRRtime_,  &RRtimeAvg[0]);
+RoachBackend.cc:  share_->writeReg(roachQtime_,   &QtimeAvg[0]);
+RoachBackend.cc:  share_->writeReg(roachUtime_,   &UtimeAvg[0]);
+RoachBackend.cc:  share_->writeReg(roachTL1time_, &TL1timeAvg[0]);
+RoachBackend.cc:  share_->writeReg(roachTL2time_, &TL2timeAvg[0]);
+Scan.cc:    // If time has jumped, increment by the equivalent number of scan
+Scanner.cc:  // Set the current time in the database.
+Scanner.cc:  // Record the time.
+ServoCommandSa.cc:	  // time values
+ServoComms.cc:      // went through a time out.  re-issue commands 
+ServoComms.cc:      ThrowError(" Port timeout on response");
+ServoComms.cc:  struct timespec delay;
+ServoComms.cc:  TimeVal timeout(0, SERVO_TIMEOUT_USEC, 0);
+ServoComms.cc:  // Now wait in select until the fd becomes readable, or we time out
+ServoComms.cc:  int nready = select(fdSet_.size(), fdSet_.readFdSet(), NULL, fdSet_.exceptionFdSet(), timeout.timeVal());
+ServoComms.cc:    //   CTOUT("timed out in servo select: " << pthread_self());
+ServoComms.cc:     * Read the bytes one at a time
+ServoComms.cc:      // COUT("Serial port timeout warning: " << diff.getTimeInMicroSeconds());
+ServoComms.cc:  // Fill the UTC register with appropriate time values
+ServoComms.cc:  COUT("time of previous data");
+ServoComms.cc:      // Fill the UTC register with appropriate time values
+ServoComms.cc: * Fill the utc register with the time stamps appropriate for the data
+ServoComms.cc:  struct timespec delay;
+servoCommsSa.cc:      // went through a time out.  re-issue commands 
+servoCommsSa.cc:      COUT("timed out more than five times");
+servoCommsSa.cc:      ThrowError(" Port timeout on response CJC");
+servoCommsSa.cc:  struct timespec delay;
+servoCommsSa.cc:  TimeVal timeout(0, SERVO_TIMEOUT_USEC, 0);
+servoCommsSa.cc:  // Now wait in select until the fd becomes readable, or we time out
+servoCommsSa.cc:  int nready = select(fdSet_.size(), fdSet_.readFdSet(), NULL, fdSet_.exceptionFdSet(), timeout.timeVal());
+servoCommsSa.cc:      //COUT("Serial port timeout warning: " << diff.getTimeInMicroSeconds());
+servoCommsSa.cc:  // Fill the UTC register with appropriate time values
+servoCommsSa.cc:  COUT("time of previous data");
+servoCommsSa.cc:      // Fill the UTC register with appropriate time values
+servoCommsSa.cc: * Fill the utc register with the time stamps appropriate for the data
+servoCommsSa.cc:  struct timespec delay;
+ServoCommsSa.cc:      // went through a time out.  re-issue commands 
+ServoCommsSa.cc:      COUT("timed out more than five times");
+ServoCommsSa.cc:      ThrowError(" Port timeout on response CJC");
+ServoCommsSa.cc:  struct timespec delay;
+ServoCommsSa.cc:  TimeVal timeout(0, SERVO_TIMEOUT_USEC, 0);
+ServoCommsSa.cc:  // Now wait in select until the fd becomes readable, or we time out
+ServoCommsSa.cc:  int nready = select(fdSet_.size(), fdSet_.readFdSet(), NULL, fdSet_.exceptionFdSet(), timeout.timeVal());
+ServoCommsSa.cc:      COUT("Serial port timeout warning: " << diff.getTimeInMicroSeconds());
+ServoCommsSa.cc:  // Fill the UTC register with appropriate time values
+ServoCommsSa.cc:  //  COUT("time of previous data");
+ServoCommsSa.cc:      // Fill the UTC register with appropriate time values
+ServoCommsSa.cc: * Fill the utc register with the time stamps appropriate for the data
+ServoCommsSa.cc:  struct timespec delay;
+Site.cc: * Return the local sidereal time for a given site and UTC.
+SpecificShare.cc:#include <time.h>
+SpecificShare.cc: *  timeout      int    How long to wait for the database to become
+SpecificShare.cc: *                       WAIT_FOREVER  - Don't timeout.
+SpecificShare.cc:void SpecificShare::SpecificRegDb::grabRegs(TimeOut timeout)
+SpecificShare.cc:  if(timeout==WAIT_FOREVER)
+SpecificShare.cc:  // Record the new time relationship.
+SpecificShare.cc:  time_.setMjd(mjd, sec, nanoSeconds);
+SpecificShare.cc:void SpecificShare::SpecificClock::setClock(TimeVal& time)
+SpecificShare.cc:  // Record the new time relationship.
+SpecificShare.cc:  time_ = time;
+SpecificShare.cc: * Set the SZA UTC to the current time.
+SpecificShare.cc:  // Record the new time relationship.
+SpecificShare.cc:  time_.setToCurrentTime();
+SpecificShare.cc:  double mjd;               // The time to be returned 
+SpecificShare.cc:  mjd = time_.getTimeInMjdDays();
+SpecificShare.cc: *  timeout      int    How long to wait for the database to become
+SpecificShare.cc: *                       WAIT_FOREVER  - Don't timeout.
+SpecificShare.cc:void SpecificShare::grabRegs(TimeOut timeout)
+SpecificShare.cc:  regdb_->grabRegs(timeout);
+SpecificShare.cc: *  double        utc    The time to which the ut1-utc value pertains.
+SpecificShare.cc: *  value      double *  The value of ut1 - utc for time 'utc' (seconds).
+SpecificShare.cc: *  value     double *   The equation of the equinoxes at time tt (radians).
+SpecificShare.cc: * Return the local sidereal time that corresponds to a given UTC.
+SpecificShare.cc: * Return the Terestrial time (aka Ephemeris Time), corresponding to a
+SpecificShare.cc: * given terrestrial time.
+SpecificShare.cc: * Set the current time.
+SpecificShare.cc: * Set the current time.
+SpecificShare.cc:void SpecificShare::setClock(TimeVal& time)
+SpecificShare.cc:  clock_->setClock(time);
+SpecificShare.cc: * Set the current time.
+Tfp.cc:#include <sys/time.h>
+Tfp.cc:  TimeVal timeOut;
+Tfp.cc:  timeOut.setMicroSeconds(10000);
+Tfp.cc:    timeOut.reset();
+Tfp.cc:    (void)select(0, NULL, NULL, NULL, timeOut.timeVal());
+Tfp.cc: * Read the time, in decimal BCD format
+Tfp.cc:  unsigned time0, time1;
+Tfp.cc:  // Latch and read the time
+Tfp.cc:  time0 = *ctlTime0Ptr_;
+Tfp.cc:  time1 = *ctlTime1Ptr_;
+Tfp.cc:  sec   = time1 & 0xff;
+Tfp.cc:  min   = (time1 >> 8) & 0xff;
+Tfp.cc:  hours = (time1 >> 16) & 0x0f;
+Tfp.cc:  days  = (time1 >> 24) & 0xff;
+Tfp.cc: * Read the time, in binary UNIX format
+Tfp.cc:  unsigned time0, time1;
+Tfp.cc:  // Latch and read the time
+Tfp.cc:  time0 = *ctlTime0Ptr_;
+Tfp.cc:  time1 = *ctlTime1Ptr_;
+Tfp.cc:  unsigned sec = time1;
+Tfp.cc:  unsigned uSec = time0 & 0xfffff;
+Tfp.cc:  unsigned nSec = 100*(((time0) >> 20) & 0xf);
+Tfp.cc: * Set the time register format
+Tfp.cc: * Set the format of the input timecode signal
+Tfp.cc: * Set the format of the timecode signal output on the J1 connector
+Tfp.cc: * Set the modulation type of the input timecode signal
+Tfp.cc: * Set the major component of the time, in UNIX format
+Tfp.cc: * Set the major component of the time, in BCD format
+Tfp.cc:  // Set the time code input format
+Tfp.cc:  // Set up for an amplitude-modulated timecode signal
+Tfp.cc:  // Default to get time from the integrated GPS receiver
+Tfp.cc:  // No local time offset
+Tfp.cc:  // Get time in binary format
+Tfp.cc:  // Generate IRIG-B time code
+Tfp.cc:  // Use UTC time, not GPS (leap seconds automatically included)
+Tfp.cc:  readUnixTime(date.timeVal());
+TrackerBoard.cc:  time_diff_        = share_->addBufferedBlock("tracker", "time_diff");
+TrackerBoard.cc:  // Get the UTC, the local apparent sidereal time and the terrestrial
+TrackerBoard.cc:  // time at the given time.
+TrackerBoard.cc:    // Record the local apparent sidereal time in milli-seconds.
+TrackerBoard.cc:    // to milliseconds of time (lst).
+TrackerBoard.cc:  // Get the UTC, the local apparent sidereal time and the terrestrial
+TrackerBoard.cc:  // time at the given time.
+TrackerBoard.cc:    // Record the local apparent sidereal time in milli-seconds.
+TrackerBoard.cc:    // to milliseconds of time (lst).
+Tracker.cc:#include <sys/time.h>
+Tracker.cc: * Respond to a 1-second tick from the time-code reader ISR by
+Tracker.cc: * has been requested, also check the time against the time-code
+Tracker.cc:  // The timestamp gets set when the signal handler is called, on the
+Tracker.cc:  // timestamp, since we want calculations to be done relative to the
+Tracker.cc:  // We need to calculate the timestamp for three different times, and
+Tracker.cc:    // if the first time running the loop. no need to check the time
+Tracker.cc:    // The new time should be roughly 1 second later than the previous
+Tracker.cc:    // time.  But it's only crucial that we deliver the last position 
+Tracker.cc:	// three positions at that time, one for the integral previous
+Tracker.cc:	// all of these (with their time) to the servo box.
+Tracker.cc:	  // timestamp.
+Tracker.cc:	    // respond in time, which has been seen to happen
+Tracker.cc:	    // timeout occurs, we should just queue a resync and
+Tracker.cc:	    // timeout occurred, re-target the source.
+Tracker.cc:	  COUT("Tracker thinks pmac has lost time sync");
+Tracker.cc:	  errStr << "The pmac appears to have lost its time synchronization.";
+Tracker.cc:      // If the time hasn't changed at all then this implies that a
+Tracker.cc:      errStr << "Discarding spurious time-code reader interrupt.";
+Tracker.cc:      // Record the time error for inclusion in the archive database.
+Tracker.cc:  // If the time is invalid and we are tracking then we should attempt
+Tracker.cc:	    "About to enter TARGET because of a time error");
+Tracker.cc:    // current source, and arm the GPS time-code-reader to send the
+Tracker.cc:      // rate to extrapolate back in time.
+Tracker.cc:	// elevation rate to extrapolate back in time.
+Tracker.cc: * Update the year. Note that the time code reader doesn't supply the
+Tracker.cc: *  sec               int    The MJD utc time of day, in seconds.
+Tracker.cc:  // Record the time stamp of the coordinates.
+Tracker.cc: *  sec               int    The MJD utc time of day, in seconds.
+Tracker.cc:  // Record the time stamp of the coordinates.
+Tracker.cc:  // Get the Terrestrial time that corresponds to 'utc'.
+Tracker.cc:  // Determine the local apparent sidereal time.
+Tracker.cc:    ThrowError("Tracker::sourcePosition: Illegal time received.\n");
+Tracker.cc:  // Record the time stamp of the coordinates.
+Tracker.cc:  // Get the Terrestrial time that corresponds to 'utc'.
+Tracker.cc:  // Determine the local apparent sidereal time.
+Tracker.cc:    ThrowError("Tracker::sourcePosition: Illegal time received.\n");
+Tracker.cc:  // Record the time stamp of the coordinates.
+Tracker.cc:  // Compute the rate of change of hour angle wrt sidereal time in
+Tracker.cc:  // radians of sidereal time per second of UT1.
+Tracker.cc:  // Compute the rate of change of hour angle wrt sidereal time in
+Tracker.cc:  // radians of sidereal time per second of UT1.
+Tracker.cc:  // If we successfully connected, disable the connect timer.
+Tracker.cc: * Respond to a 1-second tick from the time-code reader ISR by
+Tracker.cc: * has been requested, also check the time against the time-code
+Tracker.cc:  // The timestamp gets set when the signal handler is called, on the
+Tracker.cc:  // timestamp, since we want calculations to be done relative to the
+Tracker.cc:  // The timestamp for which we want to calculate the next telescope
+Tracker.cc:    // if the first time running the loop. no need to check the time
+Tracker.cc:    // The new time should be roughly 1 second later than the previous
+Tracker.cc:    // time.  But it's only crucial that we deliver the current
+Tracker.cc:	  // timestamp.
+Tracker.cc:	    // respond in time, which has been seen to happen
+Tracker.cc:	    // timeout occurs, we should just queue a resync and
+Tracker.cc:	    // timeout occurred, re-target the source.
+Tracker.cc:	  COUT("Tracker thinks pmac has lost time sync");
+Tracker.cc:	  errStr << "The pmac appears to have lost its time synchronization.";
+Tracker.cc:      // If the time hasn't changed at all then this implies that a
+Tracker.cc:      errStr << "Discarding spurious time-code reader interrupt.";
+Tracker.cc:      // Record the time error for inclusion in the archive database.
+Tracker.cc:  // If the time is invalid and we are tracking then we should attempt
+Tracker.cc:	    "About to enter TARGET because of a time error");

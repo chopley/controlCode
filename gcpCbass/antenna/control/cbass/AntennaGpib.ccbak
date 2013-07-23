@@ -1,0 +1,417 @@
+
+#include "gcp/antenna/control/specific/AntennaControl.h"
+#include "gcp/antenna/control/specific/AntennaGpib.h"
+#include "gcp/antenna/control/specific/SpecificShare.h"
+
+#include "gcp/util/common/Exception.h"
+
+#include "gcp/control/code/unix/libunix_src/specific/rtcnetcoms.h"
+
+using namespace std;
+using namespace gcp::antenna::control;
+using namespace gcp::util;
+
+/**.......................................................................
+ * Constructor.
+ */
+AntennaGpib::AntennaGpib(AntennaControl* parent, std::string gpibDevice, unsigned cryoConAddr, unsigned lsThermoAddr) :
+  SpecificTask(), gcp::util::GenericTask<AntennaGpibMsg>::GenericTask()
+{ 
+  // Initialize internal pointers
+  
+  parent_          = 0;
+  gpib_            = 0;
+  share_           = 0;
+  cryoCon_         = 0;
+
+  lsThermo_        = 0;
+  thermalBoard_    = 0;
+
+  utc_             = 0;
+  lsTempSensors_   = 0;
+  ccTempSensor_    = 0;
+  ccHeaterCurrent_ = 0;
+  previousIndex_   = 4;
+
+  // Keep a pointer to the parent task resources
+  
+  parent_ = parent;
+
+  if(parent_) {
+    share_  = parent_->getShare();
+    thermalBoard_ = new Board(share_, "thermal");
+  } else {
+    thermalBoard_ = new Board();
+  }
+
+  //  COUT("Here 2");
+  utc_             = thermalBoard_->findReg("utc");
+  lsTempSensors_   = thermalBoard_->findReg("lsTemperatureSensors");
+  ccTempSensor_    = thermalBoard_->findReg("ccTemperatureLoad");
+  ccHeaterCurrent_ = thermalBoard_->findReg("ccHeaterCurrent");
+  
+  // Store the addresses of the cryocon and lakeshore devices
+
+  //  COUT("Here 3");
+  gpibDevice_   = gpibDevice;
+  cryoConAddr_  = cryoConAddr;
+  lsThermoAddr_ = lsThermoAddr;
+
+  // And try to connect.  On failure, the parent will set a timer to
+  // alert us when to attempt to reconnect
+
+  //  COUT("Here 4");
+  if(!connect()) {
+    if(parent_)
+      parent_->sendGpibConnectedMsg(false);
+  }
+  //  COUT("Here 5");
+}
+
+/**.......................................................................
+ * Attempt to connect to the controller
+ */
+bool AntennaGpib::connect()
+{
+  // Instantiate the controller, connect and initialize devices
+  
+  try {
+
+    gpib_ = new gcp::util::GpibUsbController(gpibDevice_, true);
+    gpib_->connectAndClear();
+    gpib_->setEoi(true);
+    gpib_->setAuto(false);
+    gpib_->enableEot(true);
+//    gpib_->setEos(0);
+//    gpib_->connectAndClear();
+    gpib_->setEotChar('\n');
+
+    cryoCon_  = new gcp::util::CryoCon(*gpib_);
+    lsThermo_ = new gcp::util::LsThermal(*gpib_);
+
+    cryoCon_->setAddress(cryoConAddr_);
+    lsThermo_->setAddress(lsThermoAddr_);
+
+  } catch(Exception& err) {
+
+    ReportError(err.what());
+    return false;
+  }
+
+  // try to initialize the loop variables on the cryocon
+  try { 
+    cryoCon_->setUpLoop(1);
+  } catch(Exception& err) { 
+    COUT("Could not initialize the loop");
+  };
+
+  return true;
+};
+
+/**.......................................................................
+ * Destructor.
+ */
+AntennaGpib::~AntennaGpib() 
+{
+  if(parent_) {
+    delete thermalBoard_;
+    thermalBoard_ = 0;
+  }
+
+  if(cryoCon_) {
+    delete cryoCon_;
+    cryoCon_ = 0;
+  }
+
+  if(lsThermo_) {
+    delete lsThermo_;
+    lsThermo_ = 0;
+  }
+
+  if(gpib_) {
+    delete gpib_;
+    gpib_ = 0;
+  }
+}
+
+/**.......................................................................
+ * Process a message received on the AntennaGpib message queue
+ */
+void AntennaGpib::processMsg(AntennaGpibMsg* msg)
+{
+  switch (msg->type) {
+
+    // Attempt to connect to the GPIB controller
+
+  case AntennaGpibMsg::CONNECT:
+    parent_->sendGpibConnectedMsg(connect());
+    break;
+
+  case AntennaGpibMsg::READOUT_THERMO:
+    readoutThermometry();
+    break;
+
+    // A GPIB command
+
+  case AntennaGpibMsg::GPIB_CMD:
+    executeGpibCmd(msg);
+    break;
+
+  default:
+    ReportError("Unrecognized message type: " << msg->type);
+    break;
+  };
+};
+
+/**.......................................................................
+ * Read out thermometry
+ */
+void AntennaGpib::readoutThermometry()
+{
+  static std::vector<float> temps;
+  static TimeVal time;
+  static CoordRange rangeSens;
+  static CoordRange rangeCryocon;
+  static CoordRange rangeUtc;
+  static RegDate regDate;
+  float tempVal, heatVal;
+  int expectedIndex, i;
+  bool skippedBeat;
+  float ccTemps[THERMAL_SAMPLES_PER_FRAME];
+  float utcVals[THERMAL_SAMPLES_PER_FRAME];
+
+  time.setToCurrentTime();
+  unsigned index = time.getMilliSeconds() / MS_PER_THERMAL_SAMPLE;
+  int count=0;
+  COUT("cryotime"<<time.getMilliSeconds());
+ // while((index == previousIndex_) ){
+//	 //   COUT("index skipped"<<index);
+//	 time.setToCurrentTime();
+//	 index = time.getMilliSeconds() / MS_PER_THERMAL_SAMPLE;
+//	 count++;
+//	}
+  // First we check if it skipped an index.
+
+  expectedIndex = (previousIndex_ + 1) % THERMAL_SAMPLES_PER_FRAME;
+
+  COUT("Temperature index "<<index);
+  if(index != expectedIndex) {
+    COUT("index skipped"<<index);
+    COUT("index expected skipped"<<expectedIndex);
+    COUT("index expected prevous"<<previousIndex_);
+//    previousIndex_=index -1;	
+
+    // If index is not as expected, set the previous indices to the desired values:
+    rangeCryocon.setIndex(0,0);
+    rangeCryocon.setStartIndex(1,expectedIndex);
+    rangeCryocon.setStopIndex(1,index);
+
+    rangeUtc.setIndex(0,0);
+    rangeUtc.setStartIndex(1, expectedIndex);
+    rangeUtc.setStopIndex(1,index);
+
+    skippedBeat = 1;
+  } else {
+    rangeCryocon.setIndex(0,0);
+    rangeCryocon.setIndex(1, index);
+    
+    rangeUtc.setIndex(0,0);
+    rangeUtc.setIndex(1, index);
+    skippedBeat = 0;
+  };    
+
+  regDate = time;
+
+  // First read out the cryocon temps
+  if(cryoCon_) {
+    
+    // The only things from the CryoCon we read out are the heater
+    // current and the temperature sensor
+    
+    try{
+      tempVal = cryoCon_->queryChannelTemperature(0);
+      COUT("Cryocon "<<tempVal);	
+      if(index!=1){
+	
+	// do not make it query at index 0 because the process will
+	// take too long -- the lakeshore queries on zero
+	
+	heatVal = cryoCon_->queryHeaterCurrent();
+	share_->writeReg(ccHeaterCurrent_, &heatVal);
+      };
+
+      if(!skippedBeat){
+	share_->writeReg(ccTempSensor_,    &tempVal, &rangeCryocon);
+	share_->writeReg(utc_,           regDate.data(), &rangeUtc);
+      } else {
+	COUT("Skipped a beat.");
+	COUT("index: " << index << "expectedIndex: " << expectedIndex);
+	COUT("filling with tempVal: " << tempVal);
+	//for (i=index;i>expectedIndex-1;i--) {
+	  //ccTemps[i] = tempVal;
+	  // don't know how to index regDate backwards
+//	}
+//	share_->writeReg(ccTempSensor_,    &ccTemps, &rangeCryocon);	
+      }
+    } catch(...) {
+      COUT("Error reading from the cryocon box");
+     // cryoCon_->clearStatus();
+     // cryoCon_->resetModule();
+    }
+  }
+
+
+  // Now read out the lakeshore sensors, which are slow to respond
+  if(lsThermo_) {
+
+    // Only read out the lakeshore once per time period
+    
+    if(index==6){
+      try {
+	CTOUT("IN ANTENNAGPIB:  REQUESTING lakeshore DATA");
+	temps = lsThermo_->requestMonitor();
+	CTOUT("IN ANTENNAGPIB:  done REQUESTING lakeshore DATA");
+	for(i=0;i<8;i++){
+	  		COUT("Writing "<<temps[i]<<"to shared memory");
+	}
+	share_->writeReg(lsTempSensors_, &temps[0]);
+      } catch(...) {
+	COUT("Error reading from the Lakeshore thermal box");
+      }
+      
+    }
+
+  }
+  previousIndex_ = index;
+  return;
+}
+
+/**.......................................................................
+ * Read out CryoCon information
+ */
+void AntennaGpib::readoutCryoCon()
+{
+  float tempVal;
+  float heatVal;
+
+  static TimeVal time;
+  static CoordRange rangeSens;
+  static CoordRange rangeUtc;
+  static RegDate regDate;
+
+  time.setToCurrentTime();
+  unsigned index = time.getMilliSeconds() / MS_PER_THERMAL_SAMPLE;
+
+  rangeSens.setStartIndex(0, 0);
+  rangeSens.setStopIndex(0, 0);
+  rangeSens.setIndex(1, index);
+
+  rangeUtc.setIndex(0, 0);
+  rangeUtc.setIndex(1, index);
+
+  regDate = time;
+
+  if(cryoCon_){
+    
+    // The only things from the CryoCon we read out are the heater
+    // current and the temperature sensor
+    try{
+      tempVal = cryoCon_->queryChannelTemperature(0);
+      heatVal = cryoCon_->queryHeaterCurrent();
+      
+      share_->writeReg(ccTempSensor_, tempVal, &rangeSens);
+      share_->writeReg(ccHeaterCurrent_, heatVal, &rangeSens);
+    } catch(...) {
+	COUT("Reading Cryocon failed");
+    };
+
+    // Write them to disk
+    share_->writeReg(utc_,           regDate.data(), &rangeUtc);
+
+  };
+
+  return;
+}
+
+
+/**.......................................................................
+ * Execute the GPIB command
+ */
+void AntennaGpib::executeGpibCmd(AntennaGpibMsg* msg)
+{
+  // need to read the message and take in the values.
+
+  switch(msg->body.gpib.cmdId) {
+  case gcp::control::GPIB_SETUP:
+    // check to see if there are parameters to be input
+    cryoCon_->setUpLoop(msg->body.gpib.intVals[0]);
+    break;
+    
+  case gcp::control::GPIB_HEAT:
+    cryoCon_->heatUpSensor(msg->body.gpib.intVals[0]);
+    break;
+    
+  case gcp::control::GPIB_COOL:
+    cryoCon_->resumeCooling(msg->body.gpib.intVals[0]);
+    break;
+
+  case gcp::control::GPIB_UNITS:
+    cryoCon_->setInputUnits();
+    break;
+
+  case gcp::control::GPIB_CLR_STATUS:
+    cryoCon_->clearStatus();
+    break;
+
+  case gcp::control::GPIB_RESET:
+    cryoCon_->resetModule();
+    break;
+
+  case gcp::control::GPIB_STOP_LOOP:
+    cryoCon_->stopControlLoop();
+    break;
+
+  case gcp::control::GPIB_ENGAGE_LOOP:
+    cryoCon_->engageControlLoop();
+    break;
+
+  case gcp::control::GPIB_SET_SKY_TEMP:
+    cryoCon_->setSkyTemp(msg->body.gpib.intVals[0], msg->body.gpib.fltVal);
+    break;
+
+  case gcp::control::GPIB_SET_CHANNEL:
+    cryoCon_->setSourceChannel(msg->body.gpib.intVals[0], msg->body.gpib.intVals[1]);
+    break;
+
+  case gcp::control::GPIB_SET_LOOP_RANGE:
+    cryoCon_->setLoopRange(msg->body.gpib.intVals[0], msg->body.gpib.intVals[1]);
+    break;
+
+  case gcp::control::GPIB_SET_P:
+    cryoCon_->setPGain(msg->body.gpib.intVals[0], msg->body.gpib.fltVal);
+    break;
+
+  case gcp::control::GPIB_SET_I:
+    cryoCon_->setIGain(msg->body.gpib.intVals[0], msg->body.gpib.fltVal);
+    break;
+
+  case gcp::control::GPIB_SET_D:
+    cryoCon_->setDGain(msg->body.gpib.intVals[0], msg->body.gpib.fltVal);
+    break;
+
+  case gcp::control::GPIB_SET_POWER_OUTPUT:
+    cryoCon_->setPowerOutput(msg->body.gpib.intVals[0], msg->body.gpib.fltVal);
+    break;
+
+  case gcp::control::GPIB_SET_HEATER_LOAD:
+    cryoCon_->setHeaterLoad(msg->body.gpib.intVals[0], msg->body.gpib.fltVal);
+    break;
+
+  case gcp::control::GPIB_SET_LOOP_TYPE:
+    cryoCon_->setControlLoopType(msg->body.gpib.intVals[0], msg->body.gpib.intVals[1]);
+    break;
+
+  };
+  return;
+}
+

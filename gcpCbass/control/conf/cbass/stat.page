@@ -1,0 +1,30 @@
+add_page 10 217 Page black red yellow 10 11 {10 10 10 10 10 10} {} 0 {} 0 {
+  label 0 1 midnightblue paleturquoise center I1
+  label 0 2 midnightblue paleturquoise center I2
+  label 0 3 midnightblue paleturquoise center I3
+  label 0 4 midnightblue paleturquoise center I4
+  register 1 1 black green center {antenna0.receiver.drainCurrent[0]} floating 2 0 {} 0 0 0.0 0.0 0 1
+  register 1 2 black green center {antenna0.receiver.drainCurrent[1]} floating 2 0 {} 0 0 0.0 0.0 0 1
+  register 1 3 black green center {antenna0.receiver.drainCurrent[2]} floating 2 0 {} 0 0 0.0 0.0 0 1
+  register 1 4 black green center {antenna0.receiver.drainCurrent[3]} floating 2 0 {} 0 0 0.0 0.0 0 1
+  label 2 0 midnightblue paleturquoise center LNA
+  label 2 1 midnightblue paleturquoise center Vd1
+  label 2 2 midnightblue paleturquoise center Vd2
+  label 2 3 midnightblue paleturquoise center Vd3
+  label 2 4 midnightblue paleturquoise center Vd4
+  label 2 5 midnightblue paleturquoise center {Vaccum }
+  label 3 0 midnightblue paleturquoise center BIASES
+  register 3 1 black green center {antenna0.receiver.drainVoltage[0]} floating 2 0 {} 0 0 0.0 0.0 0 1
+  register 3 2 black green center {antenna0.receiver.drainVoltage[1]} floating 2 0 {} 0 0 0.0 0.0 0 1
+  register 3 3 black green center {antenna0.receiver.drainVoltage[2]} floating 2 0 {} 0 0 0.0 0.0 0 1
+  register 3 4 black green center {antenna0.receiver.drainVoltage[3]} floating 2 0 {} 0 0 0.0 0.0 0 1
+  register 3 5 black green center {antenna0.koekblik.adc[0]} floating 3 0 {} 0 0 0.0 0.0 0 1
+  label 4 1 midnightblue paleturquoise center Vg1
+  label 4 2 midnightblue paleturquoise center Vg2
+  label 4 3 midnightblue paleturquoise center Vg3
+  label 4 4 midnightblue paleturquoise center Vg4
+  register 5 1 black green center {antenna0.receiver.gateVoltage[0]} floating 2 0 {} 0 0 0.0 0.0 0 1
+  register 5 2 black green center {antenna0.receiver.gateVoltage[1]} floating 2 0 {} 0 0 0.0 0.0 0 1
+  register 5 3 black green center {antenna0.receiver.gateVoltage[2]} floating 2 0 {} 0 0 0.0 0.0 0 1
+  register 5 4 black green center {antenna0.receiver.gateVoltage[3]} floating 2 0 {} 0 0 0.0 0.0 0 1
+}

@@ -1,0 +1,47 @@
+? Makefile.rules
+? stat.txt
+===================================================================
+File: Makefile         	Status: Up-to-date
+
+   Working revision:	1.1.1.1
+   Repository revision:	1.1.1.1	/sw/cvsroot/cbass/gcpCbass/control/code/unix/libunix_src/cbass/Makefile,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: rtcnetcoms.c     	Status: Locally Modified
+
+   Working revision:	1.6
+   Repository revision:	1.6	/sw/cvsroot/cbass/gcpCbass/control/code/unix/libunix_src/cbass/rtcnetcoms.c,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: rtcnetcoms.h     	Status: Locally Modified
+
+   Working revision:	1.6
+   Repository revision:	1.6	/sw/cvsroot/cbass/gcpCbass/control/code/unix/libunix_src/cbass/rtcnetcoms.h,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: specificregs.c   	Status: Locally Modified
+
+   Working revision:	1.19
+   Repository revision:	1.19	/sw/cvsroot/cbass/gcpCbass/control/code/unix/libunix_src/cbass/specificregs.c,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: specificregs.h   	Status: Locally Modified
+
+   Working revision:	1.8
+   Repository revision:	1.8	/sw/cvsroot/cbass/gcpCbass/control/code/unix/libunix_src/cbass/specificregs.h,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+

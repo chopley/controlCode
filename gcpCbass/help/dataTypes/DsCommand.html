@@ -1,0 +1,69 @@
+<center><a href=../index.html>Index</a></center>
+<HEAD><TITLE>The DsCommand datatype.</TITLE></HEAD>
+<BODY bgcolor=add8e6>
+<HR>
+<font color=blue><a name=DsCommand> <code><b>DsCommand</b></code> </a></font>
+<P>
+The command to send to the thermometry task.
+<P>
+<DL>
+<DT> Input Format:
+<P>
+<DD> An <a href=dt_class.html#option>option</a> from:<br><br>
+    <UL>
+
+    <LI> <code><b>address</b></code> - Address selected device.  This
+    option requires that the <code>address</code> argument also be
+    present.
+
+    <LI> <code><b>checksum</b></code> - Add checksumming to data
+    written to and read from the temperature sensors.
+
+    <LI> <code><b>nochecksum</b></code> - Remove checksumming from data
+    written to and read from the temperature sensors.
+
+    <LI> <code><b>search</b></code> - Search for devices attached to
+     its bus and record the ROM id of each device found.  This will
+     sequentially fill the register <code>thermo.romid</code> with the ROM id of
+     detected devices; the register <code>thermo.temp</code> will subsequently
+     record the temperature of the devices in the same order.  To
+     associate a device ROM id with a particular index of the thermo
+     registers, use the <code><b>romid</b></code> option.
+
+    <LI> <code><b>display</b></code> - Display the list of known
+    devices.
+
+    <LI> <code><b>read</b></code> - Read the temperature of a selected
+    device.  This option requires that the <code>address</code>
+    argument also be present.  If the specified device is currently
+    flagged as unreachable, the thermometry task will unflag it and
+    attempt to read from it.
+
+    <LI> <code><b>readall</b></code> - Read the temperature of all
+    known devices.  Any devices flagged as unreachable will not be read.
+
+    <LI> <code><b>reset</b></code> - In theory, this causes the DS2480
+    to initiate a master reset cycle, equivalent to power up.
+
+    <LI> <code><b>romid</b></code> - Associate a specific device with
+    an index of the <code>thermo.temp</code> register.  This option requires that
+    the <code>address</code> and <code>index</code> arguments also be
+    present.
+
+    <LI> <code><b>flag</b></code> - Flag the specified device as
+    unreachable.  This option requires that the <code>address</code>
+    argument also be present.  When a device is flagged as
+    unreachable, the thermometry task will not attempt to read from
+    that device, even when the readout interval is non-zero.  
+
+    <LI> <code><b>unflag</b></code> - Flag the specified device as
+    reachable.  This option requires that the <code>address</code>
+    argument also be present.
+
+    </UL>
+</dl>
+<p>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:00 PST 2004)
+</BODY>

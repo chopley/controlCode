@@ -1,0 +1,100 @@
+#ifndef ADCMONITOR_H
+#define ADCMONITOR_H
+/**
+ * @file LsThermal.h
+ * 
+ * Tagged: Thu Oct 18 15:49:12 PDT 2007
+ * 
+ * @author GCP data acquisition
+ */
+
+#include "gcp/util/common/Labjack.h"
+#include "gcp/util/common/LabjackU3.h"
+#include "gcp/antenna/control/specific/Board.h"
+#include "gcp/control/code/unix/libunix_src/common/tcpip.h"
+#include "gcp/control/code/unix/libunix_src/common/regmap.h"
+#include "gcp/util/common/GenericTaskMsg.h"
+
+namespace gcp { 
+  namespace antenna {
+    namespace control {
+      
+      // define a class to hold the message
+      class AdcMonitorMsg : public gcp::util::GenericTaskMsg {
+      public:
+
+	enum MsgType {
+	  CONNECT,
+	  DISCONNECT, 
+	  GET_VOLTAGE,
+	};
+
+	// A type for this message
+
+	MsgType type_;
+      };
+
+
+      // Class to read data back from the DlpUsbThermal device
+      
+      class SpecificShare;
+      
+      class AdcMonitor : public Board, public gcp::util::SpawnableTask<AdcMonitorMsg> { 
+	
+      public:
+	
+	/**
+	 * Constructor.
+	 */
+	AdcMonitor();
+	AdcMonitor(SpecificShare* share, std::string name, bool spawn);
+	
+	/**
+	 * Destructor.
+	 */
+	virtual ~AdcMonitor();
+
+	/**
+	 * Way to process the message to figure out what to do.
+	 */
+	void processMsg(AdcMonitorMsg* msg);
+
+	// Pointer to resources.
+	gcp::util::Labjack* labjack_;
+
+	// connects:
+	bool connect();
+	// disconnects:
+	bool disconnect();
+
+	// is the response valid?
+	bool isValid_;
+	bool connected_;
+
+	// values from the previous reading
+	float prevAdcValues_[NUM_LABJACK_VOLTS];
+	
+	/**
+	 *  request voltage command issued from AntennaControl
+	 **/
+	void sendVoltRequest();
+
+	/**
+	 * Requests all Voltages
+	 */
+	void requestAllVoltages();
+	
+	/**
+	 *  Data registers we store
+	 */
+	/**
+         * The data registers we will store
+         */
+	RegMapBlock* adcVoltPtr_;
+
+
+      }; // End class AdcMonitor
+    } // End namespace control
+  } // End namespace antenna
+} // End namespace gcp
+#endif // End #ifndef ADCMONITOR_H

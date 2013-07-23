@@ -1,0 +1,72 @@
+#ifndef GCP_UTIL_WXDATASA_H
+#define GCP_UTIL_WXDATASA_H
+
+/**
+ * @file WxDataSA.h
+ * 
+ * Tagged: May 15, 2013
+ * 
+ * @author Stephen Muchovej
+ */
+#include "gcp/util/common/NetStruct.h"
+
+namespace gcp {
+  namespace util {
+    
+    class WxDataSA : public NetStruct {
+    public:
+
+      /**
+       * Constructor.
+       */
+      WxDataSA();
+      
+      /**
+       * Destructor.
+       */
+      virtual ~WxDataSA();
+      
+      unsigned year_;
+      unsigned day_;
+      unsigned hour_;
+      unsigned min_;
+
+      double airTemperatureC_;
+      double windDirectionDegrees_;
+
+      double pressure_;
+      double relativeHumidity_;
+      double windSpeed_;
+
+      std::string mtSampleTime_;
+      unsigned char mtSampleTimeUchar_[35];
+      unsigned char monthUchar_[10];
+      unsigned char weekDayUchar_[10];
+      std::string year2_;
+      std::string weekDay_;
+      std::string month_;
+      double mtWindSpeed_;
+      double mtAdjWindDir_;
+      double mtTemp1_;
+      double mtRelHumidity_;
+      double mtDewPoint_;
+      double mtAdjBaromPress_;
+      double mtVaporPressure_;
+
+      bool received_;
+
+      // Write the contents of this object to an ostream
+
+      friend std::ostream& 
+	gcp::util::operator<<(std::ostream& os, WxDataSA& data);
+
+      std::string header();
+
+    }; // End class WxDataSA
+
+    
+  } // End namespace util
+} // End namespace gcp
+
+
+#endif // End #ifndef GCP_UTIL_WXDATASA_H

@@ -1,0 +1,26 @@
+<HEAD><TITLE>The GpibCmd datatype.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+<center><a href=../index.html>Index</a></center>
+<HR>
+<font color=blue><a name=GpibCmd> <code><b>GpibCmd</b></code> </a></font>
+<P>
+A command-string to be sent to an instrument on the GPIB bus.
+<P>
+<DL>
+<DT> Input Format:
+<P>
+<DD> A string of up to 80 characters.
+<P>
+<DT> Context:
+<DD> Most expensive measuring instruments such as oscilloscopes and
+     power meters can be controlled and monitored under computer
+     control via a GPIB bus. To control an instrument one sends it
+     a command string. This can be done with the
+     <code><a href=../commands/gpib_send.html>gpib_send</a>()</code>,
+     which requires the command string to be sent as a
+     <code>GpibCmd</code> value.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:08 PST 2004)
+</BODY>

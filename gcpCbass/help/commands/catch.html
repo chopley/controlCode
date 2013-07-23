@@ -1,0 +1,118 @@
+<HEAD><TITLE>The catch command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+<font color=blue><a name=catch> <code><b>catch</b> condition {commands} {remedial_commands}</code></a></font>
+<P>
+Abort the specified block of commands if a given condition becomes true.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><a href=../dataTypes/Boolean.html><code>Boolean</code></a> <code>condition</code>
+     <DD>The condition whose truth value aborts the block of commands.
+     <DT><code>commands</code>
+     <DD>A block of commands to execute. The commands will be executed to
+         completion unless the condition becomes true.
+     <DT><code>remedial_commands</code>
+     <DD>An optional block of commands to execute if the condition
+         becomes true.
+     </DL>
+<P>
+<DT> Example:
+<DD> In the following example, if the source sets while the enclosed
+     statements are being executed, or the statements take more than
+     10 minutes to complete, execution of these statements is aborted,
+     and execution resumes with the print statement that follows the
+     catch statement.
+<pre>
+  catch $signaled(source_set) | $elapsed &gt; 10m {
+    track jupiter
+    until $acquired(source)
+    until $elapsed &gt; 30s
+    track blank
+    until $acquired(source)
+    until $elapsed &gt; 10m
+  }
+  print "Finished"
+</pre>
+
+<DT> Example:
+<DD> This example is similar to the previous one, except that here an
+     extra block of remedial commands has been provided. This block of
+     commands is only executed if the catch condition becomes true.
+     In this case it tells the user that the statements had to be
+     aborted, and why. After it has finished executing, execution
+     continues with the print statement that follows the catch
+     statement.
+
+<pre>
+  catch $signaled(source_set) | $elapsed &gt; 10m {
+    track jupiter
+    until $acquired(source)
+    until $elapsed &gt; 30s
+    track blank
+    until $acquired(source)
+    until $elapsed &gt; 10m
+  } {
+    if($signaled(source_set)) {
+      print "The source set"
+    } else {
+      print "Observations took too long"
+    }
+    exit
+  }
+  print "Finished"
+</pre>
+
+<DT> Context:
+<DD> Catch commands provide a way to abort a block of commands when
+     specified events occur. This is important when using <a
+     href=until.html>until</a> statements, because these can block
+     script execution indefinitely, and unless every one of these
+     until commands checks all conceivable conditions, it is possible
+     that script execution will be held up much longer than intended.
+     For example, in the following example, if Jupiter or Saturn were
+     to set before the telescope reached them, the script would pause
+     until they rose again.
+
+<pre>
+  track jupiter
+  until $acquired(source)
+  until $elapsed > 30s
+  track saturn
+  until $acquired(source)
+  until $elapsed > 30s
+</pre>
+
+     One could deal with this by adding a &quot;<code> |
+     $signaled(source_set)</code>&quot; clause to each of the until
+     statements, but this becomes troublesome if there are a lot of
+     such statements, and could be impossible if the code is being
+     <a href=import.html>imported</a> from somebody else's file.
+     Both of these problems are resolved by enclosing the
+     block of statements in a catch block, and writing the stopping
+     condition just once.
+
+<pre>
+  catch $signaled(source_set) {
+    until $acquired(source)
+    until $elapsed > 30s
+    track saturn
+    until $acquired(source)
+    until $elapsed > 30s
+  }
+</pre>
+
+Note that the catch condition is only evaluated at certain times. It
+is evaluated just before the first of its enclosed statements is about
+to be run, whenever a new signal arrives, and repeatedly while <a
+href=until.html>until</a> statements are running.  If the condition is
+found to be true at any of these points, the enclosed block of
+statements is aborted, and if the optional block of remedial commands
+has been provided, it is executed. Then execution continues with the
+first statement that follows the catch command.
+
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:15:49 PST 2004)
+</BODY>

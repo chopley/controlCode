@@ -1,0 +1,2916 @@
+%!
+%%BoundingBox: (atend)
+%%Pages: (atend)
+%%DocumentFonts: (atend)
+%%EndComments
+%
+% FrameMaker PostScript Prolog 3.0, for use with FrameMaker 3.0
+% Copyright (c) 1986,87,89,90,91 by Frame Technology Corporation.
+% All rights reserved.
+%
+% Known Problems:
+%	Due to bugs in Transcript, the 'PS-Adobe-' is omitted from line 1
+/FMversion (3.0) def 
+% Set up Color vs. Black-and-White
+	/FMPrintInColor systemdict /colorimage known
+		systemdict /currentcolortransfer known or def
+% Uncomment this line to force b&w on color printer
+%   /FMPrintInColor false def
+/FrameDict 195 dict def 
+systemdict /errordict known not {/errordict 10 dict def
+		errordict /rangecheck {stop} put} if
+% The readline in 23.0 doesn't recognize cr's as nl's on AppleTalk
+FrameDict /tmprangecheck errordict /rangecheck get put 
+errordict /rangecheck {FrameDict /bug true put} put 
+FrameDict /bug false put 
+mark 
+% Some PS machines read past the CR, so keep the following 3 lines together!
+currentfile 5 string readline
+00
+0000000000
+cleartomark 
+errordict /rangecheck FrameDict /tmprangecheck get put 
+FrameDict /bug get { 
+	/readline {
+		/gstring exch def
+		/gfile exch def
+		/gindex 0 def
+		{
+			gfile read pop 
+			dup 10 eq {exit} if 
+			dup 13 eq {exit} if 
+			gstring exch gindex exch put 
+			/gindex gindex 1 add def 
+		} loop
+		pop 
+		gstring 0 gindex getinterval true 
+		} def
+	} if
+/FMVERSION {
+	FMversion ne {
+		/Times-Roman findfont 18 scalefont setfont
+		100 100 moveto
+		(FrameMaker version does not match postscript_prolog!)
+		dup =
+		show showpage
+		} if
+	} def 
+/FMLOCAL {
+	FrameDict begin
+	0 def 
+	end 
+	} def 
+	/gstring FMLOCAL
+	/gfile FMLOCAL
+	/gindex FMLOCAL
+	/orgxfer FMLOCAL
+	/orgproc FMLOCAL
+	/organgle FMLOCAL
+	/orgfreq FMLOCAL
+	/yscale FMLOCAL
+	/xscale FMLOCAL
+	/manualfeed FMLOCAL
+	/paperheight FMLOCAL
+	/paperwidth FMLOCAL
+/FMDOCUMENT { 
+	array /FMfonts exch def 
+	/#copies exch def
+	FrameDict begin
+	0 ne dup {setmanualfeed} if
+	/manualfeed exch def
+	/paperheight exch def
+	/paperwidth exch def
+	/yscale exch def
+	/xscale exch def
+	currenttransfer cvlit /orgxfer exch def
+	currentscreen cvlit /orgproc exch def
+	/organgle exch def /orgfreq exch def
+	setpapername 
+	manualfeed {true} {papersize} ifelse 
+	{manualpapersize} {false} ifelse 
+	{desperatepapersize} if
+	end 
+	} def 
+	/pagesave FMLOCAL
+	/orgmatrix FMLOCAL
+	/landscape FMLOCAL
+/FMBEGINPAGE { 
+	FrameDict begin 
+	/pagesave save def
+	3.86 setmiterlimit
+	/landscape exch 0 ne def
+	landscape { 
+		90 rotate 0 exch neg translate pop 
+		}
+		{pop pop}
+		ifelse
+	xscale yscale scale
+	/orgmatrix matrix def
+	gsave 
+	} def 
+/FMENDPAGE {
+	grestore 
+	pagesave restore
+	end 
+	showpage
+	} def 
+/FMFONTDEFINE { 
+	FrameDict begin
+	findfont 
+	ReEncode 
+	1 index exch 
+	definefont 
+	FMfonts 3 1 roll 
+	put
+	end 
+	} def 
+/FMFILLS {
+	FrameDict begin
+	array /fillvals exch def
+	end 
+	} def 
+/FMFILL {
+	FrameDict begin
+	 fillvals 3 1 roll put
+	end 
+	} def 
+/FMNORMALIZEGRAPHICS { 
+	newpath
+	0.0 0.0 moveto
+	1 setlinewidth
+	0 setlinecap
+	0 0 0 sethsbcolor
+	0 setgray 
+	} bind def
+	/fx FMLOCAL
+	/fy FMLOCAL
+	/fh FMLOCAL
+	/fw FMLOCAL
+	/llx FMLOCAL
+	/lly FMLOCAL
+	/urx FMLOCAL
+	/ury FMLOCAL
+/FMBEGINEPSF { 
+	end 
+	/FMEPSF save def 
+	/showpage {} def 
+	FMNORMALIZEGRAPHICS 
+	[/fy /fx /fh /fw /ury /urx /lly /llx] {exch def} forall 
+	fx fy translate 
+	rotate
+	fw urx llx sub div fh ury lly sub div scale 
+	llx neg lly neg translate 
+	} bind def
+/FMENDEPSF {
+	FMEPSF restore
+	FrameDict begin 
+	} bind def
+FrameDict begin 
+/setmanualfeed {
+%%BeginFeature *ManualFeed True
+	 statusdict /manualfeed true put
+%%EndFeature
+	} def
+/max {2 copy lt {exch} if pop} bind def
+/min {2 copy gt {exch} if pop} bind def
+/inch {72 mul} def
+/pagedimen { 
+	paperheight sub abs 16 lt exch 
+	paperwidth sub abs 16 lt and
+	{/papername exch def} {pop} ifelse
+	} def
+	/papersizedict FMLOCAL
+/setpapername { 
+	/papersizedict 14 dict def 
+	papersizedict begin
+	/papername /unknown def 
+		/Letter 8.5 inch 11.0 inch pagedimen
+		/LetterSmall 7.68 inch 10.16 inch pagedimen
+		/Tabloid 11.0 inch 17.0 inch pagedimen
+		/Ledger 17.0 inch 11.0 inch pagedimen
+		/Legal 8.5 inch 14.0 inch pagedimen
+		/Statement 5.5 inch 8.5 inch pagedimen
+		/Executive 7.5 inch 10.0 inch pagedimen
+		/A3 11.69 inch 16.5 inch pagedimen
+		/A4 8.26 inch 11.69 inch pagedimen
+		/A4Small 7.47 inch 10.85 inch pagedimen
+		/B4 10.125 inch 14.33 inch pagedimen
+		/B5 7.16 inch 10.125 inch pagedimen
+	end
+	} def
+/papersize {
+	papersizedict begin
+		/Letter {lettertray letter} def
+		/LetterSmall {lettertray lettersmall} def
+		/Tabloid {11x17tray 11x17} def
+		/Ledger {ledgertray ledger} def
+		/Legal {legaltray legal} def
+		/Statement {statementtray statement} def
+		/Executive {executivetray executive} def
+		/A3 {a3tray a3} def
+		/A4 {a4tray a4} def
+		/A4Small {a4tray a4small} def
+		/B4 {b4tray b4} def
+		/B5 {b5tray b5} def
+		/unknown {unknown} def
+	papersizedict dup papername known {papername} {/unknown} ifelse get
+	end
+	/FMdicttop countdictstack 1 add def 
+	statusdict begin stopped end 
+	countdictstack -1 FMdicttop {pop end} for 
+	} def
+/manualpapersize {
+	papersizedict begin
+		/Letter {letter} def
+		/LetterSmall {lettersmall} def
+		/Tabloid {11x17} def
+		/Ledger {ledger} def
+		/Legal {legal} def
+		/Statement {statement} def
+		/Executive {executive} def
+		/A3 {a3} def
+		/A4 {a4} def
+		/A4Small {a4small} def
+		/B4 {b4} def
+		/B5 {b5} def
+		/unknown {unknown} def
+	papersizedict dup papername known {papername} {/unknown} ifelse get
+	end
+	stopped 
+	} def
+/desperatepapersize {
+	statusdict /setpageparams known
+		{
+		paperwidth paperheight 0 1 
+		statusdict begin
+		{setpageparams} stopped pop 
+		end
+		} if
+	} def
+/savematrix {
+	orgmatrix currentmatrix pop
+	} bind def
+/restorematrix {
+	orgmatrix setmatrix
+	} bind def
+/dmatrix matrix def
+/dpi    72 0 dmatrix defaultmatrix dtransform
+    dup mul exch   dup mul add   sqrt def
+/freq dpi 18.75 div 8 div round dup 0 eq {pop 1} if 8 mul dpi exch div def
+/sangle 1 0 dmatrix defaultmatrix dtransform exch atan def
+/DiacriticEncoding [
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef /space /exclam /quotedbl
+/numbersign /dollar /percent /ampersand /quotesingle /parenleft
+/parenright /asterisk /plus /comma /hyphen /period /slash /zero /one
+/two /three /four /five /six /seven /eight /nine /colon /semicolon
+/less /equal /greater /question /at /A /B /C /D /E /F /G /H /I /J /K
+/L /M /N /O /P /Q /R /S /T /U /V /W /X /Y /Z /bracketleft /backslash
+/bracketright /asciicircum /underscore /grave /a /b /c /d /e /f /g /h
+/i /j /k /l /m /n /o /p /q /r /s /t /u /v /w /x /y /z /braceleft /bar
+/braceright /asciitilde /.notdef /Adieresis /Aring /Ccedilla /Eacute
+/Ntilde /Odieresis /Udieresis /aacute /agrave /acircumflex /adieresis
+/atilde /aring /ccedilla /eacute /egrave /ecircumflex /edieresis
+/iacute /igrave /icircumflex /idieresis /ntilde /oacute /ograve
+/ocircumflex /odieresis /otilde /uacute /ugrave /ucircumflex
+/udieresis /dagger /.notdef /cent /sterling /section /bullet
+/paragraph /germandbls /registered /copyright /trademark /acute
+/dieresis /.notdef /AE /Oslash /.notdef /.notdef /.notdef /.notdef
+/yen /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+/ordfeminine /ordmasculine /.notdef /ae /oslash /questiondown
+/exclamdown /logicalnot /.notdef /florin /.notdef /.notdef
+/guillemotleft /guillemotright /ellipsis /.notdef /Agrave /Atilde
+/Otilde /OE /oe /endash /emdash /quotedblleft /quotedblright
+/quoteleft /quoteright /.notdef /.notdef /ydieresis /Ydieresis
+/fraction /currency /guilsinglleft /guilsinglright /fi /fl /daggerdbl
+/periodcentered /quotesinglbase /quotedblbase /perthousand
+/Acircumflex /Ecircumflex /Aacute /Edieresis /Egrave /Iacute
+/Icircumflex /Idieresis /Igrave /Oacute /Ocircumflex /.notdef /Ograve
+/Uacute /Ucircumflex /Ugrave /dotlessi /circumflex /tilde /macron
+/breve /dotaccent /ring /cedilla /hungarumlaut /ogonek /caron
+] def
+/ReEncode { 
+	dup 
+	length 
+	dict begin 
+	{
+	1 index /FID ne 
+		{def} 
+		{pop pop} ifelse 
+	} forall 
+	0 eq {/Encoding DiacriticEncoding def} if 
+	currentdict 
+	end 
+	} bind def
+/graymode true def
+	/bwidth FMLOCAL
+	/bpside FMLOCAL
+	/bstring FMLOCAL
+	/onbits FMLOCAL
+	/offbits FMLOCAL
+	/xindex FMLOCAL
+	/yindex FMLOCAL
+	/x FMLOCAL
+	/y FMLOCAL
+/setpattern {
+	 /bwidth  exch def
+	 /bpside  exch def
+	 /bstring exch def
+	 /onbits 0 def  /offbits 0 def
+	 freq sangle landscape {90 add} if 
+		{/y exch def
+		 /x exch def
+		 /xindex x 1 add 2 div bpside mul cvi def
+		 /yindex y 1 add 2 div bpside mul cvi def
+		 bstring yindex bwidth mul xindex 8 idiv add get
+		 1 7 xindex 8 mod sub bitshift and 0 ne
+		 {/onbits  onbits  1 add def 1}
+		 {/offbits offbits 1 add def 0}
+		 ifelse
+		}
+		setscreen
+	 {} settransfer
+	 offbits offbits onbits add div FMsetgray
+	/graymode false def
+	} bind def
+/grayness {
+	FMsetgray
+	graymode not {
+		/graymode true def
+		orgxfer cvx settransfer
+		orgfreq organgle orgproc cvx setscreen
+		} if
+	} bind def
+	/HUE FMLOCAL
+	/SAT FMLOCAL
+	/BRIGHT FMLOCAL
+	/Colors FMLOCAL
+FMPrintInColor 
+	
+	{
+	/HUE 0 def
+	/SAT 0 def
+	/BRIGHT 0 def
+	% array of arrays Hue and Sat values for the separations [HUE BRIGHT]
+	/Colors   
+	[[0    0  ]    % black
+	 [0    0  ]    % white
+	 [0.00 1.0]    % red
+	 [0.37 1.0]    % green
+	 [0.60 1.0]    % blue
+	 [0.50 1.0]    % cyan
+	 [0.83 1.0]    % magenta
+	 [0.16 1.0]    % comment / yellow
+	 ] def
+      
+	/BEGINBITMAPCOLOR { 
+		BITMAPCOLOR} def
+	/BEGINBITMAPCOLORc { 
+		BITMAPCOLORc} def
+	/BEGINBITMAPTRUECOLOR { 
+		BITMAPTRUECOLOR } def
+	/BEGINBITMAPTRUECOLORc { 
+		BITMAPTRUECOLORc } def
+	/K { 
+		Colors exch get dup
+		0 get /HUE exch store 
+		1 get /BRIGHT exch store
+		  HUE 0 eq BRIGHT 0 eq and
+			{1.0 SAT sub setgray}
+			{HUE SAT BRIGHT sethsbcolor} 
+		  ifelse
+		} def
+	/FMsetgray { 
+		/SAT exch 1.0 exch sub store 
+		  HUE 0 eq BRIGHT 0 eq and
+			{1.0 SAT sub setgray}
+			{HUE SAT BRIGHT sethsbcolor} 
+		  ifelse
+		} bind def
+	}
+	
+	{
+	/BEGINBITMAPCOLOR { 
+		BITMAPGRAY} def
+	/BEGINBITMAPCOLORc { 
+		BITMAPGRAYc} def
+	/BEGINBITMAPTRUECOLOR { 
+		BITMAPTRUEGRAY } def
+	/BEGINBITMAPTRUECOLORc { 
+		BITMAPTRUEGRAYc } def
+	/FMsetgray {setgray} bind def
+	/K { 
+		pop
+		} def
+	}
+ifelse
+/normalize {
+	transform round exch round exch itransform
+	} bind def
+/dnormalize {
+	dtransform round exch round exch idtransform
+	} bind def
+/lnormalize { 
+	0 dtransform exch cvi 2 idiv 2 mul 1 add exch idtransform pop
+	} bind def
+/H { 
+	lnormalize setlinewidth
+	} bind def
+/Z {
+	setlinecap
+	} bind def
+	/fillvals FMLOCAL
+/X { 
+	fillvals exch get
+	dup type /stringtype eq
+	{8 1 setpattern} 
+	{grayness}
+	ifelse
+	} bind def
+/V { 
+	gsave eofill grestore
+	} bind def
+/N { 
+	stroke
+	} bind def
+/M {newpath moveto} bind def
+/E {lineto} bind def
+/D {curveto} bind def
+/O {closepath} bind def
+	/n FMLOCAL
+/L { 
+ 	/n exch def
+	newpath
+	normalize
+	moveto 
+	2 1 n {pop normalize lineto} for
+	} bind def
+/Y { 
+	L 
+	closepath
+	} bind def
+	/x1 FMLOCAL
+	/x2 FMLOCAL
+	/y1 FMLOCAL
+	/y2 FMLOCAL
+	/rad FMLOCAL
+/R { 
+	/y2 exch def
+	/x2 exch def
+	/y1 exch def
+	/x1 exch def
+	x1 y1
+	x2 y1
+	x2 y2
+	x1 y2
+	4 Y 
+	} bind def
+/RR { 
+	/rad exch def
+	normalize
+	/y2 exch def
+	/x2 exch def
+	normalize
+	/y1 exch def
+	/x1 exch def
+	newpath
+	x1 y1 rad add moveto
+	x1 y2 x2 y2 rad arcto
+	x2 y2 x2 y1 rad arcto
+	x2 y1 x1 y1 rad arcto
+	x1 y1 x1 y2 rad arcto
+	closepath
+	16 {pop} repeat
+	} bind def
+/C { 
+	grestore
+	gsave
+	R 
+	clip
+	} bind def
+	/FMpointsize FMLOCAL
+/F { 
+	FMfonts exch get
+	FMpointsize scalefont
+	setfont
+	} bind def
+/Q { 
+	/FMpointsize exch def
+	F 
+	} bind def
+/T { 
+	moveto show
+	} bind def
+/RF { 
+	rotate
+	0 ne {-1 1 scale} if
+	} bind def
+/TF { 
+	gsave
+	moveto 
+	RF
+	show
+	grestore
+	} bind def
+/P { 
+	moveto
+	0 32 3 2 roll widthshow
+	} bind def
+/PF { 
+	gsave
+	moveto 
+	RF
+	0 32 3 2 roll widthshow
+	grestore
+	} bind def
+/S { 
+	moveto
+	0 exch ashow
+	} bind def
+/SF { 
+	gsave
+	moveto
+	RF
+	0 exch ashow
+	grestore
+	} bind def
+/B { 
+	moveto
+	0 32 4 2 roll 0 exch awidthshow
+	} bind def
+/BF { 
+	gsave
+	moveto
+	RF
+	0 32 4 2 roll 0 exch awidthshow
+	grestore
+	} bind def
+/G { 
+	gsave
+	newpath
+	normalize translate 0.0 0.0 moveto 
+	dnormalize scale 
+	0.0 0.0 1.0 5 3 roll arc 
+	closepath fill
+	grestore
+	} bind def
+/A { 
+	gsave
+	savematrix
+	newpath
+	2 index 2 div add exch 3 index 2 div sub exch 
+	normalize 2 index 2 div sub exch 3 index 2 div add exch 
+	translate 
+	scale 
+	0.0 0.0 1.0 5 3 roll arc 
+	restorematrix
+	stroke
+	grestore
+	} bind def
+	/x FMLOCAL
+	/y FMLOCAL
+	/w FMLOCAL
+	/h FMLOCAL
+	/xx FMLOCAL
+	/yy FMLOCAL
+	/ww FMLOCAL
+	/hh FMLOCAL
+	/FMsaveobject FMLOCAL
+	/FMoptop FMLOCAL
+	/FMdicttop FMLOCAL
+/BEGINPRINTCODE { 
+	/FMdicttop countdictstack 1 add def 
+	/FMoptop count 4 sub def 
+	/FMsaveobject save def
+	userdict begin 
+	/showpage {} def 
+	FMNORMALIZEGRAPHICS 
+	3 index neg 3 index neg translate
+	} bind def
+/ENDPRINTCODE {
+	count -1 FMoptop {pop pop} for 
+	countdictstack -1 FMdicttop {pop end} for 
+	FMsaveobject restore 
+	} bind def
+/gn { 
+	0 
+	{	46 mul 
+		cf read pop 
+		32 sub 
+		dup 46 lt {exit} if 
+		46 sub add 
+		} loop
+	add 
+	} bind def
+	/str FMLOCAL
+/cfs { 
+	/str sl string def 
+	0 1 sl 1 sub {str exch val put} for 
+	str def 
+	} bind def
+/ic [ 
+	0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0223
+	0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0223
+	0
+	{0 hx} {1 hx} {2 hx} {3 hx} {4 hx} {5 hx} {6 hx} {7 hx} {8 hx} {9 hx}
+	{10 hx} {11 hx} {12 hx} {13 hx} {14 hx} {15 hx} {16 hx} {17 hx} {18 hx}
+	{19 hx} {gn hx} {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11} {12}
+	{13} {14} {15} {16} {17} {18} {19} {gn} {0 wh} {1 wh} {2 wh} {3 wh}
+	{4 wh} {5 wh} {6 wh} {7 wh} {8 wh} {9 wh} {10 wh} {11 wh} {12 wh}
+	{13 wh} {14 wh} {gn wh} {0 bl} {1 bl} {2 bl} {3 bl} {4 bl} {5 bl} {6 bl}
+	{7 bl} {8 bl} {9 bl} {10 bl} {11 bl} {12 bl} {13 bl} {14 bl} {gn bl}
+	{0 fl} {1 fl} {2 fl} {3 fl} {4 fl} {5 fl} {6 fl} {7 fl} {8 fl} {9 fl}
+	{10 fl} {11 fl} {12 fl} {13 fl} {14 fl} {gn fl}
+	] def
+	/sl FMLOCAL
+	/val FMLOCAL
+	/ws FMLOCAL
+	/im FMLOCAL
+	/bs FMLOCAL
+	/cs FMLOCAL
+	/len FMLOCAL
+	/pos FMLOCAL
+/ms { 
+	/sl exch def 
+	/val 255 def 
+	/ws cfs 
+	/im cfs 
+	/val 0 def 
+	/bs cfs 
+	/cs cfs 
+	} bind def
+400 ms 
+/ip { 
+	is 
+	0 
+	cf cs readline pop 
+	{	ic exch get exec 
+		add 
+		} forall 
+	pop 
+	
+	} bind def
+/wh { 
+	/len exch def 
+	/pos exch def 
+	ws 0 len getinterval im pos len getinterval copy pop
+	pos len 
+	} bind def
+/bl { 
+	/len exch def 
+	/pos exch def 
+	bs 0 len getinterval im pos len getinterval copy pop
+	pos len 
+	} bind def
+/s1 1 string def
+/fl { 
+	/len exch def 
+	/pos exch def 
+	/val cf s1 readhexstring pop 0 get def
+	pos 1 pos len add 1 sub {im exch val put} for
+	pos len 
+	} bind def
+/hx { 
+	3 copy getinterval 
+	cf exch readhexstring pop pop 
+	} bind def
+	/h FMLOCAL
+	/w FMLOCAL
+	/d FMLOCAL
+	/lb FMLOCAL
+	/bitmapsave FMLOCAL
+	/is FMLOCAL
+	/cf FMLOCAL
+/wbytes { 
+	dup 
+	8 eq {pop} {1 eq {7 add 8 idiv} {3 add 4 idiv} ifelse} ifelse
+	} bind def
+/BEGINBITMAPBWc { 
+	1 {} COMMONBITMAPc
+	} bind def
+/BEGINBITMAPGRAYc { 
+	8 {} COMMONBITMAPc
+	} bind def
+/BEGINBITMAP2BITc { 
+	2 {} COMMONBITMAPc
+	} bind def
+/COMMONBITMAPc { 
+	/r exch def
+	/d exch def
+	gsave
+	translate rotate scale /h exch def /w exch def
+	/lb w d wbytes def 
+	sl lb lt {lb ms} if 
+	/bitmapsave save def 
+	r                    
+	/is im 0 lb getinterval def 
+	ws 0 lb getinterval is copy pop 
+	/cf currentfile def 
+	w h d [w 0 0 h neg 0 h] 
+	{ip} image 
+	bitmapsave restore 
+	grestore
+	} bind def
+/BEGINBITMAPBW { 
+	1 {} COMMONBITMAP
+	} bind def
+/BEGINBITMAPGRAY { 
+	8 {} COMMONBITMAP
+	} bind def
+/BEGINBITMAP2BIT { 
+	2 {} COMMONBITMAP
+	} bind def
+/COMMONBITMAP { 
+	/r exch def
+	/d exch def
+	gsave
+	translate rotate scale /h exch def /w exch def
+	/bitmapsave save def 
+	r                    
+	/is w d wbytes string def
+	/cf currentfile def 
+	w h d [w 0 0 h neg 0 h] 
+	{cf is readhexstring pop} image
+	bitmapsave restore 
+	grestore
+	} bind def
+	/proc1 FMLOCAL
+	/proc2 FMLOCAL
+	/newproc FMLOCAL
+/Fmcc {
+    /proc2 exch cvlit def
+    /proc1 exch cvlit def
+    /newproc proc1 length proc2 length add array def
+    newproc 0 proc1 putinterval
+    newproc proc1 length proc2 putinterval
+    newproc cvx
+} bind def
+/ngrayt 256 array def
+/nredt 256 array def
+/nbluet 256 array def
+/ngreent 256 array def
+	/gryt FMLOCAL
+	/blut FMLOCAL
+	/grnt FMLOCAL
+	/redt FMLOCAL
+	/indx FMLOCAL
+	/cynu FMLOCAL
+	/magu FMLOCAL
+	/yelu FMLOCAL
+	/k FMLOCAL
+	/u FMLOCAL
+/colorsetup {
+	currentcolortransfer
+	/gryt exch def
+	/blut exch def
+	/grnt exch def
+	/redt exch def
+	0 1 255 {
+		/indx exch def
+		/cynu 1 red indx get 255 div sub def
+		/magu 1 green indx get 255 div sub def
+		/yelu 1 blue indx get 255 div sub def
+		/k cynu magu min yelu min def
+		/u k currentundercolorremoval exec def
+		nredt indx 1 0 cynu u sub max sub redt exec put
+		ngreent indx 1 0 magu u sub max sub grnt exec put
+		nbluet indx 1 0 yelu u sub max sub blut exec put
+		ngrayt indx 1 k currentblackgeneration exec sub gryt exec put
+	} for
+	{255 mul cvi nredt exch get}
+	{255 mul cvi ngreent exch get}
+	{255 mul cvi nbluet exch get}
+	{255 mul cvi ngrayt exch get}
+	setcolortransfer
+	{pop 0} setundercolorremoval
+	{} setblackgeneration
+	} bind def
+	/tran FMLOCAL
+/fakecolorsetup {
+	/tran 256 string def
+	0 1 255 {/indx exch def 
+		tran indx
+		red indx get 77 mul
+		green indx get 151 mul
+		blue indx get 28 mul
+		add add 256 idiv put} for
+	currenttransfer
+	{255 mul cvi tran exch get 255.0 div}
+	exch Fmcc settransfer
+} bind def
+/BITMAPCOLOR { 
+	/d 8 def
+	gsave
+	translate rotate scale /h exch def /w exch def
+	/bitmapsave save def 
+	colorsetup
+	/is w d wbytes string def
+	/cf currentfile def 
+	w h d [w 0 0 h neg 0 h] 
+	{cf is readhexstring pop} {is} {is} true 3 colorimage 
+	bitmapsave restore 
+	grestore
+	} bind def
+/BITMAPCOLORc { 
+	/d 8 def
+	gsave
+	translate rotate scale /h exch def /w exch def
+	/lb w d wbytes def 
+	sl lb lt {lb ms} if 
+	/bitmapsave save def 
+	colorsetup
+	/is im 0 lb getinterval def 
+	ws 0 lb getinterval is copy pop 
+	/cf currentfile def 
+	w h d [w 0 0 h neg 0 h] 
+	{ip} {is} {is} true 3 colorimage
+	bitmapsave restore 
+	grestore
+	} bind def
+/BITMAPTRUECOLORc { 
+        gsave
+        translate rotate scale /h exch def /w exch def
+        /bitmapsave save def 
+        
+        /is w string def
+        
+        ws 0 w getinterval is copy pop 
+        /cf currentfile def 
+        w h 8 [w 0 0 h neg 0 h] 
+        {ip} {gip} {bip} true 3 colorimage
+        bitmapsave restore 
+        grestore
+        } bind def
+/BITMAPTRUECOLOR { 
+        gsave
+        translate rotate scale /h exch def /w exch def
+        /bitmapsave save def 
+        /is w string def
+        /gis w string def
+        /bis w string def
+        /cf currentfile def 
+        w h 8 [w 0 0 h neg 0 h] 
+        { cf is readhexstring pop } 
+        { cf gis readhexstring pop } 
+        { cf bis readhexstring pop } 
+        true 3 colorimage 
+        bitmapsave restore 
+        grestore
+        } bind def
+/BITMAPTRUEGRAYc { 
+        gsave
+        translate rotate scale /h exch def /w exch def
+        /bitmapsave save def 
+        
+        /is w string def
+        
+        ws 0 w getinterval is copy pop 
+        /cf currentfile def 
+        w h 8 [w 0 0 h neg 0 h] 
+        {ip gip bip w gray} image
+        bitmapsave restore 
+        grestore
+        } bind def
+/ww FMLOCAL
+/r FMLOCAL
+/g FMLOCAL
+/b FMLOCAL
+/i FMLOCAL
+/gray { 
+        /ww exch def
+        /b exch def
+        /g exch def
+        /r exch def
+        0 1 ww 1 sub { /i exch def r i get .299 mul g i get .587 mul
+			b i get .114 mul add add r i 3 -1 roll floor cvi put } for
+        r
+        } bind def
+/BITMAPTRUEGRAY { 
+        gsave
+        translate rotate scale /h exch def /w exch def
+        /bitmapsave save def 
+        /is w string def
+        /gis w string def
+        /bis w string def
+        /cf currentfile def 
+        w h 8 [w 0 0 h neg 0 h] 
+        { cf is readhexstring pop 
+          cf gis readhexstring pop 
+          cf bis readhexstring pop w gray}  image
+        bitmapsave restore 
+        grestore
+        } bind def
+/BITMAPGRAY { 
+	8 {fakecolorsetup} COMMONBITMAP
+	} bind def
+/BITMAPGRAYc { 
+	8 {fakecolorsetup} COMMONBITMAPc
+	} bind def
+/ENDBITMAP {
+	} bind def
+end 
+	/ALDsave FMLOCAL
+	/ALDmatrix matrix def ALDmatrix currentmatrix pop
+/StartALD {
+	/ALDsave save def
+	 savematrix
+	 ALDmatrix setmatrix
+	} bind def
+/InALD {
+	 restorematrix
+	} bind def
+/DoneALD {
+	 ALDsave restore
+	} bind def
+%%EndProlog
+%%BeginSetup
+(3.0) FMVERSION
+1 1 612 792 0 1 4 FMDOCUMENT
+0 0 /Times-Roman FMFONTDEFINE
+1 0 /Times-Bold FMFONTDEFINE
+32 FMFILLS
+0 0 FMFILL
+1 .1 FMFILL
+2 .3 FMFILL
+3 .5 FMFILL
+4 .7 FMFILL
+5 .9 FMFILL
+6 .97 FMFILL
+7 1 FMFILL
+8 <0f1e3c78f0e1c387> FMFILL
+9 <0f87c3e1f0783c1e> FMFILL
+10 <cccccccccccccccc> FMFILL
+11 <ffff0000ffff0000> FMFILL
+12 <8142241818244281> FMFILL
+13 <03060c183060c081> FMFILL
+14 <8040201008040201> FMFILL
+16 1 FMFILL
+17 .9 FMFILL
+18 .7 FMFILL
+19 .5 FMFILL
+20 .3 FMFILL
+21 .1 FMFILL
+22 0.03 FMFILL
+23 0 FMFILL
+24 <f0e1c3870f1e3c78> FMFILL
+25 <f0783c1e0f87c3e1> FMFILL
+26 <3333333333333333> FMFILL
+27 <0000ffff0000ffff> FMFILL
+28 <7ebddbe7e7dbbd7e> FMFILL
+29 <fcf9f3e7cf9f3f7e> FMFILL
+30 <7fbfdfeff7fbfdfe> FMFILL
+%%EndSetup
+%%Page: "1" 1
+%%BeginPaperSize: Letter
+%%EndPaperSize
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+0 10 Q
+0 X
+(Ephemerides) 72 701.33 T
+(Jet Propulsion Laboratory) 252 701.33 T
+(April, 1997) 468 701.33 T
+(Solar System Dynamics Group) 243.95 689.33 T
+(D.K. Yeomans, Supervisor) 252.01 677.33 T
+118.64 640.34 72 640.34 2 L
+V
+0.95 H
+0 Z
+N
+1 F
+(PURPOSE) 72 641.33 T
+(:) 118.64 641.33 T
+0 F
+1.01 (The purpose of the) 108 617.33 P
+1 F
+1.01 (JPL Horizons On-Line Ephemeris System) 189.75 617.33 P
+0 F
+1.01 ( is to provide simple access to key solar) 373.14 617.33 P
+1.11 (system data and flexible production of highly accurate ephemerides \050ASCII tables\051 for solar system objects. This) 72 605.33 P
+1.07 (includes 15000+ asteroids & comets, 60 natural satellites, 9 planets, the Sun and several dynamical points. Some) 72 593.33 P
+2.08 (spacecraft trajectories are available. The system also offers parameter searches of the comet/asteroid database,) 72 581.33 P
+(matching combinations of up to 39 different parameters.) 72 569.33 T
+0.67 (More than 70  different observational and physical aspect quantities can be requested at intervals for both) 108 545.33 P
+-0.56 (topocentric and geocentric situations. Over 600 Earth station locations are on file; users can input their own topocentric) 72 533.33 P
+0.24 (coordinates if not listed. Output is generally suitable for observers, mission  planners and other researchers although) 72 521.33 P
+(this determination is ultimately the user's responsibility.) 72 509.33 T
+(Three basic types of customizable ephemerides can be requested:) 108 485.33 T
+(1\051  Observables \050RA/DEC, Az/El, physical aspect, angles, illumination, etc.\051) 144 461.33 T
+(2\051  Osculating elements) 144 449.33 T
+(3\051  Cartesian state vectors) 144 437.33 T
+-0.12 (Output is returned to the user via e-mail, FTP or Kermit protocals. Ephemerides can be produced in a format) 108 413.33 P
+(suitable for import into spreadsheets.) 72 401.33 T
+0.54 (The underlying planet/satellite ephemerides and small-body osculating elements are the same ones used at) 108 377.33 P
+(JPL for radar astronomy, mission planning and spacecraft navigation.) 72 365.33 T
+181.95 340.34 72 340.34 2 L
+V
+N
+1 F
+(OVERVIEW OF USAGE) 72 341.33 T
+184.73 340.24 181.95 340.24 2 L
+V
+0.49 H
+N
+0 F
+(:) 181.95 341.33 T
+(1\051  Telnet directly to the system. No account or password is required.) 144 317.33 T
+(2\051  Specify an object to get a summary data screen.) 144 305.33 T
+(3\051  Follow prompts. At  any prompt, type ? or ?! for short and long explanations) 144 293.33 T
+(4\051  Transmit results to your system by e-mail, FTP or Kermit) 144 281.33 T
+0.51 (The Horizons system was intended to be easy to use.  Aside from object selection, it is prompt driven and) 108 257.33 P
+-0.37 (should have a step-function learning curve.) 72 245.33 P
+1 F
+-0.37 (The remainder of this documentation summarizes system capabilities,) 244.96 245.33 P
+(but is not necessary for successful use.) 72 233.33 T
+(While using the system, type "?" or "?!" at any prompt for an explanation of options.) 108 209.33 T
+FMENDPAGE
+%%EndPage: "1" 2
+%%Page: "2" 2
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+0 11 Q
+0 X
+(   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++) 72 712.67 T
+1 F
+(TABLE OF CONTENTS) 248.16 694.67 T
+0 F
+(   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++) 72 676.67 T
+1 F
+(Introduction) 126 604.67 T
+0 F
+(Purpose) 144 586.67 T
+(Overview of Usage) 144 568.67 T
+(1.) 108 532.67 T
+1 F
+(Connecting to the System) 126 532.67 T
+0 F
+(2.) 108 514.67 T
+1 F
+(Object Selection) 126 514.67 T
+0 F
+(Categories) 144 496.67 T
+(Major Body Selection) 144 478.67 T
+(Small Body Selection) 144 460.67 T
+(3.) 108 442.67 T
+1 F
+(Other Main Prompt Commands) 126 442.67 T
+0 F
+(4.) 108 424.67 T
+1 F
+(Integrator Display) 126 424.67 T
+0 F
+(5.) 108 406.67 T
+1 F
+(Specification of Time) 126 406.67 T
+0 F
+(6.) 108 388.67 T
+1 F
+(Coordinate Reference Frames) 126 388.67 T
+0 F
+(ICRF/J2000.0) 144 370.67 T
+(FK4/B1950.0) 144 352.67 T
+(7.) 108 334.67 T
+1 F
+(Searching for Small Bodies) 126 334.67 T
+0 F
+(8.) 108 316.67 T
+1 F
+(User-Specified Small Bodies) 126 316.67 T
+0 F
+(9.) 108 298.67 T
+1 F
+(Customizing Requested Ephemeri) 126 298.67 T
+0 F
+(s) 285.91 298.67 T
+(10.) 108 280.67 T
+1 F
+(Definition of Observer Table Quantities) 126 280.67 T
+0 F
+(11.) 108 262.67 T
+1 F
+(Statement of Ephemeris Limitations) 126 262.67 T
+0 F
+(12.) 108 244.67 T
+1 F
+(Background) 126 244.67 T
+0 F
+(13.) 108 226.67 T
+1 F
+(List of Major-Body Ephemerides On-Line) 126 226.67 T
+0 F
+(14.) 108 208.67 T
+1 F
+(Sources and References for Primary Ephemeris Data) 126 208.67 T
+0 F
+(15.) 108 190.67 T
+1 F
+(Planetary Constants) 126 190.67 T
+0 F
+(16.) 108 172.67 T
+1 F
+(Acknowledgements) 126 172.67 T
+0 F
+(17.) 108 154.67 T
+1 F
+(Appendices/Examples) 124.48 154.67 T
+FMENDPAGE
+%%EndPage: "2" 3
+%%Page: "3" 3
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+399.7 698.58 215.04 698.58 2 L
+0 X
+V
+1.04 H
+0 Z
+N
+1 11 Q
+(1.  CONNECTING TO THE SYSTEM) 215.04 699.67 T
+0 10 Q
+2.51 (The Horizons on-line ephemeris system is a telnet service. From a telnet-capable machine, telnet to) 108 674.33 P
+-0.12 (") 72 662.33 P
+1 F
+-0.12 (ssd.jpl.nasa.gov 6775) 76.08 662.33 P
+0 F
+-0.12 (",  where 6775 is a required port number. From within a web-browser, such as Netscape, enter) 165.37 662.33 P
+(location ") 72 650.33 T
+1 F
+(telnet://ssd.jpl.nasa.gov:6775) 110.78 650.33 T
+0 F
+(". The system will start automatically. No user-ID or password is required.) 233.77 650.33 T
+(Reasons for being denied access are:) 108 626.33 T
+(1\051 You typed the wrong machine address or port number.) 144 602.33 T
+(2\051 The maximum allowed number of users are already connected. Try later.) 144 590.33 T
+(3\051 The system is down \050should be rare; 24/7 service is planned\051) 144 578.33 T
+(If a user-name/password is requested, you did not specify the port number.) 108 554.33 T
+-0.01 (The system will automatically negotiate the terminal type. If this fails \050common\051, the default will be a vt100) 108 530.33 P
+(display.) 72 518.33 T
+0.19 (The system will also attempt to determine your window size. If this fails \050also common\051, it will default to a) 108 494.33 P
+0.55 (24 row by 79 column screen display. If this is inappropriate, and your display paging is choppy, manually set your) 72 482.33 P
+2.41 (screen size by using the command "TTY {rows} {columns}", where {rows} and {columns} are replaced by) 72 470.33 P
+0.89 (appropriate integers.) 72 458.33 P
+1 F
+0.89 (Window  sizes less than 79 columns aren\325t recommended since data-screen displays are) 158.43 458.33 P
+(formatted with that minimum size in mind and will be difficult to read on something smaller.) 72 446.33 T
+0 F
+0.4 (If you require guaranteed access, contact JPL at the address at the end of this document with identification) 108 422.33 P
+0.07 (and justification. Also include the IP addresses of the machine\050s\051 you will access from  and the time span you expect) 72 410.33 P
+(such access to be necessary. The number of reserved slots is very limited.) 72 398.33 T
+FMENDPAGE
+%%EndPage: "3" 4
+%%Page: "4" 4
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+371.02 698.58 246.48 698.58 2 L
+0 X
+V
+1.04 H
+0 Z
+N
+1 11 Q
+(2.  OBJECT SELECTION) 246.48 699.67 T
+0 10 Q
+-0.49 (Effective use of this system requires knowledge of how to select objects. The two classes of objects, accessed) 108 674.33 P
+(slightly differently, are:) 72 662.33 T
+(1\051 Major bodies \050planets & satellites\051) 216 638.33 T
+(2\051 Small bodies \050comets and asteroids\051) 216 626.33 T
+(Accessing the different object types is described in the sections below.) 72 602.33 T
+458.91 562.58 74.75 562.58 2 L
+V
+N
+1 11 Q
+(MAJOR BODIES \050PLANETS, ~60 NATURAL SATELLITES & SPACECRAFT\051) 74.75 563.67 T
+0 10 Q
+(To select a major body, enter) 108 538.33 T
+1 F
+(one) 227.07 538.33 T
+0 F
+( of the following ...) 242.07 538.33 T
+(\0501\051  String to search on \050"Mars" or "Trit"\051) 144 514.33 T
+(\0502\051  JPL ID integer code or fragment) 144 502.33 T
+(\0503\051  An IAU code) 144 490.33 T
+(TYPE 'MB' TO GET A LIST OF ALL MAJOR-BODY STRINGS YOU CAN SEARCH ON.) 72 466.33 T
+1 F
+(Examples) 72 442.33 T
+0 F
+( \050at the main prompt\051:) 113.65 442.33 T
+(Horizons> mars) 108 418.33 T
+(\050uniquely select Mars center; '499' does same\051) 216 418.33 T
+(Horizons> 501) 108 406.33 T
+(\050uniquely select Io\051) 216 406.33 T
+(Horizons> -94) 108 394.33 T
+(\050Select Mars Global Surveyor interplanetary cruise\051) 216 394.33 T
+(Horizons> N*) 108 382.33 T
+(\050list all major bodies with 'n' in an ID field\051) 216 382.33 T
+-0.53 (Note that major bodies may have two integer ID's. Those >100, ending in 99 \050such as 199, 299, 399, etc.\051 refer) 108 358.33 P
+0.06 (to planet CENTERS. To select planet SYSTEM BARYCENTERS, use the codes less than 10 \0501, 2, 3\051. For Mercury,) 72 346.33 P
+1.52 (Venus and Mars, there is no significant difference between planet-center and system barycenter \0501=199, 2=299,) 72 334.33 P
+(4=499\051.) 72 322.33 T
+-0.36 (If planet name is matched, such as "Jupiter", it is assumed the PLANET CENTER \050599\051 is desired. Similarly,) 108 298.33 P
+("Earth" means body 399, "Sun" means body 10, etc.) 72 286.33 T
+(The only way to get a system barycenter is to specify a numeric code less) 108 262.33 T
+0.02 ( than 10. Barycenters are available) 401.67 262.33 P
+(over a longer time interval than planet-centers.) 72 250.33 T
+FMENDPAGE
+%%EndPage: "4" 5
+%%Page: "5" 5
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+438.8 698.58 216 698.58 2 L
+0 X
+V
+1.04 H
+0 Z
+N
+1 11 Q
+(SMALL BODIES \050ASTEROIDS & COMETS\051:) 216 699.67 T
+0 10 Q
+0.4 (To select an asteroid or comet, enter a list of parameters to search on SEPARATED BY A SEMI-COLON) 108 674.33 P
+-0.62 (\050;\051.  TYPE 'SB' FOR LIST OF 39 FIELD KEYWORDS THAT  CAN BE MATCHED, or see list later in this document.) 72 662.33 P
+(Match symbols are from the set { >,  <,  <>,  = }.) 72 650.33 T
+1 F
+(Examples) 72 626.33 T
+0 F
+( \050at the main prompt\051:) 113.65 626.33 T
+(Horizons> A < 2.5; IN > 7.8; STYP = S; GM <> 0; \050match parameters\051) 108 602.33 T
+(Horizons> Vesta;) 108 590.33 T
+(\050or "ASTNAM = Vesta;" for faster search\051) 288 590.33 T
+(Horizons> DES = 1993*;) 108 578.33 T
+(\050Objects with designations containing 1993\051) 288 578.33 T
+(Horizons> 1;) 108 566.33 T
+(\050Object in file position #1\051) 288 566.33 T
+(Horizons> ;) 108 554.33 T
+(\050Enter your own elements\051) 288 554.33 T
+-0.48 (For example,  "A < 2.5; IN > 7.8; STYP = S; GM <> 0; " searches for all S-type small-bodies with semi-major) 108 530.33 P
+0.15 (axis less than 2.5 AU and inclination greater than 7.8 degrees with a known \050non-zero\051 GM. Spaces in the command) 72 518.33 P
+(are not considered, nor are upper/lower-case distinctions.) 72 506.33 T
+2.61 (Exceptions are object names and designations. Name searches consider spaces. Designation searches) 108 482.33 P
+0.13 (consider spaces AND upper/lower-case. If you want to match a fragment of a designation, end it with a '*' \050e.g. DES) 72 470.33 P
+0.45 (= 1993*;\051. Otherwise, it is assumed a complete designation is specified. Name searches are always treated as string) 72 458.33 P
+(fragments.) 72 446.33 T
+0.71 (Once a small-body is uniquely identified, a screen of data will be displayed. If more than one small-body) 108 422.33 P
+-0.22 (matches given parameters, a list is displayed. Individual objects from the matched list can then be requested by giving) 72 410.33 P
+(the  displayed record number followed by a semi-colon.) 72 398.33 T
+-0.31 (The semi-colon is used to indicate a small-body request and resolve number ambiguities. For example, if you) 108 374.33 P
+(enter '1' you will select Mercury Barycenter.  Enter '1;' to retrieve the small-body in record #1 \050Ceres\051.) 72 362.33 T
+(Small-body record numbers are assigned as follows:) 108 338.33 T
+(Record # range) 144 314.33 T
+(Object type) 225 314.33 T
+(------------------) 144 302.33 T
+(-------------------------------------------------------------------------) 225 302.33 T
+1 F
+(       1 -> 10000) 144 290.33 T
+0 F
+(Reserved for) 225 290.33 T
+1 F
+(NUMBERED) 278.84 290.33 T
+0 F
+( asteroids \050record # = asteroid #\051) 337.14 290.33 T
+1 F
+(10001 -> 20000) 144 278.33 T
+0 F
+(Reserved for) 225 278.33 T
+1 F
+(UNNUMBERED) 278.84 278.33 T
+0 F
+( asteroids) 351.57 278.33 T
+1 F
+(20001 -> 30000) 144 266.33 T
+0 F
+(Reserved for) 225 266.33 T
+1 F
+(COMET APPARITIONS) 278.84 266.33 T
+0 F
+0.96 (Elements for more than one comet apparition may be listed \050"apparition" refers to a particular perihelion) 108 242.33 P
+(passage\051, since out-gassing near perihelion can alter the orbit for each passage.) 72 230.33 T
+1.43 (The record \050or file\051 number of unnumbered asteroids and comet apparitions should NOT be considered) 108 206.33 P
+(constants; they may change as the database is updated, until an updated small-body storage system  is implemented.) 72 194.33 T
+(  To enter your own heliocentric ecliptic elements, type ";". This capability is described in a later section.) 72 170.33 T
+FMENDPAGE
+%%EndPage: "5" 6
+%%Page: "6" 6
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+369.02 698.58 245.73 698.58 2 L
+0 X
+V
+1.04 H
+0 Z
+N
+1 11 Q
+(3.  OTHER COMMANDS) 245.73 699.67 T
+0 10 Q
+(MB ..................) 144 661.33 T
+(List planet/natural-satellite \050major-body\051 ID fields) 216 661.33 T
+(SB ...................) 144 649.33 T
+(List small-body search-field names) 216 649.33 T
+(EMAIL {X}....) 144 637.33 T
+(Set/store email address to {X} for output delivery) 216 637.33 T
+(N .....................) 144 625.33 T
+(News) 216 625.33 T
+(TTY {R} {C}..) 144 613.33 T
+(Inquire about or set terminal dimensions; "tty" or "tty 24 79") 216 613.33 T
+(X ....................) 144 601.33 T
+(Exit system \050same as 'q'\051; from any prompt.) 216 601.33 T
+(? ......................) 144 589.33 T
+(Basic help; available at every prompt, even if not listed) 216 589.33 T
+(?! .....................) 144 577.33 T
+(Extra help; may expand on basic help. Available at all prompts.) 216 577.33 T
+(- .......................) 144 565.33 T
+(Return to previous prompt.) 216 565.33 T
+FMENDPAGE
+%%EndPage: "6" 7
+%%Page: "7" 7
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+377.26 698.58 237.48 698.58 2 L
+0 X
+V
+1.04 H
+0 Z
+N
+1 11 Q
+(4.  INTEGRATOR DISPLAY) 237.48 699.67 T
+0 10 Q
+0.36 ( Comet and asteroid ephemerides are integrated from initial conditions called "osculating elements". These) 108 661.33 P
+-0.26 (describe the 3-dimensional position and velocity of the body at a specific time. The integrator starts with this state and) 72 649.33 P
+1.68 (takes small time steps, summing the perturbing forces at each step before taking another step. In this way, the) 72 637.33 P
+(gravitational attraction of other major solar system bodies on the target body trajectory is taken into account.) 72 625.33 T
+0.39 (The integrator will thus start at the epoch, or time, of the osculating elements. It then integrates forward or) 108 601.33 P
+0 (backward, as necessary, to the start of the requested table. Once it reaches the table start time, it may have  to reverse) 72 589.33 P
+(direction and go forward in time to generate the table.) 72 577.33 T
+0.03 (Every 50th step will be displayed so the user can get some sense of the progress of the ephemeris. Direction) 108 553.33 P
+0.28 (reversals are also displayed. If you  request output at small time intervals, the integrator may proceed rapidly to  the) 72 541.33 P
+0.38 (start of your table. There may then be long \050apparent\051 pauses, as numerous interpolations within a given integration) 72 529.33 P
+(step are performed to compute states at closely spaced print times.) 72 517.33 T
+(The last number on the integrator display line is the most recent step size in days.) 108 493.33 T
+FMENDPAGE
+%%EndPage: "7" 8
+%%Page: "8" 8
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+382.91 698.58 231.84 698.58 2 L
+0 X
+V
+1.04 H
+0 Z
+N
+1 11 Q
+(5.  SPECIFICATION OF TIME) 231.84 699.67 T
+0 10 Q
+(Users will be prompted for a time-span. Thus, an over-view may be helpful  in understanding this system's) 108 674.33 T
+(capabilities in different time-scales.) 72 662.33 T
+(Time may be specified many ways in addition to the primary form "YYYY-MMM-DD HH:MM". Of) 108 638.33 T
+(particular note are Julian Date and day-of-year forms. Examples are shown below. In this software, 1 minute is the) 72 626.33 T
+(finest output  resolution allowed, so input seconds result in rounding to the nearest minute.) 72 614.33 T
+326.21 589.24 216 589.24 2 L
+V
+0.49 H
+N
+(YOUR INPUT) 216 590.33 T
+496.86 589.24 360 589.24 2 L
+V
+N
+(PROGRAM INTERPRETATION) 360 590.33 T
+1 F
+(Recommended:) 72 566.33 T
+0 F
+(1997-May-5 12:30:23.3342) 216 566.33 T
+(\050 5 MAY 1997 12:30 \051) 360 566.33 T
+(Acceptable:) 72 542.33 T
+(1/9/96 3 12 59.2) 216 542.33 T
+(\050 9 JAN 1996 03:13 \051) 360 542.33 T
+(1 9 96 3,12,59.2) 216 530.33 T
+(\050 9 JAN 1996 03:13 \051) 360 530.33 T
+(2 jan 91 3:00 12.2) 216 518.33 T
+(\050 2 JAN 1991 03:00 \051) 360 518.33 T
+(91 MAR 10 12:00:00) 216 506.33 T
+(\05010 MAR 1991 12:00\051) 360 506.33 T
+(29 February 1975 3:00) 216 494.33 T
+(\050 1 MAR 1975 03:00\051) 360 494.33 T
+(10 October 29 3:58) 216 482.33 T
+(\05029 OCT 2010 03:58\051) 360 482.33 T
+(dec 31 86 12) 216 470.33 T
+(\05031 DEC 1986 12:00\051) 360 470.33 T
+(86-365 // 12) 216 458.33 T
+(\05031 DEC 1986 12:00\051) 360 458.33 T
+(JUL 98) 216 446.33 T
+(\050 1 JUL 1998 00:00\051) 360 446.33 T
+(JD 2451545.) 216 434.33 T
+(\050 1 JAN 2000 12:00\051) 360 434.33 T
+(JD2451545.) 216 422.33 T
+(\050 1 JAN 2000 12:00\051) 360 422.33 T
+0.73 (The program will interpret other forms as well, but if you get too casual, you may end up with a surprise) 108 398.33 P
+(interpretation.) 72 386.33 T
+-0.22 (The program's time-span prompts indicate the earliest & latest dates that  may be used for the selected target/) 108 362.33 P
+(center combination, as well as the type of time assumed being input \050UTC, TDB, or TT\051.) 72 350.33 T
+0.93 (For cartesian coordinates or osculating elements tables, only TDB may be  used.   For "observer tables",) 108 326.33 P
+0.25 (output may be either UTC or TT.) 72 314.33 P
+1 F
+0.25 (To change the  default, append a "UTC" or "TT" when entering the START) 209.2 314.33 P
+(time, or change it  later in table output defaults section.) 72 302.33 T
+0 F
+( The three time systems are described  as follows:) 307.41 302.33 T
+1 F
+(TDB \050"Barycentric Dynamical Time"\051) 72 278.33 T
+0 F
+( Typically for cartesian and osculating element) 108 266.33 T
+( tables. The uniform time scale of the  ephemerides;) 295.64 266.33 T
+(coordinate time.) 72 254.33 T
+1 F
+(TT  \050"Terrestrial \050Dynamic\051 Time"\051) 72 230.33 T
+0 F
+(Called TDT prior to 1991, used for  observer quantity) 108 218.33 T
+( tables. This) 322.85 218.33 T
+( is proper time as measured by an Earth-) 373.93 218.33 T
+(bound observer and is directly related to atomic time,) 72 206.33 T
+(TAI.  TT periodically differs from) 285.46 206.33 T
+4.16 ( TDB by, at most, 0.002) 422.58 206.33 P
+(seconds.) 72 194.33 T
+1 F
+(UTC \050"Coordinated Universal Time", or Greenwich Civil Time\051) 72 170.33 T
+0 F
+0.27 (This is a  non-uniform time-scale based on the rotation of the Earth. Future  and pre-1972 UTC corrections) 108 158.33 P
+(are currently unavailable, so the  closest known correction is treated as constant over out-of-range intervals.) 72 146.33 T
+FMENDPAGE
+%%EndPage: "8" 9
+%%Page: "9" 9
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+371.31 698.58 240.69 698.58 2 L
+0 X
+V
+1.04 H
+0 Z
+N
+1 11 Q
+(6.  REFERENCE FRAMES) 240.69 699.67 T
+0 10 Q
+0.1 (It is necessary to adopt a commonly agreed-upon coordinate system for describing the position and velocity) 108 674.33 P
+0.73 (of an object in three-dimensional space. This program has two basic frames available; the default is ICRF/J2000.0) 72 662.33 P
+(which can be changed to FK4/B1950.0, if desired, at the appropriate prompt.) 72 650.33 T
+(") 108 626.33 T
+1 F
+(J2000) 112.08 626.33 T
+0 F
+(" selects an Earth Mean-Equator and dynamical Equinox of Epoch J2000.0 inertial reference system,) 137.06 626.33 T
+0.27 (where the Epoch of J2000.0 is the Julian date 2451545.0. "Mean" indicates nutation effects are ignored in the frame) 72 614.33 P
+-0.52 (definition. The system is aligned with the IAU-sponsored J2000 frame of the Radio Source Catalog of the International) 72 602.33 P
+(Earth Rotational Service \050ICRF93\051. This ICRF frame is thought to differ from FK5 by 0.05 to 0.2 arcsec.) 72 590.33 T
+(J2000.0 reference vectors have the following properties:) 108 566.33 T
+(+Z is normal to ICRF Mean Earth Equator of Epoch J2000.0) 144 554.33 T
+(+X is parallel to ICRF Mean Earth Vernal Equinox of Epoch J2000.0) 144 542.33 T
+(+Y completes the right-handed system) 144 530.33 T
+-0.41 (") 108 506.33 P
+1 F
+-0.41 (B1950) 112.08 506.33 P
+0 F
+-0.41 (" selects an inertial reference frame based on Earth Mean-Equator and FK4 catalog Equinox of Epoch) 138.73 506.33 P
+0.79 (B1950.0 \050FK4/B1950.0\051, where the Epoch of B1950.0 is the Julian date at the start of the Besselian year B1950.0) 72 494.33 P
+(\0502433282.42345905\051. The Fricke equinox correction at Epoch is applied.) 72 482.33 T
+FMENDPAGE
+%%EndPage: "9" 10
+%%Page: "10" 10
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+403.97 698.58 210.78 698.58 2 L
+0 X
+V
+1.04 H
+0 Z
+N
+1 11 Q
+(7.  SEARCHING FOR SMALL-BODIES) 210.78 699.67 T
+0 10 Q
+-0.35 (Search for small-bodies with following keywords \050R=real, I=integer, C=char\051. Use comparisons from the set) 108 674.33 P
+({ <, >, <>, = }.) 72 662.33 T
+1 F
+(Separate each field with a semi-colon.) 134.77 662.33 T
+0 F
+( Example search formulation at main prompt:) 295.22 662.33 T
+(A < 2.5; IN > 7.8; STYP = S; GM <> 0;) 216 638.33 T
+(The first group of keywords are common to asteroids AND comets:) 72 614.33 T
+96.16 589.34 74.5 589.34 2 L
+V
+0.95 H
+N
+1 F
+(Type) 74.5 590.33 T
+183.42 589.34 144 589.34 2 L
+V
+N
+(Keyword) 144 590.33 T
+265.41 589.34 216 589.34 2 L
+V
+N
+(Description) 216 590.33 T
+0 F
+(  C) 72 578.33 T
+(NAME ...........) 144 578.33 T
+(Asteroid OR comet name fragment) 216 578.33 T
+(  C) 72 566.33 T
+(DES ...............) 144 566.33 T
+(Object designation) 216 566.33 T
+(  R) 72 554.33 T
+(EPOCH .........) 144 554.33 T
+(Julian Date of osculating elements) 216 554.33 T
+(  R) 72 542.33 T
+(CALEPO ......) 144 542.33 T
+(Calendar date of osc. elements; YYYYMMDD.ffff) 216 542.33 T
+(  R) 72 530.33 T
+(A ...................) 144 530.33 T
+(Semi-major axis \050AU\051) 216 530.33 T
+(  R) 72 518.33 T
+(EC .................) 144 518.33 T
+(Eccentricity) 216 518.33 T
+(  R) 72 506.33 T
+(IN ..................) 144 506.33 T
+(Inclination of orbit plane \050DEG\051 wrt ecliptic) 216 506.33 T
+(  R) 72 494.33 T
+(OM ................) 144 494.33 T
+(Longitude of Ascending Node \050DEG\051 wrt ecliptic/equinox) 216 494.33 T
+(  R) 72 482.33 T
+(W ..................) 144 482.33 T
+(Argument of Perihelion \050DEG\051 wrt ecliptic/equinox) 216 482.33 T
+(  R) 72 470.33 T
+(TP .................) 144 470.33 T
+(Perihelion Julian Date) 216 470.33 T
+(  R) 72 458.33 T
+(CALTP .........) 144 458.33 T
+(Perihelion calendar date; YYYYMMDD.ffff) 216 458.33 T
+(  R) 72 446.33 T
+(MA ...............) 144 446.33 T
+(Mean anomaly \050DEG\051) 216 446.33 T
+(  R) 72 434.33 T
+(PER ..............) 144 434.33 T
+(Orbital period \050YRS\051) 216 434.33 T
+(  R) 72 422.33 T
+(RAD .............) 144 422.33 T
+(Object radius \050KM\051) 216 422.33 T
+(  R) 72 410.33 T
+(GM ...............) 144 410.33 T
+(Object GM \050KM^3/S^2\051, only a few are known) 216 410.33 T
+(  R) 72 398.33 T
+(QR ................) 144 398.33 T
+(Perihelion distance \050AU\051) 216 398.33 T
+(  R) 72 386.33 T
+(ADIST ..........) 144 386.33 T
+(Aphelion distance \050AU\051) 216 386.33 T
+(  R) 72 374.33 T
+(ANGMOM ...) 144 374.33 T
+(Specific angular momentum \050AU^2/DAY\051) 216 374.33 T
+(  R) 72 362.33 T
+(N ...................) 144 362.33 T
+(Mean motion \050DEG/DAY\051) 216 362.33 T
+(  R) 72 350.33 T
+(DAN .............) 144 350.33 T
+(Heliocentric dist. \050AU\051 of ascending node) 216 350.33 T
+(  R) 72 338.33 T
+(DDN .............) 144 338.33 T
+(Heliocentric dist. \050AU\051 of descending node) 216 338.33 T
+(  R) 72 326.33 T
+(L ...................) 144 326.33 T
+(Ecliptic longitude of perihelion \050DEG\051) 216 326.33 T
+(  R) 72 314.33 T
+(B ...................) 144 314.33 T
+(Ecliptic latitude of perihelion \050DEG\051) 216 314.33 T
+(  I) 72 302.33 T
+(NOBS ...........) 144 302.33 T
+(Number of astrometric determinations in solution) 216 302.33 T
+(The next parameters are ASTEROID SPECIFIC. If one or more is used, the search will conclude faster by) 108 278.33 T
+(examining asteroids only. For example, include  something like  "H > -10;" to search all asteroids only:) 72 266.33 T
+(  C) 72 242.33 T
+(ASTNAM .....) 144 242.33 T
+(Asteroid name fragment \050designation if unnamed\051) 216 242.33 T
+(  R) 72 230.33 T
+(B-V ...............) 144 230.33 T
+(B-V color \050asteroid\051) 216 230.33 T
+(  R) 72 218.33 T
+(H ...................) 144 218.33 T
+(Absolute magnitude parameter \050asteroid\051) 216 218.33 T
+(  R) 72 206.33 T
+(G ...................) 144 206.33 T
+(Magnitude slope parameter; can be < 0 \050asteroid\051) 216 206.33 T
+(  R) 72 194.33 T
+(ROTPER ......) 144 194.33 T
+(Rotational period, hrs \050asteroid\051) 216 194.33 T
+(  R) 72 182.33 T
+(ALBEDO .....) 144 182.33 T
+(Geometric albedo \050asteroid\051) 216 182.33 T
+(  C) 72 170.33 T
+(STYP ............) 144 170.33 T
+(Spectral type, Tholen scheme \050asteroid\051) 216 170.33 T
+(The next parameters are COMET SPECIFIC. If one or more is used, the search will conclude faster by) 108 146.33 T
+(examining comets only. For example, include  something like "M1 > -10;' to search all comets only:) 72 134.33 T
+(  C) 72 110.33 T
+(COMNAM ....) 144 110.33 T
+(Comet name fragment \050designation if unnamed\051) 216 110.33 T
+(  R) 72 98.33 T
+(M1 .................) 144 98.33 T
+(Total absolute magnitude \050comet\051) 216 98.33 T
+(  R) 72 86.33 T
+(M2 .................) 144 86.33 T
+(Nuclear absolute magnitude \050comet\051) 216 86.33 T
+FMENDPAGE
+%%EndPage: "10" 11
+%%Page: "11" 11
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+0 10 Q
+0 X
+(  R) 72 713.33 T
+(K1 ..................) 144 713.33 T
+(Total magnitude scaling factor \050comet\051) 216 713.33 T
+(  R) 72 701.33 T
+(K2 ..................) 144 701.33 T
+(Nuclear magnitude scaling factor \050comet\051) 216 701.33 T
+(  R) 72 689.33 T
+(PHCOF ..........) 144 689.33 T
+(Phase coefficient for k2=5 \050comet\051) 216 689.33 T
+(  R) 72 677.33 T
+(A1 ..................) 144 677.33 T
+(Radial non-grav accel \050comet\051, 10^-8 AU/DAY^2) 216 677.33 T
+(  R) 72 665.33 T
+(A2 ...................) 144 665.33 T
+(Transverse non-grav accel \050comet\051, 10^-8 AU/DAY^2) 216 665.33 T
+(Only 1 of the 4 keywords 'ASTNAM', 'COMNAM', 'NAME' or 'DES' can be specified on a given search.) 108 641.33 T
+FMENDPAGE
+%%EndPage: "11" 12
+%%Page: "12" 12
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+402.14 711.58 209.86 711.58 2 L
+0 X
+V
+1.04 H
+0 Z
+N
+1 11 Q
+(8.  USER-SPECIFIED SMALL-BODIES) 209.86 712.67 T
+0 10 Q
+-0.17 (It is possible for users to input their own small-body HELIOCENTRIC ECLIPTIC elements and some other) 108 687.33 P
+(parameters. Type ';' at the main prompt. It is also possible to display a DASTCOM3 object, then "cut-and-paste") 72 675.33 T
+(elements back into the program, varying parameters \050such as magnitude\051, as needed. Cut-and-paste is a function of) 72 663.33 T
+(your local terminal capability.) 72 651.33 T
+1 F
+(PRESS <return> ON A BLANK LINE WHEN DONE.) 77 627.33 T
+0 F
+(Input format is:) 312.45 627.33 T
+(          LABEL= VALUE      LABEL= VALUE ...) 72 603.33 T
+(          LABEL= VALUE ...) 72 591.33 T
+(            .) 72 579.33 T
+(            .) 72 567.33 T
+(... where acceptable label strings are defined as follows:) 72 543.33 T
+(       EPOCH ...) 72 531.33 T
+(Julian ephemeris date \050TDB\051 of osculating elements) 144 531.33 T
+(       EC ...........) 72 519.33 T
+(Eccentricity) 144 519.33 T
+(       QR ..........) 72 507.33 T
+(Perihelion distance in \050AU\051) 144 507.33 T
+(       TP ...........) 72 495.33 T
+(Perihelion Julian date) 144 495.33 T
+(       OM ..........) 72 483.33 T
+(Longitude of ascending node \050DEGREES\051 wrt ecliptic) 144 483.33 T
+(       W ............) 72 471.33 T
+(Argument of perihelion \050DEGREES\051 wrt ecliptic) 144 471.33 T
+(       IN ...........) 72 459.33 T
+(Inclination \050DEGREES\051 wrt ecliptic) 144 459.33 T
+(Instead of {TP, QR}, {MA, A} or {MA,N} may be specified \050not both\051:) 72 435.33 T
+(       MA ........) 72 423.33 T
+(Mean anomaly \050DEGREES\051) 144 423.33 T
+(       A ............) 72 411.33 T
+(Semi-major axis \050AU\051) 144 411.33 T
+(       N ............) 72 399.33 T
+(Mean motion \050DEG/DAY\051) 144 399.33 T
+-0.53 (Note that if you specify elements with MA, {TP, QR} will be computed from them. The program always uses) 108 375.33 P
+(TP and QR.) 72 363.33 T
+159.44 338.24 72 338.24 2 L
+V
+0.49 H
+N
+(OPTIONAL INPUTS) 72 339.33 T
+(       RAD ......) 72 315.33 T
+(Object radius \050KM\051) 144 315.33 T
+(  For asteroids, additional OPTIONAL parameters can be given:) 72 291.33 T
+(       H .............) 72 279.33 T
+(Absolute magnitude parameter \050asteroid\051) 144 279.33 T
+(       G .............) 72 267.33 T
+(Magnitude slope parameter; can be < 0 \050asteroid\051) 144 267.33 T
+(  For comets, additional OPTIONAL parameters can be given:) 72 243.33 T
+(       M1 ...........) 72 231.33 T
+(Total absolute magnitude \050comet\051) 144 231.33 T
+(       M2 ...........) 72 219.33 T
+(Nuclear absolute magnitude \050comet\051) 144 219.33 T
+(       K1 ............) 72 207.33 T
+(Total magnitude scaling factor \050comet\051) 144 207.33 T
+(       K2 ............) 72 195.33 T
+(Nuclear magnitude scaling factor \050comet\051) 144 195.33 T
+(       PHCOF ...) 72 183.33 T
+(Phase coefficient for k2=5 \050comet\051) 144 183.33 T
+(       A1 ............) 72 171.33 T
+(Radial non-grav accel \050comet\051, AU/DAY^2) 144 171.33 T
+(       A2 ............) 72 159.33 T
+(Transverse non-grav accel \050comet\051,  AU/DAY^2) 144 159.33 T
+(You may enter each value on a separate line or several on one line.  If you make a mistake, re-entering the) 108 135.33 T
+-0.5 (label on another line will over-ride the previously specified value.  To erase a value, enter something like "H=",  where) 72 123.33 P
+(no value is given. To cancel all input, enter "-" as the first character on a line. To log-out, enter a "q" or "x" as first) 72 111.33 T
+(character on a line.) 72 99.33 T
+-0.1 (When done, after having pressed <return> on a blank line, you will be asked whether the reference frame of) 108 75.33 P
+FMENDPAGE
+%%EndPage: "12" 13
+%%Page: "13" 13
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+0 10 Q
+0 X
+(the elements is FK5/J2000.0 or FK4/B1950.0. You will also be asked the object name.) 72 713.33 T
+(Example input:) 72 689.33 T
+( EPOCH= 2450200.5) 72 665.33 T
+(EC= .8241907231263196 QR= .532013766859137 TP= 2450077.480966184235) 108 653.33 T
+(OM= 89.14262290335057 W = 326.0591239257098 IN= 4.247821264821585) 108 641.33 T
+(A1= -5.113711376907895D-10 A2= -6.288085687976327D-10) 108 629.33 T
+FMENDPAGE
+%%EndPage: "13" 14
+%%Page: "14" 14
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+429 711.58 183 711.58 2 L
+0 X
+V
+1.04 H
+0 Z
+N
+1 11 Q
+(9. CUSTOMIZING REQUESTED EPHEMERIDES) 183 712.67 T
+0 10 Q
+(Keys are embedded in output ephemerides to assist with automated reading of the output by user's own) 108 687.33 T
+(software. The keys are defined as follows:) 72 675.33 T
+($$SOH) 216 651.33 T
+(Start of header) 288 651.33 T
+($$EOH) 216 639.33 T
+(End of header) 288 639.33 T
+($$SOE) 216 627.33 T
+(Start of ephemeris) 288 627.33 T
+($$EOE) 216 615.33 T
+(End of ephemeris) 288 615.33 T
+($$SOD) 216 603.33 T
+(Start of description) 288 603.33 T
+($$EOD) 216 591.33 T
+(End of description) 288 591.33 T
+($$EOF) 216 579.33 T
+(End of file) 288 579.33 T
+1.04 (Ephemerides may be customized by changing output default flags.  The '*'  symbols below denote login) 108 555.33 P
+(defaults. All tables may be optionally output in a  "comma-separated-value" format for import into spreadsheets.) 72 543.33 T
+(1.) 72 507.33 T
+198.84 506.34 82 506.34 2 L
+V
+0.95 H
+N
+1 F
+(Cartesian state vector table) 82 507.33 T
+0 F
+(       Any object with respect to any major body.) 72 483.33 T
+(       Reference coordinate frame:) 72 459.33 T
+(    *) 72 447.33 T
+(J2000 \050ICRF/J2000.0\051) 108 447.33 T
+(B1950 \050FK4/B1950.0\051) 108 435.33 T
+(       Aberration corrections:) 72 411.33 T
+(    *) 72 399.33 T
+(NONE  \050geometric state vectors\051) 108 399.33 T
+(LT    \050light-time\051) 108 387.33 T
+(LT+S  \050light-time & stellar aberration\051) 108 375.33 T
+(       Units:) 72 351.33 T
+(KM and seconds) 108 339.33 T
+(KM and days) 108 327.33 T
+(AU and days) 108 315.33 T
+(       Quantities Output:) 72 291.33 T
+120.86 266.24 91.99 266.24 2 L
+V
+0.49 H
+N
+(Format) 91.99 267.33 T
+189.76 266.24 162 266.24 2 L
+V
+N
+(Output) 162 267.33 T
+(1) 108 255.33 T
+(Position components {x,y,z} only) 162 255.33 T
+(2) 108 243.33 T
+(State vector {x,y,z,vx,vy,vz}) 162 243.33 T
+(    *) 72 231.33 T
+(3) 108 231.33 T
+(State vector + 1-way light-time + range + range-rate) 162 231.33 T
+(4) 108 219.33 T
+(Position      + 1-way light-time + range + range-rate) 162 219.33 T
+(5) 108 207.33 T
+(Velocity components {vx, vy, vz} only) 162 207.33 T
+(6) 108 195.33 T
+(1-way light-time + range + range-rate) 162 195.33 T
+FMENDPAGE
+%%EndPage: "14" 15
+%%Page: "15" 15
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+0 11 Q
+0 X
+(2.) 72 712.67 T
+203.22 711.58 82.99 711.58 2 L
+V
+1.04 H
+0 Z
+N
+1 F
+(Osculating elements table) 82.99 712.67 T
+0 10 Q
+(      Any object with respect to any major-body) 74.75 686.67 T
+(       Reference plane) 72 662.33 T
+(Ecliptic of frame Epoch \050J2000.0 or B1950.0\051) 108 650.33 T
+(Central body mean equator of date) 108 638.33 T
+(       Coordinate frame:) 72 614.33 T
+(  *) 72 602.33 T
+(J2000 \050ICRF/J2000.0\051) 108 602.33 T
+(B1950 \050FK4/B1950.0  \051) 108 590.33 T
+(       Units:) 72 566.33 T
+(KM and seconds) 108 554.33 T
+(KM and days) 108 542.33 T
+(AU and days) 108 530.33 T
+(  *    Output quantities \050fixed\051:) 72 506.33 T
+(JDTDB) 108 494.33 T
+(Epoch Julian Date, Barycentric Dynamical Time) 180 494.33 T
+(e) 108 482.33 T
+(Eccentricity) 180 482.33 T
+(q) 108 470.33 T
+(Periapsis distance) 180 470.33 T
+(i) 108 458.33 T
+(Inclination w.r.t. reference plane \050degrees\051) 180 458.33 T
+(LAN) 108 446.33 T
+(Longitude of Ascending Node \050degrees\051) 180 446.33 T
+(APF) 108 434.33 T
+(Argument of Perifocus \050degrees\051) 180 434.33 T
+(ToP) 108 422.33 T
+(Time of last periapsis relative to epoch \050P-E\051) 180 422.33 T
+(n) 108 410.33 T
+(Mean motion \050degrees/DU\051) 180 410.33 T
+(MA) 108 398.33 T
+(Mean anomaly \050degrees\051) 180 398.33 T
+(TA) 108 386.33 T
+(True anomaly \050degrees\051) 180 386.33 T
+(a) 108 374.33 T
+(Semi-major axis) 180 374.33 T
+(AD) 108 362.33 T
+(Aphelion distance) 180 362.33 T
+(PER) 108 350.33 T
+(Orbital Period) 180 350.33 T
+(3.) 72 326.33 T
+145.56 325.34 82 325.34 2 L
+V
+0.95 H
+N
+1 F
+(Observer table) 82 326.33 T
+0 F
+(        Any object with respect to geocentric or topocentric observer) 72 314.33 T
+(        Default quantities. Always output:) 72 290.33 T
+(Time) 108 278.33 T
+(Solar-presence) 108 266.33 T
+(Lunar-presence) 108 254.33 T
+-0.19 (        Selectable quantities are output in order requested.  No initial default  exists. You will be prompted at least once.) 72 230.33 P
+(A detailed definition of  these values follows. These numbers could change if new quantities are added:) 72 218.33 T
+(1. Astrometric RA & DEC) 108 194.33 T
+(10. Illuminated fraction) 252 194.33 T
+(19. Helio range & rng rate) 414 194.33 T
+(2. Apparent RA & DEC) 108 182.33 T
+(11. Defect of illumination) 252 182.33 T
+(20. Obsrv range & rng rate) 414 182.33 T
+(3.) 108 170.33 T
+(Rates; RA & DEC) 135 170.33 T
+(12. Sat. angular separ/vis) 252 170.33 T
+(21. One-Way Light-Time) 414 170.33 T
+(4. Apparent AZ & EL) 108 158.33 T
+(13. Target angular diam.) 252 158.33 T
+(22. Speed wrt Sun & obsrvr) 414 158.33 T
+(5.) 108 146.33 T
+(Rates; AZ & EL) 135 146.33 T
+(14. Obs sub-long & sub-lat) 252 146.33 T
+(23. Sun-Earth-Object angle) 414 146.33 T
+(6. RA & DEC Offset) 108 134.33 T
+(15. Sun sub-long & sub-lat) 252 134.33 T
+(24. Sun-Object-Earth angle) 414 134.33 T
+(7. Local app. sid. time) 108 122.33 T
+(16. Sub Sun Pos. Ang & Dis) 252 122.33 T
+(25. Obj-Earth-Moon/Illum%) 414 122.33 T
+(8. Airmass) 108 110.33 T
+(17. N. Pole Pos. Ang & Dis) 252 110.33 T
+(26. Earth-Primary-Obj ang.) 414 110.33 T
+(9. Vis mag. & Surf Brt) 108 98.33 T
+(18. Helio eclip. lon & lat) 252 98.33 T
+(27. Pos. Ang;radius & -vel) 414 98.33 T
+0 11 Q
+(28. Orbit plane angle) 414 85.67 T
+FMENDPAGE
+%%EndPage: "15" 16
+%%Page: "16" 16
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+0 10 Q
+0 X
+(... or select one of the pre-defined alphabetic formats below:) 77.49 712.67 T
+(A = All quantities) 108 688.33 T
+(B = Geocentric only) 216 688.33 T
+(C = Small-body geocentric) 360 688.33 T
+(D = Small-body topo.) 108 676.33 T
+(E = Spacecraft geocentric) 216 676.33 T
+(F = Spacecraft topocentric) 360 676.33 T
+(The alphabetic assignments specifically mean:) 72 652.33 T
+(A = 1-28) 108 640.33 T
+(B = 1-3, 6, 9-28) 216 640.33 T
+(C = 1-3,9-11,13,18-28) 360 640.33 T
+(D = 1-5,8-10,11,13,18-28) 108 628.33 T
+(E = 1-3, 8,10,18-25) 216 628.33 T
+(F = 1-5, 8,10,18-25) 360 628.33 T
+(Reference coordinate frame:) 99 604.33 T
+(  *) 72 592.33 T
+(J2000 \050ICRF/J2000.0\051) 108 592.33 T
+(B1950 \050FK4/B1950.0 \051) 108 580.33 T
+(Time scale:) 99 556.33 T
+(UTC \050Coordinated Universal Time\051) 108 544.33 T
+(  *) 72 532.33 T
+(TT  \050Terrestrial Time\051) 108 532.33 T
+(Time format) 99 508.33 T
+(  *) 72 496.33 T
+(Calendar) 108 496.33 T
+(JD \050Julian date\051) 108 484.33 T
+(Both) 108 472.33 T
+(Right-ascension format) 99 448.33 T
+(  *) 72 436.33 T
+(Hours, minutes, seconds of arc \050DEC degrees, minutes, seconds\051) 108 436.33 T
+(Decimal degrees) 108 424.33 T
+(High-precision RA/DEC output) 99 400.33 T
+(  *) 72 388.33 T
+(No  \050~ 10^-2 arcsec; HH MM SS.ff DD MM SS.f\051) 108 388.33 T
+(Yes \050~ 10^-4 arcsec; HH MM SS.ffff DD MM SS.fff\051) 108 376.33 T
+(Apparent coordinate corrections) 99 352.33 T
+(  *) 72 340.33 T
+(Airless apparent) 108 340.33 T
+(Refracted apparent) 108 328.33 T
+(Minimum elevation \050integer value\051) 99 304.33 T
+(  *) 72 292.33 T
+(-90 degrees) 108 292.33 T
+(Maximum airmass \050real value\051) 99 268.33 T
+(  *) 72 256.33 T
+(38.0 \050refracted elevation = -0 deg\051) 108 256.33 T
+(Skip Daylight) 99 232.33 T
+(  *) 72 220.33 T
+(No) 108 220.33 T
+(Yes) 108 208.33 T
+FMENDPAGE
+%%EndPage: "16" 17
+%%Page: "17" 17
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+446.71 711.58 165.29 711.58 2 L
+0 X
+V
+1.04 H
+0 Z
+N
+1 11 Q
+(10.  DEFINITION OF OBSERVER  TABLE QUANTITIES) 165.29 712.67 T
+0 10 Q
+-0.64 (The menu of observer table output quantities was shown above. The format of the table is as follows. "Labels") 108 687.33 P
+(refers to possible column headings:) 72 675.33 T
+1 F
+(TIME) 72 651.33 T
+0 F
+(One output line for each step. The line begins with the time, which is either UTC or TT, in  calendar or JD) 108 639.33 T
+(format \050or both\051, depending on user defaults.) 72 627.33 T
+1 F
+(SOLAR PRESENCE) 72 603.33 T
+0 F
+(Time tag is followed by a blank, then a solar-presence symbol:) 108 591.33 T
+('*') 144 567.33 T
+(Daylight \050refracted solar upper-limb on or above apparent horizon\051) 162 567.33 T
+('C') 144 555.33 T
+(Civil twilight/dawn) 162 555.33 T
+('N') 144 543.33 T
+(Nautical twilight/dawn) 162 543.33 T
+('A') 144 531.33 T
+(Astronomical twilight/dawn) 162 531.33 T
+( ' ') 144 519.33 T
+(Night OR geocentric ephemeris) 162 519.33 T
+1 F
+(LUNAR PRESENCE) 72 495.33 T
+0 F
+( The solar-presence symbol is immediately followed by a lunar-presence symbol:) 108 483.33 T
+('m') 144 459.33 T
+(Refracted upper-limb of Moon on or above apparent horizon) 162 459.33 T
+(' ') 144 447.33 T
+(Refracted upper-limb of Moon below apparent horizon OR geocentric) 162 447.33 T
+(ephemeris) 162 435.33 T
+1 F
+(SPECIFIC QUANTITIES) 72 411.33 T
+0 F
+(  1. Astrometric RA & DEC:) 72 387.33 T
+(Corrected for light-time only. If FK4/B1950.0 frame output is selected, elliptic aberration terms are added.) 108 375.33 T
+(        Labels:) 72 351.33 T
+(R.A._\050ICRF/J2000.0\051_DEC) 144 351.33 T
+(\050HMS/DMS format\051) 288 351.33 T
+(R.A._\050 FK4/B1950.0\051_DEC) 144 339.33 T
+(\050HMS/DMS format\051) 288 339.33 T
+(R.A._\050J2000.0\051_DEC.) 144 327.33 T
+(\050degree format\051) 288 327.33 T
+(R.A._\050B1950.0\051_DEC.) 144 315.33 T
+(\050degree format\051) 288 315.33 T
+(  2. Apparent RA & DEC:) 72 291.33 T
+(Corrected for light-time, stellar aberration, precession, nutation and  the deflection of light due to the  Sun) 108 279.33 T
+(and Earth.  Optional \050approximate\051  correction for atmospheric refraction.) 72 267.33 T
+(        Labels:) 72 243.33 T
+(R.A._\050a-apparent\051__DEC.) 144 243.33 T
+(\050airless, HMS/DMS format\051) 288 243.33 T
+(R.A._\050r-apparent\051__DEC.) 144 231.33 T
+(\050refracted, HMS/DMS format\051) 288 231.33 T
+(R.A._\050a-appar\051_DEC.) 144 219.33 T
+(\050airless, degrees format\051) 288 219.33 T
+(R.A._\050r-appar\051_DEC.) 144 207.33 T
+(\050refracted, degrees format\051) 288 207.33 T
+(  3. Rates; RA & DEC) 72 183.33 T
+(The rate of change of RA and DEC. d\050RA\051/dt is multiplied by the cosine of the declination. Units are) 108 171.33 T
+(ARCSECONDS PER MINUTE.) 72 159.33 T
+(        Labels:  dRA*cosD d\050DEC\051/dt) 72 135.33 T
+( 4. Apparent AZ & EL:) 74.75 110.67 T
+-0.14 (Azimuth and elevation corrected for light-time, stellar aberration,  precession, nutation and the deflection of) 108 98.33 P
+(light due to the Sun and Earth.     Optional \050approximate\051 correction for atmospheric refraction. TOPOCENTRIC) 72 86.33 T
+FMENDPAGE
+%%EndPage: "17" 18
+%%Page: "18" 18
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+0 10 Q
+0 X
+(ONLY. Units are DEGREES.) 72 713.33 T
+(        Labels:) 72 689.33 T
+(Azi_\050a-appr\051_Elev) 144 689.33 T
+(\050airless\051) 288 689.33 T
+(Azi_\050r-appr\051_Elev) 144 677.33 T
+(\050refracted\051) 288 677.33 T
+(  5. Rates; AZ & EL) 72 653.33 T
+(The rate of change of azimuth and elevation. d\050AZ\051/dt is multiplied by  the cosine of the elevation angle.) 108 641.33 T
+(TOPOCENTRIC ONLY. Units are ARCSECONDS  PER MINUTE.) 72 629.33 T
+(        Labels:) 72 605.33 T
+(dAZ*cosE d\050ELV\051/dt) 144 605.33 T
+(  6. RA & DEC Offset) 72 581.33 T
+-0.66 (The difference in RA and DEC between the center of a \050non-lunar\051 natural satellite and the center of the planet) 108 569.33 P
+(it orbits \050sat-primary\051.     Units are ARCSECONDS.) 72 557.33 T
+(        Labels:) 72 533.33 T
+(RA_\050offset\051_DEC) 144 533.33 T
+(  7. Local Apparent Sidereal Time) 72 509.33 T
+-0.06 (        The rotation angle, measured westward, between the Earth-fixed observer and the true equinox \050the intersection) 72 497.33 P
+(of the true equator of date with the ecliptic of date\051.  TOPOCENTRIC ONLY. Units are either HH MM SS.ffff  or) 72 485.33 T
+(decimal hours \050HH.ffffffffff\051) 72 473.33 T
+(        Labels:) 72 449.33 T
+(L_Ap_Sid_Time) 144 449.33 T
+(  8. Airmass) 72 425.33 T
+(Relative optical airmass; a measure of extinction. The ratio between   the absolute optical airmass at target) 108 413.33 T
+-0.57 (refracted elevation to the absolute  optical airmass at zenith. Based on work of Kasten and Young \050Applied Optics, vol.) 72 401.33 P
+(28 no. 22, 15-Nov-1989\051.  TOPOCENTRIC, ABOVE HORIZON ONLY.   Unitless.) 72 389.33 T
+(        Labels:) 72 365.33 T
+(a-mass) 144 365.33 T
+(  9. Vis mag. & Surf Bright) 72 341.33 T
+-0.28 (Approximate \050apparent\051 visual magnitude & surface brightness. Value  for Pluto includes Charon. The Sun's) 108 329.33 P
+-0.18 (altitude above the Saturn ring-plane  is not considered for Saturn.  When the Moon is at phase angles < 7 deg  \050within) 72 317.33 P
+-0.13 (1 day of full\051, the computed magnitude tends to be ~ 0.12 too  small. Surface brightness is returned for asteroids only) 72 305.33 P
+(if a radius is   known. It is the average visual magnitude of a square-arcsecond of the  illuminated portion of the) 72 293.33 T
+(apparent disk. Units are \050none\051 and VISUAL MAGNITUDES PER SQUARE ARCSECOND.) 72 281.33 T
+(Small-body magnitude laws:) 108 257.33 T
+(Asteroids) 126 245.33 T
+(APmag= H + 5*log10\050delta\051 + 5*log10\050r\051 -2.5*log10\050\0501-G\051*phi1 + G*phi2\051) 144 233.33 T
+(Comets) 126 221.33 T
+(T-mag=M1 + 5*log10\050delta\051 + k1*log10\050r\051) 144 209.33 T
+(N-mag=M2 + 5*log10\050delta\051 + k2*log10\050r\051 + phcof*beta) 144 197.33 T
+(Surface brightness:) 108 185.33 T
+(S-brt= V + 2.5*log10\050k*PI*a*b'\051) 126 173.33 T
+(        Labels:) 72 149.33 T
+(APmag S-brt) 144 149.33 T
+(\050Non-comet with known dimensions\051) 216 149.33 T
+(APmag) 144 137.33 T
+(\050Non-comet with unknown dimensions\051) 216 137.33 T
+(T-mag N-mag) 144 125.33 T
+(\050Comets; total & nuclear magnitudes\051) 216 125.33 T
+( 10. Illuminated fraction) 72 101.33 T
+(Percent of target object circular disk illuminated by Sun \050phase\051, as seen by observer.  Units are PERCENT.) 108 89.33 T
+FMENDPAGE
+%%EndPage: "18" 19
+%%Page: "19" 19
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+0 10 Q
+0 X
+(        Labels:) 72 713.33 T
+(Illu%) 144 713.33 T
+( 11. Defect of illumination) 72 689.33 T
+(Angular width of target circular disk diameter not illuminated by Sun.  Available only if target radius is) 108 677.33 T
+(known.  Units are ARCSECONDS.) 72 665.33 T
+(        Labels:) 72 641.33 T
+(Def_illu) 144 641.33 T
+( 12. Angular separation/visibility) 72 617.33 T
+-0.71 (The angle between the center of a non-lunar target body and the center  of the primary body it revolves around,) 108 605.33 P
+(as seen by the observer. Units are  ARCSECONDS.) 72 593.33 T
+(The target visibility codes are:) 108 569.33 T
+(/t) 126 557.33 T
+(Transitting primary body disk) 144 557.33 T
+(/o) 126 545.33 T
+(Occulted by primary body disk) 144 545.33 T
+(/-) 126 533.33 T
+(Target is the primary body) 144 533.33 T
+(/*) 126 521.33 T
+(None of the above \050"free and clear"\051) 144 521.33 T
+(For natural satellites, additional possible codes are:) 108 497.33 T
+(/p) 126 485.33 T
+(Partial umbral eclipse) 144 485.33 T
+(/u) 126 473.33 T
+(Total umbral eclipse) 144 473.33 T
+(      ... the radius of major bodies is taken to be the equatorial value \050max\051  defined by the 1994 IAU system. No) 72 449.33 T
+(atmospheric effects are currently considered in these computations.) 72 437.33 T
+(        Labels:) 72 413.33 T
+(ang-sep/v) 144 413.33 T
+( 13. Target angular diameter) 72 389.33 T
+(The angle subtended by the disk of the target seen by the observer, if it was fully illuminated. The target) 108 377.33 T
+(diameter is taken to be the 1994 IAU equatorial diameter.  Oblateness aspect is not currently included. Units  are) 72 365.33 T
+(ARCSECONDS.) 72 353.33 T
+(        Labels:) 72 329.33 T
+(Ang-diam) 144 329.33 T
+( 14. Obs sub-long & sub-lat) 72 305.33 T
+-0.43 (The planetographic longitude and latitude of the center of the target  disk seen by the observer. Uses the 1994) 108 293.33 P
+-0.58 (IAU rotation models. Values for Jupiter, Saturn, Uranus and Neptune are Set III, referring to rotation  of their magnetic) 72 281.33 P
+(fields. Units are DEGREES.) 72 269.33 T
+(        Labels:) 72 245.33 T
+(Ob-lon Ob-lat) 144 245.33 T
+( 15. Solar sub-long & sub-lat) 72 221.33 T
+-0.19 (The planetographic longitude and latitude of the center of the target disk seen by an observer at the center of) 108 209.33 P
+-0.08 (the Sun. Uses the 1994 IAU rotation models. Values for Jupiter, Saturn, Uranus and Neptune are Set  III, referring to) 72 197.33 P
+(rotation of their magnetic fields. Units are DEGREES.) 72 185.33 T
+(        Labels:) 72 161.33 T
+(Sl-lon Sl-lat) 144 161.33 T
+( 16. Sub Sol Pos. Ang & Dis) 72 137.33 T
+-0.47 (Target sub-solar point position angle \050CCW with respect to direction  of celestial North\051 and angular distance) 108 125.33 P
+-0.26 (from the sub-Earth point \050center  of disk\051 at Earth observation time. Negative distance indicates the  sub-solar point is) 72 113.33 P
+(on the hemisphere hidden from the observer.  Units:  DEGREES and ARCSECONDS) 72 101.33 T
+(        Labels:) 72 77.33 T
+(SN.ang SN.ds) 144 77.33 T
+FMENDPAGE
+%%EndPage: "19" 20
+%%Page: "20" 20
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+0 10 Q
+0 X
+( 17. N. Pole Pos. Ang & Dis) 72 701.33 T
+(Target's North Pole position angle \050CCW with respect to direction of  celestial North\051 and angular distance) 108 689.33 T
+(from the sub-Earth point \050center of  disk\051 at Earth observation time. Negative distance indicates N.P. on  hidden) 72 677.33 T
+(hemisphere. Units: DEGREES and ARCSECONDS) 72 665.33 T
+(        Labels:) 72 641.33 T
+(NP.ang NP.ds) 144 641.33 T
+( 18. Helio eclip. lon & lat) 72 617.33 T
+-0.55 (Apparent heliocentric ecliptic longitude and latitude of the target  with respect to the ecliptic and true equinox) 108 605.33 P
+(of-date.  Units:  DEGREES.) 72 593.33 T
+(        Labels:) 72 569.33 T
+(hEcl-Lon hEcl-Lat) 144 569.33 T
+( 19. Helio range & range-rate) 72 545.33 T
+(Target apparent heliocentric range \050"r"\051 and range-rate \050"rdot"\051 as seen by the observer. Units are AU and) 108 533.33 T
+(KM/S.) 72 521.33 T
+(        Labels:) 72 497.33 T
+(r       rdot) 144 497.33 T
+( 20. Observer range & range rate) 72 473.33 T
+(Target apparent range \050"delta"\051 & range-rate \050"delta-dot"\051 relative  to observer.  Units are AU and KM/S.) 108 461.33 T
+(        Labels:) 72 437.33 T
+(delta  deldot) 144 437.33 T
+( 21. One-Way Light-time) 72 413.33 T
+(Target apparent 1-way light-time as seen by the observer. Units are MINUTES.) 108 401.33 T
+(        Labels:) 72 377.33 T
+(1-way_LT) 144 377.33 T
+( 22. Speed wrt Sun & obsrvr) 72 353.33 T
+-0.4 (Magnitude of velocity of target with respect to the Sun center and the  observer at the time light left the target) 108 341.33 P
+(to be observed. Units are KM/S.) 72 329.33 T
+(        Labels:) 72 305.33 T
+(VmagSn VmagOb) 144 305.33 T
+( 23. Sun-Earth-Object angle) 72 281.33 T
+(Apparent solar elongation angle seen by Earth observer. Units are DEGREES.) 108 269.33 T
+(        Labels:) 72 245.33 T
+(S-E-O) 144 245.33 T
+( 24. Sun-Object-Earth angle) 72 221.33 T
+(Apparent phase angle at observation time on Earth. Units are DEGREES.) 108 209.33 T
+(        Labels:) 72 185.33 T
+(S-O-E) 144 185.33 T
+( 25. Obj-Earth-Moon/Illum%) 72 161.33 T
+(Apparent Moon angle seen by Earth observer along with percent of the  lunar disk illuminated by the Sun.) 108 149.33 T
+(Units are DEGREES and PERCENT.) 72 137.33 T
+(        Labels:) 72 113.33 T
+(O-E-M/Illu%) 144 113.33 T
+( 26. Earth-Primary-Obj ang.) 72 89.33 T
+(Apparent angle between a satellite, its primarys' center, and the  Earth-based observer at Earth observation) 108 77.33 T
+FMENDPAGE
+%%EndPage: "20" 21
+%%Page: "21" 21
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+0 10 Q
+0 X
+(time. Units are DEGREES.) 72 713.33 T
+(        Labels:) 72 689.33 T
+(E-P-O) 144 689.33 T
+( 27. Pos. Ang; radius & -vel) 72 665.33 T
+(The position angles of the extended Sun->target radius vector   \050"PsAng"\051 and the negative of the target's) 108 653.33 T
+(heliocentric velocity vector  \050"PsAMV"\051, as seen in the plane-of-sky of the observer, measured CCW from North) 72 641.33 T
+(Celestial Pole. Small-bodies only. Units are DEGREES.) 72 629.33 T
+(        Labels:) 72 605.33 T
+(PsAng PsAMV) 144 605.33 T
+(28.  Orbit Plane Angle) 72 581.33 T
+(Angle between observer and target orbital plane, measured from center of target at the moment light) 108 569.33 T
+-0.11 (seen at observation time leaves the target. Positive values indicate observer is above the object\325s orbital  plane, in the) 72 557.33 P
+(direction of J2000 +z axis.  Small-bodies only.   Units: DEGREES.) 72 545.33 T
+(        Labels:  PlAng) 72 521.33 T
+-0.27 (NOTE: "n.a." is output if a requested quantity is not available for selected object. For example, azimuth and elevation) 72 485.33 P
+(for a geocentric ephemeris.) 72 473.33 T
+FMENDPAGE
+%%EndPage: "21" 22
+%%Page: "22" 22
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+435.41 711.58 179.33 711.58 2 L
+0 X
+V
+1.04 H
+0 Z
+N
+1 11 Q
+(11.  STATEMENT OF EPHEMERIS LIMITATIONS) 179.33 712.67 T
+0 10 Q
+0.16 (To produce an ephemeris, observational data \050optical, radar & spacecraft\051 containing measurement errors is) 108 687.33 P
+-0.12 (combined with dynamical models containing modeling imprecisions.  A best fit is developed to statistically minimize) 72 675.33 P
+(those errors. The resulting ephemeris has an associated uncertainty that fluctuateswith time.) 72 663.33 T
+0.3 (For example, only a limited number of asteroid orbits are known to better than 1 arcsec in the plane-of-sky) 108 639.33 P
+-0.23 (over significant periods of time. While 1991 JX center-of-mass was known to within 30 meters along the line-of-sight) 72 627.33 P
+0.79 (during the 1995 Goldstone radar experiment, errors increase rapidly outside that time-span. Uncertainties in major) 72 615.33 P
+-0.02 (planet ephemerides range from 10cm to  100+ km in the state-of-the-art JPL/DE-403 ephemeris, used as the basis for) 72 603.33 P
+0.43 (spacecraft navigation, mission planning and most other ephemeris publications, such as the Astronomical Almanac.) 72 591.33 P
+(This covariance information is not yet offered on-line.) 72 579.33 T
+1.32 (Cartesian state vectors are output in all their 16 decimal-place glory.  This does not mean all digits are) 108 555.33 P
+-0.38 (physically meaningful. The full-precision  may be of interest to those studying the ephemerides or as a source of initial) 72 543.33 P
+(conditions for subsequent integrations.) 72 531.33 T
+(For osculating element output, GM is rarely known to better than 5 significant figures.) 108 507.33 T
+1.24 (For observer angular output tables, purely local atmospheric conditions will affect "refraction-corrected") 108 483.33 P
+(apparent places by several arcseconds,  more at the horizon.) 72 471.33 T
+0.88 (Small-body elements are reported in the optical frame \050FK5/J2000.0\051.  This frame is currently thought to) 108 447.33 P
+0.89 (differ by 0.05 to 0.2 arcseconds from the  radio frame ICRF/J2000.0 of the planetary ephemeris DE-403.  Until a) 72 435.33 P
+-0.14 (generally agreed upon transformation from one frame to the other is defined and implemented, they will be treated by) 72 423.33 P
+(this program as being the same.) 72 411.33 T
+-0.6 (Daily variations in Earth's polar motion due to tides, wobble and ocean/atmosphere couplings are not included) 108 387.33 P
+0.34 (in these ephemerides.  This will  affect lunar output at the milliarcsecond level, the planets less so.  The  distinction) 72 375.33 P
+0.13 (between UTC and UT1 is ignored here. The Earth is assumed to be a  rigid body. Of course, precession and nutation) 72 363.33 P
+0.96 (effects are included.  These Earth-model approximations result in topocentric station location errors less than 500) 72 351.33 P
+(meters with respect to the reference ellipsoid.) 72 339.33 T
+-0.4 (Relativistic effects are included in all planet,  lunar and small-body dynamics, but not for satellites. Relativity) 108 315.33 P
+0.22 (is included in observables via 2nd order terms in stellar aberration and the deflection of light due to gravity fields of) 72 303.33 P
+(the Sun \050and Earth, for topocentric observers\051.) 72 291.33 T
+0.86 (Deflections due to other gravity fields can potentially have an effect at the 10^-4 arcsec level but are not) 108 267.33 P
+0.68 (currently included here. Satellites of other planets, such as Jupiter could experience deflections at the 10^-3 arcsec) 72 255.33 P
+1.21 (level as well.  Light time iterations are Newtonian. This affects light-time  convergence at the millisecond level,) 72 243.33 P
+(position at ~10^-6 arcsec level.) 72 231.33 T
+0.22 (For many small natural satellites, the orbit orientation is well known, but the position of the body along the) 108 207.33 P
+(ellipse is not. Errors may be  significant, especially for the lesser satellites of outer planets.) 72 195.33 T
+1 F
+0.72 (IF YOUR CAREER OR SPACECRAFT DEPENDS ON A NON-LUNAR NATURAL SATELLITE) 108 171.33 P
+5.29 (OR SMALL-BODY EPHEMERIS, CONTACT JPL BEFORE USING IT. YOU >MUST< HAVE) 72 159.33 P
+1.85 (ADDITIONAL INFORMATION TO CORRECTLY UNDERSTAND EPHEMERIS LIMITATIONS AND) 72 147.33 P
+(UNCERTAINTIES.) 72 135.33 T
+FMENDPAGE
+%%EndPage: "22" 23
+%%Page: "23" 23
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+355.89 711.58 256.11 711.58 2 L
+0 X
+V
+1.04 H
+0 Z
+N
+1 11 Q
+(12.  BACKGROUND) 256.11 712.67 T
+0 10 Q
+(  A\051) 74.75 686.67 T
+(Comet and asteroid orbits are INTEGRATED from initial conditions stored) 108 686.67 T
+(in the JPL-maintained) 412.8 686.67 T
+(DASTCOM database.) 108 674.33 T
+(   B\051) 72 650.33 T
+(Planet and satellite ephemerides are INTERPOLATED from files previously) 108 650.33 T
+(generated by JPL,) 420 650.33 T
+(such as the DE-403 planetary ephemeris.) 108 638.33 T
+(   C\051) 72 614.33 T
+(SMALL BODY DATA SCREENS are from the JPL DASTCOM database. These display) 108 614.33 T
+(constants ARE ACTUALLY USED to produce the ephemeris.) 108 602.33 T
+(   D\051) 72 578.33 T
+(MAJOR BODY DATA SCREEN CONSTANTS are from "Astrometric and Geometric Properties) 108 578.33 T
+(of Earth and the Solar System", Charles Yoder \050JPL\051, published) 108 566.33 T
+(in "Global Earth Physics: A) 365.8 566.33 T
+(Handbook of Physical Constants", AGU Reference Shelf 1.) 108 554.33 T
+(   E\051) 72 530.33 T
+(MAJOR BODY DATA SCREEN CONSTANTS are presented for your information \050FYI\051  only) 108 530.33 T
+(and ARE NOT USED to generate the ephemeris output \050see below\051. While an effort has been made) 108 518.33 T
+(to insure their accuracy, suitability of these) 108 506.33 T
+(DISPLAY constants for any given purpose must be) 285.37 506.33 T
+(determined by individual) 108 494.33 T
+(users.   Users should be aware there is often more than one determination) 213.49 494.33 T
+(in the literature for many of these constants and that they are subject to revision as more data are) 108 482.33 T
+(accumulated.) 108 470.33 T
+FMENDPAGE
+%%EndPage: "23" 24
+%%Page: "24" 24
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+419.83 711.58 192.16 711.58 2 L
+0 X
+V
+1.04 H
+0 Z
+N
+1 11 Q
+(13.  MAJOR BODY EPHEMERIDES ON-LINE) 192.16 712.67 T
+0 10 Q
+-0.01 (Planet centers are considered the 99th satellite of the system barycenter. Satellites 506-513, 607 and 802 do) 108 687.33 P
+(not have defined rotational models in the 1994 IAU report.) 72 675.33 T
+(000 Solar System Barycenter) 108 651.33 T
+(010 Sun) 126 639.33 T
+(001 Mercury barycenter) 108 615.33 T
+(199 Mercury) 126 603.33 T
+(002 Venus barycenter) 108 579.33 T
+(299 Venus) 126 567.33 T
+(003 Earth barycenter) 108 543.33 T
+(399 Earth) 126 531.33 T
+(301 Moon) 126 519.33 T
+(004 Mars barycenter) 108 495.33 T
+(499 Mars) 126 483.33 T
+(401 Phobos) 126 471.33 T
+(402 Deimos) 216 471.33 T
+(005 Jupiter barycenter) 108 447.33 T
+(599 Jupiter) 126 435.33 T
+(501 Io) 126 423.33 T
+(502 Europa) 216 423.33 T
+(503 Ganymede) 297 423.33 T
+(504 Callisto) 378 423.33 T
+(505 Amalthea) 126 411.33 T
+(506 Himalia) 216 411.33 T
+(507 Elara) 297 411.33 T
+(508 Pasiphae) 378 411.33 T
+(509 Sinope) 126 399.33 T
+(510 Lysithea) 216 399.33 T
+(511 Carme) 297 399.33 T
+(512 Ananke) 378 399.33 T
+(513 Leda) 126 387.33 T
+(514 Thebe) 216 387.33 T
+(515 Adrastea) 297 387.33 T
+(516 Metis) 378 387.33 T
+(006 Saturn barycenter) 108 363.33 T
+(699 Saturn) 126 351.33 T
+(601 Mimas) 126 339.33 T
+(602 Enceladus) 216 339.33 T
+(603 Tethys) 297 339.33 T
+(604 Dione) 378 339.33 T
+(605 Rhea) 126 327.33 T
+(606 Titan) 216 327.33 T
+(607 Hyperion) 297 327.33 T
+(608 Iapetus) 378 327.33 T
+(609 Phoebe) 126 315.33 T
+(610 Janus) 216 315.33 T
+(611 Epimetheus) 297 315.33 T
+(612 Helene) 378 315.33 T
+(613 Telesto) 126 303.33 T
+(614 Calypso) 216 303.33 T
+(615 Atlas) 297 303.33 T
+(616 Prometheus) 378 303.33 T
+(617 Pandora) 126 291.33 T
+(618 Pan) 216 291.33 T
+(007 Uranus barycenter) 108 267.33 T
+(799 Uranus) 126 255.33 T
+(701 Ariel) 126 243.33 T
+(702 Umbriel) 216 243.33 T
+(703 Titania) 297 243.33 T
+(704 Oberon) 378 243.33 T
+(705 Miranda) 126 231.33 T
+(706 Cordelia) 216 231.33 T
+(707 Ophelia) 297 231.33 T
+(708 Bianca) 378 231.33 T
+(709 Cressida) 126 219.33 T
+(710 Desdemona) 216 219.33 T
+(711 Juliet) 297 219.33 T
+(712 Portia) 378 219.33 T
+(713 Rosalind) 126 207.33 T
+(714 Belinda) 216 207.33 T
+(715 Puck) 297 207.33 T
+( 008 Neptune barycenter) 108 183.33 T
+(899 Neptune) 126 171.33 T
+(801 Triton) 126 159.33 T
+(802 Nereid) 216 159.33 T
+(803 Naiad) 297 159.33 T
+(804 Thalassa) 378 159.33 T
+(805 Despina) 126 147.33 T
+(806 Galatea) 216 147.33 T
+(807 Larissa) 297 147.33 T
+(808 Proteus) 378 147.33 T
+(009 Pluto barycenter) 108 123.33 T
+(999 Pluto) 126 111.33 T
+(901 Charon) 126 99.33 T
+FMENDPAGE
+%%EndPage: "24" 25
+%%Page: "25" 25
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+485.29 699.58 126.71 699.58 2 L
+0 X
+V
+1.04 H
+0 Z
+N
+1 11 Q
+(14.  SOURCES AND REFERENCES FOR PRIMARY EPHEMERIS DATA) 126.71 700.67 T
+1 10 Q
+(Planets) 72 675.33 T
+0 F
+(Standish, E.M., XX Newhall, J.G. Williams, and W.M. Folkner.  JPL Planetary and Lunar Ephemerides, DE403/) 72 651.33 T
+(LE403.  JPL Interoffice Memorandum 314.10-127 dated May 22, 1995.) 72 639.33 T
+1 F
+(Natural Satellites) 72 615.33 T
+104.76 590.24 72 590.24 2 L
+V
+0.49 H
+N
+0 F
+(Satellite) 72 591.33 T
+290.11 590.24 216 590.24 2 L
+V
+N
+(Ephemeris Theory) 216 591.33 T
+404.4 590.24 360 590.24 2 L
+V
+N
+(References) 360 591.33 T
+(Phobos & Deimos) 72 567.33 T
+(MARSAT \050Analytic\051) 216 567.33 T
+(Jacobson et al. \0501989\051) 360 567.33 T
+(Galileans) 72 543.33 T
+(GALSAT\050E5, Analytic\051) 216 543.33 T
+(Lieske \0501995\051) 360 543.33 T
+(Minor Jovians) 72 531.33 T
+(Precessing ellipse) 216 531.33 T
+(Jacobson \0501994\051) 360 531.33 T
+(Outer Jovians) 72 519.33 T
+(Numerical Integration) 216 519.33 T
+(Jacobson \0501991\051) 360 519.33 T
+(Major Saturnians) 72 495.33 T
+(Numerical Integration) 216 495.33 T
+(Jacobson \0501996a\051) 360 495.33 T
+(Phoebe) 72 483.33 T
+(Numerical Integration) 216 483.33 T
+(Jacobson \0501996c\051) 360 483.33 T
+(Inner Saturnians) 72 471.33 T
+(Precessing ellipse) 216 471.33 T
+(Jacobson \0501995\051) 360 471.33 T
+(Saturn co-orbiters) 72 459.33 T
+(Numerical Integration) 216 459.33 T
+(Jacobson \0501995\051) 360 459.33 T
+(Saturn librators) 72 447.33 T
+(Numerical Integration) 216 447.33 T
+(Jacobson \0501995\051) 360 447.33 T
+(Major Uranians) 72 423.33 T
+(GUST \050Analytic\051) 216 423.33 T
+(Laskar & Jacobson \0501987\051) 360 423.33 T
+(Minor Uranians) 72 411.33 T
+(Precessing ellipse) 216 411.33 T
+(Jacobson \0501996b\051) 360 411.33 T
+(Triton) 72 387.33 T
+(Numerical Integration) 216 387.33 T
+(Jacobson et al. \0501991\051) 360 387.33 T
+(Nereid) 72 375.33 T
+(Numerical Integration) 216 375.33 T
+(Jacobson et al. \0501991\051) 360 375.33 T
+(Inner Neptunians) 72 363.33 T
+(Precessing ellipse) 216 363.33 T
+(Owen et al. \0501991\051) 360 363.33 T
+(Charon) 72 339.33 T
+(Dynamic conic) 216 339.33 T
+(Tholen \0501990\051) 360 339.33 T
+1 F
+(References For Natural Satellite Ephemerides) 206.63 303.33 T
+0 F
+(:) 402.59 303.33 T
+(Jacobson, R.A., 1991.  Outer Jovian Satellite Ephemerides for the Galileo Project.  JPL Interoffice Memorandum) 72 279.33 T
+(314.6-1261 \050JPL internal document\051.) 72 267.33 T
+-0.61 (Jacobson, R.A., 1994.  Revised Ephemerides for the Inner Jovian Satellites.  JPL Interoffice Memorandum 314.10-101) 72 243.33 P
+(\050JPL internal document\051.) 72 231.33 T
+(Jacobson, R.A., 1995.  The Orbits of the Minor Saturnian Satellites. Bulletin, American Astronomical  Society, vol.) 72 207.33 T
+(27, No.3, p. 1202-1203.) 72 195.33 T
+(Jacobson, R.A., 1996a.  Update of the Major Saturnian Satellite Ephemerides.  JPL Interoffice Memorandum 312.1-) 72 171.33 T
+(96-012 \050JPL internal document\051.) 72 159.33 T
+-0.26 (Jacobson, R.A., 1996b.  Updated Ephemerides for the Minor Uranian Satellites.  JPL Interoffice Memorandum 312.1-) 72 135.33 P
+(96-014 \050JPL internal document\051.) 72 123.33 T
+(Jacobson, R.A., 1996c.  Update of the Ephemeris for Phoebe.  JPL Interoffice Memorandum 312.1-96-025 \050JPL) 72 99.33 T
+(internal document\051.) 72 87.33 T
+FMENDPAGE
+%%EndPage: "25" 26
+%%Page: "26" 26
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+0 10 Q
+0 X
+(Jacobson, R.A., Synnott, S.P., and Campbell, J.K., 1989.  The Orbits of the Satellites of Mars from Spacecraft and) 72 713.33 T
+(Earthbased Observations. Astronomy and Astrophysics, 225, 548.) 72 701.33 T
+-0.39 (Jacobson, R.A., Riedel, J.E. and Taylor, A.H., 1991.  The Orbits of Triton and Nereid from Spacecraft and Earthbased) 72 677.33 P
+(Observations. Astronomy and Astrophysics, 247, 565.) 72 665.33 T
+(Laskar, J. and Jacobson, R.A., 1987.  GUST86. An Analytic Ephemeris of the Uranian Satellites.  Astronomy and) 72 641.33 T
+(Astrophysics, 188, 212.) 72 629.33 T
+(Lieske, J.H., 1995.  Galilean Satellite Ephemerides E5.  JPL Engineering Memorandum 312-583 \050JPL internal) 72 605.33 T
+(document\051.) 72 593.33 T
+(Owen, W.M., Vaughan, R.M., and Synnott, S.P., 1991.  Orbits of the  Six New Satellites of Neptune.  Astronomical) 72 569.33 T
+(Journal, 101, 1511.) 72 557.33 T
+(Tholen, D. and Buie, M.W., 1990. Further Analysis of Pluto-Charon Mutual Event Observations - 1990.  Bulletin,) 72 533.33 T
+(American Astronomical Society, vol. 22, No.3, p. 1129.) 72 521.33 T
+1 F
+(COMETS AND ASTEROIDS) 242.14 485.33 T
+303.79 460.34 72 460.34 2 L
+V
+0.95 H
+0 Z
+N
+(Sources of Orbital Elements for Comets and Asteroids) 72 461.33 T
+0 F
+1.41 (1.  Minor Planet Circulars \050MPC\051 published by the Minor Planet Center,    60 Garden St., Cambridge,) 108 437.33 P
+(Massachusetts 02138,    http://cfa-www.harvard.edu/cfa/ps/mpc.html) 72 425.33 T
+(2.  The Lowell Observatory Database of Asteroid Orbits \050E.L.G. Bowell\051 ,   http://www.lowell.edu) 108 401.33 T
+(3.  Solar System Dynamics Group/Jet Propulsion Laboratory \050JPL\051 ,  D.K. Yeomans, Supervisor) 108 377.33 T
+215.77 340.34 72 340.34 2 L
+V
+N
+1 F
+(Cometary Magnitude Parameters) 72 341.33 T
+0 F
+-0.38 (1.  International Comet Quarterly \050D.W.E. Green, editor\051, 60 Garden St.,    Cambridge, Massachusetts, 02138) 108 317.33 P
+(2.  Charles Morris, Jet Propulsion Laboratory, Pasadena, California  91109    http://encke.jpl.nasa.gov) 108 293.33 T
+198.57 256.34 72 256.34 2 L
+V
+N
+1 F
+(Asteroid Physical Parameters) 72 257.33 T
+0 F
+(Radius and Albedo:) 72 233.33 T
+0.05 (1.  Tedesco, E.F. \0501995\051  "IMPS Diameters and Albedos V1.0" Planetary Data System - Small Bodies Node) 108 209.33 P
+(\050PDSSBN\051 \050M. A'Hearn, University of Maryland, College Park, Maryland\051 http://pdssbn.astro.umd.edu) 72 197.33 T
+(2.  McFadden, L.A. et al. \0501989\051  In Asteroids II, p. 456.) 108 173.33 T
+(3.  Williams, J.G. \0501990\051  Private Communication.) 108 149.33 T
+(Taxonomic Type \050"Spectral Type"\051:) 72 125.33 T
+-0.34 (1.  Tholen, D.J. \0501989\051  "Asteroid Taxonomy V1.0"   Planetary Data System - Small Bodies Node \050PDSSBN\051) 108 101.33 P
+(\050M. A'Hearn, University of Maryland, College Park, Maryland\051 http://pdssbn.astro.umd.edu) 72 89.33 T
+FMENDPAGE
+%%EndPage: "26" 27
+%%Page: "27" 27
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+0 10 Q
+0 X
+(2.  Binzel, R.P. and Xu, S. \0501993\051  Science 216:186-191.) 108 713.33 T
+(Rotation Period:) 72 689.33 T
+0.69 (1.  Harris, A.W. \0501996\051  "Asteroid Lightcurve Derived Data V2.0" Planetary Data System - Small Bodies) 108 665.33 P
+(Node \050PDSSBN\051 \050M. A'Hearn, University of Maryland, College Park, Maryland\051 http://pdssbn.astro.umd.edu) 72 653.33 T
+(Magnitude Parameters:) 72 629.33 T
+2.19 (1.  Minor Planet Circulars \050MPC\051 published by the Minor Planet Center, 60 Garden St., Cambridge,) 108 605.33 P
+(Massachusetts 02138 http://cfa-www.harvard.edu/cfa/ps/mpc.html) 72 593.33 T
+FMENDPAGE
+%%EndPage: "27" 28
+%%Page: "28" 28
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+386.11 698.58 228.63 698.58 2 L
+0 X
+V
+1.04 H
+0 Z
+N
+1 11 Q
+(15.  PLANETARY CONSTANTS) 228.63 699.67 T
+0 10 Q
+1.59 (Major body \050planet/satellite\051 GM and AU definitions ACTUALLY USED \050as opposed to the FYI data) 108 674.33 P
+-0.5 (screens\051 are from the DE-403 ephemeris, a significant improvement over the earlier DE-200.  Other planet and satellite) 72 662.33 P
+(constants used by this software, such as radii, rotation and orientation, are based on the following sources:) 72 650.33 T
+(1.  \324Report of the IAU/IAG/COSPAR Working Group on  Cartographic Coordinates and Rotational) 108 626.33 T
+(Elements of  the Planets and Satellites: 1994') 72 614.33 T
+(2.  \324The Astronomical Almanac', 1993.) 108 590.33 T
+-0.04 (3.  \324Planetary Geodetic Control Using Satellite Imaging', Journal of Geophysical Research, Vol. 84, No. B3,) 108 566.33 P
+(March 10, 1979, by Thomas C. Duxbury.) 72 554.33 T
+2.17 (4.  Letter from Thomas C. Duxbury to Dr. Ephraim Lazeryevich Akim, Keldish Institute of Applied) 108 530.33 P
+(Mathematics, USSR Academy of Sciences, Moscow, USSR.) 72 518.33 T
+-0.27 (Most values are from the \324IAU/IAG/COSPAR Working Group on   Cartographic Coordinates and Rotational) 108 494.33 P
+(Elements of the Planets and Satellites: 1994'.  The exceptions are:) 72 482.33 T
+(         --   Radii for the Sun are from the above reference [2].) 72 458.33 T
+0.22 (         --   The second nutation precession angle \050M2\051 for Mars is  represented by a quadratic polynomial in the 1994) 72 434.33 P
+0.19 (IAU report. Current software cannot handle this term \050which is extremely small\051, so the polynomial is truncated to a) 72 422.33 P
+(linear one.) 72 410.33 T
+0.09 (         --   The expressions for the pole and prime meridian of Neptune  given in the IAU report include trigonometric) 72 386.33 P
+(terms which  current software doesn't yet handle.  These terms are omitted.) 72 374.33 T
+0.29 (         --   For several satellites, the 1994 IAU report either gives a  single radius value or a polar radius and a single) 72 350.33 P
+-0.07 (equatorial  radius.  Current software uses a triaxial ellipsoid model that  requires three radii. In the cases listed below,) 72 338.33 P
+0.41 (additional values have been supplied in order to allow the software to function. The \324invented' values should not be) 72 326.33 P
+(used in any application requiring values sanctioned by an authoritative source.) 72 314.33 T
+(              The affected satellites are:) 72 290.33 T
+165.66 265.24 144 265.24 2 L
+V
+0.49 H
+N
+(Body) 144 266.33 T
+247.91 265.24 216 265.24 2 L
+V
+N
+(ID code) 216 266.33 T
+(Thebe) 144 254.33 T
+(514) 216 254.33 T
+(Metis) 144 242.33 T
+(516) 216 242.33 T
+(Helene) 144 230.33 T
+(612) 216 230.33 T
+(Larissa) 144 218.33 T
+(807) 216 218.33 T
+(Airmass computation is based on:) 72 194.33 T
+-0.13 (         5.  Kasten, F., Young, A., "Revised Optical Air Mass Tables and Approximation Formula", Applied Optics, vol) 72 170.33 P
+(28, no. 22, p. 4735-4738, Nov. 15, 1989.) 72 158.33 T
+FMENDPAGE
+%%EndPage: "28" 29
+%%Page: "29" 29
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+380.32 698.58 231.68 698.58 2 L
+0 X
+V
+1.04 H
+0 Z
+N
+1 11 Q
+(16.  ACKNOWLEDGEMENTS) 231.68 699.67 T
+0 10 Q
+(This software reflects the underlying contributions of several people at JPL:) 72 674.33 T
+(Design/implementation :) 144 650.33 T
+(Jon Giorgini) 288 650.33 T
+(Don Yeomans) 288 638.33 T
+(Cognizant Engineer      :) 144 614.33 T
+(Jon Giorgini) 288 614.33 T
+(Ephemerides                 :) 144 590.33 T
+(Myles Standish \050DE-403/LE-403\051) 288 590.33 T
+(Bob Jacobson   \050Satellites\051) 288 578.33 T
+(Jay Lieske        \050Satellites\051) 288 566.33 T
+(Contributors                  :) 144 542.33 T
+(Paul Chodas) 288 542.33 T
+(The NAIF group \050SPICELIB & donated computer\051) 288 530.33 T
+(        \050esp. Chuck Acton, Bill Taber, Nat Bachman\051) 288 518.33 T
+(Ray Wimberly) 288 506.33 T
+(Mike Keesey) 288 494.33 T
+(Alan Chamberlin) 288 482.33 T
+(Address queries to "Jon.D.Giorgini@jpl.nasa.gov", who is soley responsible for any errors or omissions.) 72 458.33 T
+(Solar System Dynamics Group, Jet Propulsion Laboratory, 4800 Oak Grove Drive, Pasadena, CA 91109, USA) 72 446.33 T
+FMENDPAGE
+%%EndPage: "29" 30
+%%Page: "30" 30
+612 792 0 FMBEGINPAGE
+72 746 540 756 R
+7 X
+0 K
+V
+72 33.32 540 43.32 R
+V
+72 72 540 720 R
+V
+338.39 514.91 216 514.91 2 L
+0 X
+V
+1.04 H
+0 Z
+N
+1 11 Q
+(17.  Appendices/Examples) 216 516 T
+0 10 Q
+(These  examples demonstrate a few of the different types of Horizons functions. Additional functions and) 99 481.33 T
+(customizable output types are available.) 72 469.33 T
+(a\051 Major body data screen) 216 445.33 T
+(b\051 Asteroid data screen) 216 433.33 T
+(c\051 Comet data screen) 216 421.33 T
+(d\051 Small-body search) 216 409.33 T
+(e\051 Satellite Observer Ephemeris \050Io\051) 216 397.33 T
+(f\051 Asteroid Observer Ephemeris \0501996 PW\051) 216 385.33 T
+FMENDPAGE
+%%EndPage: "30" 31
+%%Trailer
+%%BoundingBox: 0 0 612 792
+%%Pages: 30 1
+%%DocumentFonts: Times-Roman
+%%+ Times-Bold

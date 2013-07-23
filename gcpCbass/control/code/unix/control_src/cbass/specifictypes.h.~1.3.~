@@ -1,0 +1,70 @@
+#ifndef specifictypes_h
+#define specifictypes_h
+
+#include "generictypes.h"
+
+/*-----------------------------------------------------------------------
+ * The AcquireTargets datatype is used to tell the until() command which
+ * operations to wait for.
+ *
+ * It is stored in a SetVariable and supports the standard
+ * set + - !~ ~ != == operators.
+ */
+DataType *add_AcquireTargetsDataType(Script *sc, char *name);
+DataType *add_DeicingZonesDataType(Script *sc, char *name);
+DataType *add_ShutterStateDataType(Script *sc, char *name);
+DataType *add_HeaterStateDataType(Script *sc, char *name);
+DataType *add_HeaterTempDataType(Script *sc, char *name);
+DataType *add_HeaterPIDDataType(Script *sc, char *name);
+DataType *add_ActuatorPositionDataType(Script *sc, char *name);
+DataType *add_ActuatorOffsetDataType(Script *sc, char *name);
+DataType *add_ActuatorAcquiredThresholdDataType(Script *sc, char *name);
+DataType *add_BenchFocusOffsetDataType(Script *sc, char *name);
+DataType *add_TiltMeterEnableDataType(Script *sc, char *name);
+DataType *add_TiltMeterThetaDataType(Script *sc, char *name);
+DataType *add_TiltMeterOffsetDataType(Script *sc, char *name);
+DataType *add_TiltMeterRangeDataType(Script *sc, char *name);
+DataType *add_TiltMeterMovingAverageIntervalDataType(Script *sc, char *name);
+DataType *add_LinearSensorEnableDataType(Script *sc, char *name);
+DataType *add_LinearSensorOffsetDataType(Script *sc, char *name);
+DataType *add_LinearSensorRangeDataType(Script *sc, char *name);
+DataType *add_LinearSensorMovingAverageIntervalDataType(Script *sc, char *name);
+DataType *add_LnaNumberDataType(Script *sc, char *name);
+DataType *add_RxChannelDataType(Script *sc, char *name);
+DataType *add_RxStageDataType(Script *sc, char *name);
+DataType *add_LnaStageNumberDataType(Script *sc, char *name);
+DataType *add_RoachNumberDataType(Script *sc, char *name);
+DataType *add_LnaDrainCurrentDataType(Script *sc, char *name);
+DataType *add_LnaDrainVoltageDataType(Script *sc, char *name);
+
+/*
+ * Enumerate bit-set values of the available targets. Each should be
+ * a power of two.
+ */
+typedef enum {
+  ACQ_SOURCE      = 0x1,   // The last tracker command 
+  ACQ_MARK        = 0x2,   // The last mark-command 
+  ACQ_GRAB        = 0x4,   // The last grabber command 
+  ACQ_SETREG      = 0x8,   // The last grabber command 
+  ACQ_TV_OFFSET   = 0x10,  // The last tv_offset command 
+  ACQ_FRAME       = 0x20,  // The last newFrame command 
+  ACQ_SCAN        = 0x40,  // The last scan command 
+  ACQ_BENCH       = 0x80,  // The last optical bench command
+  ACQ_SCRIPT      = 0x100, // The last script command
+} AcquireTargets;
+
+typedef enum {
+  TELESCOPE_SHUTTER_CLOSED = 0,
+  TELESCOPE_SHUTTER_OPEN   = 1
+} TelescopeShutterState;
+
+typedef enum {
+  TELESCOPE_HEATER_OFF     = 0,
+  TELESCOPE_HEATER_ON      = 1,
+  TELESCOPE_HEATER_PID     = 2,
+  TELESCOPE_HEATER_TUNE    = 3
+} TelescopeHeaterState;
+
+#endif
+
+

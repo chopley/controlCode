@@ -1,0 +1,139 @@
+add_page 15 22 Status black red yellow 10 11 {13 10 12 13 10 10 10 10} {} 0 {} 0 {
+  label 0 0 midnightblue paleturquoise center {Array frame}
+  label 0 1 midnightblue paleturquoise center {Antenna frame}
+  label 0 4 midnightblue paleturquoise center Azimuth
+  label 0 5 midnightblue paleturquoise center Elevation
+  label 0 7 midnightblue paleturquoise center {X Sky Offset}
+  label 0 8 midnightblue paleturquoise center {Y Sky Offset}
+  label 0 11 midnightblue paleturquoise center SERVO
+  label 0 14 midnightblue paleturquoise center {Motor 1}
+  label 0 15 midnightblue paleturquoise center {Motor 2}
+  label 0 16 midnightblue paleturquoise center {Motor 3}
+  label 0 17 midnightblue paleturquoise center {Motor 4}
+  label 0 20 midnightblue paleturquoise center I1
+  label 0 21 midnightblue paleturquoise center I2
+  label 0 22 midnightblue paleturquoise center I3
+  label 0 23 midnightblue paleturquoise center I4
+  register 1 0 black green center array.frame.record integer 0 0 unknown,false,true 0 0 0.0 0.0 0 1
+  register 1 1 black green center antenna0.frame.record integer 0 0 unknown,false,true 0 0 0.0 0.0 0 1
+  label 1 3 midnightblue paleturquoise center Position
+  register 1 4 black green center {antenna0.servo.slow_az_pos[0]} fixed_point 2 0 unknown,false,true 1 0 2 2 0 1
+  register 1 5 black green center {antenna0.servo.slow_el_pos[0]} fixed_point 2 0 unknown,false,true 1 0 2 2 0 1
+  register 1 7 black green center {antenna0.tracker.equat_off[0][0]} sexagesimal 2 0 {} 0 0 0.0 0.0 0 1
+  register 1 8 black green center {antenna0.tracker.equat_off[1][0]} sexagesimal 2 0 {} 0 0 0.0 0.0 0 1
+  label 1 11 midnightblue paleturquoise center {Lid Open}
+  register 1 12 black green center {antenna0.servo.drive_lids[0]} bit 0 0 {closed, open} 0 1 0.0 0.0 0 1
+  label 1 13 midnightblue paleturquoise center {Contact ON}
+  register 1 14 black green center {antenna0.servo.contactor[0][0]} bit 0 0 {yes, no} 0 1 0.0 0.0 0 1
+  register 1 15 black green center {antenna0.servo.contactor[0][1]} bit 0 0 {yes, no} 0 1 0.0 0.0 0 1
+  register 1 16 black green center {antenna0.servo.contactor[0][2]} bit 0 0 {yes, no} 0 1 0.0 0.0 0 1
+  register 1 17 black green center {antenna0.servo.contactor[0][3]} bit 0 0 {yes, no} 0 1 0.0 0.0 0 1
+  register 1 20 black green center {antenna0.receiver.drainCurrent[0]} floating 2 0 {} 0 0 0.0 0.0 0 1
+  register 1 21 black green center {antenna0.receiver.drainCurrent[1]} floating 2 0 {} 0 0 0.0 0.0 0 1
+  register 1 22 black green center {antenna0.receiver.drainCurrent[2]} floating 2 0 {} 0 0 0.0 0.0 0 1
+  register 1 23 black green center {antenna0.receiver.drainCurrent[3]} floating 2 0 {} 0 0 0.0 0.0 0 1
+  register 2 0 black green center array.frame.received enum 0 0 unknown,false,true 0 1 2 2 0 1
+  register 2 1 black green center antenna0.frame.received enum 0 0 unknown,false,true 0 1 2 2 0 1
+  label 2 11 midnightblue paleturquoise center Brake
+  register 2 12 black green center {antenna0.servo.mechanical_brakes[0]} bit 0 0 {disengaged, engaged} 0 1 0.0 0.0 0 1
+  label 2 13 midnightblue paleturquoise center {MCB trip}
+  register 2 14 black green center {antenna0.servo.circuit_breaker[0][0]} bit 0 0 {good, tripped} 0 1 0.0 0.0 0 1
+  register 2 15 black green center {antenna0.servo.circuit_breaker[0][1]} enum 0 0 {good, tripped} 0 1 0.0 0.0 0 1
+  register 2 16 black green center {antenna0.servo.circuit_breaker[0][2]} bit 0 0 {good, tripped} 0 1 0.0 0.0 0 1
+  register 2 17 black green center {antenna0.servo.circuit_breaker[0][3]} bit 0 0 {good, tripped} 0 1 0.0 0.0 0 1
+  label 2 19 midnightblue paleturquoise center LNA
+  label 2 20 midnightblue paleturquoise center Vd1
+  label 2 21 midnightblue paleturquoise center Vd2
+  label 2 22 midnightblue paleturquoise center Vd3
+  label 2 23 midnightblue paleturquoise center Vd4
+  label 3 0 midnightblue paleturquoise center {Az Error}
+  label 3 1 midnightblue paleturquoise center {El Error}
+  label 3 3 midnightblue paleturquoise center Offset
+  register 3 4 black green center {antenna0.tracker.horiz_off[0][0]} sexagesimal 2 0 {} 0 0 0.0 0.0 0 1
+  register 3 5 black green center {antenna0.tracker.horiz_off[1][0]} sexagesimal 2 0 {} 0 0 0.0 0.0 0 1
+  label 3 7 midnightblue paleturquoise center RA
+  label 3 8 midnightblue paleturquoise center DEC
+  label 3 11 midnightblue paleturquoise center {Az Wrap}
+  register 3 12 black green center {antenna0.servo.az_no_wrap[0]} enum 0 0 {zone 0, zone 1, zone 2} 0 0 0.0 0.0 0 1
+  label 3 13 midnightblue paleturquoise center {Thermal Cut}
+  register 3 14 black green center {antenna0.servo.thermal_cutout[0][0]} bit 0 0 {good, tripped} 0 1 0.0 0.0 0 1
+  register 3 15 black green center {antenna0.servo.thermal_cutout[0][1]} bit 0 0 {good, tripped} 0 1 0.0 0.0 0 1
+  register 3 16 black green center {antenna0.servo.thermal_cutout[0][2]} bit 0 0 {good, tripped} 0 1 0.0 0.0 0 1
+  register 3 17 black green center {antenna0.servo.thermal_cutout[0][3]} bit 0 0 {good, tripped} 0 1 0.0 0.0 0 1
+  label 3 19 midnightblue paleturquoise center BIASES
+  register 3 20 black green center {antenna0.receiver.drainVoltage[0]} floating 2 0 {} 0 0 0.0 0.0 0 1
+  register 3 21 black green center {antenna0.receiver.drainVoltage[1]} floating 2 0 {} 0 0 0.0 0.0 0 1
+  register 3 22 black green center {antenna0.receiver.drainVoltage[2]} floating 2 0 {} 0 0 0.0 0.0 0 1
+  register 3 23 black green center {antenna0.receiver.drainVoltage[3]} floating 2 0 {} 0 0 0.0 0.0 0 1
+  register 4 0 black green center {antenna0.servo.fast_az_err[0][0]} fixed_point 2 0 unknown,false,true 1 0 2 2 0 1
+  register 4 1 black green center {antenna0.servo.fast_el_err[0][0]} fixed_point 2 0 unknown,false,true 1 0 2 2 0 1
+  label 4 3 midnightblue paleturquoise center {Scan Offset}
+  register 4 4 black green center {antenna0.tracker.scan_off[0][0]} sexagesimal 1 0 {} 0 0 0.0 0.0 0 1
+  register 4 5 black green center {antenna0.tracker.scan_off[1][0]} sexagesimal 1 0 {} 0 0 0.0 0.0 0 1
+  register 4 7 black green center {antenna0.tracker.equat_geoc[0][0]} sexagesimal 2 0 {} 0 0 0.0 0.0 0 1
+  register 4 8 black green center {antenna0.tracker.equat_geoc[1][0]} sexagesimal 2 0 {} 0 0 0.0 0.0 0 1
+  label 4 13 midnightblue paleturquoise center Status
+  register 4 14 black green center {antenna0.servo.servo_status[0][0]} bit 0 0 {good, bad} 0 0 0.0 0.0 0 1
+  register 4 15 black green center {antenna0.servo.servo_status[0][1]} bit 0 0 {good, bad} 0 0 0.0 0.0 0 1
+  register 4 16 black green center {antenna0.servo.servo_status[0][2]} bit 0 0 {good, bad} 0 0 0.0 0.0 0 1
+  register 4 17 black green center {antenna0.servo.servo_status[0][3]} bit 0 0 {good, bad} 0 0 0.0 0.0 0 1
+  label 4 20 midnightblue paleturquoise center Vg1
+  label 4 21 midnightblue paleturquoise center Vg2
+  label 4 22 midnightblue paleturquoise center Vg3
+  label 4 23 midnightblue paleturquoise center Vg4
+  label 5 1 midnightblue paleturquoise center Roach1
+  label 5 2 midnightblue paleturquoise center {Roach2 }
+  label 5 6 midnightblue paleturquoise center {Vac Gauge}
+  label 5 10 midnightblue paleturquoise center {rad shield}
+  label 5 11 midnightblue paleturquoise center {cold plate}
+  register 5 20 black green center {antenna0.receiver.gateVoltage[0]} floating 2 0 {} 0 0 0.0 0.0 0 1
+  register 5 21 black green center {antenna0.receiver.gateVoltage[1]} floating 2 0 {} 0 0 0.0 0.0 0 1
+  register 5 22 black green center {antenna0.receiver.gateVoltage[2]} floating 2 0 {} 0 0 0.0 0.0 0 1
+  register 5 23 black green center {antenna0.receiver.gateVoltage[3]} floating 2 0 {} 0 0 0.0 0.0 0 1
+  label 6 0 midnightblue paleturquoise center {Int Count}
+  register 6 1 black green center {antenna0.roach1.intCount[0][0]} floating 10 0 {} 0 0 0.0 0.0 0 1
+  register 6 2 black green center {antenna0.roach2.intCount[0][0]} floating 8 0 {} 0 0 0.0 0.0 0 1
+  register 6 6 black green center {antenna0.koekblik.adc[0]} floating 10 0 {} 0 0 0.0 0.0 0 1
+  label 6 9 midnightblue paleturquoise center TEMPS
+  register 6 10 black green center {antenna0.thermal.lsTemperatureSensors[0]} floating 4 0 {} 0 0 0.0 0.0 0 1
+  register 6 11 black green center {antenna0.thermal.lsTemperatureSensors[7]} floating 4 0 {} 0 0 0.0 0.0 0 1
+  label 7 0 midnightblue paleturquoise center Version
+  register 7 1 black green center {antenna0.roach1.version[0][0]} floating 10 0 {} 0 0 0.0 0.0 0 1
+  register 7 2 black green center {antenna0.roach2.version[0][0]} floating 10 0 {} 0 0 0.0 0.0 0 1
+}
+
+add_plot 346 22 {ROACH 1 BANDPASSES} 0 80.7692307692308 1 1 maximum 20.0 {antenna0.roach1.channel[0-63][0]} {channel number} {
+  graph -4909.0375 103089.7875 LL {{antenna0.roach1.LLtime[0-63][0]} {}} {} 0 1 1 0
+  graph -4901.140625 102923.953125 {Load 1} {{antenna0.roach1.load1time[0-63][0]} {}} {} 0 1 1 0
+  graph -4940.909375 103759.096875 {Load 2} {{antenna0.roach1.load2time[0-63][0]} {}} {} 0 1 1 0
+  graph -68864.2261230469 4377.37358398438 Q {{antenna0.roach1.Qtime[0-63][0]} {} {}} {} 0 1 1 0
+  graph -4687.132421875 98429.780859375 RR {{antenna0.roach1.RRtime[0-63][0]} {}} {} 0 1 1 0
+  graph -68857.41612854 4234.36369934082 U {{antenna0.roach1.Utime[0-63][0]} {}} {} 0 1 1 0
+} normal 0 0.0 1
+
+add_plot 346 22 {ROACH 2 BANDPASSES} 0 80.7692307692308 1 1 maximum 20.0 {antenna0.roach2.channel[0-63][0]} {channel number} {
+  graph -4909.0375 103089.7875 LL {{antenna0.roach2.LLtime[0-63][0]} {}} {} 0 1 1 0
+  graph -4901.140625 102923.953125 {Load 1} {{antenna0.roach2.load1time[0-63][0]} {}} {} 0 1 1 0
+  graph -4940.909375 103759.096875 {Load 2} {{antenna0.roach2.load2time[0-63][0]} {}} {} 0 1 1 0
+  graph -68864.2261230469 4377.37358398438 Q {{antenna0.roach2.Qtime[0-63][0]} {} {}} {} 0 1 1 0
+  graph -4687.132421875 98429.780859375 RR {{antenna0.roach2.RRtime[0-63][0]} {}} {} 0 1 1 0
+  graph -68857.41612854 4234.36369934082 U {{antenna0.roach2.Utime[0-63][0]} {}} {} 0 1 1 0
+} normal 0 0.0 1
+
+add_plot 176 22 {Roach1: BP averaged time stream} 0 0.00273014600866307 1 1 maximum 20.0 {antenna0.roach1.utc.date[0][0-99]} Time {
+  graph 61544.23046875 61984.31640625 LL {{antenna0.roach1.LLfreq[0][0-99]} {} {}} {} 0 1 1 0
+  graph 65974.79609375 66234.68828125 {Load 1} {{antenna0.roach1.load1freq[0][0-99]} {}} {} 0 1 1 0
+  graph 68318.40546875 68663.54765625 {Load 2} {{antenna0.roach1.load2freq[0][0-99]} {}} {} 0 1 1 0
+  graph -2154.55234375 -2142.74453125 Q {{antenna0.roach1.Qfreq[0][0-99]} {}} {} 0 1 1 0
+  graph 59757.76328125 59920.40859375 RR {{antenna0.roach1.RRfreq[0][0-99]} {}} {} 0 1 1 0
+  graph -1976.45078125 -1964.12734375 U {{antenna0.roach1.Ufreq[0][0-99]} {}} {} 0 1 1 0
+} normal 0 0.0 1
+
+add_plot 176 22 {Roach 2: BP averaged time stream} 0 0.00273014600866307 1 1 maximum 20.0 {antenna0.roach2.utc.date[0][0-99]} Time {
+  graph 61544.23046875 61984.31640625 LL {{antenna0.roach2.LLfreq[0][0-99]} {} {}} {} 0 1 1 0
+  graph 65974.79609375 66234.68828125 {Load 1} {{antenna0.roach2.load1freq[0][0-99]} {}} {} 0 1 1 0
+  graph 68318.40546875 68663.54765625 {Load 2} {{antenna0.roach2.load2freq[0][0-99]} {}} {} 0 1 1 0
+  graph -2154.55234375 -2142.74453125 Q {{antenna0.roach2.Qfreq[0][0-99]} {}} {} 0 1 1 0
+  graph 59757.76328125 59920.40859375 RR {{antenna0.roach2.RRfreq[0][0-99]} {}} {} 0 1 1 0
+  graph -1976.45078125 -1964.12734375 U {{antenna0.roach2.Ufreq[0][0-99]} {}} {} 0 1 1 0
+} normal 0 0.0 1

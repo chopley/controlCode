@@ -1,0 +1,157 @@
+#include <iostream>
+
+#include "program/common/Program.h"
+
+#include "antenna/control/cbass/RoachBackendMsg.h"
+#include "antenna/control/cbass/RoachBackend.h"
+#include "gcp/util/common/Exception.h"
+#include "gcp/util/common/TimeVal.h"
+
+
+
+using namespace std;
+using namespace gcp::antenna::control;
+using namespace gcp::program;
+using namespace gcp::util;
+
+void Program::initializeUsage() {};
+
+KeyTabEntry Program::keywords[] = {
+  { "init",  "f", "b", "shall i initialize?"},
+  { END_OF_KEYWORDS}
+};
+
+int Program::main()
+{
+  RoachBackend backend(false, "timon");
+  int status;
+  int i,j,k;
+
+  struct timespec delay;
+  delay.tv_sec  =         0;
+  delay.tv_nsec = 100000000;
+
+
+  
+
+  COUT("ABOUT TO CONNECT");
+  backend.connect();
+  
+  if(backend.connected_){
+    COUT("connected to the roach board");
+  } else{
+    COUT("CONNECTION FAIL");
+  }
+
+  sleep(2);
+
+  backend.command_.packReadDataMsg();
+  backend.issueCommand(backend.command_);
+  COUT("got data?");
+
+  COUT("RESPONSE VALID: " << backend.command_.responseValid_);
+
+  sleep(2);
+
+#if(1)
+  backend.command_.packRoachCmdMsg("POOPIEBUTT");
+  backend.issueCommand(backend.command_);
+  COUT("done with issuing poop");
+  COUT("RESPONSE VALID: " << backend.command_.responseValid_);
+
+  sleep(2);
+
+  backend.command_.packRoachCmdMsg("JACKATTACK");
+  backend.issueCommand(backend.command_);
+  COUT("done with issuing JACK");
+
+  COUT("RESPONSE VALID: " << backend.command_.responseValid_);
+
+
+  sleep(2);
+
+
+#endif
+
+  for (i=0;i<50;i++){
+    COUT("READING OUT WITH GETDATA COMMAND");
+    backend.getData();
+    
+    COUT(" in testprogram:");
+    COUT("(NumFrames, version, intCount) : (" << backend.command_.numFrames_ << " , " << backend.command_.version_ << " , " << backend.command_.intCount_ << ")");
+    COUT("INT_LENGTH: " << backend.command_.intLength_)
+    nanosleep(&delay, 0);
+
+    for(j=0;j<10;j++){
+      COUT("TIME[" << j << "] = " << backend.command_.tstart_[j]);
+    }
+
+  }
+
+  backend.command_.PrintData();
+
+
+  //  COUT("PRINTING OUT THE DATA");
+  //  backend.command_.PrintData();
+
+#if(0)
+
+  //  COUT("TIME FOR A SEGFAULT");
+  backend.command_.packetizeNetworkMsg();
+
+  COUT("look at the data");
+  COUT("version:  " << backend.command_.packet_.version);
+
+
+  backend.writeString("GETDATAXXX");
+  
+  backend.command_.numBytesExpected_ = 15432;
+  backend.readTCPPort(backend.command_);
+  backend.command_.packetizeNetworkMsg();
+
+  COUT("look at the data");
+  COUT("version:  " << backend.command_.packet_.version);  
+
+#endif
+
+
+  COUT("DISCONNECT");  
+  backend.disconnect();
+  
+#if(0)
+
+  for(i=0;i<NUM_ROACH_INTEGRATION_PER_TRANSFER;i++){
+    for(j=0;j<NUM_CHANNELS_PER_BAND;j++){
+      COUT("LLe[i][j].  i: " << i << ", j: " << j << " val: " << backend.command_.LLe_[i][j]);
+      COUT("RRe[i][j].  i: " << i << ", j: " << j << " val: " << backend.command_.RRe_[i][j]);
+      COUT("Ue[i][j].  i: " << i << ", j: " << j << " val: " << backend.command_.Ue_[i][j]);
+      COUT("Qe[i][j].  i: " << i << ", j: " << j << " val: " << backend.command_.Qe_[i][j]);
+      COUT("TL1e[i][j].  i: " << i << ", j: " << j << " val: " << backend.command_.TL1e_[i][j]);
+      COUT("TL2e[i][j].  i: " << i << ", j: " << j << " val: " << backend.command_.TL2e_[i][j]);
+      COUT("LLo[i][j].  i: " << i << ", j: " << j << " val: " << backend.command_.LLo_[i][j]);
+      COUT("RRo[i][j].  i: " << i << ", j: " << j << " val: " << backend.command_.RRo_[i][j]);
+      COUT("Uo[i][j].  i: " << i << ", j: " << j << " val: " << backend.command_.Uo_[i][j]);
+      COUT("Qo[i][j].  i: " << i << ", j: " << j << " val: " << backend.command_.Qo_[i][j]);
+      COUT("TL1o[i][j].  i: " << i << ", j: " << j << " val: " << backend.command_.TL1o_[i][j]);
+      COUT("TL2o[i][j].  i: " << i << ", j: " << j << " val: " << backend.command_.TL2o_[i][j]);
+    }
+  };
+  for(i=0;i<NUM_ROACH_INTEGRATION_PER_TRANSFER;i++){
+    for(j=0;j<NUM_CHANNELS_PER_BAND;j++){
+      for(k=0;k<NUM_PARITY;k++){
+	COUT("LL[i][j].  i: "  << i << ", j: " << j << " k: " << k << " val: " << backend.command_.LL_[i][j][k]);
+	COUT("RR[i][j].  i: "  << i << ", j: " << j << " k: " << k << " val: " << backend.command_.RR_[i][j][k]);
+	COUT("U[i][j].  i: "   << i << ", j: " << j << " k: " << k << " val: " << backend.command_.U_[i][j][k]);
+	COUT("Q[i][j].  i: "   << i << ", j: " << j << " k: " << k << " val: " << backend.command_.Q_[i][j][k]);
+	COUT("TL1[i][j].  i: " << i << ", j: " << j << " k: " << k << " val: " << backend.command_.TL1_[i][j][k]);
+	COUT("TL2[i][j].  i: " << i << ", j: " << j << " k: " << k << " val: " << backend.command_.TL2_[i][j][k]);
+      }
+    };
+  };
+
+#endif
+
+  return 0;
+}
+
+

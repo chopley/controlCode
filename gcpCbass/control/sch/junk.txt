@@ -1,0 +1,281 @@
+? az_scan.sch
+? az_scan_source.sch
+? cvs
+? el_beam_slew.sch
+? el_beam_slew_reverse.sch
+? el_slew.sch
+? fine_grid.sch
+? grid_search.sch
+? grid_search2.sch
+? junk.txt
+? jupiter_raster.sch
+? moon_raster.sch
+? radio_pointing_raster.sch
+? radio_pointing_raster_bright.sch
+? scan_large_source.sch
+? scan_source_charles.sch
+? sun_scan.sch
+? trackOff.sch
+? trackTest.sch
+? track_test.sch
+===================================================================
+File: beammap.sch      	Status: Up-to-date
+
+   Working revision:	1.1.1.1
+   Repository revision:	1.1.1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/beammap.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: holography_011007.sch	Status: Up-to-date
+
+   Working revision:	1.1.1.1
+   Repository revision:	1.1.1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/holography_011007.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: leadTrail.sch    	Status: Up-to-date
+
+   Working revision:	1.1.1.1
+   Repository revision:	1.1.1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/leadTrail.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: radio_pointing.sch	Status: Locally Modified
+
+   Working revision:	1.1.1.1
+   Repository revision:	1.1.1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/radio_pointing.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: radoff_cross.sch 	Status: Up-to-date
+
+   Working revision:	1.1.1.1
+   Repository revision:	1.1.1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/radoff_cross.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: radoff_grid.sch  	Status: Up-to-date
+
+   Working revision:	1.1.1.1
+   Repository revision:	1.1.1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/radoff_grid.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: radoff_sun_cross.sch	Status: Up-to-date
+
+   Working revision:	1.1.1.1
+   Repository revision:	1.1.1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/radoff_sun_cross.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: radoff_sun_cross_fine.sch	Status: Up-to-date
+
+   Working revision:	1.1.1.1
+   Repository revision:	1.1.1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/radoff_sun_cross_fine.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: scan_source.sch  	Status: Up-to-date
+
+   Working revision:	1.2
+   Repository revision:	1.2	/sw/cvsroot/cbass/gcpCbass/control/sch/scan_source.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: schedlib.sch     	Status: Up-to-date
+
+   Working revision:	1.3
+   Repository revision:	1.3	/sw/cvsroot/cbass/gcpCbass/control/sch/schedlib.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: slow_HII_scans.sch	Status: Up-to-date
+
+   Working revision:	1.1.1.1
+   Repository revision:	1.1.1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/slow_HII_scans.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: source_map.sch   	Status: Up-to-date
+
+   Working revision:	1.1.1.1
+   Repository revision:	1.1.1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/source_map.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: spt_el_dip040707.sch	Status: Up-to-date
+
+   Working revision:	1.1.1.1
+   Repository revision:	1.1.1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/spt_el_dip040707.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: spt_point_radio_092507.sch	Status: Up-to-date
+
+   Working revision:	1.1.1.1
+   Repository revision:	1.1.1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/spt_point_radio_092507.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: test_scan051308.sch	Status: Up-to-date
+
+   Working revision:	1.1.1.1
+   Repository revision:	1.1.1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/test_scan051308.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: auto_point_cbass_2min.sch	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/pointing/auto_point_cbass_2min.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: auto_point_cbass_3min.sch	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/pointing/auto_point_cbass_3min.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: auto_point_cbass_lst01.sch	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/pointing/auto_point_cbass_lst01.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: auto_point_cbass_lst01_2.sch	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/pointing/auto_point_cbass_lst01_2.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: auto_point_cbass_lst04.sch	Status: Up-to-date
+
+   Working revision:	1.2
+   Repository revision:	1.2	/sw/cvsroot/cbass/gcpCbass/control/sch/pointing/auto_point_cbass_lst04.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: auto_point_cbass_lst07.sch	Status: Up-to-date
+
+   Working revision:	1.2
+   Repository revision:	1.2	/sw/cvsroot/cbass/gcpCbass/control/sch/pointing/auto_point_cbass_lst07.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: auto_point_cbass_lst10.sch	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/pointing/auto_point_cbass_lst10.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: auto_point_cbass_lst13.sch	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/pointing/auto_point_cbass_lst13.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: auto_point_cbass_lst136.sch	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/pointing/auto_point_cbass_lst136.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: auto_point_cbass_lst16.sch	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/pointing/auto_point_cbass_lst16.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: auto_point_cbass_lst21.sch	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/pointing/auto_point_cbass_lst21.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: auto_point_cbass_lst21_2.sch	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/pointing/auto_point_cbass_lst21_2.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: auto_point_cbass_lst23.sch	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/pointing/auto_point_cbass_lst23.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: point_cbass_single_source.sch	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/sch/pointing/point_cbass_single_source.sch,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+

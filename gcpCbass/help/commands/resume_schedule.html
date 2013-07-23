@@ -1,0 +1,36 @@
+<HEAD><TITLE>The resume_schedule command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><code><b>resume_schedule</b></code></font>
+<P>
+Resume execution of a paused scheduling script.
+<P>
+<DL>
+<DT> Arguments:
+<DD> (none)
+<P>
+<DT> Example:
+<DD> The following example pauses then resumes execution of the
+     currently running scheduling script. Note that at least the
+     second line would have to be typed from the command line, since
+     there is no script running after the resume_schedule command
+     has been executed.
+
+<pre>
+  suspend_schedule
+  ...
+  resume_schedule
+</pre>
+
+<DT> Context:
+<DD> After the current schedule has been paused by the
+     <code><a href=suspend_schedule.html>suspend_schedule</a></code>
+     command, this command can be used to resume execution. The
+     script continues executing from where it was stopped.
+</DL>
+
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:42 PST 2004)
+</BODY>

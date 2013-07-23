@@ -1,0 +1,46 @@
+<HEAD><TITLE>Displaying archive data</TITLE></HEAD>
+<BODY bgcolor=add8e6>
+<center><a href=index.html>Index</a></center>
+<HR>
+<center><H1>Displaying archive data</H1></center>
+
+To display data from the archive, pull down the <b>File</b> menu of
+the main sptViewer window, and select &quot;<b>Load Archive Data from
+Disk</b>&quot;. This brings up an archive in which you can specify the
+directory in which to look for archive files, the range of times that
+you are interested in, the calibration file to use to convert register
+values from archive units to convenient display units, whether to
+subsample the data to speed loading, whether to plot the data while
+loading, instead of waiting until it has been loaded, and whether to
+discard previously plotted data, or merge it with the new data.
+
+<P>
+Unless the archive directory was <a href=command_line.html>explicitly
+specified</a> when the program was started, the archive directory
+initially defaults to the value of <code>$GCP_ARC_DIR</code> if this
+is provided, or the current directory otherwise.
+<P>
+The default calibration file is <code>$GCP_DIR/conf/cal</code>.
+<P>
+The start time should either be a blank string to request the earliest
+available time in the archive, or a UTC date and time string formatted
+like <b>dd-mmm-yyyy hh:mm:ss</b>, where <u>dd</u> is the integer day
+of the month, <u>mmm</u> is a three letter month abbreviation,
+<u>yyyy</u> is a four digit year, <u>hh</u> is the hour of day,
+<u>mm</u> is the minute within the hour, and <u>ss</u> is the number
+of seconds into the minute. Omitted trailing components of the time
+default to zero, and if the time is omitted completely, midnight is
+assumed.
+<P>
+The end time can be a blank string to request the latest available
+time in the archive, a date and time as described above, or the name
+of the computer on which the control program is running. In the latter
+case data will be read from the archive, starting with the specified
+start time, up until the end of the archive is reached, at which point
+the viewer will connect to the control program to get future
+data. This allows one to prime a antenna control plot with data from the
+archive.
+
+<HR>
+Erik Leitch (6-Nov-1999)
+</BODY>

@@ -1,0 +1,37 @@
+<HEAD><TITLE>The check_schedule command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name=check_schedule> <code><b>check_schedule</b> filename(arguments)</code> </a></font>
+<P>
+Check whether a scheduling script can be compiled.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><a href=../dataTypes/Script.html>Script</a> filename(arguments)</code>
+     <DD> The path-name and arguments of the scheduling script to be
+          checked.
+     </DL>
+<P>
+<DT> Example:
+<DD> The following example checks wether the observe.sch script
+     would be accepted by the <a href=schedule.html>schedule</a>
+     command. If not, the first error found in the file is shown.
+
+<pre>
+ check_schedule ~bicepdaq/observe.sch
+</pre>
+
+<DT> Context:
+<DD> When a script is scheduled for execution, it is first compiled by
+     the scheduler. This will fail if there are any syntatical or
+     usage errors in the script. The check_schedule command allows one
+     to check wether a schedule is compilable without having to submit
+     it for execution.
+</DL>
+
+
+<HR>
+Erik Leitch (Tue Mar 30 21:15:51 PST 2004)
+</BODY>

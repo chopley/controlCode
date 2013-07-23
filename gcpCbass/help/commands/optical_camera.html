@@ -1,0 +1,41 @@
+
+<HEAD><TITLE>The "optical_camera" datatype.</TITLE></HEAD>
+<BODY bgcolor=add8e6>
+<HR>
+<font color=blue><a name="optical_camera"> <code><b>optical_camera</b> camera|stepper|focus, count</code></a></font>
+<P>
+Control the optical camera and stepper motor.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/OpticalCamera.html>OpticalCamera</a> camera|stepper|focus</b></code>
+     <DD> The target of an optical_camera command.
+     <DT><code><b><a href=OptCam../dataTypes/Count.html>OptCamCount</a> count</b></code>
+     <DD> An integral number of steps to step the stepper motor, or the words: <code><b>on</b></code> or <code><b>off</b></code>.
+     </DL>
+<P>
+<DT> Examples:
+<DD> The following example steps the motor 200 steps in a counterclockwise direction:
+
+<pre>
+  optical_camera focus, -200
+</pre>
+
+<DT> Context:
+<DD> This command controls solid-state relays which turn the optical 
+     camera and stepper motor on and off via the noise generator digital
+     I/O board, and specifies the number of pulses to be sent to the 
+     stepper motor.  If the pulse count is positive, the stepper will 
+     rotate in a clockwise direction; if negative, the stepper will rotate 
+     in a counterclockwise direction.  
+
+<P> On power up, both the camera and
+     stepper motor should be turned on.  If the noise generator board is
+     unflagged, the camera and stepper motor will be set to the last 
+     commanded state.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:30 PST 2004)
+</BODY>

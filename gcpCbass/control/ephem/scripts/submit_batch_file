@@ -1,0 +1,22 @@
+#!/bin/sh
+#-----------------------------------------------------------------------
+# Submit an E-mail batch file to JPL to request a source ephemeris.
+#-----------------------------------------------------------------------
+# Usage:
+#  submit_to_jpl batch_file
+#
+# See Horizons_batch_file for a template of the batch file format
+# expected by JPL.
+#-----------------------------------------------------------------------
+
+if [ $# -ne 1 ]; then
+  echo 'Usage: submit_to_jpl batch_file'
+  exit 1
+fi
+if [ ! -r $1 ]; then
+  echo 'Usage: submit_to_jpl batch_file'
+  exit 1
+fi
+
+Mail -s "JOB-SUBMITTAL" horizons@ssd.jpl.nasa.gov < $1
+

@@ -1,0 +1,217 @@
+#=======================================================================
+# Required environment variable
+#=======================================================================
+
+ifeq ($(strip $(CBASS_TOOLS)),)
+ $(error CBASS_TOOLS has not been defined.  Set up your environment)
+endif
+
+TOOLSDIR = $(CBASS_TOOLS)
+
+#=======================================================================
+# Directories
+#=======================================================================
+
+# Check if GCPTOP is already defined.  This may be because this
+# Makefile was included from another Makefile, in which case don't
+# redefine the path.  Else define GCPTOP to be the current directory
+
+ifeq ($(GCPTOP),) 
+  GCPTOP := $(shell pwd)
+endif
+
+export GCPTOP
+
+# Define directories from the top level directory
+
+LIBDIR   = $(GCPTOP)/lib
+BINDIR   = $(GCPTOP)/bin
+HELPDIR  = $(GCPTOP)/help
+LOGDIR   = $(GCPTOP)/runlogs
+SCHDIR   = $(GCPTOP)/control/sch
+MUXDIR   = $(HOME)/MuxReadoutSoftware
+
+export LIBDIR
+export BINDIR
+export HELPDIR
+export LOGDIR
+export SCHDIR
+export MUXDIR
+export TOOLSDIR
+
+#=======================================================================
+# Compile flags and include paths
+#=======================================================================
+
+INCFLAGS  = -I$(GCPTOP)
+INCFLAGS += -I$(GCPTOP)/control/code/unix/libunix_src/common
+INCFLAGS += -I$(MUXDIR)
+INCFLAGS += -I$(TOOLSDIR)/include
+
+CCINC = $(INCFLAGS)
+
+export INCFLAGS
+export CCINC
+
+# The C++ compiler
+
+CC = g++
+
+export CC
+
+# Library paths
+
+LDPATH   +=  -L$(LIBDIR)
+LDPATH   +=  -L$(TOOLSDIR)/lib
+
+export LDPATH
+
+RPATH    += -Xlinker -R -Xlinker $(LIBDIR)
+RPATH    += -Xlinker -R -Xlinker $(TOOLSDIR)/lib
+
+export RPATH
+
+#=======================================================================
+# Makefile.directives should contain a bunch of environment variables
+# which will control how the code is compiled.  Make sure these are
+# defined.
+#
+# This script will modify CCFLAGS to add flags for both the generic
+# code and the specific code.
+#=======================================================================
+
+include $(GCPTOP)/directives/common/Makefile.flags
+include $(GCPTOP)/directives/$(SPECIFIC)/Makefile.flags
+
+#-----------------------------------------------------------------------
+# Modify CCFLAGS from whatever was defined in the flags files above
+#-----------------------------------------------------------------------
+
+# C++ standard library is supposed to be threadsafe with -D_REENTRANT
+
+CCFLAGS += -D_REENTRANT
+CCFLAGS += -fPIC
+
+# Many executables use a host argument
+
+CCFLAGS += -DHOST="\"$(HOSTNAME)\""
+
+export CCFLAGS
+
+#=======================================================================
+# Libs needed for building binaries
+#=======================================================================
+
+MATLAB   = 
+IDL      = 
+
+GCPLIBS  = 
+MATLIBS  = 
+MUXLIBS  = 
+IDLLIBS  = 
+SYSLIBS  = 
+LIBS = 
+
+#-----------------------------------------------------------------------
+# GCP-specific libs
+#-----------------------------------------------------------------------
+
+GCPLIBS += $(LIBDIR)/libGcpAntennaControlSpecific$(LIBSO_SUFFIX)
+
+GCPLIBS += $(LIBDIR)/libGcpControlCommon$(LIBSO_SUFFIX)
+GCPLIBS += $(LIBDIR)/libGcpControlSpecific$(LIBSO_SUFFIX)
+
+GCPLIBS += $(LIBDIR)/libGcpMediatorSpecific$(LIBSO_SUFFIX)
+GCPLIBS += $(LIBDIR)/libGcpMonitor$(LIBSO_SUFFIX)
+GCPLIBS += $(LIBDIR)/libGcpSla$(LIBSO_SUFFIX)
+GCPLIBS += $(LIBDIR)/libGcpSrc$(LIBSO_SUFFIX)
+GCPLIBS += $(LIBDIR)/libGcpScan$(LIBSO_SUFFIX)
+GCPLIBS += $(LIBDIR)/libGcpScript$(LIBSO_SUFFIX) 
+
+GCPLIBS += $(LIBDIR)/libGcpShareSpecific$(LIBSO_SUFFIX)
+GCPLIBS += $(LIBDIR)/libGcpShareCommon$(LIBSO_SUFFIX)
+
+GCPLIBS += $(LIBDIR)/libGcpProgramCommon$(LIBSO_SUFFIX)
+GCPLIBS += $(LIBDIR)/libGcpTransaction$(LIBSO_SUFFIX)
+
+GCPLIBS += $(LIBDIR)/libGcpUtilCommon$(LIBSO_SUFFIX)
+GCPLIBS += $(LIBDIR)/libGcpUtilSpecific$(LIBSO_SUFFIX)
+
+GCPLIBS += $(LIBDIR)/libGcpGrabberCommon$(LIBSO_SUFFIX)
+GCPLIBS += $(LIBDIR)/libcfitsio$(LIBSO_SUFFIX)
+
+ifeq ($(HAVE_MUX),1)
+  GCPLIBS += $(LIBDIR)/libGcpReceiverSpecific$(LIBSO_SUFFIX)
+endif
+
+export GCPLIBS
+
+#-----------------------------------------------------------------------
+# Mux-specific libs
+#-----------------------------------------------------------------------
+
+MUXLIBDIR = $(MUXDIR)/Utilities
+
+export MUXLIBDIR
+
+ifeq ($(HAVE_MUX),1)
+  MUXLIBS += $(MUXLIBDIR)/libMuxClient$(LIBSO_SUFFIX)
+else
+  MUXLIBS = 
+endif
+
+export MUXLIBS
+
+#-----------------------------------------------------------------------
+# System-specific libs
+#-----------------------------------------------------------------------
+
+SYSLIBS = -lpthread -lreadline -ltermcap -lcurl
+
+ifeq ($(HAVE_RT),1)
+  SYSLIBS += -lrt
+endif
+
+ifeq ($(HAVE_FFTW),1)
+  SYSLIBS += -L$(TOOLSDIR)/lib -lfftw3
+endif
+
+ifeq ($(HAVE_USB),1)
+  SYSLIBS += -lusb
+endif
+
+export SYSLIBS
+
+#-----------------------------------------------------------------------
+# Libs needed to build control system executables
+#-----------------------------------------------------------------------
+
+LIBS += $(GCPLIBS) 
+LIBS += $(MUXLIBS)
+LIBS += $(SYSLIBS)
+
+export LIBS
+
+#-----------------------------------------------------------------------
+# Libs needed to build Matlab executables
+#-----------------------------------------------------------------------
+
+MATLIBS += $(GCPLIBS)
+MATLIBS += $(SYSLIBS)
+MATLIBS += $(LIBDIR)/libGcpMatlab$(LIBSO_SUFFIX)
+
+export MATLIBS
+
+#-----------------------------------------------------------------------
+# Libs needed to build IDL executables
+#-----------------------------------------------------------------------
+
+IDLSYSLIBS = -lpthread -lrt -lreadline -lhistory -ltermcap
+
+export IDLSYSLIBS
+
+IDLLIBS += $(GCPLIBS)
+IDLLIBS += $(IDLSYSLIBS)
+IDLLIBS += $(LIBDIR)/libGcpIdl$(LIBSO_SUFFIX)
+
+export IDLLIBS

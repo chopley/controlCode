@@ -1,0 +1,39 @@
+<HEAD><TITLE>The Heaters datatype.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+<center><a href=../index.html>Index</a></center>
+<HR>
+<font color=blue><a name=Heaters> <code><b>Heaters</b></code> </a></font>
+<P>
+A set of antenna-based heaters.
+
+<P>
+<DL>
+<DT> Input Format:
+<P>
+<DD> A <a href=dt_class.html#set>set</a> of one or more of:
+    <UL>
+    <LI> <code><b>cryo</b></code>  - A heater in a receiver cryostat.
+    <LI> <code><b>ambient0</b></code>  - One of two heaters outside the receiver cryostat.
+    <LI> <code><b>ambient1</b></code>  - The second of two heaters outside the receiver cryostat.
+    <LI> <code><b>all</b></code>  - All of the above heaters.
+    </UL>
+
+<P>
+<DT> Examples:
+<DD> The following example requests that both ambient temperature
+     heaters of receiver 0 be set such that the corresponding
+     thermisters produce an output voltage of 3.03 volts.
+
+<pre>
+  heater rx0, ambient0+ambient1, 3.03  
+</pre>
+
+<DT> Context:
+<DD> Variables of type <code>Heaters</code> are used by the
+     <code><a href=../commands/heater.html>heater</a>()</code>
+     command.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:12 PST 2004)
+</BODY>

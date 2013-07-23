@@ -1,0 +1,47 @@
+<HEAD><TITLE>The "collimate" datatype.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name="collimate"> <code><b>collimate</b> radio|optical, size, direction</code></a></font>
+<P>
+Calibrate the collimation of the radio or optical pointing axes.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/Model.html>Model</a> model</b></code>
+     <DD> The pointing axis to collimate.
+     <DT><code><b><a href=../dataTypes/Tilt.html>Tilt</a> size</b></code>
+     <DD> The size of the tilt of the pointing axis.
+     <DT><code><b><a href=../dataTypes/DeckAngle.html>DeckAngle</a> direction</b></code>
+     <DD> The deck angle at which the collimation tilt is directed
+          radially outwards.
+     </DL>
+<P>
+<DT> Examples:
+<DD> The following example says that the radio axis is tilted 0.5
+     degrees outwards from the deck axis, along a deck angle of 23.32
+     degrees.
+
+<pre>
+  collimate radio, 0.5, 23.32
+</pre>
+
+<DT> Context:
+<DD> The axis along which the BICEP sensors are most sensitive, will not
+     exactly lie along the deck rotation axis. The collimation command
+     tells the control system what the misalignment is, so that it can
+     counteract it with changes to the azimuth and elevation. The
+     optical telescope and the radio receivers will have different
+     collimation parameters, whereas the rest of their pointing models
+     should be the same, so this command requires that you specify
+     which pointing axis you are refering to.
+<P>
+     Before the control system can point the telescope accurately at a
+     source, the collimate command should be called once for each
+     axis, to set the collimation parameters.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:15:53 PST 2004)
+</BODY>

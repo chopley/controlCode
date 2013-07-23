@@ -1,0 +1,4 @@
+#!/bin/tcsh
+killAll "Holography/go"
+$GCP_DIR/bin/sptMediator ctlhost=localhost deicinghost=deicing deicingport=5207 ptelhost=pointingTel ptelport=5207 logd=$GCP_DIR/runlogs logf=sptMediator debuglevel=0 hwhost=stoli2 diohost=stoli2 opticshost=optics simRx=t simOptics=f &
+# ssh kenaird@sptcontrol2 /home/kenaird/Holography/go &

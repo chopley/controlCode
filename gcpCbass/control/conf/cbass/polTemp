@@ -1,0 +1,10 @@
+add_plot 985 68 Plot 0 0.0034425451024 1 1 maximum 20.0 array.frame.utc.date {} {
+  graph -0.525052690505981 11.0261065006256 {} {{antenna0.thermal.ccTemperatureLoad[0][0-4]} {}} {} 0 1 1 0
+  graph -62339835494.4 1309136545382.4 {} {{antenna0.thermal.lsTemperatureSensors[0-7]} {}} {} 0 1 1 0
+  graph -177135820.8 3719852236.8 {} {{antenna0.roach1.LLfreq[0][0-99]} {}} {} 0 1 1 0
+  graph -117522086.4 2467963814.4 {} {{antenna0.roach1.RRfreq[0][0-99]} {}} {} 0 1 1 0
+  graph -34208272 718373712 {} {{antenna0.roach1.load1freq[0][0-99]} {}} {} 0 1 1 0
+  graph -36314345.6 762601257.6 {} {{antenna0.roach1.load2freq[0][0-99]} {}} {} 0 1 1 0
+  graph -199090995.2 4180910899.2 {} {{antenna0.roach1.Qfreq[0][0-99]} {}} {} 0 1 1 0
+  graph -145259904 3050457984 {} {{antenna0.roach1.Ufreq[0][0-99]} {}} {} 0 1 1 0
+} normal 0 0.0 1

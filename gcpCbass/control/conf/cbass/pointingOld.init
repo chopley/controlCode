@@ -1,0 +1,48 @@
+#=======================================================================
+# Set up pointing model parameters
+#=======================================================================
+
+#-------------------------------------------------------------
+# Set the encoder tick <--> angle calibrations
+#-------------------------------------------------------------
+
+encoder_cals 1000000000, 1000000000, 0  # Az,el counts per turn
+
+#-------------------------------------------------------------
+# Set encoder limits:
+#-------------------------------------------------------------
+# az negative limits:  soft -46.4, hard -49ish
+# az positive limits:  soft 494.2, hard 497ish
+# el negative limits:  soft 13.4 , hard 10.9
+# el positive limits:  soft 84.5 , hard 86
+encoder_limits  -30, 450, 15, 84, 0, 0  # in degrees  
+
+# from optical pointing run on September 14, 2009
+
+#-------------------------------------------------------------
+# Common Pointing
+#-------------------------------------------------------------
+
+encoder_zeros 0, 0, 0 
+tilts 0.0, 0.0, 0 
+
+
+#-------------------------------------------------------------
+# Optical Pointing
+#-------------------------------------------------------------
+
+add_signals {done} #define signals for optical pointing
+
+flexure optical, 0.0, 0.0, ptel=0+1+2 
+collimate_fixed optical, 0.0, 0.0, ptel=0+1+2
+
+#-------------------------------------------------------------
+# Radio Pointing
+#-------------------------------------------------------------
+
+collimate_fixed radio,  0, 0 
+flexure radio, 0, 0
+
+# startup model is optical
+model optical, ptel=0
+

@@ -1,0 +1,12 @@
+#ifndef SPT_UTIL_DIRECTIVES_H
+#define SPT_UTIL_DIRECTIVES_H
+
+#define DIR_USE_WX 0
+
+#define DIR_HAVE_MUX (HAVE_MUX)
+
+#define DIR_IS_STABLE (IS_STABLE)
+
+#define DIR_DEBUG (COMPILE_WITH_DEBUG)
+ 
+#endif // End #ifndef SZA_UTIL_DIRECTIVES_H

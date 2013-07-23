@@ -1,0 +1,63 @@
+(Source src, PointingOffset maxOff, Sexagesimal del)
+
+track $src
+
+# Get rid of any legacy signals.
+signal/init done
+mark remove, all
+
+# Archive only marked frames
+archive combine=1, filter=false
+open grabber
+
+model optical, ptel=0
+sky_offset x=0, y=0
+radec_offset ra=0, dec=0
+
+ 
+# Configure the frame grabber 
+setDefaultFrameGrabberChannel chan1
+configureFrameGrabber chan=chan1
+setOpticalCameraRotation angle=189
+configureFrameGrabber flatfield=image
+setOpticalCameraFov fov=11.5, chan=chan1
+setOpticalCameraXImDir upright, chan=chan1
+setOpticalCameraYImDir upright, chan=chan1
+addSearchBox 8, 9, 501, 472, true, chan=chan1
+
+configureFrameGrabber flatfield=image, chan=chan1
+open grabber
+
+# track the source, then do a big raster pattern.
+track $src
+until $acquired(source) | $elapsed > 1m
+
+# Raster scan in x and y
+
+PointingOffset dStart = -$maxOff - $del
+PointingOffset dStop  = $maxOff
+
+if($elevation($src) > 15) { 
+	do PointingOffset dy = $dStart, $dStop, $del {
+		do PointingOffset dx = $dStart, $dStop, $del {
+
+		log $dx, $dy
+
+		offset az=$dx, el=$dy  # apply the offset
+		until $acquired(source) | $elapsed > 30s # wait for offset
+		until $elapsed>2s        # wait for settle
+		
+		mark add, f3
+		grabFrame chan=chan1
+		mark remove, f3
+
+		}
+	}
+	
+	offset az=0, el=0  # Reset it.
+	until $acquired(source)
+} else if ($elevation($src) < 15) {
+	log "source too low"
+}
+
+

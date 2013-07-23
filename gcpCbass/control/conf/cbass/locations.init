@@ -1,0 +1,8 @@
+#-----------------------------------------------------------------------
+# Set up antenna locations
+#-----------------------------------------------------------------------
+#
+# NB: The order of these parameters are now: Up, East, North in meters
+
+#ANTENNA0
+setAntennaLocation 0.0, 0.0, 0.0,ant=ant0 

@@ -1,0 +1,350 @@
+<HEAD><TITLE>A Tutorial Introduction to the SPT Scheduling Language.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+<center><a href=index.html>Index</a></center>
+<H1>A Tutorial Introduction to the SPT Scheduling Language</H1>
+
+The relationship between the scheduler, which runs scheduling scripts,
+and the antenna control control system, which controls the telescope, is
+something like the relationship between a master and a set of
+slaves. When the scheduler is given a command to execute, it
+forwards the command to a slave in the control system. It doesn't
+then wait for its order to be obeyed, but instead continues on to the
+next command in the script. For example, the following command
+
+<pre>
+ track 3c273
+</pre>
+
+tells the antenna control control system to acquire and track the source
+3c273. Since the antenna control control system can handle this request on
+its own, without further guidance from the scheduler, the
+<code>track</code> command completes immediately, without waiting for
+the the source to be acquired. The scheduler then continues on to the
+next command in the script. If that command happens to be another
+source request, then the scheduler again hands on the request to the
+antenna control control system, which dutifully stops working on the
+previous source and starts to acquire the new one. Clearly some way is
+needed to tell the scheduler to wait before sending the second source
+request. This can be accomplished by using the
+<code><a href=until.html>until</a></code> command. This
+halts script execution until a given set of conditions have been met.
+<P>
+In the following example, a scheduling script initiates two
+time-consuming operations, then uses the <code>until</code> command to
+wait for both of them to complete.
+
+<pre>
+ # Tell the control system to start iteratively adjusting the
+ # attenuators to achieve an output power level close to 26.4.
+
+ power_level 26.4
+
+ # Tell the control system to start slewing to 3c273.
+
+ track 3c273
+
+ # Wait for the target power level and source to be acquired.
+
+ until $acquired(power) & $acquired(source)
+
+ # Stay on source for another 15 minutes.
+
+ until $elapsed &gt;= 15m
+
+</pre>
+
+Note that all function calls are introduced with a leading
+<samp>$</samp>. This is also a requirment for taking the value of a
+variable. It allows the compiler to distinguish between
+variable/function names and literally typed words such as
+<code>power</code>. This in turn frees the user from having to enclose
+names like <code>3c273</code> in quotes.
+
+<P>
+
+Continuing the above example, imagine that the antenna control control
+system is unable to achieve the requested power level, or that the
+source couldn't be acquired. In such cases the
+
+<pre>
+ until $acquired(power) & $acquired(source)
+</pre>
+
+statement might wait indefinitely. To remedy this, the following example
+shows a modified version of the statement which times out after 5 minutes
+have elapsed.
+
+<pre>
+ until $acquired(power) & $acquired(source) | $elapsed &gt;= 5m
+</pre>
+
+The <samp>|</samp> symbol stands for boolean <em>or</em>, so the above
+statement reads, &quot;wait until the desired power level has been
+reached, and the source has been acquired, or the elapsed time exceeds
+5 minutes.&quot; Boolean expressions are evaluated left to right, so
+each <samp>&</samp> and <samp>|</samp> operator operates on the result
+of the expression to its left and the single boolean value to its
+right. This <em>associativity</em> rule can be overriden with the
+use of parentheses. Using parentheses, the above example is equivalent
+to writing:
+
+<pre>
+ until ($acquired(power) & $acquired(source)) | $elapsed &gt;= 5m
+</pre>
+
+Having added a timeout to the statement, one might also want to
+detect that something went wrong before continuing the script. In the
+following addition to the script, the script is aborted if the source
+wasn't acquired, but it is allowed to continue if the requested power
+level wasn't reached.
+
+<pre>
+ if(!$acquired(source)) {
+   print &quot;Source not acquired - aborting.\n&quot;
+   exit
+ } else if(!$acquired(power)) {
+   print &quot;At least one of the attenuators failed to acquire - continuing.\n&quot;
+ } else {
+   print &quot;Now tracking 3c273.\n&quot;
+ }
+</pre>
+
+Notice how statements within the <a href=if.html>if</a>
+command are grouped with <samp>{}</samp> parentheses. Also note the
+use of <code>&quot;\n&quot;</code> to add a newline character to a log line. If
+you omit the <code>&quot;\n&quot;</code> sequence, then the output from the next
+print command is appended to the same line. Finally, notice the use of
+the <samp>!</samp> operator to negate the value returned by the
+<code>$acquired()</code> function. This is the boolean <em>not</em>
+operator. With this in mind the first <code>if</code> clause reads as,
+&quot;if not acquired source, then...&quot;.
+<P>
+Having got to this point, you may be thinking that you don't want to
+have to type so much, just to observe one source. This is where
+user-defined commands come to the rescue. The following example shows
+how the above procedure could be encapsulated in a user-defined command.
+
+<pre>
+command observe(Source src, Power pwr, Interval timeout, Interval dt)
+{
+  # Tell the control system to start iteratively adjusting the
+  # attenuators to achieve the power level contained in the
+  # <b>pwd</b> variable.
+
+  power_level $pwr
+
+  # Tell the control system to start slewing to the source named in
+  # the <b>src</b> variable.
+
+  track $src
+
+  # Wait for the target power level and source to be acquired, but
+  # don't wait longer than the time contained in the <b>timeout</b>
+  # variable.
+
+  until ($acquired(power) & $acquired(source)) | $elapsed &gt;= $timeout
+
+  # Report our status.
+
+  if(!$acquired(source)) {
+    print &quot;Failed to acquire &quot;, $src, &quot; - aborting.\n&quot;
+    exit
+  }
+  if(!$acquired(power)) {
+    print &quot;At least one of the attenuators failed to acquire - continuing.\n&quot;
+  }
+  print &quot;Now tracking &quot;, $src, &quot;.\n&quot;
+
+  # Stay on source for the time contained in the <b>dt</b> variable,
+  # or the source sinks below 40 degrees elevation.
+
+  until $elapsed &gt;= $dt | $elevation($src) &lt; 40.0
+}
+</pre>
+
+The first line gives the command a name and then lists the types and
+names of each of its arguments. The arguments are thereafter
+accessible to the statements within the command as variables. As
+previously mentioned, the value of a variable is accessed by
+prefixing the variable name with a <samp>$</samp> character.
+
+<P>
+
+Having defined this command one could then use it to sequentially
+observe a couple of different sources by typing:
+
+<pre>
+ observe 3c273, 26.4, 5m, 15m
+ observe 3c286, 25, 5m, 15m
+</pre>
+
+This is much more convenient, but there are still a few ways to
+improve the situation. First, you probably don't want to have to
+manually define the same command in every script that you
+write. Instead, one can collect commonly used command definitions in
+separate files and then use the <a href=import.html>import</a>
+command to read them into subsequent scripts. For example, if I placed
+the above definition of the observe command into a file called
+<code>~sptdaq/scripts/observing.sch</code>, then I could include it in
+subsequent scripts by typing:
+
+<pre>
+ import ~sptdaq/scripts/observing.sch
+</pre>
+
+OK so far, but what if one had a lot of sources to observe? It would
+be a bit irritating to have to type in the observe command for each
+source, particularly if you wanted to add your own commands before and
+after the canned observe command. A better alternative is to form a
+list, and use the <a href=foreach.html>foreach</a> command
+to apply the observe command to each member of the list. But a list of
+what? The observe command takes more than one argument, so we need to
+form a list in which each member of the list is a group of
+values. This is where user-defined <a href=group.html>group</a>
+data-types become useful. The following command defines a new datatype called
+<code>Observation</code>, which contains a list of the arguments
+needed by the observe command.
+
+<pre>
+ group Observation {
+   Source src,        # The source to be observed.
+   Power pwr,         # The output power level to achieve.
+   Interval timeout,  # The acquisition timeout.
+   Interval dt        # The desired integration time.
+ }
+</pre>
+
+Having done this, we could create and initialize a variable that
+contains the above parameters by typing:
+
+<pre>
+ Observation obs = {3c273, 26.4, 5m, 15m}
+</pre>
+
+This sets the <code>src</code> member of the variable to 3c273, the
+<code>pwr</code> member of the variable to 26.4, the
+<code>timeout</code> member to 5m and the <code>dt</code> member to
+15m. We could print out the contents of this variable by typing:
+
+<pre>
+ print $obs.src, &quot; &quot;, $obs.pwr, &quot; &quot;, $obs.timeout, &quot; &quot;, $obs.dt
+</pre>
+
+So to access the <code>src</code> member of the <code>obs</code>
+variable, one types <code>$obs.src</code>.
+
+<P>
+
+To form a list of observation variables, and then assign the list to a
+variable called <code>ol</code> one could then type:
+
+<pre>
+ listof Observation ol = {
+   {3c273, 26.4, 5m, 15m},
+   {3c286, 25,   5m, 10m},
+   {arp220, 30,  10m, 4m}
+ }
+</pre>
+
+Having formed such a source list, one could then run the observe
+command like:
+
+<pre>
+ foreach(Observation obs) $ol {
+   print &quot;Moving to source: &quot;, $obs.src
+   observe $obs.src, $obs.pwr, $obs.timeout, $obs.dt
+   print &quot;Finished observing source: &quot;, $obs.src
+ }
+</pre>
+
+To make this even more convenient, one could rewrite the observe
+command to take a list of observations as its sole argument, and then
+include the foreach loop inside the command. If the definition of an
+observation datatype and the observe command were then placed in a
+file called <code>~sptdaq/scripts/better.sch</code>, then subsequent
+observing scripts could be reduced to:
+
+<pre>
+ import ~sptdaq/scripts/better.sch
+
+ listof Observation ol = {
+   {3c273, 26.4, 5m, 15m},
+   {3c286, 25,   5m, 10m},
+   {arp220, 30,  10m, 4m}
+ }
+
+ observe $ol 
+</pre>
+
+In fact we could simplify this even further by writing the list in
+place, rather than first assigning it to a variable. This would look
+like:
+
+<pre>
+ import ~sptdaq/scripts/better.sch
+
+ observe {
+   {3c273, 26.4, 5m, 15m},
+   {3c286, 25,   5m, 10m},
+   {arp220, 30,  10m, 4m}
+ }
+</pre>
+
+This brings us to the question of how the compiler figures out when
+one statement ends and the next begins. To add some fuel, take a look
+at the following example:
+
+<pre>
+ print &quot;This is actually&quot;,
+       &quot; one print command&quot;,
+       &quot; that stretches across a few lines.\n&quot;
+</pre>
+
+Unlike most languages, the SPT scheduling language has neither line
+termination characters nor continuation characters. Instead the
+compiler figures out whether a line is continued from context. In the
+above example, each line ended with a comma. On seeing the comma, the
+compiler expects another argument. So when it can't find one on the
+current line, it looks on the next line. Similarly, in the following
+example, the compiler sees the <samp>|</samp> operator at the end of
+the first line and assumes that its second operand must lie on the
+following line.
+
+<pre>
+  until $elapsed &gt;= 20m | $elevation(current) &lt; 40.0 |
+        $after(23:34, LST)
+</pre>
+
+Unclosed parentheses have the same effect, so the compiler accepts the
+following statement without complaint.
+
+<pre>
+until (
+        $elapsed &gt;= 20m | $signaled(quit)
+      )
+</pre>
+
+The only down side of this is that an accidentally unclosed
+parenthesis could result in a puzzling error message from the
+compiler!
+
+<P>
+
+Just in case you are wondering, the <code><a
+href=elapsed.html>$elapsed</a></code> argument in the above example is
+actually a call to a function that takes no arguments. This allows the
+trailing parentheses, which are normally needed to enclose function
+arguments, to be omitted.
+
+<P>
+
+Also, the call to the <code><a
+href=signaled.html>$signaled</a>(quit)</code> function returns true
+after an interactive user types:
+
+<pre>
+ <a href=signal.html>signal</a> quit
+</pre>
+<HR>
+Erik Leitch (Tue Mar 30 21:16:18 PST 2004)
+</BODY>

@@ -1,0 +1,159 @@
+<center><a href=../index.html>Index</a></center>
+<HEAD><TITLE>The FgReg datatype.</TITLE></HEAD>
+<BODY bgcolor=add8e6>
+<HR>
+<font color=blue><a name=FgReg> <code><b>FgReg</b></code> </a></font>
+<P>
+The target of an <code><a href=../commands/fg.html>fg</a></code> command.
+<P>
+<DL>
+<DT> Input Format:
+<P>
+<DD> An <a href=dt_class.html#option>option</a> from:
+    <UL>
+    <LI> <code><b>incsr1</b></code>    - Input video control/status register 1.
+    <LI> <code><b>incsr2</b></code>    - Input video control/status register 2.
+    <LI> <code><b>outcsr</b></code>    - Output video control/status register.
+    <LI> <code><b>cursor</b></code>    - Cursor register.
+    <LI> <code><b>index</b></code>     - Index register.
+    <LI> <code><b>inlut</b></code>     - Input Look-up table register.
+    <LI> <code><b>redgrn</b></code>    - Output red/green look-up table register.
+    <LI> <code><b>blue</b></code>      - Output blue look-up table register.
+    </UL>
+<P>
+
+<DT> Context:
+<DD> These registers control the operation of the DT1451 frame grabber.  See the
+     <a href=registers.html>SPT register list</a> for a detailed description of 
+     each bit.  A four-channel multiplexer allows the frame grabber to capture 
+     images from up to four separate video inputs.  The input channel is 
+     selected by setting bits 8 and 9 of the incsr2 register as follows:
+<p>
+   <center>
+   <table cellspacing=1 cellpadding=1 border=1>
+   <tr><th>INCSR2 Bit 9<th>INCSR2 Bit 8<th>Channel</tr>
+   <tr><th>           0<th>           0<th>      0</tr>
+   <tr><th>           0<th>           1<th>      1</tr>
+   <tr><th>           1<th>           0<th>      2</tr>
+   <tr><th>           1<th>           1<th>      3</tr>
+   </tr>
+   </table>
+   </center>  
+<p>
+    From the 8-bit A/D converter, pixel data passes through one of eight 
+    256x8 bit, programmable input look-up tables (LUT).  The input look-up 
+    table to be used is selected by setting bits 0-2 of register incsr1 as 
+    follows:
+<p>
+   <center>
+   <table cellspacing=1 cellpadding=1 border=1>
+   <tr><th>INPUT LUT<th>INCSR1 Bit 2<th>INCSR1 Bit 1<th>INCSR1 Bit 0</tr>
+   <tr><th>        0<th>           0<th>           0<th>           0</tr>
+   <tr><th>        1<th>           0<th>           0<th>           1</tr>
+   <tr><th>        2<th>           0<th>           1<th>           0</tr>
+   <tr><th>        3<th>           0<th>           1<th>           1</tr>
+   <tr><th>        4<th>           1<th>           0<th>           0</tr>
+   <tr><th>        5<th>           1<th>           0<th>           1</tr>
+   <tr><th>        6<th>           1<th>           1<th>           0</tr>
+   <tr><th>        7<th>           1<th>           1<th>           1</tr>
+   </tr>
+   </table>
+   </center>  
+<p>
+    Any element of these input look-up tables can be written or read by 
+    setting the appropriate index in the index register, then writing or
+    reading the first 8 bits of the inlut register.  After processing through
+    the selected look-up pixel data is stored in one of 2 512x512x8 bit
+    frame-store memory buffers, selectable by setting bit 7 of the incsr2 
+    register.
+<p>
+    The frame grabber contains an 8-bit ALU (arithmetic logic unit) for real-
+    time image processing.  A feedback path connecting the ouput of the 
+    frame-store memory buffer with the input look-up table permits frame-store 
+    data to be passed through any of the eight 256x8-bit input look-up tables 
+    and returned to either frame-store memory buffer in real time.
+<p>
+    The 8-bit ALU has one operand (B) fed by the feedback path and the other 
+    operand (A) fed by the output of the video A/D converter.  A frame of data
+    can be read out of either frame memory, input as one operand of an on-board
+    ALU, and be processed by that ALU (along with incoming video data as the 
+    second operand, if desired).  The function which the ALU performs is 
+    selected by bits 10-15 of the incsr2 register.  When bit 14 is set, 10-13
+    specify a logic function.  When bit 14 is cleared, bits 10-13 specify an
+    arithmetic function.  When set, bit 15 forces a carry in for the
+    arithmetic operations.  These operations are summarized below:
+<p>
+ <center>
+ <table cellspacing=1 cellpadding=1 border=1>
+ <tr><th>INCSR2 13<th>INCSR2 12<th>INCSR2 11<th>INCSR2 10<th>Logic Function</tr>
+ <tr><th>        0<th>        0<th>        0<th>        0<th>      F=^A</tr>
+ <tr><th>        0<th>        0<th>        0<th>        1<th>      F=^(A+B)</tr>
+ <tr><th>        0<th>        0<th>        1<th>        0<th>      F=^AB</tr>
+ <tr><th>        0<th>        0<th>        1<th>        1<th>      F=0</tr>
+ <tr><th>        0<th>        1<th>        0<th>        0<th>      F=^(AB)</tr>
+ <tr><th>        0<th>        1<th>        0<th>        1<th>      F=^B</tr>
+ <tr><th>        0<th>        1<th>        1<th>        0<th>      F=A +o B</tr>
+ <tr><th>        0<th>        1<th>        1<th>        1<th>      F=A^B</tr>
+ <tr><th>        1<th>        0<th>        0<th>        0<th>      F=^A + B</tr>
+ <tr><th>        1<th>        0<th>        0<th>        1<th>      F=^A +o ^B</tr>
+ <tr><th>        1<th>        0<th>        1<th>        0<th>      F=B</tr>
+ <tr><th>        1<th>        0<th>        1<th>        1<th>      F=AB</tr>
+ <tr><th>        1<th>        1<th>        0<th>        0<th>      F=1</tr>
+ <tr><th>        1<th>        1<th>        0<th>        1<th>      F=A + ^B</tr>
+ <tr><th>        1<th>        1<th>        1<th>        0<th>      F=A + B</tr>
+ <tr><th>        1<th>        1<th>        1<th>        1<th>      F=A</tr>
+ </table>
+ </center>  
+<p>
+ <center>
+ <table cellspacing=1 cellpadding=1 border=1>
+ <tr><th>INCSR2 13<th>INCSR2 12<th>INCSR2 11<th>INCSR2 10<th>Arith Function, no carry</tr>
+ <tr><th>        0<th>        0<th>        0<th>        0<th>      F=A</tr>
+ <tr><th>        0<th>        0<th>        0<th>        1<th>      F=A + B</tr>
+ <tr><th>        0<th>        0<th>        1<th>        0<th>      F=A + ^B</tr>
+ <tr><th>        0<th>        0<th>        1<th>        1<th>      F=MINUS 1</tr>                 
+ <tr><th>        0<th>        1<th>        0<th>        0<th>      F=A PLUS A^B</tr>               
+ <tr><th>        0<th>        1<th>        0<th>        1<th>      F=(A + B) PLUS A^B</tr>        
+ <tr><th>        0<th>        1<th>        1<th>        0<th>      F=A MINUS B MINUS 1</tr>       
+ <tr><th>        0<th>        1<th>        1<th>        1<th>      F=A^B MINUS 1                  
+ <tr><th>        1<th>        0<th>        0<th>        0<th>      F=A PLUS AB</tr>               
+ <tr><th>        1<th>        0<th>        0<th>        1<th>      F=A PLUS B</tr>                
+ <tr><th>        1<th>        0<th>        1<th>        0<th>      F=(A + ^B) PLUS AB</tr>        
+ <tr><th>        1<th>        0<th>        1<th>        1<th>      F=AB MINUS 1</tr>              
+ <tr><th>        1<th>        1<th>        0<th>        0<th>      F=A PLUS A</tr>                
+ <tr><th>        1<th>        1<th>        0<th>        1<th>      F=(A + B) PLUS A</tr>          
+ <tr><th>        1<th>        1<th>        1<th>        0<th>      F=(A + ^B) PLLUS A</tr>        
+ <tr><th>        1<th>        1<th>        1<th>        1<th>      F=A MINUS 1</tr>                   
+ </table>
+ </center>  
+<p>
+ <center>
+ <table cellspacing=1 cellpadding=1 border=1>
+ <tr><th>INCSR2 13<th>INCSR2 12<th>INCSR2 11<th>INCSR2 10<th>Arith Function, with carry</tr>
+ <tr><th>        0<th>        0<th>        0<th>        0<th>      F=A PLUS 1</tr>
+ <tr><th>        0<th>        0<th>        0<th>        1<th>      F=A + B PLUS 1</tr>
+ <tr><th>        0<th>        0<th>        1<th>        0<th>      F=A + ^B PLUS 1</tr>
+ <tr><th>        0<th>        0<th>        1<th>        1<th>      F=0</tr>                 
+ <tr><th>        0<th>        1<th>        0<th>        0<th>      F=A PLUS A^B PLUS 1</tr> 
+ <tr><th>        0<th>        1<th>        0<th>        1<th>      F=(A + B) PLUS A^B PLUS 1</tr>        
+ <tr><th>        0<th>        1<th>        1<th>        0<th>      F=A MINUS B</tr>       
+ <tr><th>        0<th>        1<th>        1<th>        1<th>      F=A^B                  
+ <tr><th>        1<th>        0<th>        0<th>        0<th>      F=A PLUS AB PLUS 1</tr>               
+ <tr><th>        1<th>        0<th>        0<th>        1<th>      F=A PLUS B PLUS 1</tr>                
+ <tr><th>        1<th>        0<th>        1<th>        0<th>      F=(A + ^B) PLUS AB PLUS 1</tr>        
+ <tr><th>        1<th>        0<th>        1<th>        1<th>      F=AB</tr>              
+ <tr><th>        1<th>        1<th>        0<th>        0<th>      F=A PLUS A PLUS 1</tr>                
+ <tr><th>        1<th>        1<th>        0<th>        1<th>      F=(A + B) PLUS A PLUS 1</tr>          
+ <tr><th>        1<th>        1<th>        1<th>        0<th>      F=(A + ^B) PLLUS A PLUS 1</tr>        
+ <tr><th>        1<th>        1<th>        1<th>        1<th>      F=A</tr>                   
+ </table>
+ </center>  
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:05 PST 2004)
+</BODY>
+
+
+
+
+

@@ -1,0 +1,62 @@
+<HEAD><TITLE>The "psys" command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name="psys"> <code><b>psys</b> power, [ant, band]</code></a></font>
+<P>
+Set the Psys power level
+<P>
+
+<DL>
+<DT> Mandatory Arguments:
+<p>
+<DD> 
+<DL>
+<DT><code><b><a href=../dataTypes/DcPower.html>DcPower</a> power</b></code>
+<DD> A valid power level
+</DL>
+<p>
+<DT> Optional Arguments:
+<p>
+<DD> 
+<DL>
+<DT><code><b><a href=../dataTypes/Antennas.html>Antennas</a> ant</b></code>
+<DD> A set of antennas for which the output power should be set
+<DT><code><b><a href=../dataTypes/Bands.html>Bands</a> band</b></code>
+<DD> A set of bands for which the output power should be set
+</DL>
+
+<P>
+<DT> Examples:
+<P>
+<DD>To set the power for all antennas, all bands, to 100:
+
+<pre>
+  psys 100
+</pre>
+
+<dt>
+<dd>To set the power for ant1, band0, to 100:
+
+<pre>
+  psys 100, ant=ant1, band=band0
+</pre>
+
+</DL>
+
+<DT> Note:
+<P>
+<DD>
+
+As of this writing, the XAC code on the modules for bands 12-15
+contains a bug which will cause this command to be ignored after a <a
+href=psysAtten.html>psysAtten</a> command has been issued.  To restore
+the downconverter modules to the power-on state, you will have to
+reset them using the <a href=reset.html>reset</a> command.
+
+</DL>
+
+<P>
+<HR>
+Erik Leitch (Sat May 28 00:53:48 PDT 2005)
+</BODY>

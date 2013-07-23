@@ -1,0 +1,805 @@
+#include <float.h>
+#include <ctype.h>
+#include <string.h>
+#include <stdlib.h>
+#include <math.h>
+
+#include "specificcontrol.h"
+#include "specificscript.h"
+#include "genericregs.h"
+#include "pathname.h"
+#include "scanner.h" /* SCAN_xxx_HARDWARE_INTERVAL */
+#include "navigator.h"
+#include "specifictypes.h"
+#include "arcfile.h"
+#include "genericscheduler.h"
+
+#include "gcp/control/code/unix/libtransaction_src/TransactionManager.h"
+
+#include "gcp/util/specific/Directives.h"
+
+#include <sstream>
+
+
+static DT_CHECK(check_actuator_position);
+static DT_CHECK(check_actuator_acquired_threshold);
+static DT_CHECK(check_focus_offset);
+static DT_CHECK(check_tilt_theta);
+static DT_CHECK(check_tilt_offset);
+static DT_CHECK(check_tilt_range);
+static DT_CHECK(check_tilt_avg_interval);
+static DT_CHECK(check_linear_sensor_offset);
+static DT_CHECK(check_linear_sensor_range);
+static DT_CHECK(check_linear_sensor_avg_interval);
+static DT_CHECK(check_lna_number);
+static DT_CHECK(check_lna_stage_number);
+static DT_CHECK(check_roach_number);
+static DT_CHECK(check_rx_channel_number);
+static DT_CHECK(check_rx_stage_number);
+static DT_CHECK(check_drain_current);
+static DT_CHECK(check_drain_voltage);
+
+
+/*-----------------------------------------------------------------------*
+ * AcquireTargets
+ *-----------------------------------------------------------------------*/
+
+/*.......................................................................
+ * Create a new datatype for specifying the targets of the acquired()
+ * function.
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_AcquireTargetsDataType(Script *sc, char *name)
+{
+  static Enumerator en[] = {
+    {"source",      ACQ_SOURCE},
+    {"bench",       ACQ_BENCH},
+    {"mark",        ACQ_MARK},
+    {"grab",        ACQ_GRAB},
+    {"setreg",      ACQ_SETREG},
+    {"tv_offset",   ACQ_TV_OFFSET},
+    {"frame",       ACQ_FRAME},
+    {"scan",        ACQ_SCAN},
+    {"script",      ACQ_SCRIPT},
+    {"all",         ACQ_SOURCE | ACQ_BENCH | ACQ_MARK | ACQ_GRAB | ACQ_SETREG | ACQ_TV_OFFSET | ACQ_FRAME | ACQ_SCAN | ACQ_SCRIPT
+    }
+  };
+  return add_SetDataType(sc, name, 0, en, DIMENSION(en), NULL, NULL);
+
+}
+
+/*.......................................................................
+ * Create a new datatype for specifying the states of a shutter
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_ShutterStateDataType(Script *sc, char *name)
+{
+  static Enumerator en[] = {
+    {"close",      TELESCOPE_SHUTTER_CLOSED},
+    {"open",        TELESCOPE_SHUTTER_OPEN},
+  };
+  return add_ChoiceDataType(sc, name, en, DIMENSION(en));
+}
+
+/*.......................................................................
+ * Create a new datatype for specifying the states of a heater
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_HeaterStateDataType(Script *sc, char *name)
+{
+  static Enumerator en[] = {
+    {"off",      TELESCOPE_HEATER_OFF},
+    {"on",       TELESCOPE_HEATER_ON},
+    {"pid",      TELESCOPE_HEATER_PID},
+    {"tune",     TELESCOPE_HEATER_TUNE},
+  };
+  return add_ChoiceDataType(sc, name, en, DIMENSION(en));
+}
+
+static const double MIN_HEATER_TEMP = -30.0;
+static const double MAX_HEATER_TEMP = 30.0;
+
+static DT_CHECK(check_heater_temp)
+{
+  double temp = DOUBLE_VARIABLE(var)->d;
+  if((temp < MIN_HEATER_TEMP) || (temp > MAX_HEATER_TEMP)) {
+    return input_error(stream, 1,
+		       "Invalid heater set point %g. Should be %g <= position <= %g.\n",
+		       temp, MIN_HEATER_TEMP, MAX_HEATER_TEMP);
+  };
+  return 0;
+}
+
+/*.......................................................................
+ * Create a new datatype for specifying the temperature set point for a heater
+ * in millimeters
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_HeaterTempDataType(Script *sc, char *name)
+{
+  return add_DoubleDataType(sc, name, check_heater_temp, sc_iterate_double,
+			    "Double", 1);
+}
+
+static const double MIN_HEATER_PID = 0.0;
+
+static DT_CHECK(check_heater_pid)
+{
+  double value = DOUBLE_VARIABLE(var)->d;
+  if(value < MIN_HEATER_PID) {
+    return input_error(stream, 1,
+		       "Invalid heater PID parameter %g. Should be %g <= value\n",
+		       value, MIN_HEATER_PID);
+  };
+  return 0;
+}
+
+/*.......................................................................
+ * Create a new datatype for specifying a temperature PID loop parameter
+ * in millimeters
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_HeaterPIDDataType(Script *sc, char *name)
+{
+  return add_DoubleDataType(sc, name, check_heater_pid, sc_iterate_double,
+			    "Double", 1);
+}
+
+/*.......................................................................
+ * Check the validity of an actuator position variable. 
+ *
+ * Input:
+ *  sc          Script *  The host scripting environment.
+ *  var       Variable *  The variable who's value is to be checked.
+ *  stream InputStream *  The stream from which the variable value was
+ *                        read.
+ * Output:
+ *  return         int    0 - Value ok.
+ *                        1 - Out of bounds.
+ */
+
+// Optical bench actuator travel is 0 to 70 millimeters
+
+static const double MIN_BENCH_ACTUATOR_POSITION = 0.0;
+static const double MAX_BENCH_ACTUATOR_POSITION = 70.0;
+
+static DT_CHECK(check_actuator_position)
+{
+  double position = DOUBLE_VARIABLE(var)->d;
+  if((position < MIN_BENCH_ACTUATOR_POSITION) || (position > MAX_BENCH_ACTUATOR_POSITION)) {
+    return input_error(stream, 1,
+		       "Invalid actuator position %g. Should be %g <= position <= %g.\n",
+		       position, MIN_BENCH_ACTUATOR_POSITION, MAX_BENCH_ACTUATOR_POSITION);
+  };
+  return 0;
+}
+
+/*.......................................................................
+ * Create a new datatype for specifying the positon of an
+ * optical bench actuator in millimeters
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_ActuatorPositionDataType(Script *sc, char *name)
+{
+  return add_DoubleDataType(sc, name, check_actuator_position, sc_iterate_double,
+			    "Double", 0);
+}
+
+/*.......................................................................
+ * Check the validity of an actuator position offset variable. 
+ *
+ * Input:
+ *  sc          Script *  The host scripting environment.
+ *  var       Variable *  The variable who's value is to be checked.
+ *  stream InputStream *  The stream from which the variable value was
+ *                        read.
+ * Output:
+ *  return         int    0 - Value ok.
+ *                        1 - Out of bounds.
+ */
+
+// Optical bench actuator travel is 0 to 70 millimeters
+
+static const double MAX_BENCH_ACTUATOR_OFFSET = MAX_BENCH_ACTUATOR_POSITION;
+static const double MIN_BENCH_ACTUATOR_OFFSET = -MAX_BENCH_ACTUATOR_POSITION;
+
+static DT_CHECK(check_actuator_offset)
+{
+  double offset = DOUBLE_VARIABLE(var)->d;
+  if((offset < MIN_BENCH_ACTUATOR_OFFSET) || (offset > MAX_BENCH_ACTUATOR_OFFSET)) {
+    return input_error(stream, 1,
+		       "Invalid actuator offset %g. Should be %g <= offset <= %g.\n",
+		       offset, MIN_BENCH_ACTUATOR_OFFSET, MAX_BENCH_ACTUATOR_OFFSET);
+  };
+  return 0;
+}
+
+/*.......................................................................
+ * Create a new datatype for specifying the positon offset of an
+ * optical bench actuator in millimeters
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_ActuatorOffsetDataType(Script *sc, char *name)
+{
+  return add_DoubleDataType(sc, name, check_actuator_offset, sc_iterate_double,
+			    "Double", 1);
+}
+
+/*.......................................................................
+ * Check the validity of an actuator acquired threshold variable. 
+ *
+ * Input:
+ *  sc          Script *  The host scripting environment.
+ *  var       Variable *  The variable who's value is to be checked.
+ *  stream InputStream *  The stream from which the variable value was
+ *                        read.
+ * Output:
+ *  return         int    0 - Value ok.
+ *                        1 - Out of bounds.
+ */
+
+static const double MAX_BENCH_ACTUATOR_ACQUIRED_THRESHOLD = 1.0;
+static const double MIN_BENCH_ACTUATOR_ACQUIRED_THRESHOLD = 0.0;
+
+static DT_CHECK(check_actuator_acquired_threshold)
+{
+  double threshold = DOUBLE_VARIABLE(var)->d;
+  if((threshold < MIN_BENCH_ACTUATOR_ACQUIRED_THRESHOLD) || (threshold > MAX_BENCH_ACTUATOR_ACQUIRED_THRESHOLD)) {
+    return input_error(stream, 1,
+		       "Invalid actuator acquired threshold %g. Should be %g <= threshold <= %g.\n",
+		       threshold, MIN_BENCH_ACTUATOR_ACQUIRED_THRESHOLD, MAX_BENCH_ACTUATOR_ACQUIRED_THRESHOLD);
+  };
+  return 0;
+}
+
+/*.......................................................................
+ * Create a new datatype for specifying the position error in millimeters
+ * within which the bench position will be considered acquired
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_ActuatorAcquiredThresholdDataType(Script *sc, char *name)
+{
+  return add_DoubleDataType(sc, name, check_actuator_acquired_threshold, sc_iterate_double,
+			    "Double", 0);
+}
+
+/*.......................................................................
+ * Check the validity of an actuator focus offset variable. 
+ *
+ * Input:
+ *  sc          Script *  The host scripting environment.
+ *  var       Variable *  The variable who's value is to be checked.
+ *  stream InputStream *  The stream from which the variable value was
+ *                        read.
+ * Output:
+ *  return         int    0 - Value ok.
+ *                        1 - Out of bounds.
+ */
+
+static const double MAX_BENCH_FOCUS_OFFSET =  150.0;
+static const double MIN_BENCH_FOCUS_OFFSET = -150.0;
+
+static DT_CHECK(check_focus_offset)
+{
+  double threshold = DOUBLE_VARIABLE(var)->d;
+  if((threshold < MIN_BENCH_FOCUS_OFFSET) || (threshold > MAX_BENCH_FOCUS_OFFSET)) {
+    return input_error(stream, 1,
+		       "Invalid focus offset %g. Should be %g <= offset <= %g.\n",
+		       threshold, MIN_BENCH_FOCUS_OFFSET, MAX_BENCH_FOCUS_OFFSET);
+  };
+  return 0;
+}
+
+/*.......................................................................
+ * Create a new datatype for specifying the bench focus offset
+ * in millimeters
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_BenchFocusOffsetDataType(Script *sc, char *name)
+{
+  return add_DoubleDataType(sc, name, check_focus_offset, sc_iterate_double,
+			    "Double", 1);
+}
+
+static const double MAX_TILT_THETA =  360.0;
+static const double MIN_TILT_THETA =  0.0;
+
+/*.......................................................................
+ * Create a new datatype for specifying the angle of the x structure
+ * tilt meter relative to zero azimuth, with increasing angle
+ * clockwise facing down.
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_TiltMeterThetaDataType(Script *sc, char *name)
+{
+  return add_SexagesimalDataType(sc, name, check_tilt_theta, sc_iterate_double,
+				 "Sexagesimal", 1);
+}
+
+static DT_CHECK(check_tilt_theta)
+{
+  double theta = DOUBLE_VARIABLE(var)->d;
+  if((theta < MIN_TILT_THETA) || (theta > MAX_TILT_THETA)) {
+    return input_error(stream, 1,
+                       "Invalid tilt meter angle %g. Should be %g <= angle <= %g.\n",
+                       theta, MIN_TILT_THETA, MAX_TILT_THETA);
+  };
+  return 0;
+}
+
+static const double MAX_TILT_OFFSET =  1.0;
+static const double MIN_TILT_OFFSET = -1.0;
+
+/*.......................................................................
+ * Create a new datatype for specifying the angle of the x structure
+ * tilt meter relative to zero azimuth, with increasing angle
+ * clockwise facing down.
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_TiltMeterOffsetDataType(Script *sc, char *name)
+{
+  return add_SexagesimalDataType(sc, name, check_tilt_offset, sc_iterate_double,
+				 "Sexagesimal", 1);
+}
+
+static DT_CHECK(check_tilt_offset)
+{
+  double theta = DOUBLE_VARIABLE(var)->d;
+  if((theta < MIN_TILT_OFFSET) || (theta > MAX_TILT_OFFSET)) {
+    return input_error(stream, 1,
+                       "Invalid tilt meter offset %g. Should be %g <= offset <= %g.\n",
+                       theta, MIN_TILT_OFFSET, MAX_TILT_OFFSET);
+  };
+  return 0;
+}
+
+static const double MAX_TILT_RANGE =  1.0;
+static const double MIN_TILT_RANGE =  0.0;
+
+/*.......................................................................
+ * Create a new datatype for specifying the maximum allowed absolute
+ * value of the average tilt meter reading
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_TiltMeterRangeDataType(Script *sc, char *name)
+{
+  return add_SexagesimalDataType(sc, name, check_tilt_range, sc_iterate_double,
+				 "Sexagesimal", 1);
+}
+
+static DT_CHECK(check_tilt_range)
+{
+  double theta = DOUBLE_VARIABLE(var)->d;
+  if((theta < MIN_TILT_RANGE) || (theta > MAX_TILT_RANGE)) {
+    return input_error(stream, 1,
+                       "Invalid tilt meter range %g. Should be %g <= range <= %g.\n",
+                       theta, MIN_TILT_RANGE, MAX_TILT_RANGE);
+  };
+  return 0;
+}
+
+static const double MAX_TILT_MOVING_AVERAGE_INTERVAL =  300.0;
+static const double MIN_TILT_MOVING_AVERAGE_INTERVAL =  0.01;
+
+/*.......................................................................
+ * Create a new datatype for specifying moving average period
+ * for tilt meters
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_TiltMeterMovingAverageIntervalDataType(Script *sc, char *name)
+{
+  return add_DoubleDataType(sc, name, check_tilt_avg_interval, sc_iterate_double, "Double", 0);
+}
+
+static DT_CHECK(check_tilt_avg_interval)
+{
+  double interval = DOUBLE_VARIABLE(var)->d;
+  if((interval < MIN_TILT_MOVING_AVERAGE_INTERVAL) || (interval > MAX_TILT_MOVING_AVERAGE_INTERVAL)) {
+    return input_error(stream, 1,
+                       "Invalid tilt meter moving average interval %g. Should be %g <= interval <= %g.\n",
+                       interval, MIN_TILT_MOVING_AVERAGE_INTERVAL, MAX_TILT_MOVING_AVERAGE_INTERVAL);
+  };
+  return 0;
+}
+
+static const bool TILT_METER_ENABLED  = true;
+static const bool TILT_METER_DISABLED = false;
+
+/*.......................................................................
+ * Create a new datatype for specifying the states of a tilt meter
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_TiltMeterEnableDataType(Script *sc, char *name)
+{
+  static Enumerator en[] = {
+    {"off",      TILT_METER_DISABLED},
+    {"on",       TILT_METER_ENABLED},
+  };
+  return add_ChoiceDataType(sc, name, en, DIMENSION(en));
+}
+
+static const double MAX_LINEAR_SENSOR_OFFSET =  2.0;
+static const double MIN_LINEAR_SENSOR_OFFSET = -2.0;
+
+/*.......................................................................
+ * Create a new datatype for specifying the zeroing offset of the 
+ * yoke linear sensors.
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_LinearSensorOffsetDataType(Script *sc, char *name)
+{
+  return add_DoubleDataType(sc, name, check_linear_sensor_offset, sc_iterate_double,
+				 "Double", 1);
+}
+
+static DT_CHECK(check_linear_sensor_offset)
+{
+  double offset = DOUBLE_VARIABLE(var)->d;
+  if((offset < MIN_LINEAR_SENSOR_OFFSET) || (offset > MAX_LINEAR_SENSOR_OFFSET)) {
+    return input_error(stream, 1,
+                       "Invalid lgdt offset %g. Should be %g <= offset <= %g.\n",
+                       offset, MIN_LINEAR_SENSOR_OFFSET, MAX_LINEAR_SENSOR_OFFSET);
+  };
+  return 0;
+}
+
+static const double MAX_LINEAR_SENSOR_RANGE =  2.0;
+static const double MIN_LINEAR_SENSOR_RANGE =  0.0;
+
+/*.......................................................................
+ * Create a new datatype for specifying the maximum allowed absolute
+ * value of the yoke linear sensor readings
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_LinearSensorRangeDataType(Script *sc, char *name)
+{
+  return add_DoubleDataType(sc, name, check_linear_sensor_range, sc_iterate_double,
+				 "Double", 1);
+}
+
+static DT_CHECK(check_linear_sensor_range)
+{
+  double range = DOUBLE_VARIABLE(var)->d;
+  if((range < MIN_LINEAR_SENSOR_RANGE) || (range > MAX_LINEAR_SENSOR_RANGE)) {
+    return input_error(stream, 1,
+                       "Invalid tilt meter range %g. Should be %g <= range <= %g.\n",
+                       range, MIN_LINEAR_SENSOR_RANGE, MAX_LINEAR_SENSOR_RANGE);
+  };
+  return 0;
+}
+
+static const double MAX_LINEAR_SENSOR_MOVING_AVERAGE_INTERVAL =  300.0;
+static const double MIN_LINEAR_SENSOR_MOVING_AVERAGE_INTERVAL =  0.01;
+
+/*.......................................................................
+ * Create a new datatype for specifying moving average period
+ * for yoke linear sensors
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_LinearSensorMovingAverageIntervalDataType(Script *sc, char *name)
+{
+  return add_DoubleDataType(sc, name, check_linear_sensor_avg_interval, sc_iterate_double, "Double", 0);
+}
+
+static DT_CHECK(check_linear_sensor_avg_interval)
+{
+  double interval = DOUBLE_VARIABLE(var)->d;
+  if((interval < MIN_LINEAR_SENSOR_MOVING_AVERAGE_INTERVAL) || (interval > MAX_LINEAR_SENSOR_MOVING_AVERAGE_INTERVAL)) {
+    return input_error(stream, 1,
+                       "Invalid tilt meter moving average interval %g. Should be %g <= interval <= %g.\n",
+                       interval, MIN_LINEAR_SENSOR_MOVING_AVERAGE_INTERVAL, MAX_LINEAR_SENSOR_MOVING_AVERAGE_INTERVAL);
+  };
+  return 0;
+}
+
+static const bool LINEAR_SENSOR_ENABLED  = true;
+static const bool LINEAR_SENSOR_DISABLED = false;
+
+/*.......................................................................
+ * Create a new datatype for specifying the states of a yoke linear sensor
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_LinearSensorEnableDataType(Script *sc, char *name)
+{
+  static Enumerator en[] = {
+    {"off",      LINEAR_SENSOR_DISABLED},
+    {"on",       LINEAR_SENSOR_ENABLED},
+  };
+  return add_ChoiceDataType(sc, name, en, DIMENSION(en));
+}
+
+/*************************************************************/
+
+static const int MIN_LNA_NUMBER = 1;
+static const int MAX_LNA_NUMBER = 4;
+
+static DT_CHECK(check_lna_number)
+{
+  int number = INT_VARIABLE(var)->i;
+  if((number < MIN_LNA_NUMBER) || (number > MAX_LNA_NUMBER)) {
+    return input_error(stream, 1,
+		       "Invalid LNA number %i. Should be %i <= number <= %i.\n",
+		       number, MIN_LNA_NUMBER, MAX_LNA_NUMBER);
+  };
+  return 0;
+}
+
+/*.......................................................................
+ * Create a new datatype for specifying the lna number
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_LnaNumberDataType(Script *sc, char *name)
+{
+  return add_IntDataType(sc, name, check_lna_number, sc_iterate_int, "Integer", 1);
+}
+
+
+static const int MIN_LNA_STAGE_NUMBER = 1;
+static const int MAX_LNA_STAGE_NUMBER = 3;
+
+static DT_CHECK(check_lna_stage_number)
+{
+  int number = INT_VARIABLE(var)->i;
+  if((number < MIN_LNA_STAGE_NUMBER) || (number > MAX_LNA_STAGE_NUMBER)) {
+    return input_error(stream, 1,
+		       "Invalid LNA Stage number %i. Should be %i <= number <= %i.\n",
+		       number, MIN_LNA_STAGE_NUMBER, MAX_LNA_STAGE_NUMBER);
+  };
+  return 0;
+}
+
+
+/*************************************************************/
+
+static const int MIN_ROACH_NUMBER = 0;
+static const int MAX_ROACH_NUMBER = 2;
+
+static DT_CHECK(check_roach_number)
+{
+  int number = INT_VARIABLE(var)->i;
+  if((number < MIN_ROACH_NUMBER) || (number > MAX_ROACH_NUMBER)) {
+    return input_error(stream, 1,
+		       "Invalid Roach number %i. Should be %i <= number <= %i.\n",
+		       number, MIN_ROACH_NUMBER, MAX_ROACH_NUMBER);
+  };
+  return 0;
+}
+
+/*.......................................................................
+ * Create a new datatype for specifying the roach number
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_RoachNumberDataType(Script *sc, char *name)
+{
+  return add_IntDataType(sc, name, check_roach_number, sc_iterate_int, "Integer", 1);
+}
+
+
+
+/*.......................................................................
+ * Create a new datatype for specifying the rx channel number
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_RxChannelDataType(Script *sc, char *name)
+{
+  return add_IntDataType(sc, name, check_rx_channel_number, sc_iterate_int, "Integer", 1);
+}
+
+
+static const int MIN_RX_CHANNEL_NUMBER = 1;
+static const int MAX_RX_CHANNEL_NUMBER = 12;
+
+static DT_CHECK(check_rx_channel_number)
+{
+  int number = INT_VARIABLE(var)->i;
+  if((number < MIN_RX_CHANNEL_NUMBER) || (number > MAX_RX_CHANNEL_NUMBER)) {
+    return input_error(stream, 1,
+		       "Invalid Rx Channel number %i. Should be %i <= number <= %i.\n",
+		       number, MIN_RX_CHANNEL_NUMBER, MAX_RX_CHANNEL_NUMBER);
+  };
+  return 0;
+}
+
+/*.......................................................................
+ * Create a new datatype for specifying the rx stage number
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_RxStageDataType(Script *sc, char *name)
+{
+  return add_IntDataType(sc, name, check_rx_stage_number, sc_iterate_int, "Integer", 1);
+}
+
+
+static const int MIN_RX_STAGE_NUMBER = 0;
+static const int MAX_RX_STAGE_NUMBER = 1;
+
+static DT_CHECK(check_rx_stage_number)
+{
+  int number = INT_VARIABLE(var)->i;
+  if((number < MIN_RX_STAGE_NUMBER) || (number > MAX_RX_STAGE_NUMBER)) {
+    return input_error(stream, 1,
+		       "Invalid Rx Stage number %i. Should be %i <= number <= %i.\n",
+		       number, MIN_RX_STAGE_NUMBER, MAX_RX_STAGE_NUMBER);
+  };
+  return 0;
+}
+
+/*.......................................................................
+ * Create a new datatype for specifying the lna stage number
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_LnaStageNumberDataType(Script *sc, char *name)
+{
+  return add_IntDataType(sc, name, check_lna_stage_number, sc_iterate_int, "Integer", 1);
+}
+
+
+static const double MIN_DRAIN_CURRENT = 0;
+static const double MAX_DRAIN_CURRENT = 20;
+
+static DT_CHECK(check_drain_current)
+{
+  float number = DOUBLE_VARIABLE(var)->d;
+  if((number < MIN_DRAIN_CURRENT) || (number > MAX_DRAIN_CURRENT)) {
+    return input_error(stream, 1,
+		       "Desired Drain Current outside range. Should be %g <= number <= %g.\n",
+		       number, MIN_DRAIN_CURRENT, MAX_DRAIN_CURRENT);
+  };
+  return 0;
+}
+
+/*.......................................................................
+ * Create a new datatype for specifying the lna DRAIN CURRENT
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_LnaDrainCurrentDataType(Script *sc, char *name)
+{
+  return add_DoubleDataType(sc, name, check_drain_current, sc_iterate_double, "Double", 1);}
+
+
+static const double MIN_DRAIN_VOLTAGE = 0;
+static const double MAX_DRAIN_VOLTAGE = 5;
+
+static DT_CHECK(check_drain_voltage)
+{
+  float number = DOUBLE_VARIABLE(var)->d;
+  if((number < MIN_DRAIN_VOLTAGE) || (number > MAX_DRAIN_VOLTAGE)) {
+    return input_error(stream, 1,
+		       "Desired Drain Voltage outside range. Should be %g <= number <= %g.\n",
+		       number, MIN_DRAIN_VOLTAGE, MAX_DRAIN_VOLTAGE);
+  };
+  return 0;
+}
+
+/*.......................................................................
+ * Create a new datatype for specifying the lna DRAIN VOLTAGE
+ *
+ * Input:
+ *  sc          Script *  The target scripting environment.
+ *  name          char *  The name for the datatype.
+ * Output:
+ *  return    DataType *  The newly added datatype, or NULL on error.
+ */
+DataType *add_LnaDrainVoltageDataType(Script *sc, char *name)
+{
+  return add_DoubleDataType(sc, name, check_drain_voltage, sc_iterate_double, "Double", 1);}

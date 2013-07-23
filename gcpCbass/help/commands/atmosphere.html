@@ -1,0 +1,30 @@
+<html>
+<head>
+<title>BICEP Command List</title>
+<link rel=stylesheet href="../StyleSheet.css" type="text/css">
+</head>
+
+<body bgcolor="#add8e6">
+<font face="Verdana, Arial, Helvetica, sans-serif"size="2" color="#000000">
+<h2>The <span class=command>atmosphere</span> command (usage)</h2>
+<hr>
+
+
+<h2><i>Context:</i></h2><p>
+
+The atmosphere command sets the current value of temperature in degrees Celcius, relative humidity in percent, and
+pressure in mmHg. These data are required for the refraction calculations when pointing the telescope.
+
+<p>
+
+This command is not normally used by SPT as this information is provided to the control system by the weather station
+through an RS-232 serial connection to sptcontrol. It may be useful for testing or operation when the weather
+station is not working.
+
+<h2><i>Examples:</i></h2><p>
+
+<pre>
+atmosphere -34.0, 674.8, 61
+</pre>
+
+</body></html>

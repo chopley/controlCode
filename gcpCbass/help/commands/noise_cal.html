@@ -1,0 +1,54 @@
+<HEAD><TITLE>The "noise_cal" command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name="noise_cal"> <code><b>noise_cal</b> on|off</code> </a></font>
+<P>
+Turn the noise-calibration signal on or off.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/SwitchState.html>SwitchState</a> state</b></code>
+     <DD> The desired state of the noise source <code>on</code> or <code>off</code>.
+     </DL>
+<P>
+<DT> Example 1:
+<DD> The following example turns the noise-cal signal on for 10
+     seconds.
+
+<pre>
+ noise_cal on
+ until $elapsed > 10s
+ noise_cal off
+</pre>
+
+<P>
+<DT> Context:
+<DD> To calibrate the response of the BICEP correlator to a signal being
+     presented to a given antenna of the BICEP, a stable noise source is
+     injected into the receiver signal path and compared to the signal
+     received from an astronomical calibration source. During normal
+     observing, signals coming from random sources on the sky can then
+     be compared against the noise source to ascertain their
+     flux.  This requires that one be able to switch the noise source
+     into the signal path periodically. The noise source actually
+     remains switched on all of the time, but it is usually
+     disconnected from the receiver inputs by switches. There is one
+     master switch on the output of the noise generator followed by
+     13 individual switches that connect the noise source to each
+     receiver. So with all of these switches open, there are two
+     switches between each receiver and the noise source. This 
+     ensures sufficient isolation between the noise source and the
+     receivers. The <code>noise_cal</code> command switches all of these
+     switches either on or off. To switch them individually, use the
+     <code><a href=setreg.html>setreg</a></code> command to write
+     directly to the <code>noise_dio.output</code> register. The first
+     13 bits, spread between the first 2 bytes of this register,
+     control the individual switches. The 14th bit controls the master
+     switch.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:26 PST 2004)
+</BODY>

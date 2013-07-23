@@ -1,0 +1,83 @@
+add_page 60 379 Status black red yellow 10 11 {13 10 12 13 10 10} {} 0 {} 0 {
+  label 0 0 midnightblue paleturquoise center {Array frame}
+  label 0 1 midnightblue paleturquoise center {Antenna frame}
+  label 0 4 midnightblue paleturquoise center Azimuth
+  label 0 5 midnightblue paleturquoise center Elevation
+  label 0 6 midnightblue paleturquoise center E-Stop
+  label 0 7 midnightblue paleturquoise center {X Sky Offset}
+  label 0 8 midnightblue paleturquoise center {Y Sky Offset}
+  label 0 9 midnightblue paleturquoise center RA
+  label 0 10 midnightblue paleturquoise center DEC
+  label 0 13 midnightblue paleturquoise center {Alt Switch}
+  label 0 14 midnightblue paleturquoise center {Switch enabled}
+  label 0 15 midnightblue paleturquoise center {Noise On}
+  label 0 16 midnightblue paleturquoise center {Switch Full}
+  label 0 17 midnightblue paleturquoise center {Alpha Enable}
+  label 0 18 midnightblue paleturquoise center {Non-Lin enable}
+  label 0 19 midnightblue paleturquoise center {Fifo empty}
+  label 0 20 midnightblue paleturquoise center Rollover
+  label 0 21 midnightblue paleturquoise center {DCM locked}
+  label 0 22 midnightblue paleturquoise center {PPS synched}
+  register 1 0 black green center array.frame.record integer 0 0 unknown,false,true 0 0 0.0 0.0 0 1
+  register 1 1 black green center antenna0.frame.record integer 0 0 unknown,false,true 0 0 0.0 0.0 0 1
+  label 1 3 midnightblue paleturquoise center Position
+  register 1 4 black green center {antenna0.servo.slow_az_pos[0]} fixed_point 2 0 unknown,false,true 1 0 2 2 0 1
+  register 1 5 black green center {antenna0.servo.slow_el_pos[0]} fixed_point 2 0 unknown,false,true 1 0 2 2 0 1
+  register 1 6 black green center {antenna0.servo.emer_stop_on[0]} bool 1 0 false,true 0 1 0 0 0 1
+  register 1 7 black green center {antenna0.tracker.equat_off[0][0]} sexagesimal 2 0 {} 0 0 0.0 0.0 0 1
+  register 1 8 black green center {antenna0.tracker.equat_off[1][0]} sexagesimal 2 0 {} 0 0 0.0 0.0 0 1
+  register 1 9 black green center {antenna0.tracker.equat_geoc[0][0]} sexagesimal 2 0 {} 0 0 0.0 0.0 0 1
+  register 1 10 black green center {antenna0.tracker.equat_geoc[1][0]} sexagesimal 2 0 {} 0 0 0.0 0.0 0 1
+  register 1 13 black green center {antenna0.receiver.flags[0][99]} bit 0 0 false,true 0 0 0.0 0.0 0 1
+  register 1 14 black green center {antenna0.receiver.flags[0][99]} bit 0 1 false,true 0 0 0.0 0.0 0 1
+  register 1 15 black green center {antenna0.receiver.flags[0][99]} bit 0 2 false,true 0 0 0.0 0.0 0 1
+  register 1 16 black green center {antenna0.receiver.flags[0][99]} bit 0 3 false,true 0 0 0.0 0.0 0 1
+  register 1 17 black green center {antenna0.receiver.flags[0][99]} bit 0 4 false,true 0 0 0.0 0.0 0 1
+  register 1 18 black green center {antenna0.receiver.flags[0][99]} bit 0 5 false,true 0 0 0.0 0.0 0 1
+  register 1 19 black green center {antenna0.receiver.flags[0][99]} bit 0 6 false,true 0 0 0.0 0.0 0 1
+  register 1 20 black green center {antenna0.receiver.flags[0][98]} bit 0 7 false,true 0 0 0.0 0.0 0 1
+  register 1 21 black green center {antenna0.receiver.flags[0][99]} bit 0 8 false,true 0 0 0.0 0.0 0 1
+  register 1 22 black green center {antenna0.receiver.flags[0][25]} bit 0 9 false,true 0 0 0.0 0.0 0 1
+  register 2 0 black green center array.frame.received enum 0 0 unknown,false,true 0 1 2 2 0 1
+  register 2 1 black green center antenna0.frame.received enum 0 0 unknown,false,true 0 1 2 2 0 1
+  label 2 3 midnightblue paleturquoise center {Low Soft Limit}
+  register 2 4 black green center {antenna0.servo.az_cw_soft_limit[0]} enum 0 0 released,engaged 1 1 0 0 0 1
+  register 2 5 black green center {antenna0.servo.el_down_soft_limit[0]} enum 0 0 released,engaged 1 1 0 0 0 1
+  label 2 8 midnightblue paleturquoise center {AZ Amp 1}
+  label 2 9 midnightblue paleturquoise center {AZ Amp 2}
+  label 2 10 midnightblue paleturquoise center {EL Amp 1}
+  label 2 12 midnightblue paleturquoise center BACKEND
+  label 3 3 midnightblue paleturquoise center {High Soft Limit}
+  register 3 4 black green center {antenna0.servo.az_ccw_soft_limit[0]} enum 0 0 released,engaged 1 1 0 0 0 1
+  register 3 5 black green center {antenna0.servo.el_up_soft_limit[0]} enum 0 0 released,engaged 1 1 0 0 0 1
+  label 3 7 midnightblue paleturquoise center Enabled
+  register 3 8 black green center {antenna0.servo.enable_status_az1[0]} bool 15 0 {} 0 0 0.0 0.0 0 1
+  register 3 9 black green center {antenna0.servo.enable_status_az2[0]} bool 15 0 {} 0 0 0.0 0.0 0 1
+  register 3 10 black green center {antenna0.servo.enable_status_el1[0]} bool 15 0 {} 0 0 0.0 0.0 0 1
+  label 3 13 midnightblue paleturquoise center {Fifo Backlog}
+  label 3 14 midnightblue paleturquoise center {Switch Period}
+  label 3 15 midnightblue paleturquoise center {Trim Length}
+  label 3 16 midnightblue paleturquoise center {Integ Shortfall}
+  label 3 17 midnightblue paleturquoise center {Version #}
+  label 3 18 midnightblue paleturquoise center <sec>
+  label 4 3 midnightblue paleturquoise center Offset
+  register 4 4 black green center {antenna0.tracker.horiz_off[0][0]} sexagesimal 2 0 {} 0 0 0.0 0.0 0 1
+  register 4 5 black green center {antenna0.tracker.horiz_off[1][0]} sexagesimal 2 0 {} 0 0 0.0 0.0 0 1
+  label 4 7 midnightblue paleturquoise center {I Req}
+  register 4 8 black green center {antenna0.servo.command_current_az1[0]} floating 15 0 {} 0 0 0.0 0.0 0 1
+  register 4 9 black green center {antenna0.servo.command_current_az2[0]} floating 15 0 {} 0 0 0.0 0.0 0 1
+  register 4 10 black green center {antenna0.servo.command_current_el1[0]} floating 15 0 {} 0 0 0.0 0.0 0 1
+  register 4 13 black green center {antenna0.receiver.diagnostics[0][0]} floating 15 0 {} 0 1 0.0 8 0 1
+  register 4 14 black green center {antenna0.receiver.diagnostics[1][0]} floating 5 0 {} 0 0 0.0 0.0 0 1
+  register 4 15 black green center {antenna0.receiver.diagnostics[2][0]} floating 5 0 {} 0 0 0.0 0.0 0 1
+  register 4 16 black green center {antenna0.receiver.diagnostics[3][99]} floating 5 0 {} 0 0 0.0 0.0 0 1
+  register 4 17 black green center {antenna0.receiver.dbeVersion[0][0]} floating 15 0 {} 0 0 0.0 0.0 0 1
+  register 4 18 black green center {antenna0.receiver.avgSecond[0][0]} floating 5 0 {} 0 0 0.0 0.0 0 1
+  label 5 3 midnightblue paleturquoise center {Scan Offset}
+  register 5 4 black green center {antenna0.tracker.scan_off[0][0]} sexagesimal 1 0 {} 0 0 0.0 0.0 0 1
+  register 5 5 black green center {antenna0.tracker.scan_off[1][0]} sexagesimal 1 0 {} 0 0 0.0 0.0 0 1
+  label 5 7 midnightblue paleturquoise center {I Act}
+  register 5 8 black green center {antenna0.servo.actual_current_az1[0]} floating 15 0 {} 0 0 0.0 0.0 0 1
+  register 5 9 black green center {antenna0.servo.actual_current_az2[0]} floating 15 0 {} 0 0 0.0 0.0 0 1
+  register 5 10 black green center {antenna0.servo.actual_current_el1[0]} floating 15 0 {} 0 0 0.0 0.0 0 1
+}

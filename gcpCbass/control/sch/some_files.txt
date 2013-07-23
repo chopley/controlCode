@@ -1,0 +1,99 @@
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/phaseShifterCalibration.sch( 2h    )
+
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 30s   , 12, 3, 30 )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 1h   , 20m     )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 30s   , 12, 3, 30 )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 1h   , 20m     )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 30s   , 12, 3, 30 )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 1h   , 20m     )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 30s   , 12, 3, 30 )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 1h   , 20m     )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 30s   , 12, 3, 30 )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 1h   , 20m     )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 30s   , 12, 3, 30 )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 1h   , 20m     )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 30s   , 12, 3, 30 )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 1h   , 20m     )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 30s   , 12, 3, 30 )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 1h   , 20m     )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 30s   , 12, 3, 30 )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 1h   , 20m     )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 30s   , 12, 3, 30 )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 1h   , 20m     )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 30s   , 12, 3, 30 )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 1h   , 20m     )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 30s   , 12, 3, 30 )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 1h   , 20m     )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 30s   , 12, 3, 30 )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 1h   , 20m     )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 30s   , 12, 3, 30 )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 1h   , 20m     )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 30s   , 12, 3, 30 )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 1h   , 20m     )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 30s   , 12, 3, 30 )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 1h   , 20m     )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 30s   , 12, 3, 30 )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 1h   , 20m     )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 30s   , 12, 3, 30 )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 1h   , 20m     )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 30s   , 12, 3, 30 )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 1h   , 20m     )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 30s   , 12, 3, 30 )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 1h   , 20m     )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 30s   , 12, 3, 30 )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 1h   , 20m     )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 30s   , 12, 3, 30 )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 1h   , 20m     )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 30s   , 12, 3, 30 )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 1h   , 20m     )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 30s   , 12, 3, 30 )
+schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 1h   , 20m     )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ schedule /home/cbassuser/cbass/gcpCbass/control/sch/noiseAdding.sch( 4h   , 01s  )
+ schedule /home/cbassuser/cbass/gcpCbass/control/sch/noiseAdding.sch( 1h   , 01s  )
+ schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 2h   , 2m    )
+ schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 2h   , 5m    )
+ schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 2h   , 5m    )
+
+
+schedule schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 1m   , 12, 2, 30)
+130425 14:23:43 schedule schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 2h   , 5m   )
+130425 14:24:11 schedule schedule /home/cbassuser/cbass/gcpCbass/control/sch/polarisationModeReadout.sch
+130425 14:25:22 schedule schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 2h   , 5m   )
+130425 14:25:44 schedule schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStepFineLong.sch( 20m    )
+130425 14:29:31 schedule schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 1h   , 12, 3, 30)
+130425 14:30:56 schedule schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 4h   , 20m    )
+130425 14:31:01 schedule schedule /home/cbassuser/cbass/gcpCbass/control/sch/coldLoadStep.sch( 1h   , 12, 3, 30)
+130425 14:31:04 schedule schedule /home/cbassuser/cbass/gcpCbass/control/sch/skyStareSouth.sch( 4h   , 20m    )

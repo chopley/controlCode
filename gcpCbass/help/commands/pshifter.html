@@ -1,0 +1,59 @@
+<HEAD><TITLE>The "pshifter" datatype.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name="pshifter"> <code><b>pshifter</b> receivers, half|full, position</code> </a></font>
+<P>
+Switch off, or move one or more of the receiver phase-shifter motors.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/Receivers.html>Receivers</a> ant</b></code>
+     <DD> The set of receivers whose motors are to be controlled.
+     <DT><code><b><a href=../dataTypes/PhaseStep.html>PhaseStep</a> step</b></code>
+     <DD> The step size, from:
+          <UL>
+          <LI> <code><b>full</b></code> - Full steps of the stepper motor.
+          <LI> <code><b>half</b></code> - Half steps of the stepper motor.
+          </UL>
+     <DT><code><b><a href=../dataTypes/PhaseShift.html>PhaseShift</a>
+     position</b></code> <DD> The target motor encoder position
+     (0..1023), or any of the words: <code>off</code>,
+     <code>left</code>, or <code>right</code>. The motor moves a full
+     revolution between 0 and 1024.  This corresponds to a phase
+     change of 4.PI.
+     </DL>
+<P>
+<DT> Example:
+<DD> The following example moves the phase-shifter motor of receiver 3
+     to encoder position 420, using full steps of the motor. It then
+     waits for the motor to reach the desired position, or timeout.
+     Then it turns the phase-shifter motor off.
+<pre>
+ pshifter rx3, full, 420
+ until $acquired(phase)
+ pshifter rx3, full, off
+</pre>
+
+<P>
+<DT> Context:
+<DD> If the specified phase-shifter motors are turned off when this
+     command is invoked, they are automatically switched on before
+     attempting the move. Then starting with full steps of the stepper
+     motors, the phase shifters are moved as close as possible to the
+     desired position. Then, if half-step mode has been requested, and
+     the requested position is closer to a neighboring half step, then
+     the two coils of the bracketing steps are energized to hold the
+     motor half way between them.
+<P>
+     Note that half-step mode requires that the motor coils be
+     continuously energized, whereas full-step mode doesn't. This
+     means that after reaching a target using full steps, the motor
+     can be switched off. If you switch it off when in half step mode,
+     the motor may slip by half a step.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:37 PST 2004)
+</BODY>

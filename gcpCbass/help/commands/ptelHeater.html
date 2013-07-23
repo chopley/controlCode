@@ -1,0 +1,40 @@
+<html>
+<head>
+<title>SPT Command List</title>
+<link rel=stylesheet href="../StyleSheet.css" type="text/css">
+</head>
+
+<body bgcolor="#add8e6">
+<font face="Verdana, Arial, Helvetica, sans-serif"size="2" color="#000000">
+<h2>The <span class=command>ptelHeater</span> command (usage)</h2>
+<hr>
+
+
+<h2><i>Context:</i></h2><p>
+
+The ptelHeater command turns the heater on a pointing telescope on or off or sets the
+temperature set point or parameters for PID control loop.
+Note that the heaters are wired with a thermostat to turn on if the
+temperature falls below a fixed minimum, even if they are turned off by
+this command, in order to prevent the electronics from being damaged
+by freezing.
+
+<h2><i>Examples:</i></h2><p>
+
+<pre>
+ptelHeater 0, on    # Turn pointing telescope 0 heater on and disable PID loop
+ptelHeater 1, off   # Turn pointing telescope 1 heater off and disable PID loop
+ptelHeater all, off  # Turn all pointing telescope heaters off 
+ptelHeater 0, pid, temp=10.5 # Enable PID loop for pointing telescope 0 and set temperature set point to 10.5 degrees C
+ptelHeater 0, tune, p=0.2, i=0.001, d=1000.0 # Set proportional, integral and derivative parameters of PID loop for telescope 0
+</pre>
+
+<p>
+The PID loop parameters are remembered when the PID loop is disabled, and the PID continues to monitor the temperature
+and calculate the PID loop output, except that the PID output has no effect on the heater.
+The temperature set point is not remembered when the PID loop is disabled.
+The PID control loop for each telecope sets its heater duty cycle in 100 millisecond increments over a 20 second period.
+The heater on/off register only samples the heater state once a second, so it is not a precise indication of the heater state
+when in PID loop mode.
+
+</body></html>

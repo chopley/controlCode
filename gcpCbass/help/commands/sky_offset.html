@@ -1,0 +1,75 @@
+<HEAD><TITLE>The "sky_offset" command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><code><b>sky_offset</b>/add [x, y, ant]</code></font>
+<P>
+Replace or add to the sky-based tracking offsets.
+<P>
+<DL>
+<DT> Optional qualifier arguments:
+<DD> <DL>
+     <DT><code>/add</code>
+     <DD> If this modifier is present the offsets will be added to the
+          existing offsets. Otherwise they will replace them.
+     </DL>
+<DT> Mandatory arguments:
+<DD> (none)
+<DT> Optional Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/PointingOffset.html>PointingOffset</a> y</b></code>
+     <DD> The offset towards the zenith, directed along the great circle that
+          connects the un-offset pointing center and the zenith.
+     <DT><code><b><a href=../dataTypes/PointingOffset.html>PointingOffset</a> x</b></code>
+     <DD> The offset along the great circle that is both perpendicular to
+          the above described y axis and passes through the un-offset
+          pointing center. When the telescope is pointing south, x
+          increases towards the west.
+     <DT><code><b><a href=../dataTypes/Antennas.html>Antennas</a> ant</b></code>
+     <DD> A set of one or more antennas to which the command should be applied.
+     <DD> Default is controlled by the <code><a href=setDefault../dataTypes/Antennas.html>setDefaultAntennas</a> command.
+
+     </DL>
+<P>
+<DT> Examples:
+<DD> The following example adds an additional 10 arcseconds to the
+     pointing offset along the x axis and 0.02 degrees to the offset
+     along the y axis.
+
+<pre>
+  sky_offset/add x=0:0:10, y=0.02
+</pre>
+
+     The second example shows how to replace any existing sky offsets
+     with new sky offsets. In this case both are being set to zero, to
+     remove all sky offsets.
+
+<pre>
+  sky_offset/set x=0, y=0
+</pre>
+
+<DT>Context:
+<DD>The sky_offset command is designed for use when measuring the
+    primary beams of the individual antennas. It allows one to define
+    a regular grid in x and y over the area of the primary beam and
+    point a source at each of these locations. Unlike the raw
+    telescope-based offsets that are established with the <a
+    href=offset.html>offset</a> command, the sky_offset command
+    maintains the same part of the beam pointing at the source
+    irrespective of the elevation and declination of the source.
+<P>
+    Sky based offsets are implemented as offsets along two orthogonal
+    great circles that pass through the un-offset pointing center. The
+    orientation of these great circles is established by defining one
+    of them to be the great circle that joins the un-offset pointing
+    center and the zenith. The offset angle along this great circle is
+    refered to as an x-axis offset. The other great circle is uniquely
+    defined simply by the fact that it must go through the un-offset
+    pointing center at right angles to the x-axis great circle. At
+    zero elevation the second great circle follows the horizon, and it
+    then increases in the same direction as the telescope azimuth.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:50 PST 2004)
+</BODY>

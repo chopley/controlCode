@@ -1,0 +1,47 @@
+add_page 695 53 Receiver beige red yellow 13 9 {12 10 10} {} 0 {} 0 {
+  label 0 0 midnightblue paleturquoise center Thermometer
+  label 0 2 midnightblue paleturquoise center MAINPLATE
+  label 0 3 midnightblue paleturquoise center {IC HEAD}
+  label 0 4 midnightblue paleturquoise center {IC STAGE}
+  label 0 5 midnightblue paleturquoise center {UC HEAD}
+  label 0 6 midnightblue paleturquoise center UCSTAGE
+  label 0 8 midnightblue paleturquoise center 4HEPUMP
+  label 0 9 midnightblue paleturquoise center UCPUMP
+  label 0 10 midnightblue paleturquoise center {IC PUMP}
+  label 0 12 midnightblue paleturquoise center 4HESW
+  label 0 13 midnightblue paleturquoise center ICSW
+  label 0 14 midnightblue paleturquoise center UCSW
+  label 0 16 midnightblue paleturquoise center Heater1
+  label 0 17 midnightblue paleturquoise center Heater2
+  label 0 19 midnightblue paleturquoise center HEX
+  label 0 20 midnightblue paleturquoise center DIODEB1
+  label 0 21 midnightblue paleturquoise center DIODEB2
+  label 0 22 midnightblue paleturquoise center DIODEB3
+  label 0 23 midnightblue paleturquoise center DIODEB4
+  label 1 0 midnightblue paleturquoise center {Temp [K]}
+  register 1 2 black green center {array.fridge.Temperature[5]} fixed_point 2 0 {} 0 1 0.0 4 0 1
+  register 1 3 black green center {array.fridge.Temperature[3]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 1 4 black green center {array.fridge.Temperature[2]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 1 5 black green center {array.fridge.Temperature[0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 1 6 black green center {array.fridge.Temperature[1]} fixed_point 3 0 {} 0 1 0.0 0.275 0 1
+  register 1 8 black green center {array.fridge.Temperature[7]} fixed_point 2 0 {} 0 0 0.0 0.0 0 1
+  register 1 9 black green center {array.fridge.Temperature[6]} fixed_point 2 0 {} 0 0 0.0 0.0 0 1
+  register 1 10 black green center {array.fridge.Temperature[12]} fixed_point 2 0 {} 0 0 0.0 0.0 0 1
+  register 1 12 black green center {array.fridge.Temperature[13]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 1 13 black green center {array.fridge.Temperature[8]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 1 14 black green center {array.fridge.Temperature[15]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 1 19 black green center {array.fridge.Temperature[4]} fixed_point 2 0 {} 0 0 0.0 0.0 0 1
+  register 1 20 black green center {array.fridge.Temperature[9]} fixed_point 2 0 {} 0 0 0.0 0.0 0 1
+  register 1 21 black green center {array.fridge.Temperature[10]} fixed_point 2 0 {} 0 0 0.0 0.0 0 1
+  register 1 22 black green center {array.fridge.Temperature[11]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 1 23 black green center {array.fridge.Temperature[14]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  label 2 0 midnightblue paleturquoise center {I (mA)}
+  register 2 8 black green center {array.fridge.HeaterCurrent[1]} fixed_point 1 0 {} 0 1 -.2 2 0 1
+  register 2 9 black green center {array.fridge.HeaterCurrent[0]} fixed_point 1 0 {} 0 1 -.2 2 0 1
+  register 2 10 black green center {array.fridge.HeaterCurrent[2]} fixed_point 1 0 {} 0 1 -.2 2 0 1
+  register 2 12 black green center {array.fridge.HeaterCurrent[6]} fixed_point 1 0 {} 0 1 -1 .2 0 1
+  register 2 13 black green center {array.fridge.HeaterCurrent[4]} fixed_point 1 0 {} 0 1 -1 .3 0 1
+  register 2 14 black green center {array.fridge.HeaterCurrent[5]} fixed_point 1 0 {} 0 1 -1 .3 0 1
+  register 2 16 black green center {array.fridge.HeaterCurrent[3]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 2 17 black green center {array.fridge.HeaterCurrent[7]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+}

@@ -1,0 +1,72 @@
+<HEAD><TITLE>The logTransaction command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><code><b>logTransaction</b> device, serial number, location, date, who, [comment=?]</code></font>
+<P>
+Log a transaction.
+<P>
+<DL>
+<DT> Mandatory Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/String.html>String</a> device</b></code>
+     <DD> A valid device name, defined in a transaction catalog which can be loaded using the 
+         <code><a href=loadTransaction.html> loadTransaction</a></code> command.
+
+     <DT><code><b><a href=../dataTypes/String.html> String</a> serial number</b></code>
+     <DD> A valid serial number for the device, defined in a transaction catalog which can be loaded 
+          using the <code><a href=loadTransaction.html> loadTransaction</a></code> command.
+
+     <DT><code><b><a href=../dataTypes/String.html> String</a> location</b></code>
+     <DD> A valid location for the device, defined in a transaction catalog which can be loaded 
+          using the <code><a href=loadTransaction.html> loadTransaction</a></code> command.
+
+     <DT><code><b><a href=../dataTypes/Date.html> Date</a> date</b></code>
+     <DD> A valid date for this transaction.
+
+     <DT><code><b><a href=../dataTypes/String.html> String</a> who</b></code>
+     <DD> An identifier for the person logging the transaction.
+     
+     </DL>
+<p>
+
+<DT> Optional Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/String.html> String</a> comment</b></code>
+     <DD> An optional comment.  This need not be a quoted string, but note that a comma in an 
+          unquoted string will be interpreted as an extra argument
+     </DL>
+
+<P>
+
+<DT> Example:
+<DD> In the following example, we assume a catalog containing (at least) the following lines
+     has been loaded:
+
+<pre>
+  DEVICE Receiver
+  SERIAL sillyName1, sillyName2, sillyName3
+  LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8
+</pre>
+
+Once this catalog is loaded, the following logs a valid transaction:
+
+<pre>
+ logTransaction Receiver, sillyName2, ant3, 10-oct-2004, me, comment="This is a test"
+</pre>
+
+This will place the following lines in the current archived logfile:
+
+<pre>
+041011 23:27:08 **** Device: (Receiver: sillyName2) (ant3) (10-OCT-2004 00:00:00) Logged by: (me)
+041011 23:27:08 **** This is a test
+</pre>
+
+<DT> Context:
+<DD> see <code><a href=loadTransaction.html> loadTransaction</a></code>
+</DL>
+
+<HR>
+Erik Leitch (Wed Jul 21 14:13:52 CDT 2004)
+
+</BODY>

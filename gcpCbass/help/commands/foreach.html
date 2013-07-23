@@ -1,0 +1,61 @@
+<HEAD><TITLE>The foreach datatype.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name=foreach> <code><b>foreach</b>(type name) list {commands}</code> </a></font>
+<P>
+Loop through a block of commands once for each member of a list.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code>type name</code>
+     <DD> The datatype and name to give the loop variable. The
+          datatype must match that of members of the following list.
+     <DT><code>list</code>
+     <DD> The list to iterate through. The loop variable will be set
+          to the value of the next member of this list on each
+	  iteration of the loop.
+     <DT><code>commands</code>
+     <DD> The list of commands to be executed by the loop.
+     </DL>
+<P>
+<DT> Example:
+<DD> The following example prints the contents of a list of strings,
+     as a single line of words separated by spaces.
+<pre>
+ foreach(String s) {&quot;Hello&quot;, &quot;World&quot;} {
+   print $s, &quot; &quot;
+ }
+ print &quot;\n&quot;
+</pre>
+
+     Note that the following script does the same thing.
+
+<pre>
+ listof String sl = {&quot;Hello&quot;, &quot;World&quot;}
+ foreach(String s) $sl {
+   print $s, &quot; &quot;
+ }
+ print &quot;\n&quot;
+</pre>
+<DT> Context:
+<DD> The <code>foreach</code> command repeats a sequence of
+     commands for different values of given parameter. For example,
+     when scheduling a telescope, the list that you give the foreach
+     command could be a list of sources that you want to observe. On
+     the first iteration of the loop, the loop variable is set to the
+     first member of the specified list. On the second iteration, it
+     is set to the second member of the list, and so on until the end
+     of the list is reached. The foreach statement then
+     terminates. You can leave the loop before the last element of the
+     list has been reached by using the <code><a
+     href=break.html>break</a></code> command. Similarly,
+     the next iteration of the loop can be started before
+     the current iteration has been completed via the
+     <code><a href=next.html>next</a></code> command.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:07 PST 2004)
+</BODY>

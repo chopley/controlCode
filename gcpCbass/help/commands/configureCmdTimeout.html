@@ -1,0 +1,34 @@
+<html>
+<head>
+<title>SPT Command List</title>
+<link rel=stylesheet href="../StyleSheet.css" type="text/css">
+</head>
+
+<body bgcolor="#add8e6">
+<font face="Verdana, Arial, Helvetica, sans-serif"size="2" color="#000000">
+<h2>The <span class=command>configureCmdTimeout</span> command (usage)</h2>
+<hr>
+
+
+<h2><i>Context:</i></h2><p>
+
+The configureCmdTimeout command enables or disables and sets the duration of a timer to abort a read of
+an interprocess communication channel if the expected information is not received withing the specified time.
+This prevents the entire control system from hanging if one component crashes or hangs.
+
+<p>
+
+If state=on the timeout is enabled. If state=off the timeout is disabled.
+
+<p>
+
+Interval is the duration of the timeout in seconds.
+
+<h2><i>Examples:</i></h2><p>
+
+<pre>
+configureCmdTimeout on, 10  # enable ten second timeout
+
+configureCmdTimeout off     # disable timeout
+
+</body></html>

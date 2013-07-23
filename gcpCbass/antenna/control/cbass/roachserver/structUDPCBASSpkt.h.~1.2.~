@@ -1,0 +1,42 @@
+/*
+ *  structUDPCBASSpkt.h
+ *  CPacketize
+ *  CJC 8/8/2011
+ *  Based on header by Danny Price on 18/01/2011.
+ *
+ */
+ 
+#define kDataperPacket 10
+#define vectorLength 32 //size of FFT (32)
+
+//data structure definition
+struct UDPCBASSpkt {
+int version; // 1 byte
+int data_size; // 1 byte
+int dataCount;
+int int_count; // 1 byte
+int tstart; // 4 byte
+int tend; // 4 byte
+int int_len; // 2 byte
+int reserved1; // 1 byte
+int reserved2; // 1 byte
+int data_ch0odd[kDataperPacket*vectorLength];
+int data_ch0even[kDataperPacket*vectorLength];
+int data_ch1odd[kDataperPacket*vectorLength];
+int data_ch1even[kDataperPacket*vectorLength];
+int data_ch2odd[kDataperPacket*vectorLength];
+int data_ch2even[kDataperPacket*vectorLength];
+int data_ch3odd[kDataperPacket*vectorLength];
+int data_ch3even[kDataperPacket*vectorLength];
+int data_ch4odd[kDataperPacket*vectorLength];
+int data_ch4even[kDataperPacket*vectorLength];
+int data_ch5odd[kDataperPacket*vectorLength];
+int data_ch5even[kDataperPacket*vectorLength];
+};
+
+//definitions of strings used by the parser
+char getDataCommand[]= "GETDATAXXX";
+char NoiseDiodeCommand[]= "NDIODEXXXX";
+char GarbageReturn[]="GARBAGEXXX";
+char Temp[15];
+///////////////////////////

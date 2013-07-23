@@ -1,0 +1,40 @@
+<HEAD><TITLE>The suspend_schedule command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><code><b>suspend_schedule</b></code></font>
+<P>
+Temporarily suspend execution of the schedule that is currently running.
+<P>
+<DL>
+<DT> Arguments:
+<DD> (none)
+<P>
+<DT> Example:
+<DD> The following example pauses then resumes execution of the
+     currently running scheduling script. Note that at least the
+     second line would have to be typed from the command line, since
+     there is no script running after the suspend_schedule command
+     has been executed.
+
+<pre>
+  suspend_schedule
+  ...
+  resume_schedule
+</pre>
+
+<DT> Context:
+<DD> This command is used to temporarily pause execution of the
+     currently running schedule. The scheduler then waits until the
+     user uses the <code><a
+     href=resume_schedule.html>resume_schedule</a></code> command, before
+     executing any more commands from the current schedule.
+  
+<P>
+     If no schedule is currently running, this command has no effect.
+</DL>
+
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:53 PST 2004)
+</BODY>

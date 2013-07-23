@@ -1,0 +1,20 @@
+/Makefile.defs/1.5/Tue Feb 23 17:19:56 2010//
+/Makefile_generic/1.8/Thu Mar  4 21:17:26 2010//
+D/antenna////
+D/cfitsio////
+D/config////
+D/control////
+D/directives////
+D/grabber////
+D/help////
+D/idl////
+D/matlab////
+D/mediator////
+D/misc////
+D/modules////
+D/pgutil////
+D/program////
+D/receiver////
+D/scripts////
+D/util////
+/Makefile/1.5/Fri Mar 16 17:59:11 2012//

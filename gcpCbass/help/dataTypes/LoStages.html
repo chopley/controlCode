@@ -1,0 +1,29 @@
+<HEAD><TITLE>The LoStages datatype.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+<center><a href=../index.html>Index</a></center>
+<HR>
+<font color=blue><a name=LoStages> <code><b>LoStages</b></code> </a></font>
+<P>
+One or more stages of the local oscillator chain.
+<P>
+<DL>
+<DT> Input Format:
+<P>
+<DD> A <a href=dt_class.html#set>set</a> of one or more of:
+      <UL>
+      <LI> <code><b>if</b></code>  - The local-oscillator IF-monitor output.
+      <LI> <code><b>sweep</b></code>  - The sawtooth used to acquire phase-lock.
+      <LI> <code><b>gunn</b></code>  - The gunn-diode.
+      <LI> <code><b>rfmonitor</b></code>  - The RF monitor.
+      <LI> <code><b>all</b></code>  - All of the above stages.
+      </UL>
+<P>
+
+<DT> Context:
+<DD> The <a href="../commands/lo.html">lo</a> command requires an LoStage
+     argument.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:24 PST 2004)
+</BODY>

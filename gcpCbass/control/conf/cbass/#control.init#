@@ -1,0 +1,76 @@
+# This schedule is executed by cbassControl on its startup.
+# Commands that need a connection to the control system will not
+# succeed.
+
+print "Running cbassControl startup script."
+
+ifhost cbasscontrol.cm.ovro.caltech.edu {
+
+  # Start logging if running on cbasscontrol.  Use the fully-qualified name of
+  # the host, as that is what is returned by gethostname()
+
+  open log, dir="/mnt/data/cbass/log"
+
+}
+
+# Load the script that is used to initialize the real-time environment
+# whenever the real-time cpu reboots.
+
+load_reboot_script "$CBASS_DIR/control/conf/specific/mediator.init"
+
+## Load the source catalog.
+catalog "$CBASS_DIR/control/ephem/source.cat"
+scan_catalog "$CBASS_DIR/control/scan/cbass_scan.cat"
+
+## Load the ephemeris of UT1-UTC.
+
+ut1utc "$CBASS_DIR/control/ephem/ut1utc.ephem"
+
+# Location of HartRAO (long, lat, altitude (meters))
+site 27:41:07.415, -25:53:23.105, 1415
+
+
+# Specify the horizon to be used by the "show" command.
+
+horizon 15
+
+# Specify the number of samples to include in each archive frame.
+# Also specify the number of samples to record before starting a new file.
+
+ifhost cbasscontrol.cm.ovro.caltech.edu  {
+  archive combine=1, filter=false, file_size=3000, dir="/mnt/data/cbass/arc"
+
+  # Start archiving
+   open archive
+
+  # open the frame grabber as well
+  open grabber, dir="/mnt/data/cbass/fits"
+
+}
+tr
+
+ifhost c-bass {
+ open log, dir="/home/cbassuser/data/log/"
+ archive combine=1, filter=false, file_size=3000, dir="/home/cbassuser/data/arc"
+ open archive
+ open grabber, dir="/home/cbassuser/data/fits"
+}
+
+ifhost cbaezar  {
+  open log, dir="/data/cbassdata/log"
+  archive combine=1, filter=false, file_size=3000, dir="/data/cbassdata/arc"
+
+  # Start archiving
+   open archive
+
+  # open the frame grabber as well
+  open grabber, dir="/data/cbassdata/fits"
+
+}
+
+# set up the pager
+pager disable
+import "$CBASS_DIR/control/conf/cbass/pager.init"
+
+
+print "Startup script ended."

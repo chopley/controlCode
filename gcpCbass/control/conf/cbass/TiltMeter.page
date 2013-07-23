@@ -1,0 +1,45 @@
+add_page 380 80 Page black red yellow 10 11 {10 10 10 10 10} {} 0 {} 0 {
+  label 0 0 midnightblue paleturquoise center Status
+  label 0 1 midnightblue paleturquoise center Angle
+  label 0 2 midnightblue paleturquoise center Offset
+  label 0 3 midnightblue paleturquoise center Max
+  label 0 4 midnightblue paleturquoise center {Avg Interval}
+  label 0 5 midnightblue paleturquoise center Meter
+  label 0 6 midnightblue paleturquoise center Avg
+  label 0 8 midnightblue paleturquoise center Yoke
+  label 0 9 midnightblue paleturquoise center Status
+  label 0 10 midnightblue paleturquoise center Offset
+  label 0 11 midnightblue paleturquoise center Range
+  label 0 12 midnightblue paleturquoise center {Avg Interval}
+  label 0 13 midnightblue paleturquoise center Meter
+  label 0 14 midnightblue paleturquoise center Avg
+  register 1 0 black green center {antenna0.tracker.tilt_enabled[0][0]} enum 0 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 1 1 black green center {antenna0.tracker.tilt_theta[0]} sexagesimal 0 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 1 2 black green center {antenna0.tracker.tilt_xy_offset[0]} sexagesimal 0 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 1 3 black green center {antenna0.tracker.tilt_max[0]} sexagesimal 0 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 1 4 black green center {antenna0.tracker.tilt_average_interval[0]} integer 0 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 1 5 black green center {antenna0.tracker.tilt_xy[0][0]} sexagesimal 0 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 1 6 black green center {antenna0.tracker.tilt_xy_avg[0][0]} sexagesimal 0 0 disabled,enabled 0 0 0.0 0.0 0 1
+  label 1 7 midnightblue paleturquoise center L1
+  register 1 9 black green center {antenna0.tracker.linear_sensor_enabled[0][0]} enum 0 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 1 10 black green center {antenna0.tracker.linear_sensor_offset[0]} fixed_point 3 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 1 11 black green center {antenna0.tracker.linear_sensor_range[0]} fixed_point 3 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 1 12 black green center {antenna0.tracker.linear_sensor_average_interval[0]} fixed_point 3 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 1 13 black green center {antenna0.tracker.linear_sensor[0][0]} fixed_point 3 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 1 14 black green center {antenna0.tracker.linear_sensor_avg[0][0]} fixed_point 3 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 2 2 black green center {antenna0.tracker.tilt_xy_offset[1]} sexagesimal 0 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 2 5 black green center {antenna0.tracker.tilt_xy[1][0]} sexagesimal 0 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 2 6 black green center {antenna0.tracker.tilt_xy_avg[1][0]} sexagesimal 0 0 disabled,enabled 0 0 0.0 0.0 0 1
+  label 2 7 midnightblue paleturquoise center L2
+  register 2 10 black green center {antenna0.tracker.linear_sensor_offset[1]} fixed_point 3 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 2 13 black green center {antenna0.tracker.linear_sensor[1][0]} fixed_point 3 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 2 14 black green center {antenna0.tracker.linear_sensor_avg[1][0]} fixed_point 3 0 disabled,enabled 0 0 0.0 0.0 0 1
+  label 3 7 midnightblue paleturquoise center R1
+  register 3 10 black green center {antenna0.tracker.linear_sensor_offset[2]} fixed_point 3 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 3 13 black green center {antenna0.tracker.linear_sensor[2][0]} fixed_point 3 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 3 14 black green center {antenna0.tracker.linear_sensor_avg[2][0]} fixed_point 3 0 disabled,enabled 0 0 0.0 0.0 0 1
+  label 4 7 midnightblue paleturquoise center R2
+  register 4 10 black green center {antenna0.tracker.linear_sensor_offset[3]} fixed_point 3 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 4 13 black green center {antenna0.tracker.linear_sensor[3][0]} fixed_point 3 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 4 14 black green center {antenna0.tracker.linear_sensor_avg[3][0]} fixed_point 3 0 disabled,enabled 0 0 0.0 0.0 0 1
+}

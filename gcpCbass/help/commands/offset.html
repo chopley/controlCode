@@ -1,0 +1,65 @@
+<HEAD><TITLE>The "offset" command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><code><b>offset</b>/add [az, el, ant]</code></font>
+<P>
+Change the tracking offsets of specified telescope axes.
+<P>
+<DL>
+<DT> Optional qualifier arguments:
+<DD> <DL>
+     <DT><code>/add</code>
+     <DD> If this modifier is present the offsets will be added to the
+          existing offsets. Otherwise they will replace them.
+     </DL>
+<DT> Mandatory arguments:
+<DD> (none)
+<DT> Optional Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/PointingOffset.html>PointingOffset</a> az</b></code>
+     <DD> The offset to substitute for or add to the current azimuth offset.
+     <DT><code><b><a href=../dataTypes/PointingOffset.html>PointingOffset</a> el</b></code>
+     <DD> The offset to substitute for or add to the current elevation offset.
+     <DT><code><b><a href=../dataTypes/Antennas.html>Antennas</a> ant</b></code>
+     <DD> A set of one or more antennas to which the command should be applied.
+     <DD> Default is controlled by the <code><a href=setDefault../dataTypes/Antennas.html>setDefaultAntennas</a> command.
+     </DL>
+<P>
+<DT> Example:
+<DD> The following example adds an additional 10 arcseconds to the
+     pointing offset of the azimuth, and 0.02 degrees to the offset of
+     the elevation axis.
+
+<pre>
+  offset/add az=0:0:10, el=0.02
+</pre>
+
+<DT> Example:
+<DD> The following example sets the total pointing offset of the az
+     axis to -50 degrees.
+
+<pre>
+  offset az=-50
+</pre>
+
+<DT>Context:
+<DD>There are two common reasons to add az,el offsets to the expected
+    position of a source.
+    <P>
+    <OL>
+    <LI> If the position of a source isn't known very accurately or
+         the pointing model needs adjustment, the source won't end up
+	 precisely in the center of the field of view. Offsets can
+	 then be used to peak up on the source.
+    <LI> During calibration procedures, offsets are used to
+         briefly move the telescope off source.
+    </OL>
+    <P>
+<P>
+    The offsets are added after applying all other corrections.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:27 PST 2004)
+</BODY>

@@ -1,0 +1,47 @@
+<HEAD><TITLE>The HeaterVoltage datatype.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+<center><a href=../index.html>Index</a></center>
+<HR>
+<font color=blue><a name=HeaterVoltage> <code><b>HeaterVoltage</b></code> </a></font>
+<P>
+The target voltage of a heater feedback sensor.
+
+<P>
+<DL>
+<DT> Input Format:
+<P>
+<DD> A <a href=dt_class.html#float>floating point</a> number of volts
+     between 0 and 10, or the word: <code>off</code>.
+
+<P>
+<DT> Use with do-loops:
+<DD> When a HeaterVoltage variable is used as the dependent variable of a
+     <a href="../commands/do.html">do-loop</a>, the associated loop increment is
+     specified as a <a href="Double.html">Double</a> constant.
+
+<P>
+<DT> Examples:
+<DD> The following example first sets the desired sensor voltage of
+     the cryostat heater of receiver 0 to 3.03 volts, then
+     subsequently turns the heater off.
+
+<pre>
+  heater rx0, cryo, 3.03
+  ...
+  heater rx0, cryo, off
+</pre>
+
+<DT> Context:
+<DD> The <a href=../commands/heater.html>heater</a> command sets the
+     temperatures of three small heaters per receiver, one in
+     the receiver cryostat and two unassigned heaters outside the
+     cryostat. The heater temperatures are controlled via feedback
+     loops that maintain the output of a neighboring thermistor or
+     thermocouple sensor at a given fixed voltage. The HeaterVoltage
+     argument of the heater command thus indirectly sets the target
+     temperature of these heaters.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:12 PST 2004)
+</BODY>

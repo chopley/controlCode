@@ -1,0 +1,579 @@
+<HEAD><TITLE>Pointing the SPT</TITLE></HEAD>
+<BODY bgcolor=white>
+<H1>Pointing the SPT.</H1>
+
+The following material describes how geocentric apparent ra,dec (and
+distance for nearby objects) can be converted to instrument azimuth
+(az), elevation (el), parallactic angle (pa) and associated tracking
+rates. This involves finding where an ideal telescope at the longitude
+and latitude of the SPT would need to point, and then incorporating
+the effects of axis tilts to determine the equivalent instrumental
+az,el,pa.
+
+<P>
+
+<H2>Gather site-specific parameters</H2>
+
+For a given site we need the following site-dependent parameters:
+
+<UL>
+<LI> <img src=phi.gif> - The geodetic latitude of the site.
+<LI> <img src=lambda.gif> - The geodetic longitude of the site.
+<LI> R<sub>c</sub> - The distance from the center of the Earth (m).
+<LI> R<sub>r</sub> - The radial distance from the rotation axis of
+                     the Earth (m).
+</UL>
+
+The geodetic latitude, longitude and height above sea level will be
+determined from GPS measurements. The Earth isn't quite spherical, so
+one of the standard reference spheroids must be chosen to compute the
+the dimensions of the Earth. The SPT will use the spheroid that is
+coded in the slalib <code>slaGeoc()</code> function. When passed the
+geodetic latitude and height above sea-level, this returns the radial
+distance from the rotation axis, R<sub>r</sub>, and the distance
+from the equatorial plane, denoted by <code>z</code>. The distance
+from the center of the Earth is then given by
+
+<P>
+<img src=rc_eqn.gif>
+</P>
+
+The altitude returned by GPS probably won't be accurate enough for
+tracking the moon to arcsecond precision. In particular it may (?) be
+referenced to a different reference spheroid than
+<code>slaGeoc()</code>. If this ever becomes an issue, the altitude
+will have to be determined more accurately, perhaps by adjusting it
+interactively to produce stationary fringes while tracking the limb of
+the moon. For other, more distant sources, the accuracy of the GPS
+altitude should be more than sufficient.
+
+<H2>Spherical coordinate systems</H2>
+
+Where possible, spherical trigonometry will be used to compute
+positions and corrections on the celestial sphere. The following
+diagram shows the chosen form of the celestial sphere.
+
+<P>
+<img src="celestial.gif">
+<P>
+
+The symbols shown in this diagram are used throughout this document.
+They are defined as:
+
+<UL>
+<LI><img src=alpha.gif> - Geocentric apparent Right Ascension.
+<LI><img src=delta.gif> - Geocentric apparent Declination.
+<LI><img src=phi.gif> - Geodetic lattitude.
+<LI>H - Hour Angle (<img src=tau.gif>-<img src=alpha.gif>).
+<LI>A - Azimuth. N=0<sup>o</sup> E=90<sup>o</sup> S=180<sup>o</sup> W=270<sup>o</sup>
+<LI>E - Elevation above the local horizon.
+<LI>P - Parallactic Angle.
+<LI><img src=tau.gif> - Local apparent sidereal time (radians).
+<LI>T - UT1.
+</UL>
+
+Application of the <em>sine formula</em> of spherical trigonometery to
+the displayed triangle yields:
+
+<P>
+<img src="sine_formula.gif">
+<P>
+
+Similarly the <em>cosine formula</em> of spherical trigonometery
+yields:
+
+<P>
+<img src="cosine_formula.gif">
+<P>
+
+and the <em>analogue to the cosine formula</em> yields:
+
+<P>
+<img src="analog_cos_formula.gif">
+<P>
+
+The above equations can be combined to find the horizon coordinates
+that correspond to given equatorial coordinates. The resulting
+equations are:
+
+<P>
+<img src="horiz_eqn1.gif">
+<P>
+
+For the SPT we also need to know the rates at which <b>A</b>,<b>E</b>
+and <b>P</b> evolve per second of UT. For a sidereal source this is
+determined solely by the rotation of the earth, so the rates are
+related to the steady increase in the hour angle of the source. The
+rates due to precession are insignificant. For a nearby source an
+additional contribution comes from the apparent proper motion of the
+source. This appears as a steady change in <img src=alpha.gif> and
+<img src=delta.gif>. For the computation of tracking rates the proper
+motion terms can be ignored for all standard astronomical sources
+except the moon. However it is possible that ephemerides could be used
+to specify unusual tracks, such as raster scans of the sky, so in the
+SPT, the proper motions of all sources that are implemented as
+ephemerides will be incorporated into the tracking rates. The proper
+motions of non-ephemeris objects will be ignored.
+
+<P>
+
+The tracking rates can be found by differentiating the above equations
+wrt hour angle, then multiplying the results by the sidereal rate.
+
+<P>
+<img src="horiz_eqn2.gif">
+<P>
+
+where <img align=middle src=pmra.gif> and <img align=middle
+src=pmdec.gif> represent the proper motion of the source (if any),
+and:
+
+<P>
+<img src="dhdt1.gif">
+<P>
+
+<P>
+
+Note that <b>d</b><img src=tau.gif><b>/dT</b> is the ratio of the
+rotational period of the Earth to the length of the UT1 day. According
+to the explanatory supplement of the Astronomical Almanac, when the
+ratio of mean sidereal time to UT1, 1.002737909350795, is combined
+with the precession rate of right ascension, the rotation rate of the
+Earth is reasonably aproximated as 1.002737811906 rotations per
+UT1-day. In order to compute tracking rates in radians per UT1 second,
+the appropriate value for <b>d</b><img src=tau.gif><b>/dT</b> is thus.
+
+<P>
+<img src="dhdt2.gif">
+<P>
+
+
+<H2>Conversions from geocentric to topocentric coordinates.</H2>
+
+When applied to geocentric equatorial coordinates, the preceding
+equations return horizon coordinates for an observer at the center of
+the Earth. The corrections in the following sections move the observer
+to the appropriate point on the surface of the Earth and correct for
+distortions caused by inevitable inperfections in the alignment of the
+physical axes of the telescope.
+
+<H2>Account for horizontal parallax</H2>
+
+The line of sight of the SPT to a nearby object is inclined to the
+line that connects the center of the Earth to the object. The geometry
+is shown below.
+
+<P>
+<img src="parallax.gif">
+<P>
+
+Application of the sine rule to the above triangle reveals,
+
+<P>
+<img src="parallax_eqn1.gif">
+<P>
+
+Solving this for the angle of parallax results in,
+
+<P>
+<img src="parallax_eqn2.gif">
+<P>
+
+This correction will be applied to solar system objects only.
+
+<H2>Account for atmospheric refraction</H2>
+
+Atmospheric refraction causes objects to appear at slightly higher
+elevations than they otherwise would. The geometry is illustrated in
+the following diagram.
+
+<P>
+<img src="refraction.gif">
+<P>
+
+The SPT weather station will provide real-time measurements of the
+local temperature and relative humidity. This will be used to estimate
+conditions in the higher parts of the atmosphere and thus derive an
+estimate of the elevation offset due to refraction. Rather than
+devising an empirical model of the atmosphere, the SPT will, at least
+initially, adopt the Starlink <code>slaRefro()</code> function in
+Patrick Wallace's slalib library. This was originally developed with
+optical pointing in mind, but it was subsequently retrofitted for
+radio wavelengths. It remains to be seen whether this will be adequate
+for the SPT. If not, an empirical model will have to be
+devised. Unfortunately the conditions in Pasadena are radically
+different from those on Chajnantor, so initial testing at Caltech
+won't necessarily resolve this issue.
+
+<P>
+
+Given information about local atmospheric conditions
+<code>slaRefro()</code> returns two coefficients, <code>A</code> and
+<code>B</code>. These relate the vacuum elevation to the observed
+refraction via the following equation.
+
+<P>
+<img src=obs_to_vac.gif>
+<P>
+
+We need an equation that goes the other way, from the vacuum elevation
+to the observed elevation. Unfortunately the above equation is
+transcendental, so in Starlink User Note 67, Pat Wallace suggests the
+following approximation.
+
+<P>
+<img src=vac_to_obs2.gif>
+<P>
+
+This can be expanded to
+
+<P>
+<img src=vac_to_obs3.gif>
+<P>
+
+<H2>Account for diurnal aberration.</H2>
+
+In a moving frame with a component of its velocity perpendicular to
+the line of sight to a light source, an observer sees the light coming
+from a direction slightly ahead of its actual position. The geometry
+of the situation is illustrated below.
+
+<P>
+<img src="diurnal_geometry.gif">
+<P>
+
+Because of this effect, the rotational velocity of the surface of the
+earth results in a small diurnal shift in the apparent positions of
+sources. The maximum aberration at the latitude of the SPT is about
+0.3 arcseconds. Note that the much larger effect caused by the motion
+of the Earth around the Sun is assumed to have been taken care of
+during the precession calculations used to find the apparent Right
+Ascension and Declination of the source.
+
+<P>
+
+The tangential rotational velocity at the surface of the Earth is
+given by,
+
+<P>
+<img src="diurnal_v1.gif">
+<P>
+
+Where R<sub>r</sub> was defined earlier to be the radial distance
+of the SPT from the center of the Earth, and 86400 is the number of
+seconds in a day.
+
+<P>
+
+To determine the adjusted azimuth and elevation, the following diagram
+shows a unit vector pointing at the source from the center of the
+celestial sphere, overlaid with a rectangular coordinate system that
+is aligned with the compass points and the zenith. A second unit
+vector illustrates the effect of diurnal aberration, and the
+accompanying equations show how to calculate its direction.
+
+<P>
+<img src="diurnal_axes.gif">
+<P>
+
+<H2>Account for telescope flexure.</H2>
+
+In a traditional radio telescope a single elevation axis supports a
+dish and a large counterweight. Gravity has the effect of causing some
+sag either side of this axis and thus causes the elevation to be lower
+than requested. The SPT should be largely immune to this effect
+because the platform on which its dishes are mounted is supported at
+two places, as illustrated in the following diagram.
+
+<P>
+<img src=flexure_telescope.gif>
+<P>
+
+Nonetheless, there will be some flexure in the mount itself and in the
+azimuth bearing. This should be a function of elevation. Traditionally
+one assumes that flexure is proportional to the torque applied by
+gravity to a hypothetical telescope tube. This can be corrected using
+
+<P>
+<img src=flexure.gif>
+<P>
+
+where k<sub>f</sub> is an empirical constant to be fitted for. It
+remains to be seen whether this will be appropriate or necessary for
+the SPT.
+
+<H2>Account for the tilt of the Azimuth axis.</H2>
+
+When the telescope is first placed on its foundations, the azimuth
+axis will be aligned to lie approximately along the local direction of
+gravity. In practice this won't exactly match the angle dictated by
+the geodetic longitude and latitude of the SPT, as reported by a GPS
+receiver. The result will be a tilt in the azimuth axis that is
+equivalent to a change in the longitude and latitude of the
+telescope. The following diagram shows an example where the azimuth
+axis is tilted away from the zenith, in the direction of reduced
+latitude and reduced Eastward longitude. The longitude offset is
+apparent as a decrease in Hour Angle.
+
+<P>
+<img src=az_tilt.gif>
+</P>
+
+Before the effect on the azimuth and elevation can be determined, we
+need the apparent Hour Angle and Declination as modified by the
+corrections that have been applied so far to the azimuth and
+elevation.
+
+<P>
+<img src=ha_dec_eqn.gif>
+<P>
+
+Now adjust the hour angle and latitude to account for the tilt in the
+azimuth axis.
+
+<P>
+<img src=az_tilt_eqn1.gif>
+</P>
+
+Now compute the modified azimuth, elevation and parallactic angle.
+
+<P>
+<img src=az_tilt_eqn2.gif>
+</P>
+
+<H2>Account for the non-perpendicularity of the Elevation axis.</H2>
+
+The elevation axis is supposed to lie in the plane of the azimuth
+ring, along the line joining A<img src=plus_minus.gif>90 degrees. In
+practice there will be a small angle between this axis and the actual
+elevation axis. The component of the tilt that lies within the plane
+of the azimuth is indistinguishable from an azimuth encoder offset,
+and is dealt with later. The remaining component of the tilt manifests
+as a rotation about the radial azimuth vector, and will be denoted by
+the clockwise angle <img src=theta.gif><sub>E</sub>, as seen from
+azimuth bearing. In the following diagram E' and A' are the azimuth
+and elevation that, when modified by the elevation-axis tilt, result
+in the requested azimuth and elevation.
+
+<P>
+<img src="el_tilt.gif">
+<P>
+
+By applying, the spherical trigonometry <em>sine</em>, <em>analogue to
+the cosine</em>, and a variant of the <em>cosine formula</em> to the
+bottom left triangle, one obtains the following equations.
+
+<P>
+<img src="el_tilt_eqn1.gif">
+<P>
+
+<H2>Account for collimation errors</H2>
+
+The 13 radio dishes and a small optical telescope are mounted on a
+rotating platform, hereafter called the "deck". This rotates to keep
+the field of view from appearing to rotate. The optical axes of the
+dishes and the optical telescope won't exactly parallel the rotation
+axis of the deck, so unless corrective action is taken, a point
+source will appear to describe a circle on the sky as the deck
+rotates.
+
+<P>
+
+The SPT will need two separate collimation models.
+
+<OL>
+<LI> When the telescope is observing radio sources, a collimation model
+     that accounts for the tilt of the deck and any common
+     tilt in the dishes will be used. The collimation errors of
+     individual dishes can't be addressed by a single collimation
+     model, so they will have to be corrected during post-processing.
+<LI> When the optical telescope is being used to measure the
+     rest of the pointing model, a collimation model that counters
+     both the tilt of the deck and the misalignment of the optical
+     telescope will be used.
+</OL>
+
+In both cases the error can be corrected by adjusting the demanded
+azimuth and elevation in accordance with the rotation angle of the
+deck.
+
+<P>
+
+The position angle of the deck will be denoted by <img src=gamma.gif>.
+This increases as the deck rotates clockwise around the direction of
+the elevation vector and is here defined to point in the direction of
+increasing elevation when <img src=gamma.gif> is zero. While tracking
+a source, the position angle of the deck will be rotated to keep the
+field of view from rotating. The deck angle will thus be given by,
+
+<P>
+<img src=gamma.gif> = <img src=gamma.gif><sub>o</sub> + P.
+</P>
+
+Where <img src=gamma.gif><sub>o</sub> is a user selected deck-angle
+offset and P is the corrected parallactic angle of the source. The
+collimation tilt will be defined by a position angle offset, <img
+src=psi.gif><sub>c</sub>, and a magnitude <img
+src=theta.gif><sub>c</sub>. The following diagram indicates the
+azimuth and elevation adjustments required to point at a source at the
+target azimuth and elevation.
+
+<P>
+<img src=collimation.gif>
+<P>
+
+The equations that relate the adjusted azimuth and elevation to the
+target elevation and azimuth are given by applying, respectively, the
+<em>sine</em> and <em>cosine</em> spherical trigonometry
+formulae to the green triangle.
+
+<P>
+<img src=collimation_eqn.gif>
+<P>
+
+Note that exploiting small-angle expectations to approximate
+cos<sup>2</sup><img src=theta.gif><sub>c</sub> to 1, and sin<sup>2</sup><img
+src=theta.gif><sub>c</sub> to 0 or <img src=theta.gif><sub>c</sub><sup>2</sup>,
+could result in significant errors, particularly near the zenith. For
+example, if <img src=psi.gif>+<img src=sigma.gif>=90<sup>o</sup>,
+E=80<sup>o</sup> and <img src=theta.gif><sub>c</sub>=0.1<sup>o</sup>, then the
+returned elevation will be wrong by almost 2 seconds of arc.
+
+<P>
+
+Also note that the apparent parallactic angle is not effected by
+collimation errors.
+
+<H2>Compute equivalent Hour Angle and Declination</H2>
+
+Having deduced the azimuth, elevation to be demanded, we still need to
+determine the the axis drive rates. The equations for the drive rates,
+in radians per second, are
+
+<P>
+<img src=rates.gif>
+<P>
+
+Note that terms involving <img src=delta.gif> have been replaced
+by equations involving <code>sin</code> and <code>cos</code> of the
+corrected <b>A</b>,<b>E</b> and <b>P</b>.
+
+<P>
+
+It remains to convert the positions and rates to encoder units. This
+involves multiplying by a fixed conversion factor and adding measured
+encoder offsets.
+
+<H2>The components of the pointing model</H2>
+
+The pointing model, described above, contains 9 terms that must be
+deduced from observations of calibration sources. The 9 terms are,
+
+<P>
+<table border=0>
+<tr><td valign=top>k<sub>f</sub></td>
+    <td> The constant of flexure (degree per cosine of elevation).
+   </td>
+<tr><td valign=top> <img src=Delta.gif>H<sub>A</sub> </td>
+    <td> The tilt of the azimuth axis in the direction of increasing
+         hour angle.
+   </td>
+<tr><td valign=top> <img src=Delta.gif><img src=phi.gif><sub>A</sub> </td>
+    <td> The tilt of the azimuth axis in the direction of increasing
+         latitude.
+   </td>
+<tr><td valign=top> <img src=theta.gif><sub>E</sub> </td>
+    <td> The tilt of the elevation axis perpendicular to the azimuth
+         ring, measured clockwise around the direction of the azimuth
+         vector. It makes sense to cache the values of
+	 sin<img src=theta.gif><sub>E</sub> and
+         cos<img src=theta.gif><sub>E</sub>.
+   </td>
+<tr><td valign=top> <img src=theta.gif><sub>c</sub> </td>
+    <td> The magnitude of the collimation error. It makes sense to
+         cache the values of sin<img src=theta.gif><sub>c</sub> and
+         cos<img src=theta.gif><sub>c</sub>.
+   </td>
+<tr><td valign=top> <img src=psi.gif><sub>c</sub> </td>
+    <td> The deck angle at which the collimation error is directed
+         radially outward.
+   </td>
+<tr><td valign=top> E<sub>o</sub> </td>
+    <td> The elevation encoder count at zero elevation.
+   </td>
+<tr><td valign=top> A<sub>o</sub> </td>
+    <td> The azimuth encoder count at zero azimuth.
+   </td>
+<tr><td valign=top> P<sub>o</sub> </td>
+    <td> The deck encoder count that aligns the reference edge of the
+         triangular platform to be horizontal. The reference edge
+	 should be chosen such that P<sub>o</sub> is close to zero.
+   </td>
+</table>
+
+<H1>Tracking offsets</H1>
+
+While tracking a source using the above pointing model, it is useful
+to be able to offset the telescope from the target position. For
+example:
+
+<OL>
+<LI>While measuring the parameters that go into the pointing model, small
+    azimuth and elevation offsets are entered manually to compensate
+    for errors in the model and bring the wandering star back into the
+    center of the field. After making such adjustments on a lot of
+    stars around the sky, the pointing model parameters can then be
+    measured off-line by fitting the pointing model to the adjusted
+    positions.
+
+    These offsets are estimated from looking at the television output
+    of a CCD camera that is mounted on the back of a small optical
+    telescope that is rigidly attached to the moving deck platform.
+    There thus needs to be a command that takes x/y distances on the
+    TV and converts them to telescope azimuth and elevation offsets,
+    irrespective of the rotation angle of the deck platform, and any
+    mirroring effects in the telescope or the CCD camera.
+
+<P>
+<LI>To measure the beam profile of the antennas one samples the beam
+    pattern with a strong unresolved radio source sequentially placed
+    at each of the vertices of a rectangular grid of positions around
+    the pointing center. The coordinate system of the grid must be
+    independent of the location of the field center, so it can not be
+    implemented using fixed azimuth/elevation or
+    Right-Ascension/Declination offsets. Instead we use a spherical
+    coordinate system centered on the field center. To orient this
+    system it is convenient to use the great circle that joins the
+    field center and the zenith as one of two orthogonal great
+    circles. This is refered to as the Y axis, and it increases from
+    the field center to the pole. The X axis increases in the same
+    sense as the azimuth, but is only parallel to it when the
+    telescope is pointing at zero elevation.
+<P>
+    The following diagram illustrates the relationship between the
+    X,Y offsets and the resulting azimuth and elevation corrections.
+
+<P>
+<img src=beam_offset.gif>
+<P>
+The corresponding equations are:
+<P>
+<img src=beam_offset_eq.gif>
+
+<P>
+    Note that since the offset depends on the azimuth and elevation of
+    the pointing center, which changes as the source moves across the
+    sky, this offset has to be recomputed every servo cycle.
+<P>
+<LI>While mosaicing multiple fields around a reference field, the
+    fields must be fixed on the sky. This is easily accomplished by
+    using a grid of fixed Right-Ascension and Declination offsets.  To
+    give the grid approximately equal spacings in the two directions,
+    it is sufficient to scale the Right-Ascension offsets by the
+    cosine of the Declination of the corresponding grid point.
+
+</OL>
+
+<HR>
+Martin Shepherd (Last updated 20-Feb-1999)
+</BODY>

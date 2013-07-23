@@ -1,0 +1,48 @@
+<HEAD><TITLE>The load_reboot_script .</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name=load_reboot_script> <code><b>load_reboot_script</b> filename</code> </a></font>
+<P>
+Load a script to be run whenever the antenna control cpu reboots.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><a href=../dataTypes/Script.html>Script</a> filename(arguments)</code>
+     <DD> The pathname (and optionally the arguments) of a readable
+          file that contains the initialization script.
+     </DL>
+<P>
+<DT> Example:
+<DD> The following example tells the control program to try to
+     read the file $BICEP_DIR/conf/bicepAntennaControl.init, compile it and arrange
+     for the result to be executed whenever the antenna control cpu
+     reboots. It replaces any existing reboot script. Note that
+     in this example the script takes no arguments. If arguments
+     are needed, see the documentation of the
+     <a href=schedule.html>schedule</a> command.
+
+<pre>
+ load_reboot_script "$BICEP_DIR/conf/bicepAntennaControl.init"
+</pre>
+
+     Note that the quotes are needed in the above example to prevent
+     the $ symbol being interpretted as a script operator.
+
+<DT> Context:
+<DD> Whenever the antenna control cpu is rebooted, the hardware that it
+     controls is placed in a safe but useless default state. The
+     antenna control system needs to be told many things about its
+     environment before it can do anything useful. This is the role
+     of the initialization script that the load_reboot_script loads.
+     This script is simply a schedule that is automatically called
+     upon to configure the antenna control system after each reboot, so it
+     can contain any of the usual scheduling commands. It is
+     recommended that the last thing that this file should do is turn
+     on archiving, using the <code>inhibit false</code> command.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:22 PST 2004)
+</BODY>

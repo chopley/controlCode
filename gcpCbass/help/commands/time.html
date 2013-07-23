@@ -1,0 +1,52 @@
+<HEAD><TITLE>A function that returns the time-of-day.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name=time> <code><a href=../dataTypes/Time.html>Time</a> <b>time</b>(utc|lst)</code> </a></font>
+<P>
+Return the current time of day on a given time-scale.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/TimeScale.html>TimeScale</a> scale</b></code>
+     <DD>The type of time wanted, from:
+         <UL>
+         <LI> UTC - Universal Coordinated Time.
+         <LI> LST - Local Sidereal Time.
+         </UL>
+     </DL>
+<P>
+<DT> Example 1:
+<DD> The following example displays the current local sidereal time in
+     hours minutes and seconds.
+
+<pre>
+ print $time(LST)
+</pre>
+
+<DT> Example 2:
+<DD> The following example halts script execution until the same time
+     tomorrow.
+
+<pre>
+ Date d = $tomorrow + $time(utc)
+ until $date &gt; $d
+</pre>
+
+     Note that if this example were changed to:
+
+<pre>
+ until $date &gt; $tomorrow + $time(utc)
+</pre>
+
+     the script would never resume because the
+     <code><a href=until.html>until</a></code> command
+     continually re-executes its arguments, and tomorrow would always
+     remain a day in the future.
+
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:56 PST 2004)
+</BODY>

@@ -1,0 +1,6 @@
+COMPILE_WITH_DEBUG = 0
+IS_STABLE          = 1
+SPECIFIC           = cbass
+
+
+

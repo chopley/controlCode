@@ -1,0 +1,43 @@
+<HEAD><TITLE>The "integrate" datatype.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name="integrate"> <code><b>integrate</b> exponent</code></a></font>
+<P>
+Change the hardware integration period to <code>(8.192e-4 x 2^exponent)</code> seconds.
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/Int../dataTypes/Time.html>IntTime</a> exponent</b></code>
+     <DD> The integration period as a power of 2 multiplier of
+          819.2 us.
+     </DL>
+<P>
+<DT> Example:
+<DD> The following example sets the hardware integration time to just
+     under 1.68 seconds.
+<pre>
+  integrate 11
+</pre>
+
+<P>
+<DT> Context:
+<DD> When the control system is started, the antenna control scanner sets up
+     the system timing generator to integrate every 1.68 seconds. This
+     can be changed using the <code>integrate</code> command. The
+     integration time is specified as a power of two exponent
+     multiplier of the minimum hardware integration time. This results
+     in a physical time of <code>(8.192e-4 x 2^exponent)</code>
+     seconds.
+<P>
+     Typical values include:
+     <UL>
+      <LI> 9  -> 0.42 seconds
+      <LI> 10 -> 0.84 seconds
+      <LI> 11 -> 1.68 seconds
+     </UL>
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:18 PST 2004)
+</BODY>

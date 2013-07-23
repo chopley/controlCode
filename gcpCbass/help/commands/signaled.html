@@ -1,0 +1,33 @@
+<HEAD><TITLE>The signaled function.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><code><a href=../dataTypes/Boolean.html>Boolean</a>
+<b>signaled</b>(name)</code></font>
+<P>
+Check whether a given signal has been sent by the user.
+<P>
+<DL>
+<DT> Mandatory arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/Signal.html>Signal</a> name</b></code>
+     <DD> The name of the signal to be checked for.
+     </DL>
+<P>
+<DT> Example:
+<DD> The following example waits for the user to send a
+     <code>quit</code> signal.
+
+<pre>
+ until $signaled(quit)
+</pre>
+
+<P>
+<DT> Context:
+<DD> The signaling facility is documented in the
+     <code><a href=signal.html>signal</a></code> help file.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:48 PST 2004)
+</BODY>

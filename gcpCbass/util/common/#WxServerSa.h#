@@ -1,0 +1,44 @@
+#ifndef GCP_UTIL_WXSERVER40M_H
+#define GCP_UTIL_WXSERVER40M_H
+
+/**
+ * @file WxServer40m.h
+ * 
+ * Tagged: Wed 01-Feb-06 15:36:17
+ * 
+ * @author Erik Leitch
+ */
+#include "gcp/util/common/Ports.h"
+#include "gcp/util/common/SerialClient.h"
+#include "gcp/util/common/Server.h"
+#include "gcp/util/common/WxReader.h"
+
+namespace gcp {
+  namespace util {
+    
+    class WxServer40m : public Server, public WxReader40m {
+    public:
+      
+      /**
+       * Constructor.
+       */
+      WxServer40m(bool spawnThread, int listenPort=Ports::wxPort("cbass"));
+      
+      /**
+       * Destructor.
+       */
+      virtual ~WxServer40m();
+      
+    private:
+
+      void initPort();
+      void acceptClientAction();
+      void timeOutAction();
+
+    }; // End class WxServer40m
+    
+  } // End namespace util
+} // End namespace gcp
+
+
+#endif // End #ifndef GCP_UTIL_WXSERVER40M_H

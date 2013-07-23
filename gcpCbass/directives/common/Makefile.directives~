@@ -1,0 +1,7 @@
+COMPILE_WITH_DEBUG = 1
+IS_STABLE          = 1
+SPECIFIC           = cbass
+HAVE_VIDEO         = 0
+
+
+

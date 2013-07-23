@@ -1,0 +1,122 @@
+<html>
+<head>
+<title>SPT Command List</title>
+<link rel=stylesheet href="../StyleSheet.css" type="text/css">
+</head>
+
+<body bgcolor="#add8e6">
+<font face="Verdana, Arial, Helvetica, sans-serif"size="2" color="#000000">
+<h2>The <span class=command>scan</span> command (usage)</h2>
+<hr>
+
+
+<h2><i>Context:</i></h2><p>
+
+The scan command causes a set of user-defined offsets to be added to
+the current tracking position.  These offsets are defined in ASCII
+text scan files that can be loaded into the control system using the
+<a class=plain href=scan_catalog.html>scan_catalog</a> command.
+
+<p>
+
+The scan catalog consists of a series of entries, associating a scan
+name with the file in which the corresponding offsets are contained.
+The first argument to this command is a valid scan name from any
+catalog loaded using the scan_catalog command.
+
+<p>
+
+A scan file itself consists of a list of desired telescope offsets in
+each axis, specified in degrees (you can specify them as decimal or
+sexagesimal (dd:mm:ss.ss) numbers).  The time interval between
+subsequent positions can be arbitrary, but must be noted by the
+MSPERSAMPLE header keyword at the top of the scan file.  As the name
+implies, the units are milli-seconds per sample.  The fundamental
+communication rate between the control system and the Vertex control
+box is 10ms, so there is no point in specifying intervals shorter than
+this.  Longer intervals are quadratically interpolated by the control
+system to the 10ms rate.
+
+<p>
+
+An excerpt from a trivial example of a scan file is given below:
+
+<p>
+<pre>
+MSPERSAMPLE       10.0000
+           0       0.0000000      0.00000       0
+           1   4.0000000e-06      0.00000       0
+           2   1.6000000e-05      0.00000       0
+           3   4.0000000e-05      0.00000       0
+           4   8.0000000e-05      0.00000       0
+           5   0.00014000000      0.00000       0
+           6   0.00022400000      0.00000       0
+           7   0.00033600000      0.00000       0
+           8   0.00048000000      0.00000       0
+</pre>
+<p>
+
+The first column must contain a monotonically increasing integer
+index, the second and third columns are the offsets for the AZ and EL
+axes, respectively, and the third column is an optional user flag that
+is recorded in the data stream along with the requested offsets.  This
+has been used in the past to ease identification of turn-around
+segments in post-processing of archived data.
+
+<p>
+
+If nreps is specified, the scan will be repeated nreps times, with no
+pause between repetitions.  If you use this option, your scan should
+therefore be defined with start and ending positions that avoid
+unwanted accelerations.  The control system performs no checking of
+the velocities or accelerations implied by a scan file; the only limit
+is what the telescope can physically achieve.  If you exceed these
+limits, the scan will proceed, but the telescope will simply fail to
+acquire the desired position.
+
+<p>
+
+A scan file can consist of three distinct segments: a start, a body,
+and an end.  These can be used to distinguish "ramping-up" and
+"ramping-down" segments of a scan from the body, or science portion of
+the scan.  An example of where this might be useful is in a circular
+scan, where the start segment might contain offsets to bring the
+telescope into a continuous acceleration phase, and the end segment
+would be the reverse.  For scans with identified start and end
+segments, only the body is repeated for nreps > 1.  An example of such
+a scan is given here:
+
+<p>
+<pre>
+MSPERSAMPLE 1000
+START
+   0    0.0000   -0.0000    0
+   1    0.0000   -0.0085    0
+   2    0.0001   -0.0289    0
+   3    0.0003   -0.0522    0
+   4    0.0006   -0.0783    0
+   5    0.0012   -0.1074    0
+BODY
+   6    0.0019   -0.1393    0
+   7    0.0030   -0.1741    0
+   8    0.0045   -0.2117    0
+   9    0.0064   -0.2523    0
+  10    0.0087   -0.2957    0
+  11    0.0117   -0.3419    0
+  12    0.0153   -0.3910    0
+END
+  13    0.0197   -0.4429    0
+  14    0.0248   -0.4977    0
+  15    0.0309   -0.5552    0
+  16    0.0380   -0.6155    0
+  17    0.0463   -0.6786    0
+  18    0.0557   -0.7445    0
+</pre>
+<p>
+
+
+<h2><i>Examples:</i></h2><p>
+
+
+
+</body></html>

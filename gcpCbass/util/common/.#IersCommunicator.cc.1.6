@@ -1,0 +1,796 @@
+#include "gcp/util/common/Connection.h"
+#include "gcp/util/common/Date.h"
+#include "gcp/util/common/Debug.h"
+#include "gcp/util/common/Exception.h"
+#include "gcp/util/common/IersCommunicator.h"
+#include "gcp/util/common/IoLock.h"
+#include "gcp/util/common/LogStream.h"
+#include "gcp/util/common/Month.h"
+#include "gcp/util/common/Pathname.h"
+#include "gcp/util/common/SpecificName.h"
+#include "gcp/util/common/TimeOut.h"
+#include "gcp/util/common/TimeVal.h"
+
+#include <fstream>
+#include <iomanip>
+
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+
+using namespace std;
+using namespace gcp::util;
+
+/**.......................................................................
+ * Constructor.
+ */
+IersCommunicator::IersCommunicator(std::string outputDir,
+				   std::string outputFileName,
+				   unsigned timeOutIntervalInSeconds) :
+  SpawnableTask<IersCommunicatorMsg>(true)
+{
+  setupTimeOuts(timeOutIntervalInSeconds);
+  initialize(outputDir, outputFileName);
+  fdSetPtr_ = &fdSet_;
+}
+
+/**.......................................................................
+ * Constructor.
+ */
+IersCommunicator::IersCommunicator(std::string fullPathToOutputFileName,
+				   unsigned timeOutIntervalInSeconds) :
+  SpawnableTask<IersCommunicatorMsg>(true)
+{
+  setupTimeOuts(timeOutIntervalInSeconds);
+  initialize(Pathname::expand("", fullPathToOutputFileName));
+  fdSetPtr_ = &fdSet_;
+}
+
+/**.......................................................................
+ * Initialize pertinent members of this class to sensible defaults
+ */
+void IersCommunicator::initialize(std::string outputDir, std::string outputFileName)
+{
+  initialize(Pathname::expand(outputDir, outputFileName));
+}
+
+/**.......................................................................
+ * Initialize pertinent members of this class to sensible defaults
+ */
+void IersCommunicator::initialize(std::string outputFileName)
+{
+  client_                =  0;
+  ftpClient_             =  0;
+  fdSetPtr_              =  0;
+  expiryThresholdInDays_ =  3;
+  updateThresholdInDays_ =  8; // USNO puts out a new UT1UTC ephemeris about once a week
+  outputFileName_        =  Pathname::expand("", outputFileName);
+  timeOutPtr_            =  0;
+  state_                 =  STATE_INIT;
+
+  // Connect to the FTP port on the usno server
+
+  client_ = new TcpClient("maia.usno.navy.mil", 21);
+
+  // This is necessary or else the returned string may contain
+  // characters like '\r' which will cause subsequent string
+  // comparisons by the likes of strstr(), etc., to fail.
+
+  client_->stripUnprintable(true);
+  client_->dontStrip("\n\t");
+
+  // And will append CR to everything we send to the strip's port.
+
+  client_->append("\n");
+
+  stepState(STATE_INIT);
+}
+
+/**.......................................................................
+ * Set up timeouts used by this class
+ */
+void IersCommunicator::setupTimeOuts(unsigned timeOutIntervalInSeconds)
+{
+  retryTimeOut_.setIntervalInSeconds(timeOutIntervalInSeconds);
+  
+  initialTimeOut_.setIntervalInSeconds(5);
+
+  if(timeOutIntervalInSeconds > 0) {
+    retryTimeOut_.activate(true);
+    initialTimeOut_.activate(true);
+  } else {
+    retryTimeOut_.activate(false);
+    initialTimeOut_.activate(false);
+  }
+  
+  commTimeOut_.setIntervalInSeconds(30);
+  commTimeOut_.activate(true);
+}
+
+/**.......................................................................
+ * Destructor.
+ */
+IersCommunicator::~IersCommunicator() 
+{
+  if(ftpClient_) {
+    delete ftpClient_;
+    ftpClient_ = 0;
+  }
+}
+
+/**.......................................................................
+ * Initiate sending commands to the server.
+ */
+void IersCommunicator::
+initiateGetIersBulletinCommSequence()
+{
+  // Compile the command/response stack associated with this command
+
+  compileGetIersBulletinStateMachine();
+
+  // Don't try to connect to the server if the network is down
+
+  Connection conn;
+  if(conn.isReachable("spt.uchicago.edu")) {
+
+    // Try to connect to the server.  If the connection fails, return to waiting.
+
+    if(client_->connectToServer(true) < 0) {
+      ReportError("Unable to connect to the IERS ftp server");
+      stepState(STATE_WAIT);
+      return;
+    }
+    
+    // Register the fd to be watched for readability
+    
+    fdSetPtr_->registerReadFd(client_->getFd());
+
+    // If we have successfully connected to the server, set the
+    // timeout to the comms timeout
+
+    stepState(STATE_COMM);
+
+    // Else if the network isn't currently reachable, just go into wait mode
+
+  } else {
+    ReportError("Unable to contact IERS ftp server: network is unreachable");
+    stepState(STATE_WAIT);
+  }
+}
+
+/**.......................................................................
+ * Advance the state machine to the requested state
+ */
+void IersCommunicator::stepState(CommState state)
+{
+  switch (state) {
+  case STATE_INIT:
+    CTOUT("Advancing to state: INIT");
+    initialTimeOut_.reset();
+    timeOutPtr_ = initialTimeOut_.tVal();
+    break;
+  case STATE_WAIT:
+    CTOUT("Advancing to state: WAIT");
+    retryTimeOut_.reset();
+    timeOutPtr_ = retryTimeOut_.tVal();
+    break;
+  case STATE_COMM:
+    //CTOUT("Advancing to state: COMM");
+    commTimeOut_.reset();
+    timeOutPtr_ = commTimeOut_.tVal();
+    break;
+  default:
+    break;
+  }
+
+  state_ = state;
+}
+
+/**.......................................................................
+ * React to a failure to reply from the FTP server once a connection
+ * has been established
+ */
+void IersCommunicator::registerCommTimeOut()
+{
+  // Register our failure to communicate
+
+  ReportError("Timed out waiting for a comms response from the IERS server");
+  terminateFtpConnection(true);
+}
+
+/**.......................................................................
+ * Compile the state machine we will use to get the tipper file
+ */
+void IersCommunicator::
+compileGetIersBulletinStateMachine()
+{
+  // Clear the stack of sent commands and expected responses
+
+  sentStrings_.clear();
+  rcvdStrings_.clear();
+
+  rcvdStrings_.push_back(RcvdStr("220", sendNextString, this));
+  sentStrings_.push_back("user anonymous");
+
+  //  rcvdStrings_.push_back(RcvdStr("password", sendNextString, this));
+  //  sentStrings_.push_back("pass sptdaq@sptnet");
+
+  rcvdStrings_.push_back(RcvdStr("Login successful", sendNextString, this));
+  sentStrings_.push_back("pasv");
+
+  rcvdStrings_.push_back(RcvdStr("Entering Passive Mode", parsePortNumber, this));
+  sentStrings_.push_back("retr ser7/ser7.dat");
+
+  // Note that the string to check against is deliberately wrong.  In
+  // this case, it is the ftp data connection that will determine when
+  // we should quit from the server
+
+  rcvdStrings_.push_back(RcvdStr("Transfer completed", quitFromServer, this));
+
+  // And set the iterators pointing to the head of the stack
+  
+  sentStringIter_ = sentStrings_.begin();
+  rcvdStringIter_ = rcvdStrings_.begin();
+}
+
+/**.......................................................................
+ * Static parser method to respond to disconnect from the FTP server
+ */
+COMM_PARSER_FN(IersCommunicator::quitFromServer)
+{
+  IersCommunicator* comm = (IersCommunicator*) arg;
+  comm->quitFromServer(false);
+}
+
+/**.......................................................................
+ * Method to disconnect from the FTP server
+ */
+void IersCommunicator::quitFromServer(bool error)
+{
+  // If the 'Transfer complete' message was received from the tcp
+  // connection, we can quit from the server
+
+  fdSetPtr_->clearFromReadFdSet(client_->getFd());
+
+  if(!error) {
+    std::string str("quit");
+    client_->writeString(str);
+  } 
+
+  client_->disconnect();
+}
+
+/**.......................................................................
+ * Static parser method to respond to a port number message from the
+ * FTP server
+ */
+COMM_PARSER_FN(IersCommunicator::parsePortNumber)
+{
+  IersCommunicator* comm = (IersCommunicator*) arg;
+  comm->parsePortNumber();
+}
+
+/**.......................................................................
+ * Parse a data port number received from the FTP server
+ */
+void IersCommunicator::parsePortNumber()
+{
+  String str(os_.str());
+
+  str.findNextInstanceOf("(", ",");
+  str.findNextInstanceOf(",", ",");
+  str.findNextInstanceOf(",", ",");
+  str.findNextInstanceOf(",", ",");
+
+  unsigned p1 = str.findNextInstanceOf(",", ",").toInt();
+  unsigned p2 = str.findNextInstanceOf(",", ")").toInt();
+
+  // Now connect to the file host on the port it specified
+
+  ftpClient_ = new TcpClient("maia.usno.navy.mil", p1*256+p2);
+
+  if(ftpClient_->connectToServer(true) < 0) {
+    ReportError("Unable to initiate connection to the USNO ftp server");
+    terminateFtpConnection(true);
+  }
+
+  // Don't strip newlines from the data received from the ftp
+  // connection
+
+  ftpClient_->dontStrip("\n\t");
+
+  // Register the data fd to be watched for readability
+
+  fdSetPtr_->registerReadFd(ftpClient_->getFd());
+
+  // Make sure the return buffer is empty
+
+  ftpOs_.str("");
+
+  // Finally, send the next string to the server.  This will be the
+  // command to send the data
+
+  sendNextString();
+}
+
+/**.......................................................................
+ * Process the IERS bulletin received from a remote server
+ */
+void IersCommunicator::processIersBulletin()
+{
+  // Get the file from the remote FTP server
+
+  unsigned nByte;
+  if((nByte=ftpClient_->getNbyte(ftpClient_->getFd())) > 0) {
+    ftpClient_->concatenateString(ftpOs_, -1, false);
+  } else {
+    terminateFtpConnection(false);
+  }
+}
+
+/**.......................................................................
+ * Terminate an established FTP DATA connection
+ */
+void IersCommunicator::terminateFtpConnection(bool error)
+{
+  // Clear the data FTP file descriptor from the read fd set
+
+  if(ftpClient_) {
+    fdSetPtr_->clearFromReadFdSet(ftpClient_->getFd());
+    delete ftpClient_;
+    ftpClient_ = 0;
+  }
+
+  // If we are exiting normally, and not on an error condition,
+  // process the data received from the FTP server
+
+  if(!error) {
+
+    // Write the ephemeris file
+    
+    writeEphem();
+    
+    // Call any handlers that are registered
+    
+    callHandlers();
+  }
+ 
+  // Now that we've successfully read all the data, we can also quit from
+  // the server
+
+  quitFromServer(error);
+
+  // And reset the state to wait for the next retry
+
+  stepState(STATE_WAIT);
+}
+
+/**.......................................................................
+ * Main Task event loop: when this is called, the task blocks forever
+ * in select(), or until a stop message is received.
+ */
+void IersCommunicator::serviceMsgQ()
+{
+  try {
+    bool stop=false;
+    int nready; // number of file descriptors ready for reading
+    
+    if(msgq_.fd() < 0) {
+      ThrowError("Received NULL file descriptor");
+    }
+    
+    while(!stop) {
+      
+      nready = select(fdSet_.size(), fdSet_.readFdSet(), 
+		      NULL, NULL, timeOutPtr_);
+
+      switch (nready) {
+
+	// If no file descriptors were ready, is it time to contact the
+	// IERS ftp server and retrieve the UT1-UTC ephemeris?
+      
+      case 0:
+
+	registerTimeOut();
+
+	break;
+
+      case -1:
+	stop = true;
+	ThrowSysError("select()");
+	break;
+
+      default:
+
+	// If a message is waiting to be read, process it now
+
+	if(fdSet_.isSetInRead(msgq_.fd())) {
+	  processTaskMsg(&stop);
+	}
+	 
+	// If this communicator's read fd was set, read the next line
+	// from the FTP server
+	 
+	if(fdSet_.isSetInRead(getFtpCommFd())) {
+	  stepState(STATE_COMM);
+	  processClientMessage();
+	}
+      
+	// If data are ready to be read on the FTP data connection,
+	// process the log file now
+
+	if(getFtpDataFd() > 0 && fdSet_.isSetInRead(getFtpDataFd())) {
+	  stepState(STATE_COMM);
+	  processIersBulletin();
+	}
+
+	break;
+      }
+    }
+  } catch(Exception& err) {
+    COUT("Caught an exception: " << err.what());
+  }
+}
+
+/**.......................................................................
+ * Return a reference to the fd corresonding to the comms link with
+ * the FTP server
+ */
+int IersCommunicator::getFtpCommFd()
+{
+  return getFd();
+}
+
+/**.......................................................................
+ * Return a reference to the fd corresonding to the data link with
+ * the FTP server
+ */
+int IersCommunicator::getFtpDataFd()
+{
+  if(ftpClient_) {
+    return ftpClient_->getFd();
+  } else {
+    return -1;
+  }
+}
+
+//-----------------------------------------------------------------------
+// Public methods by which this object can be controlled
+//-----------------------------------------------------------------------
+
+/**.......................................................................
+ * Tell this object to retrieve the ut1utc ephemeris file
+ */
+void IersCommunicator::getIersBulletin()
+{
+  IersCommunicatorMsg msg;
+  msg.genericMsgType_ = GenericTaskMsg::TASK_SPECIFIC;
+  msg.type = IersCommunicatorMsg::GET_FILE;
+  sendTaskMsg(&msg);
+}
+
+/**.......................................................................
+ * Public method to add a handler to be called when the ephemeris file
+ * is updated
+ */
+void IersCommunicator::addHandler(IERS_HANDLER(*fn), void* args)
+{
+  IersCommunicatorMsg msg;
+  msg.genericMsgType_ = GenericTaskMsg::TASK_SPECIFIC;
+  msg.type = IersCommunicatorMsg::ADD_HANDLER;
+  msg.body.addHandler.fn = fn;
+  msg.body.addHandler.args = args;
+  sendTaskMsg(&msg);
+}
+
+void IersCommunicator::removeHandler(IERS_HANDLER(*fn))
+{
+  IersCommunicatorMsg msg;
+  msg.genericMsgType_ = GenericTaskMsg::TASK_SPECIFIC;
+  msg.type = IersCommunicatorMsg::REM_HANDLER;
+  msg.body.remHandler.fn = fn;
+  sendTaskMsg(&msg);
+}
+
+
+/**.......................................................................
+ * Tell this object to update the filename
+ */
+void IersCommunicator::updateEphemerisFileName(std::string file)
+{
+  IersCommunicatorMsg msg;
+  msg.genericMsgType_ = GenericTaskMsg::TASK_SPECIFIC;
+  msg.type            = IersCommunicatorMsg::UPDATE_FILENAME;
+
+  std::string fileName = Pathname::expand("", file);
+
+  if(fileName.size() > IERS_FILENAME_MAX) {
+    ReportError("Filename: " << fileName << " is too long");
+    return;
+  }
+
+  strcpy(msg.body.fileName, fileName.c_str());
+  msg.body.fileName[fileName.size()] = '\0';
+
+  sendTaskMsg(&msg);
+}
+
+void IersCommunicator::processMsg(IersCommunicatorMsg* msg)
+{
+  switch (msg->type) {
+  case IersCommunicatorMsg::GET_FILE:
+    initiateGetIersBulletinCommSequence();
+    break;
+  case IersCommunicatorMsg::UPDATE_FILENAME:
+    outputFileName_ = msg->body.fileName;
+    break;
+  case IersCommunicatorMsg::ADD_HANDLER:
+    executeAddHandler(msg->body.addHandler.fn, msg->body.addHandler.args);
+    break;
+  case IersCommunicatorMsg::REM_HANDLER:
+    executeRemoveHandler(msg->body.remHandler.fn);
+    break;
+  default:
+    ThrowError("Unrecognized message type: " << msg->type);
+    break;
+  }
+}
+
+void IersCommunicator::writeEphem()
+{
+  std::ofstream fout(ephemFileName().c_str(), ios::out);
+  
+  printHeader(fout);
+  printEphem(fout);
+  
+  fout.close();
+}
+
+void IersCommunicator::printHeader(std::ofstream& fout)
+{
+  fout << "# " << SpecificName::experimentNameCaps() << " Ephemeris of UT1-UTC" << std::endl
+       << "# " << std::endl
+       << "# Note that MJD = JD - 2400000.5" << std::endl
+       << "# " << std::endl
+       << "# UTC (MJD)  UT1-UTC (s)  Calendar (UTC)" << std::endl
+       << "#----------  -----------  --------------" << std::endl;
+}
+
+void IersCommunicator::printEphem(std::ofstream& fout)
+{
+  // Encapsulate the ephemeris in a String object, for parsing
+
+  String str(ftpOs_.str());
+
+  String body = str.findNextInstanceOf("UT1-UTC(sec)", true, "\n      These predictions are based on all announced leap seconds.", true);
+
+  String strline;
+  unsigned year;
+  unsigned iMonth;
+  unsigned iDay;
+  double mjd;
+  double x, y, ut1utc;
+
+  // Skip the first blank line
+
+  body.findNextInstanceOf(" ",  false, "\n",   false, true);
+
+  do {
+
+    strline =    body.findNextInstanceOf(" ",  false, "\n",   false, true);
+
+    strline.findNextStringSeparatedByChars(" ", true).toInt();
+
+    year   = strline.findNextStringSeparatedByChars(" ", true).toInt();
+    iMonth = strline.findNextStringSeparatedByChars(" ", true).toInt();
+    iDay   = strline.findNextStringSeparatedByChars(" ", true).toInt();
+    mjd    = strline.findNextStringSeparatedByChars(" ", true).toInt();
+    x      = strline.findNextStringSeparatedByChars(" ", true).toDouble();
+    y      = strline.findNextStringSeparatedByChars(" ", true).toDouble();
+    ut1utc = strline.findNextStringSeparatedByChars(" ", true).toDouble();
+    
+    fout << setw(10)  << setprecision(4) << std::fixed << mjd << "    " 
+	 << setw(9)   << setprecision(6) << std::fixed << std::showpos << ut1utc << std::noshowpos << "   " 
+	 << "# " << year << "-" << Month::abbreviatedMonthName(iMonth, true) << "-" << setw(2) << setfill('0') << iDay
+	 << std::endl;
+
+  } while(!body.atEnd());
+
+}
+
+/**.......................................................................
+ * Test method to read a ser7.dat format file
+ */
+void IersCommunicator::loadFile(std::string name)
+{
+  std::ifstream fin(name.c_str(), ios::in);
+
+  ftpOs_.str("");
+
+  std::string line;
+
+  if(fin) {
+    while(getline(fin, line)) {
+      ftpOs_ << line << std::endl;
+    }
+    fin.close();
+  } else {
+    ThrowError("Unable to open file: " << name);
+    return;
+  }
+
+  writeEphem();
+}
+
+/**.......................................................................
+ * Return true if the UT1-UTC ephemeris needs updating
+ */
+bool IersCommunicator::ephemerisNeedsUpdating()
+{
+  return !ephemExists() || ephemIsAboutToRunOut() || ephemFileIsOutOfDate();
+}
+
+bool IersCommunicator::safeToUpdate()
+{
+  TimeVal tVal;
+  tVal.setToCurrentTime();
+
+  if(Date::dayInWeek(tVal.getMjd()) == 3) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+/**.......................................................................
+ * Return true if the UT1-UTC ephemeris file exists
+ */
+bool IersCommunicator::ephemExists()
+{
+  std::ifstream fin(ephemFileName().c_str(), ios::in);
+
+  if(fin) {
+    fin.close();
+    return true;
+  } else {
+    return false;
+  }
+}
+
+/**.......................................................................
+ * Return true if the ephemeris is with expiryThresholdInDays_ of
+ * running out
+ */
+bool IersCommunicator::ephemIsAboutToRunOut() 
+{
+  TimeVal curr;
+  curr.setToCurrentTime();
+
+  double mjdLast = getLastEphemMjd();
+
+  return (mjdLast - curr.getMjd()) < expiryThresholdInDays_;
+}
+
+/**.......................................................................
+ * Return the MJD of the last entry in the ephemeris file
+ */
+double IersCommunicator::getLastEphemMjd()
+{
+  std::ifstream fin(ephemFileName().c_str(), ios::in);
+  std::string line, lastLine;
+
+  if(fin) {
+    while(getline(fin, line)) {
+      lastLine = line;
+    }
+    fin.close();
+  } else {
+    ThrowError("Unable to open file: " << ephemFileName());
+  }
+
+  String str(lastLine);
+  return str.findNextStringSeparatedByChars(" ", true).toDouble();
+}
+
+/**.......................................................................
+ * Return the ephemeris file name
+ */
+std::string IersCommunicator::ephemFileName()
+{
+  return outputFileName_;
+}
+
+/**.......................................................................
+ * Return true if the ephemeris hasn't been updated in more than
+ * updateThresholdInDays_
+ */
+bool IersCommunicator::ephemFileIsOutOfDate()
+{
+  struct stat statbuf;    /* The file-statistics return buffer */
+
+  if(lstat(ephemFileName().c_str(), &statbuf) < 0) {
+    ThrowSysError("lstat()");
+  }
+
+#if MAC_OSX == 0
+  TimeVal modTime(statbuf.st_mtime);
+#else
+  TimeVal modTime(statbuf.st_mtimespec);
+#endif
+
+  TimeVal currTime;
+  currTime.setToCurrentTime();
+
+  // If file is older than a month, call it out of date
+
+  return (currTime.getMjd() - modTime.getMjd()) > updateThresholdInDays_;
+}
+
+/**.......................................................................
+ * Execute a request to add a handler
+ */
+void IersCommunicator::executeAddHandler(IERS_HANDLER(*fn), void* args)
+{
+  Handler handler;
+  handler.fn_   = fn;
+  handler.args_ = args;
+
+  handlers_.push_back(handler);
+}
+
+/**.......................................................................
+ * Execute a request to remove a handler
+ */
+void IersCommunicator::executeRemoveHandler(IERS_HANDLER(*fn))
+{
+  std::vector<Handler>::iterator iter=handlers_.begin();
+
+  for(; iter != handlers_.end(); iter++) {
+    if(iter->fn_ == fn)
+      break;
+  }
+    
+  if(iter != handlers_.end())
+    handlers_.erase(iter);
+}
+
+/**.......................................................................
+ * Call any handler that was registered
+ */
+void IersCommunicator::callHandlers()
+{
+  for(unsigned iHandler=0; iHandler < handlers_.size(); iHandler++) {
+    Handler& handler = handlers_[iHandler];
+    (*handler.fn_)(handler.args_, ephemFileName());
+  }
+}
+
+/**.......................................................................
+ * React to a timeout in select
+ */
+void IersCommunicator::registerTimeOut() 
+{
+  switch (state_) {
+
+    // If we are waiting to check an ephemeris, initiate the check now
+
+  case STATE_INIT:
+  case STATE_WAIT:
+    if(ephemerisNeedsUpdating() && safeToUpdate()) {
+      COUT("Attempting to update ephemeris: " << ephemFileName());
+      initiateGetIersBulletinCommSequence();
+    } else {
+      COUT("Ephemeris " << ephemFileName() << " doesn't need updating");
+      stepState(STATE_WAIT);
+    }
+    break;
+
+    // Else if we timed out during comunication with the ftp server, this is an error
+
+  case STATE_COMM:
+    registerCommTimeOut();
+    break;
+  default:
+    break;
+  }
+}

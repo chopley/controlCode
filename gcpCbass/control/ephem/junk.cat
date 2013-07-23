@@ -1,0 +1,2 @@
+EPHEM sun          $CBASS_DIR/control/ephem/sun.ephem
+strline =        2008  8 21  54699       0.2583      0.3615     -0.45500 

@@ -1,0 +1,46 @@
+<HEAD><TITLE>The WalshFunction datatype.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+<center><a href=../index.html>Index</a></center>
+<HR>
+<font color=blue><a name=WalshFunction> <code><b>WalshFunction</b></code> </a></font>
+<P>
+A walsh function, specified by number.
+<P>
+<DL>
+<DT> Input Format:
+<P>
+<DD> An integral value between 0 and 31 (inclusive).
+
+<P>
+<DT> Use with do-loops:
+<DD> When a WalshFunction variable is used as the dependent variable of a
+     <a href="../commands/do.html">do-loop</a>, the associated loop increment is
+     specified as an <a href="Integer.html">Integer</a> constant.
+
+<P>
+<DT> Examples:
+<DD> The first of the following commands sets the phase-switch
+     modulation functions of receivers 3 and 4, to walsh-function 2.
+
+<pre>
+ walsh all, rx3+rx4, 2
+</pre>
+
+     The second example exploits the fact that walsh function 31 is a
+     DC level to turn off phase switching on receiver 0.
+
+<pre>
+ walsh all, rx0, 31
+</pre>
+
+<DT> Context:
+<DD> This datatype is only used by the
+     <code><a href=../commands/../commands/walsh.html>walsh</a></code> command.
+<P>
+     Note that selecting walsh function 31 disables phase switching.
+     This is because walsh function 31 is a unbroken sequence of zeros.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:17:03 PST 2004)
+</BODY>

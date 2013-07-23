@@ -1,0 +1,4 @@
+configure_viewer 1 5000
+add_plot 573 142 {Power Spectrum Plot} -5.01 55.11 1 1 disabled 20.0 placeholder {} {
+  graph -1.17549435082229e-34 1.17549435082229e-34 {} {{receiver.bolometers.ac[0][0-99]} {}} {} 1
+} powSpec 1000 10

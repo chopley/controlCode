@@ -1,0 +1,21 @@
+### Antenna external
+DEVICE Optical Telescope
+SERIAL 0
+LOCATION ant0
+LOCATION good,bad,suspect,offsite
+### includes video to fiber interface
+
+DEVICE Encoder
+SERIAL 0,1
+LOCATION ant0.az
+LOCATION ant0.el
+LOCATION good,bad,suspect,offsite
+
+DEVICE Receiver
+SERIAL 0
+LOCATION ant0
+LOCATION good,bad,suspect,offsite
+
+DEVICE SPTnet Computer
+SERIAL 0
+LOCATION Chicago

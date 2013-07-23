@@ -1,0 +1,40 @@
+<HEAD><TITLE>The "polar" datatype.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name="polar"> <code><b>polar</b> receivers, left|right, position</code> </a></font>
+<P>
+Set the encoder position which corresponds to left or right circular polarization for a given receiver.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/Receivers.html>Receivers</a> ant</b></code>
+     <DD> The set of receivers whose encoder positions are to be stored.
+     <DT><code><b><a href=../dataTypes/PolarState.html>PolarState</a> state</b></code>
+     <DD> The polarization state, from 
+          <UL>
+          <LI> <code><b>left</b></code> - Left circular polarization.
+          <LI> <code><b>right</b></code> - Right circular polarization.
+          </UL>
+     <DT><code><b><a href=../dataTypes/PhaseShift.html>PhaseShift</a>
+     position</b></code> <DD> The target motor encoder position
+     (0..1023). The motor moves a full revolution between 0 and 1024.
+     This corresponds to a phase change of 4.PI.
+     </DL>
+<P>
+<DT> Example:
+<DD> The following example sets the encoder position corresponding to left circular polarization for rx9 to 914:
+<pre>
+ polar rx9, left, 914
+</pre>
+
+<P>
+<DT> Context: <DD> In general, each receiver will have a different
+encoder position which corresponds to left or right circular
+polarization.  By pre-defining these using the <code>polar</code> command, 
+you can subsequently request either state by name when using the <font color=blue><a href=pshifter.html>pshifter</a></font> command.
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:34 PST 2004)
+</BODY>

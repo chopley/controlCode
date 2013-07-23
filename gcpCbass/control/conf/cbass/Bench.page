@@ -1,0 +1,59 @@
+add_page 851 724 {Optical Bench} beige red yellow 10 9 {12 10 10 10 10 12} {} 0 {} 0 {
+  label 0 0 orange black center {position (mm)}
+  label 0 1 midnightblue paleturquoise center Y1
+  label 0 2 midnightblue paleturquoise center Y2
+  label 0 3 midnightblue paleturquoise center Y3
+  label 0 4 midnightblue paleturquoise center X4
+  label 0 5 midnightblue paleturquoise center X5
+  label 0 6 midnightblue paleturquoise center Z6
+  label 0 8 midnightblue paleturquoise center focus
+  label 0 9 midnightblue paleturquoise center deadband
+  label 0 10 midnightblue paleturquoise center {acq thresh}
+  label 1 0 midnightblue paleturquoise center zero
+  register 1 1 black green center {antenna0.scu.benchZeros[0][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 1 2 black green center {antenna0.scu.benchZeros[1][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 1 3 black green center {antenna0.scu.benchZeros[2][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 1 4 black green center {antenna0.scu.benchZeros[3][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 1 5 black green center {antenna0.scu.benchZeros[4][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 1 6 black green center {antenna0.scu.benchZeros[5][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 1 8 black green center {antenna0.scu.benchFocus[0][0]} fixed_point 3 0 locked,missing 0 0 0.0 0.0 0 1
+  register 1 9 black green center {antenna0.scu.benchDeadBand[0][0]} fixed_point 3 0 locked,missing 0 0 0.0 0.0 0 1
+  register 1 10 black green center {antenna0.scu.benchAcquiredThreshold[0][0]} fixed_point 3 0 locked,missing 0 0 0.0 0.0 0 1
+  label 2 0 midnightblue paleturquoise center offset
+  register 2 1 black green center {antenna0.scu.benchOffsets[0][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 2 2 black green center {antenna0.scu.benchOffsets[1][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 2 3 black green center {antenna0.scu.benchOffsets[2][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 2 4 black green center {antenna0.scu.benchOffsets[3][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 2 5 black green center {antenna0.scu.benchOffsets[4][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 2 6 black green center {antenna0.scu.benchOffsets[5][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  label 2 8 midnightblue paleturquoise center {pri state}
+  label 2 9 midnightblue paleturquoise center {sec state}
+  label 3 0 midnightblue paleturquoise center expected
+  register 3 1 black green center {antenna0.scu.benchExpected[0][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 3 2 black green center {antenna0.scu.benchExpected[1][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 3 3 black green center {antenna0.scu.benchExpected[2][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 3 4 black green center {antenna0.scu.benchExpected[3][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 3 5 black green center {antenna0.scu.benchExpected[4][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 3 6 black green center {antenna0.scu.benchExpected[5][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 3 8 black green center {antenna0.scu.benchPrimaryState[0][0]} enum 0 0 stop,PD,manual 0 0 0.0 0.0 0 1
+  register 3 9 black green center {antenna0.scu.benchSecondaryState[0][0]} enum 0 0 {reset,transition,active,off target,stop,disabled,pending,wait to start,finished,pos hold} 0 0 0.0 0.0 0 1
+  register 3 10 black green center {antenna0.scu.benchFault[0][0]} enum 0 0 {no fault, fault} 0 1 0 0 0 1
+  label 4 0 midnightblue paleturquoise center actual
+  register 4 1 black green center {antenna0.scu.benchActual[0][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 4 2 black green center {antenna0.scu.benchActual[1][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 4 3 black green center {antenna0.scu.benchActual[2][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 4 4 black green center {antenna0.scu.benchActual[3][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 4 5 black green center {antenna0.scu.benchActual[4][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 4 6 black green center {antenna0.scu.benchActual[5][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  label 4 8 midnightblue paleturquoise center IRIG-B
+  label 5 0 midnightblue paleturquoise center error
+  register 5 1 black green center {antenna0.scu.benchErrors[0][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 5 2 black green center {antenna0.scu.benchErrors[1][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 5 3 black green center {antenna0.scu.benchErrors[2][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 5 4 black green center {antenna0.scu.benchErrors[3][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 5 5 black green center {antenna0.scu.benchErrors[4][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 5 6 black green center {antenna0.scu.benchErrors[5][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 5 8 black green center {antenna0.scu.timeLocked[0][0]} enum 0 0 locked,fail 0 1 0 0 0 1
+  register 5 9 black green center {antenna0.scu.benchSampleTime[0][0]} date 0 0 locked,fail 0 0 0 0 0 1
+  register 5 10 black green center {antenna0.scu.benchSampleTime.time[0][0]} sexagesimal 0 0 locked,fail 0 0 0 0 0 1
+}

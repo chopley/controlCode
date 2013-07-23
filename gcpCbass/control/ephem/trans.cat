@@ -1,0 +1,484 @@
+### Antenna sidecab
+DEVICE UMAC crate
+SERIAL 0,1,2,3,4,5,6,7,8
+LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8
+LOCATION good,bad,suspect,offsite
+
+	DEVICE Turbo PMAC2
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE I/O Module
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE 2 Axis Interface
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE Hi Resolution A/D Converter
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE 48 I/O
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE Encoder Interface
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8
+	LOCATION good,bad,suspect,offsite
+	# Clem's custom card
+
+	DEVICE UMAC Power Supply
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE 1 Axis Amplifier
+	SERIAL 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18
+	LOCATION ant0.az, ant1.az, ant2.az, ant3.az, ant4.az, ant5.az, ant6.az, ant7.az, ant8.az
+	LOCATION ant0.el, ant1.el, ant2.el, ant3.el, ant4.el, ant5.el, ant6.el, ant7.el, ant8.el
+	LOCATION good,bad,suspect,offsite
+
+DEVICE Servo Interlock
+SERIAL 0,1,2,3,4,5,6,7,8
+LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8
+LOCATION good,bad,suspect,offsite
+
+DEVICE Ethernet Switch
+SERIAL 0,1,2,3,4,5,6,7,8
+LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8
+LOCATION good,bad,suspect,offsite
+
+DEVICE GW Power Supply
+SERIAL 0,1,2,3,4,5,6,7,8
+LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8
+LOCATION good,bad,suspect,offsite
+
+DEVICE PCI Crate
+SERIAL 0,1,2,3,4,5,6,7,8
+LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8
+LOCATION good,bad,suspect,offsite
+
+	DEVICE CAN Bus Card
+	SERIAL 0,1,2,3,4,5,6,7,8,9
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE Force CPU Card
+	SERIAL 0,1,2,3,4,5,6,7,8,9
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8
+	LOCATION good,bad,suspect,offsite
+
+DEVICE Baytech DS2-RPC
+SERIAL 0,1,2,3,4,5,6,7,8
+LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8
+LOCATION good,bad,suspect,offsite
+
+DEVICE Lambda Power Supply
+SERIAL 0,1,2,3,4,5,6,7,8
+LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8
+LOCATION good,bad,suspect,offsite
+
+DEVICE CAN Controller
+SERIAL 0,1,2,3,4,5,6,7,8
+LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+LOCATION good,bad,suspect,offsite
+### Controls fans in sidecab heat exchanger
+
+### Antenna external
+DEVICE Optical Telescope
+SERIAL 0
+LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8
+LOCATION good,bad,suspect,offsite
+### includes video to fiber interface
+
+DEVICE Actionjac
+SERIAL 0,1,2,3,4,5,6,7,8
+LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8
+LOCATION good,bad,suspect,offsite
+
+DEVICE Drive Motor
+SERIAL 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18
+LOCATION ant0.az,ant1.az,ant2.az,ant3.az,ant4.az,ant5.az,ant6.az,ant7.az,ant8.az
+LOCATION ant0.el,ant1.el,ant2.el,ant3.el,ant4.el,ant5.el,ant6.el,ant7.el,ant8.el
+LOCATION good,bad,suspect,offsite
+
+DEVICE Elevation Gearbox
+SERIAL 0,1,2,3,4,5,6,7,8
+LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8
+LOCATION good,bad,suspect,offsite
+
+DEVICE Azimuth Gearbox
+SERIAL 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16
+LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8
+LOCATION good,bad,suspect,offsite
+
+DEVICE Azimuth Gearbox Coupler
+SERIAL 0,1,2,3,4,5,6,7,8
+LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8
+LOCATION good,bad,suspect,offsite
+
+DEVICE Helium Compressor
+SERIAL 0,1,2,3,4,5,6,7,8
+LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8
+LOCATION good,bad,suspect,offsite
+
+DEVICE CAN Controller
+SERIAL 9,10,11,12,13,14,15,16
+LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+LOCATION good,bad,suspect,offsite
+### Controls compressor louvers and monitors helium pressure
+
+DEVICE Tilt Meter
+SERIAL 0,1,2,3,4,5,6,7,8
+LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+LOCATION good,bad,suspect,offsite
+
+DEVICE CAN Controller
+SERIAL 17,18,19,20,21,22,23,24
+LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+LOCATION good,bad,suspect,offsite
+#### Controls the tilt meter thermal regulation and monitors tilt
+
+DEVICE Encoder
+SERIAL 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16
+LOCATION ant0.az,ant1.az,ant2.az,ant3.az,ant4.az,ant5.az,ant6.az,ant7.az,ant8.az
+LOCATION ant0.el,ant1.el,ant2.el,ant3.el,ant4.el,ant5.el,ant6.el,ant7.el,ant8.el
+LOCATION good,bad,suspect,offsite
+
+### Antenna receiver box
+DEVICE Electronics Box
+SERIAL 0,1,2,3,4,5,6,7,8
+LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+LOCATION good,bad,suspect,offsite
+
+	DEVICE PAM
+	SERIAL 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18
+	LOCATION ant0.lcp,ant1.lcp,ant2.lcp,ant3.lcp,ant4.lcp,ant5.lcp,ant6.lcp,ant7.lcp,ant8.lcp
+	LOCATION ant0.rcp,ant1.rcp,ant2.rcp,ant3.rcp,ant4.rcp,ant5.rcp,ant6.rcp,ant7.rcp,ant8.rcp
+	LOCATION good,bad,suspect,offsite
+	### Two PAM's per antenna lcp and rcp
+
+	DEVICE Receiver Card
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE YIG Phase Lock
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE Varactor Phase Lock
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE Bias Phase Lock
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE Berkley Interface Module
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE LO Terminator
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE 10MHz Receiver
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE 50MHz Receiver
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE IF Transmitter
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE Varactor Gunn
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE Bias Gunn
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE YIG
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE IF Switch
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE CAN Controller
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE CAN Backplane
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+	LOCATION good,bad,suspect,offsite
+
+DEVICE Caltert Mirror
+SERIAL 0,1,2,3,4,5,6,7,8
+LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+LOCATION good,bad,suspect,offsite
+
+DEVICE Caltert Mount
+SERIAL 0,1,2,3,4,5,6,7,8
+LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+LOCATION good,bad,suspect,offsite
+
+DEVICE Caltert Drive
+SERIAL 0,1,2,3,4,5,6,7,8
+LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+LOCATION good,bad,suspect,offsite
+
+DEVICE Caltert CAN Module
+SERIAL 0,1,2,3,4,5,6,7,8
+LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+LOCATION good,bad,suspect,offsite
+
+DEVICE Receiver
+SERIAL 0,1,2,3,4,5,6,7,8
+LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+LOCATION good,bad,suspect,offsite
+
+	DEVICE 30GHz Receiver
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE 90GHz Receiver
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE Coldhead
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+	LOCATION good,bad,suspect,offsite
+
+### Trailer LO rack
+DEVICE RAID Chassis
+SERIAL 0
+LOCATION lorack,offsite
+
+	DEVICE RAID Module
+	SERIAL 0,1,2
+	LOCATION lorack
+	LOCATION good,bad,suspect,offsite
+
+DEVICE SZAnet Computer
+SERIAL 0
+LOCATION lorack,offsite
+
+DEVICE GPS Time Server
+SERIAL 0
+LOCATION lorack,offsite
+
+DEVICE Main Ethernet Switch
+SERIAL 0
+LOCATION lorack,offsite
+
+DEVICE Media Converter Chassis
+SERIAL 0
+LOCATION lorack,offsite
+
+	DEVICE Media Converter Module
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION ant0,ant1,ant2,ant3,ant4,ant5,ant6,ant7,ant8 
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE Media Converter Power Supply
+	SERIAL 0,1
+	LOCATION lorack,offsite
+
+DEVICE Lobe Rotator Chassis
+SERIAL 0
+LOCATION lorack,offsite
+
+	DEVICE Lobe Rotator Module
+	SERIAL 0,1
+	LOCATION lorack,offsite
+
+	DEVICE Lobe Rotator Power Supply
+	SERIAL 0
+	LOCATION lorack,offsite
+
+DEVICE Fiber Patch Panel
+SERIAL 0
+LOCATION lorack
+### Infrastructure can't be relocated
+
+DEVICE 10MHz Transmitter
+SERIAL 0
+LOCATION lorack,offsite
+
+DEVICE IF Receiver
+SERIAL 0
+LOCATION lorack,offsite
+
+DEVICE LO Tx/Rx Chassis
+SERIAL 0
+LOCATION lorack,offsite
+
+	DEVICE LO Transmitter
+	SERIAL 0
+	LOCATION lorack,offsite
+
+	DEVICE LO Receiver
+	SERIAL 0
+	LOCATION lorack,offsite
+
+DEVICE LO Reference Distributor
+SERIAL 0
+LOCATION lorack,offsite
+
+DEVICE 10MHz Synthesiser
+SERIAL 0
+LOCATION lorack,offsite
+
+DEVICE 10MHz Fanout
+SERIAL 0
+LOCATION lorack,offsite
+
+DEVICE RF Synthesiser
+SERIAL 0
+LOCATION lorack,offsite
+
+DEVICE RF Counter
+SERIAL 0
+LOCATION lorack,offsite
+
+DEVICE RF Muliplexor
+SERIAL 0
+LOCATION lorack,offsite
+
+DEVICE PCI Crate
+SERIAL 9
+LOCATION lorack,offsite
+
+	DEVICE CAN Bus card
+	SERIAL 10, 11 
+	LOCATION lorack, downconverter
+
+	DEVICE Force CPU card
+	SERIAL 10
+	LOCATION lorack,offsite
+
+	DEVICE Timing Distributor
+	SERIAL 0,1
+	LOCATION lorack,offsite
+
+	DEVICE Frame Grabber
+	SERIAL 0
+	LOCATION lorack,offsite
+
+### Correlator Rack
+DEVICE PCI Crate
+SERIAL 10,11,12,13,14,15,16,17,18
+LOCATION lorack,offsite
+
+	DEVICE Timing Card
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION lorack
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE COBRA Digitizer
+	SERIAL 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
+	LOCATION lorack
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE COBRA Correlator
+	SERIAL 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
+	LOCATION lorack
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE Force CPU Card
+	SERIAL 11,12,13,14,15,16,17,18
+	LOCATION loband.1-2,loband.3-4,loband.5-6,loband.7-8,hiband.1-2,hiband.3-4,hiband.5-6,hiband.7-8
+	LOCATION offsite
+
+### Downconverter Rack
+DEVICE Low Band Downconverter Chassis
+SERIAL 0,1,2,3,4,5,6,7
+LOCATION dcrack
+LOCATION good,bad,suspect,offsite
+
+	DEVICE New Downconverter Module
+	SERIAL 0,1,2,3,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64
+	LOCATION dcrack
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE Downconverter Power Supply
+	SERIAL 0,1,2,3,4,5,6,7
+	LOCATION dcrack
+	LOCATION good,bad,suspect,offsite
+
+DEVICE RF Distributor Crate
+SERIAL 0,1
+LOCATION dcrack,offsite
+
+DEVICE High Band Downconverter Chassis
+SERIAL 0,1,2,3,4,5,6,7
+LOCATION dcrack
+LOCATION good,bad,suspect,offsite
+
+	DEVICE Old Downconverter Module
+	SERIAL 0,1,2,3,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64
+	LOCATION dcrack
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE Downconverter Power Supply
+	SERIAL 8,9,10,11,12,13,14,15
+	LOCATION dcrack
+	LOCATION good,bad,suspect,offsite
+
+### Middle rack
+DEVICE Frequency Power Meter
+SERIAL 0
+LOCATION mrack,offsite
+
+DEVICE LO Monitor
+SERIAL 0
+LOCATION mrack,offsite
+
+DEVICE Quadmod Chassis
+SERIAL 0
+LOCATION mrack,offsite
+
+	DEVICE Quadmod
+	SERIAL 0,1,2,3,4,5,6,7,8
+	LOCATION mrack
+	LOCATION good,bad,suspect,offsite
+
+	DEVICE Quadmod Power Supply
+	SERIAL 0
+	LOCATION mrack
+
+DEVICE Block Downconverter
+SERIAL 0
+LOACTION mrack,offsite

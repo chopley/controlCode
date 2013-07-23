@@ -1,0 +1,31 @@
+<HEAD><TITLE>The abort_schedule datatype.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+<font color=blue><a name=abort_schedule> <code><b>abort_schedule</b></code> </a></font>
+<P>
+Abort the schedule that is currently running.
+<P>
+<DL>
+<DT> Arguments:
+<DD> (none)
+<P>
+<DT> Example:
+<DD> The following example stops the current schedule, if any. If
+     another schedule is pending in the queue, that schedule is then
+     allowed to run.
+
+<pre>
+  abort_schedule
+</pre>
+<DT> Context:
+<DD> Use the <code>abort_schedule</code> command to prematurely
+     terminate a running schedule (after running any statements
+     that the user registered with the <a
+     href=cleanup.html>cleanup</a> command).
+<P>
+     If no schedule is currently running, this command has no effect.
+</DL>
+
+
+<HR>
+Erik Leitch (Tue Mar 30 21:15:39 PST 2004)
+</BODY>

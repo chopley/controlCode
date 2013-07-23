@@ -1,0 +1,43 @@
+# This is readout interval as 2^n
+
+#------------------------------------------------------------
+# Set up pointing model parameters
+#------------------------------------------------------------
+
+import "$CBASS_DIR/control/conf/specific/pointing.init"
+
+#------------------------------------------------------------
+# Set up antenna locations
+#------------------------------------------------------------
+
+import "$CBASS_DIR/control/conf/specific/locations.init"
+
+#-----------------------------------------------------------------------
+# Configure frame grabber
+#-----------------------------------------------------------------------
+
+
+
+
+
+
+
+qassignFrameGrabberChannel chan0, ptel0
+#assignFrameGrabberChannel chan1, ptel1
+#assignFrameGrabberChannel chan2, ptel2
+#
+#setOpticalCameraRotation angle=0:00:00, ptel=all#
+#
+#setOpticalCameraXImDir upright, ptel=all
+#setOpticalCameraYImDir upright, ptel=all
+#setOpticalCameraFov fov=12.0, ptel=all
+#setOpticalCameraAspect aspect=0.75, ptel=all
+
+#------------------------------------------------------------
+# Set script output logging
+#------------------------------------------------------------
+ifhost sptcontrol {
+  scriptDir /data/sptdaq/script_output
+}
+
+print "Initialization script ended."

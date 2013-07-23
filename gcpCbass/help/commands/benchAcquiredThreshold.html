@@ -1,0 +1,34 @@
+<html>
+<head>
+<title>SPT Command List</title>
+<link rel=stylesheet href="../StyleSheet.css" type="text/css">
+</head>
+
+<body bgcolor="#add8e6">
+<font face="Verdana, Arial, Helvetica, sans-serif"size="2" color="#000000">
+<h2>The <span class=command>benchAcquiredThreshold</span> command (usage)</h2>
+<hr>
+
+<h2><i>Context:</i></h2><p>
+
+The benchAcquiredThreshold command is intended to be used in observing scripts to set the "dead band" distance from the commanded position within which each optical bench actuator is considered to be on target.
+
+<p>
+
+If optical bench brakes are enabled, when an actuator gets within threshold millimeters of its commanded position, it is 
+stopped and the brake is applied. 
+
+<p>
+
+Whether or not brakes are enabled, the expresion $acquired(bench) becomes true only when all actuators are within 
+threshold millimeters of their commanded position.
+
+<h2><i>Examples:</i></h2><p>
+
+<dd>The following example sets the threshold to two hundredths of a millimeter
+
+<pre>
+  benchAcquiredThreshold 0.02
+</pre>
+
+</body></html>

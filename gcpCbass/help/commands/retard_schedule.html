@@ -1,0 +1,42 @@
+<HEAD><TITLE>The retard_schedule command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><code><b>retard_schedule</b> index number</code></font>
+<P>
+Move a schedule one or more entries towards the back of the schedule queue.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><a href=../dataTypes/QueueEntry.html>QueueEntry</a> index</code>
+     <DD> The queue index of the schedule to be moved.
+     <DT><code><a href=../dataTypes/Count.html>Count</a> number</code>
+     <DD> The number of queue positions to advance the schedule.
+     </DL>
+<P>
+<DT> Example:
+<DD> The following example moves entry 0 in the queue of pending
+     schedules to entry 2, allowing the schedule that previously was
+     in entry 1 to advance to entry 0.
+
+<pre>
+  retard_schedule 0, 2
+</pre>
+
+<DT> Context:
+<DD> The <code><a
+     href=schedule.html>schedule</a></code> command queues scheduling
+     scripts to be executed in the order that they are queued. If
+     it then turns out that some of the scripts in the queue
+     need to be run before a particular script that is nearer to the
+     front of the queue, then the <code>retard_schedule</code>
+     command can be used to move it one or more entries further back
+     in the queue. Note that this can also be done interactively in
+     the topmost pane of the main viewer window.
+</DL>
+
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:42 PST 2004)
+</BODY>

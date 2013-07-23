@@ -1,0 +1,61 @@
+<HEAD><TITLE>The "tpzero" command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name="tpzero"> <code><b>tpzero</b> receivers, bands</code> </a></font>
+<P>
+Tell the channelizer to measure new total-power zero-offsets.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/Receivers.html>Receivers</a> receivers</b></code>
+     <DD> The set of receivers to target.
+     <DT><code><b><a href=../dataTypes/Bands.html>Bands</a> bands</b></code>
+     <DD> The set of frequency bands to target.
+     </DL>
+<P>
+<DT> Example 1:
+<DD> The following example asks the channelizer task to find the
+     total-power offsets of all correlator channels. This process
+     takes a couple of integrations to complete, so in
+     the example, the <code><a href=acquired.html>acquired</a></code>
+     function is used to wait for it to complete (or fail).
+<pre>
+ tpzero all, all
+ until $acquired(channels)
+</pre>
+
+<P>
+<DT> Context:
+<DD> The BICEP has 13 receivers (rx0..rx12) whose 10GHz bandpasses are
+     split into 10 bands (band0..band9) by a channelizer. The
+     resulting 130 signal paths are refered to as channels. The
+     corresponding correlators contain total power detectors that
+     produce voltage outputs that reflect their input powers. The
+     <code>tpzero</code> measures the zero offsets of these detector
+     outputs by turning off the IF amplifiers that feed the correlator
+     inputs for a full integration, then measuring the resulting total
+     power outputs in raw ADC counts. These numbers are recorded in the
+     archive and are used by the channelizer task when asked to set
+     the total power correlator inputs to a specified level. Since the
+     process takes a couple of integrations to complete the control
+     program is notified on completion and the
+     <code>$acquired(tp)</code> then returns <code>true</code>.
+<P>
+     Note that if any command that involves the channelizer, such as
+     the <code><a href=channel.html>channel</a></code>,
+     <code><a href=attenuate.html>attenuate</a></code>,
+     <code><a href=channelizer.html>channelizer</a></code>,
+     <code><a href=tp.html>tp</a></code> or another
+     <code><a href=tpzero.html>tpzero</a></code> command, is initiated
+     before a previous <code>tpzero</code> (or <code>tp</code>) command is
+     complete, the new command replaces the previous one, but only in
+     those channels that are common to both commands. In particular
+     the &quot;<code>channelizer off</code>&quot; command cancels any
+     ongoing commands in all channels.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:59 PST 2004)
+</BODY>

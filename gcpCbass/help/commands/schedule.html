@@ -1,0 +1,92 @@
+<HEAD><TITLE>The schedule datatype.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name=schedule> <code><b>schedule</b> filename(arguments)</code> </a></font>
+<P>
+Add a schedule to the list of pending schedules.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><a href=../dataTypes/Script.html>Script</a> filename(arguments)</code>
+     <DD> The path-name and arguments of the scheduling script to be
+          queued.
+     </DL>
+<P>
+<DT> Example:
+<DD> The following example adds a file called <code>observe.sch</code>
+     from the home directory of a user called <code>bicepdaq</code> to the
+     queue of schedules waiting to be run. If the script is ok, and
+     no other schedules are waiting to run, then it will be run
+     immediately. This script doesn't expect any arguments, so
+     the parentheses that normally enclose the argument list have
+     been omitted.
+
+<pre>
+ schedule ~bicepdaq/observe.sch
+</pre>
+
+<DT> Example of using arguments:
+<DD> One can also pass arguments to scheduling scripts. These should
+     be constant expressions that don't include either references to
+     variables or function calls. A scheduling script accepts
+     arguments if the first line of the script contains their
+     declarations, enclosed in parentheses. For example, to create a
+     script that takes a <a href=../dataTypes/String.html>String</a> argument and a
+     Boolean argument, the first line of the script would be something
+     like the following:
+
+<pre>
+ (String s, Boolean b)
+ ...statements...
+</pre>
+
+     Thereafter <code>s</code> and <code>b</code> behave like global
+     variables with constant values.
+<P>
+     The corresponding script, say <code>~bicepdaq/test.sch</code> would
+     then be scheduled by typing:
+
+<pre>
+  schedule ~bicepdaq/test.sch("hello", true)
+</pre>
+
+     If one were to call the script without any arguments, an error
+     message would be emitted.
+<P>
+     An interesting use of schedule arguments is to pass the name(s)
+     of files to <a href=import.html><code>import</code></a>
+     statements. This allows one to create a template schedules which
+     operate on lists of values provided by imported files. An example
+     of this is given in the documentation of the <a
+     href=../dataTypes/Script.html><code>Script</code></a> command, where a list of
+     stars to be observed is passed to the script by way of a file
+     that the script imports. The imported file declares and defines a
+     list variable of sources, giving it the name expected by the <a
+     href=foreach.html><code>foreach</code></a> statement that follows
+     the import statement.
+<P>
+
+<DT> Context:
+<DD> When a script is scheduled for execution, it is first compiled by
+     the scheduler. This has the side effect of checking the script
+     for errors. If it gets through the compiler without any errors,
+     then it gets added to the end of the queue of scripts that are
+     pending to be run. After this point the script file can be
+     discarded or changed without effecting the compiled form of the
+     script. While the antenna control control system is running, the script
+     at the front of the queue runs to completion. If the antenna control
+     control system goes down, for any reason, the script at the font
+     of the queue is rewound to its start and returned to a pending
+     state. It is then restarted when the control-system comes back on
+     line. Once the script at the front of the queue has run to
+     completion, or been aborted with the
+     <code><a href=abort_schedule.html>abort_schedule</a></code> command,
+     the next schedule on the queue is started.
+</DL>
+
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:44 PST 2004)
+</BODY>

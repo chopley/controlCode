@@ -1,0 +1,127 @@
+<HEAD><TITLE>The command command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name=command> <code><b>command</b> name/flags(type
+name, ...[type name, ...]) {commands}</code> </a></font>
+<P>
+Create a new command.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT> <code>name</code>
+     <DD> The name to give the function.
+     <DT> <code>/flags</code>
+     <DD> Zero or more flag names, each one preceded by a '/' character.
+          These appear as boolean variables inside the command. If the
+          user calls the command with these flags, the corresponding
+          boolean variables are assigned the value &quot;true&quot;.
+          Otherwise they have the value &quot;false&quot;. See
+          <a href=#flags>below</a> for an example.
+     <DT> <code>type name</code>
+     <DD> The datatype and name of an argument of the command.
+     <DT> <code>[type name,...]</code>
+     <DD> The datatypes and names of any optional arguments. Such
+          arguments can only be used to give values to the optional
+          arguments of other commands (ie. ultimately to the
+          optional arguments of builtin commands). See
+          <a href=#optional>below</a> for an example.
+     </DL>
+<P>
+<DT> Example:
+<DD> The following example creates a command that, when invoked,
+     delays the execution of the script for a given interval.
+     It then shows how one would call it to delay script execution
+     for 10 minutes.
+
+<pre>
+ command delay(Interval dt) {
+   until $elapsed &gt;= $dt
+ }
+
+ delay 10m
+</pre>
+
+<DT> <a name=flags>Example of using flags:</a>
+<DD> The following is an example of the definition of a command
+     with flags.
+<P>
+<pre>
+ command track_source/wait/warn(Source src) {
+ 
+   # If the source is currently below the horizon, and the
+   # caller has asked to be told about this, output a warning.
+ 
+   if($warn & $el($src) &lt; 0.0) {
+     print "Source ", $src, " is currently below the horizon."
+   }
+ 
+   # Tell the control system to track the source.
+ 
+   track $src
+ 
+   # If the caller wants us to wait until the source is acquired before
+   # returning, do so here.
+ 
+   if($wait) {
+     until $acquired(source)
+   }
+ }
+</pre>
+<P>
+This command can then be called like:
+
+<pre>
+  track_source/warn mars
+</pre>
+in which case <code>$warn</code> would be true and <code>$wait</code>
+would be false, or
+<pre>
+  track_source/warn/wait moon
+</pre>
+to make both <code>$warn</code> and <code>$wait</code> true, or
+<pre>
+  track_source mercury
+</pre>
+to make both <code>$warn</code> and <code>$wait</code> false.
+<P>
+
+<DT> <a name=optional>Example of using optional arguments:</a>
+<DD> The following is an example of the definition of a command
+     that has optional arguments.
+
+<pre>
+  command offset_track(Source src, [PointingOffset az, PointingOffset el,
+		       PointingOffset dk]) {
+    offset az=$az, el=$el, dk=$dk
+    track $src
+  }
+</pre>
+
+This command has one mandatory argument, followed by 3 optional
+arguments. The optional arguments are passed to the builtin
+<code>&quot;offset&quot;</code> command, where only the arguments that
+are presented to the <code>offset_track</code> command actually become
+arguments of the <code>offset</code> command. To be more precise, if
+the optional $az argument is omitted when calling
+<code>offset_track</code>, the corresponding optional $az argument of
+the offset command will be assigned a nul value. For example:
+
+<pre>
+ offset_track moon, az=0:0:5, el=0:0:10
+</pre>
+
+would result in the <code>offset</code> command installing new
+tracking offsets for azimuth and elevation, but would leave the deck
+angle offset unchanged.
+
+<P>
+<DT> Context:
+<DD> Once a new command has been defined like this it can be used
+     exactly as though it were a builtin command.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:15:54 PST 2004)
+</BODY>

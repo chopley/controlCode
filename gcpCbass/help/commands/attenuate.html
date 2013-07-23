@@ -1,0 +1,74 @@
+<HEAD><TITLE>The "attenuate" command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name="attenuate"> <code><b>attenuate</b>/add receivers, bands, attenuation</code> </a></font>
+<P>
+Insert a given attenuation into the signal path of one or more channels.
+<P>
+<DL>
+<DT> Optional qualifier arguments:
+<DD> <DL>
+     <DT><code>/add</code>
+     <DD> If this modifier is present the attenuation will be added to the
+          existing value. Otherwise it will replace it.
+     </DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/Receivers.html>Receivers</a> receivers</b></code>
+     <DD> The set of receivers to target.
+     <DT><code><b><a href=../dataTypes/Bands.html>Bands</a> bands</b></code>
+     <DD> The set of frequency bands to target.
+     <DT><code><b><a href=../dataTypes/Attenuation.html>Attenuation</a> attenuation</b></code>
+     <DD> The attenuation to insert into the specified channels.
+     </DL>
+<P>
+<DT> Example 1:
+<DD> The following example inserts the maximum programmable
+     attenuation into the signal path of every channel.
+<pre>
+ attenuate all, all, 31
+</pre>
+
+<DT> Example 2:
+<DD> The next example inserts 10db of attenuation into all channels
+     whose signals originate from receiver 4.
+<pre>
+ attenuate rx4, all, 10
+</pre>
+
+<DT> Example 3:
+<DD> This example reduces the attenuation to band 4 from
+     all receivers by 10db.
+<pre>
+ attenuate/add all, band4, -10
+</pre>
+
+<P>
+<DT> Context:
+<DD> The BICEP has 13 receivers (rx0..rx12) whose 10GHz bandpasses are
+     split into 10 bands (band0..band9) by a channelizer. The
+     resulting 130 signal paths are refered to as channels. Every
+     channel contains a programmable attenuator for setting the
+     input power to the corresponding correlator input. The amount of
+     attenuation needed by each channel depends on the sensitivity of
+     the various components in the signal path and the brightness of
+     the source. For bright planets more attenuation will be needed
+     than when observing the CMB. Normally this attenuation should be
+     set by using the <code><a href=tp.html>tp</a></code> command to
+     request a given input power level, but it can also be set
+     explicitly through the <code>attenuate</code> command.
+<P>
+     Note that all of the attenuators are set to maximum attenuation
+     when the control system starts.
+<P>
+     This command can be used to add and then remove attenuation
+     when going to the calibration transmitter.
+     However note that if a /add causes values to hit the 0 and 31 db 
+     limits then doing a /add with the same number of opposite sign
+     will not restore the previous state.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:15:43 PST 2004)
+</BODY>

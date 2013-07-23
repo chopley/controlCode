@@ -1,0 +1,34 @@
+<HEAD><TITLE>The PowerMeterCommand datatype.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+<center><a href=../index.html>Index</a></center>
+<HR>
+<font color=blue><a name=PowerMeterCommand> <code><b>PowerMeterCommand</b></code> </a></font>
+<P>
+The type of command to send to the noise-cal power meter.
+<P>
+<DL>
+<DT> Input Format:
+    <UL>
+    <LI> <code><b>reset</b></code>  - Reset the power meter.
+    <LI> <code><b>zero</b></code>   - Perform a zero-calibration of
+                                      the power meter.
+    <LI> <code><b>dbm</b></code>    - Set the power meter to report
+                                      powers in dBm.
+    <LI> <code><b>read</b></code>   - Take a new power reading without
+                                      waiting for the next readout
+                                      interval to expire.
+    </UL>
+<P>
+<DT> Example:
+<DD> The following example resets the power meter to its power-on
+     defaults.
+
+<pre>
+ power_meter reset
+</pre>
+
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:35 PST 2004)
+</BODY>

@@ -1,0 +1,38 @@
+<HEAD><TITLE>A function that returns the archive filtering disposition.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><code><a href=../dataTypes/Count.html>Count</a> <b>archive_filtering</b>()</code> </a></font>
+<P>
+Return a boolean value which says whether archive filtering is enabled.
+<P>
+<DL>
+<DT> Arguments: (none)
+<DD> <DL>
+     <DT>(none)
+     </DL>
+<P>
+<DT> Example 1:
+<DD> The following example shows an example of how a command can
+     restore the previous archive filtering after changing it
+     temporarily.
+
+<pre>
+  command fire_noise_cal() {
+    Boolean state = $archive_filtering
+    archive filtering=true
+    ...
+    archive filtering=$state
+  }
+</pre>
+
+<P>
+<DT>Context:
+<DD>This function is intended for library commands that need to enable
+    or disable archive filtering termporarily, then restore the original
+    filtering mode before returning to the caller.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:15:42 PST 2004)
+</BODY>

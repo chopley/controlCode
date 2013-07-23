@@ -1,0 +1,31 @@
+# This is readout interval as 2^n
+
+#------------------------------------------------------------
+# Set up pointing model parameters
+#------------------------------------------------------------
+
+import "$CBASS_DIR/control/conf/specific/pointing.init"
+
+#------------------------------------------------------------
+# Set up antenna locations
+#------------------------------------------------------------
+
+import "$CBASS_DIR/control/conf/specific/locations.init"
+
+#-----------------------------------------------------------------------
+# Configure frame grabber
+#-----------------------------------------------------------------------
+
+setOpticalCameraRotation angle=0.0
+setOpticalCameraFov fov=14
+setOpticalCameraAspect aspect=0.73
+
+#------------------------------------------------------------
+# Start taking data.
+#------------------------------------------------------------
+
+ifhost sptcontrol {
+  scriptDir /data/sptdaq/script_output
+}
+
+print "Initialization script ended."

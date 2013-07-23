@@ -1,0 +1,43 @@
+<HEAD><TITLE>The "logdir" command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name="logdir"> <code><b>logdir</b> directory</code> </a></font>
+<P>
+Tell the control program where to place subsequent log files.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/Wdir.html>Wdir</a> directory</b></code>
+     <DD> The full name of the directory in which subsequent log
+          files should be placed.
+     </DL>
+<P>
+<DT> Example:
+<DD> The following example tells the control program to place
+     subsequent log files in /scr/bicep/log. This is directory
+     is then used on a subsequent call to the <code>open log</code>
+     command.
+
+<pre>
+  arcdir /scr/bicepdaq/log
+  ...
+  open log
+</pre>
+
+<P>
+
+<DT>Context:
+<DD> Until otherwise specified log files are placed in the
+     directory from which the control program was started. This can be
+     changed either by calling the <code>logdir</code> command, or by
+     using the optional <code>dir</code> argument of the
+     <a href=open.html>open</a> command. The new directory isn't used
+     until a new log file is opened.
+</DL>
+
+<P>
+<HR>
+Erik Leitch (Tue Mar 30 21:16:22 PST 2004)
+</BODY>

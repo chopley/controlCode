@@ -1,0 +1,13 @@
+#!/bin/sh
+#
+# This script will be executed *after* all the other init scripts.
+# You can put your own initialization stuff in here if you don't
+# want to do the full Sys V style init stuff.
+
+touch /var/lock/subsys/local
+
+# make video driver readable by frame grabber
+chmod a+rw /dev/video0
+
+# put corefiles in /tmp/corefiles
+echo "/tmp/corefiles/%t_%e_sig%s" > /proc/sys/kernel/core_pattern

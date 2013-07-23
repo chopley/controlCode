@@ -1,0 +1,78 @@
+<HEAD><TITLE>The optical pointing window</TITLE></HEAD>
+<BODY bgcolor=add8e6>
+<center><a href=index.html>Index</a></center>
+<HR>
+<center><H1>The optical pointing window</H1></center>
+
+The optical pointing window is designed for manual optical
+pointing. It provides an interactive way to adjust the current azimuth
+and elevation offsets using the mouse, and a way to send a signal to
+the active scheduling script to say that the star is centered.
+
+<P>
+
+The dialog presents a rectangular grid over which one clicks the left
+mouse button to move the telescope. An arrow drawn between the center
+of the grid and the mouse cursor shows the direction that the optical
+camera image will move on the TV. Similarly, the distance away from
+the center of the grid at which you click sets the distance to be
+moved on the TV.  The effective size of the grid on the sky can be is
+set by the contents of the &quot;<b>Grid Interval</b>&quot; entry
+field below the grid. The number of arcseconds that you enter there,
+is reflected in the separation of neighboring lines on the grid. The
+same separation is used for the displayed concentric circles.  The
+actual number of arcseconds that would be moved in the X and Y
+directions of the TV, is displayed textually above the grid.
+
+<P>
+
+When the &quot;<b>Snap to grid</b>&quot; toggle button is depressed,
+only offset positions that lie on the displayed grid vertices will be
+allowed, and the cursor arrow will appear to jump from one to the next
+as you move the cursor over the grid. The repeatability delivered by
+this option can be useful if you want to move the telescope first one
+way then back to its starting position.
+
+<P>
+
+The &quot;<b>Reverse arrow</b>&quot; toggle button reverses the
+direction of the arrow that is drawn between the center of the grid
+and the mouse cursor. This also reverses the direction that the
+telescope moves when one clicks over a particular location of the
+grid.
+
+<P>
+
+Pressing the button that says, &quot;<b>Press here when the star is
+centered in the crosshairs</b>&quot; does two things. First it
+executes a &quot;<a href=../mark.html>mark one, f0</a>&quot; command
+to place a mark in the archive indicating that the star is centered.
+Then after this has had time to propogate through to the control
+system and get recorded along with the coordinates and centering
+offsets of the current star, it executes a &quot;<a
+href=../signal.html>signal done</a>&quot; command to tell the
+currently executing schedule that it is safe to move to the next star.
+The scheduling script can use the &quot;<a
+href=../signaled.html>$signaled(done)</a>&quot; function to wait for
+this signal. Without the delay between placing the mark in the archive
+and moving on to the next star, the next star would erroneously get
+marked as centered. During the delay, the star-centered button is
+shown in red.
+
+<H3>How to align of the grid</H3>
+
+For the offset dialog to work properly the relative orientation of the
+optical camera and the deck platform must be configured with the <a
+href=../tv_angle.html>tv_angle</a> command. Once the appropriate angle
+has been determined, this command should be placed in the <a
+href=../control_config.html>sptControl.init</a> startup script.
+
+<P>
+
+If you don't know what this angle should be, then you can work it out
+empirically by noticing what direction a star image on the TV monitor
+moves when you click in a given direction over the grid.
+
+<HR>
+Erik Leitch (7-Nov-1999)
+</BODY>

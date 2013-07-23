@@ -1,0 +1,100 @@
+#-----------------------------------------------------------------------
+# Configure the command timeout
+#-----------------------------------------------------------------------
+
+configureCmdTimeout state=on, interval=20m
+#configurePagerAutoEnable interval=1h, state=on
+configureCmdTimeout state=on
+
+#-----------------------------------------------------------------------
+# Clear previous email addresses
+#-----------------------------------------------------------------------
+
+pagerEmailAddress clear
+
+#-----------------------------------------------------------------------
+# Set email addresses to be notified when the pager is activated
+#-----------------------------------------------------------------------
+
+#pagerEmailAddress add, email="cbass@astro.caltech.edu"
+#pagerEmailAddress add, email="rgk@ovro.caltech.edu"
+#pagerEmailAddress add, email="rgk@isp.com"
+#pagerEmailAddress add, email="stephen.muchovej@gmail.com"
+#pagerEmailAddress add, email="ogk@astro.caltech.edu"
+pagerEmailAddress add, email="cbass-obs@astro.caltech.edu" 
+
+#-----------------------------------------------------------------------
+# This command clears the list of register to page on
+#-----------------------------------------------------------------------
+
+pager clear
+
+#-----------------------------------------------------------------------
+# Registers to page on.  Note that at present, ranges must be
+# specified in the same units the registers are natively recorded (ie,
+# with no calibration applied in szaViewer). Thus if a temperature is
+# recorded in milli-degrees, the range cannot be recorded in degrees,
+# or it will activate the pager every time!
+#
+# If you want to see typical values for an un-calibrated register in
+# szaViewer, select File->Load Calibration File and enter /dev/null
+# (or blank) in the dialog box
+#
+#
+# Registers default to activating the pager if the value goes out of
+# the specified range.  You can change this to page when the value
+# goes into the specified range by specifying the optional argument
+# 'outOfRange=false'.
+#
+# If you want to page on the delta of a register instead of the value,
+# specify the optional argument 'delta=true'.  Note that this
+# currently checks the absolute value of the delta.
+#-----------------------------------------------------------------------
+
+
+#-----------------------------------------------------------------------
+# Page if data aren't received for any antenna
+#-----------------------------------------------------------------------
+
+addPagerRegister antenna0.frame.received, 2,      2, nFrame=200#, comment="No data are being received from an antenna. \n"
+
+#-----------------------------------------------------------------------
+# Page of computer box temps being too high
+#-----------------------------------------------------------------------
+addPagerRegister antenna0.thermal.dlpTemperatureSensors[4], -10,     60, nFrame=200, outOfRange=true#, comment="Computer box on antenna too hot.\n"
+
+
+#---------------------------------------------------------------------
+# weather station frozen  -- page on derivative of value
+#-----------------------------------------------------------------------
+
+addPagerRegister array.weather.airTemperature[0],-0.0001, 0.0001, nFrame=7200, outOfRange=false, delta=true#, comment="You may need to restart the weather station server by typing controlSystem restart wxserver"
+
+#---------------------------------------------------------------------
+# cryostat cold
+#-----------------------------------------------------------------------
+addPagerRegister antenna0.thermal.lsTemperatureSensors[0], 0,     40, nFrame=100, outOfRange=true#, comment="Cryostat is warming up!  Check on compressor.\n"
+addPagerRegister antenna0.thermal.lsTemperatureSensors[1], 0,     40, nFrame=100, outOfRange=true#, comment="Cryostat is warming up!  Check on compressor.\n"
+addPagerRegister antenna0.thermal.lsTemperatureSensors[2], 0,     40, nFrame=100, outOfRange=true#, comment="Cryostat is warming up!  Check on compressor.\n"
+addPagerRegister antenna0.thermal.lsTemperatureSensors[3], 0,     40, nFrame=100, outOfRange=true#, comment="Cryostat is warming up!  Check on compressor.\n"
+addPagerRegister antenna0.thermal.lsTemperatureSensors[4], 0,     40, nFrame=100, outOfRange=true#, comment="Cryostat is warming up!  Check on compressor.\n"
+addPagerRegister antenna0.thermal.lsTemperatureSensors[5], 0,     40, nFrame=100, outOfRange=true#, comment="Cryostat is warming up!  Check on compressor.\n"
+addPagerRegister antenna0.thermal.lsTemperatureSensors[6], 0,     80, nFrame=100, outOfRange=true#, comment="Cryostat is warming up!  Check on compressor.\n"
+
+#---------------------------------------------------------------------
+# backend backed up
+#-----------------------------------------------------------------------
+addPagerRegister antenna0.receiver.diagsnostics[0][0], 0, 10, nFrame=100, outOfRange=true#, comment="Backend lagging.  Take burst of data.\n" 
+
+#---------------------------------------------------------------------
+# Servo amplifiers enabled
+#-----------------------------------------------------------------------
+addPagerRegister antenna0.servo.enable_status_az1[0], 1, 1, nFrame=100#, comment="Servo amplifier not enabled.\n"
+addPagerRegister antenna0.servo.enable_status_az2[0], 1, 1, nFrame=100#, comment="Servo amplifier not enabled.\n"
+addPagerRegister antenna0.servo.enable_status_el1[0], 1, 1, nFrame=100#, comment="Servo amplifier not enabled.\n"
+
+
+
+pager enable
+
+

@@ -1,0 +1,65 @@
+(Time lststart, Time lststop)
+# Cycle through list of radio sources taking a scan on each
+
+import ~cbass/gcpCbass/control/sch/schedlib.sch
+
+# Define source list, with an lst for each one.  This list is
+# created by rad_set.m in order to maximize sky coverage.
+
+group Source {
+  Source name,    # source name
+  Time  lst,      # lst to observe source
+  Double flux     # source flux (in Jy)
+}
+
+# using only sources which are brighter than 10Jy
+
+
+init_obs("Beginning schedule: radio_pointing_raster_bright.sch")
+
+listof Source sources = {
+}
+
+# Set archiving to the correct mode
+mark remove, all
+
+#-----------------------------------------------------------------------
+# Main loop -- track the next source,do a raster, move on
+#-----------------------------------------------------------------------
+
+log "Waiting for lststart..."
+until $after($lststart,lst) 
+
+  # Go through list
+  foreach(Source source) $sources {
+
+    # Break if past lststop
+    if $time(lst)>$lststop {
+       log "lststop reached"
+       break
+    }   
+
+    # Skip sources whose lst has passed
+    if $time(lst)>$source.lst  {
+       log "too late for source",$source.name
+    }
+
+    # Do a cross on next available source
+    if $time(lst)<$source.lst {
+      # Track Source
+      track $source.name
+      until $acquired(source)
+      until $after($source.lst,lst) # make sure we're not early
+      log "Doing scan on ",$source.name
+
+      # Do scan
+      scan point_10d_0.5step
+      #until $acquired(scan)
+      until $elapsed >7m
+
+      zeroScanOffsets   	# zero offsets
+    }
+  }
+
+terminate("Finished schedule: radio_pointing_raster_bright.sch")
+

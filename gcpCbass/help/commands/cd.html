@@ -1,0 +1,63 @@
+<HEAD><TITLE>The cd command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><code><b>cd</b> pathname</code></font>
+<P>
+Change the current working directory.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/Dir.html>Dir</a> pathname</b></code>
+     <DD> The full name of the directory that is to be used as
+          the new working directory.
+     </DL>
+<P>
+
+<DT> Example:
+<DD> The following example changes the current working directory to
+     a directory that contains scheduling scripts, then uses the
+     scheduling script to queue one of these scripts. Without the
+     preceding cd command, the user would have to type in the full
+     path name of the observe.sch script.
+
+<pre>
+  cd ~bicepdaq/BICEP/sch
+  schedule observe.sch
+</pre>
+
+<P>
+<DT> Context:
+<DD> The <code>cd</code> and <a href=pwd.html><code>pwd</code></a>
+     commands act essentially like the unix shell commands of the same
+     name.
+<P>
+     When the user doesn't specify a full pathname to a command like
+     <a href=schedule.html><code>schedule</a></code>, the full pathname is
+     constructed by appending the user's relative pathname to the
+     current working directory. The <code>cd</code> command allows
+     this working directory to be changed, while the
+     <a href=pwd.html><code>pwd</code></a> command lets
+     one see what it is currently set to.
+
+<P>
+<DT> Warning:
+     In scripts, pathnames to commands like <a
+     href=schedule.html><code>schedule</a></code> are converted to full
+     pathnames when the script is compiled, not when they are run, so
+     <code>cd</code> commands are essentially useless in scripts,
+     because they are executed long after all filenames have been set
+     in stone. In fact the only good reason that I can think of for
+     using a <code>cd</code> command in a script is in the the control program
+     initialization file, where it can be used to set the working
+     directory of interactive users.
+<P>
+     The reason for expanding filenames during compilation is to allow
+     the compiler to check that the corresponding files and
+     directories exist before accepting scripts for execution.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:15:50 PST 2004)
+</BODY>

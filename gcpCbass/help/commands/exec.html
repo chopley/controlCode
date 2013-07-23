@@ -1,0 +1,32 @@
+<html>
+<head>
+<title>SPT Command List</title>
+<link rel=stylesheet href="../StyleSheet.css" type="text/css">
+</head>
+
+<body bgcolor="#add8e6">
+<font face="Verdana, Arial, Helvetica, sans-serif"size="2" color="#000000">
+<h2>The <span class=command>exec</span> command (usage)</h2>
+<hr>
+
+
+<h2><i>Context:</i></h2><p>
+
+The exec command executes command as a Linux command in a shell. The maximum length of the command is 127 characters.
+
+<p>
+
+The output of the command is written to a log file in the directory specified by the 
+<a class=plain href=scriptDir.html>scriptDir</a> command.
+
+<p>
+
+Commands can be executed on a remote computer using ssh.
+
+<h2><i>Examples:</i></h2><p>
+
+<pre>
+exec "ssh root@optics /home/zak/sptSecondaryCryostatDaq/main_CalibratorControl.exe -ChopperFreq 19"
+</pre>
+
+</body></html>

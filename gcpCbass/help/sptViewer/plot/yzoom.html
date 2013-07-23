@@ -1,0 +1,48 @@
+<HEAD><TITLE>Zooming and autoscaling the Y-axis of a plot</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+<center><a href=index.html>Index</a></center>
+<HR>
+<center><H1>Zooming and autoscaling the Y-axis of a plot</H1></center>
+
+To interactively modify the y-axis range of a graph, start by
+switching to the y-zoom cursor-input mode, either by pressing the
+&quot;<b>y</b>&quot; key within the plot window, or by pulling down
+the <b>Cursor</b> menu of the plot window and selecting <b>Zoom
+Y</b>. The cursor will change to a single horizontal line. If you want
+to increase the y-axis range to reveal all of the available data that
+lies between the current x-axis range, press the right mouse
+button. If you want to temporarily zoom in on the y-axis of a graph,
+start by moving the horizontal cursor line to one end of the desired
+y-axis range within the graph, then click the right mouse button. The
+cursor will split into two horizontal lines, one of which stays where
+you just clicked, and the second of which should be moved to the other
+end of the range. Upon clicking the left mouse button again, the plot
+will be zoomed to display the data between the two cursor lines. If
+you didn't zoom in as far as you wanted, you can repeat the above
+operations to zoom in further. The viewer keeps a stack of all these
+nested zooms, so that unzooming takes you back to the previous zoom
+limits.
+
+<P>
+
+<H2>Unzooming the y-axis</H2>
+
+To unzoom the y-axis after zooming in one or more times, if you aren't
+still in y-zoom cursor input mode, select it as described above, then
+press the right mouse button. Each time that you press this button,
+the graph will unzoom back to the previous zoom limits, until all the
+nested zooms have been undone. If you then press this button again,
+the y-axis range will be increased just enough to reveal all of the
+data that lies within the current x-axis limits.
+
+<H2>Adopting zoom limits</H2>
+
+If after zooming in, you want to forget about all nested zoom limits
+and adopt the current zoom limits as the normal graph limits, press
+the middle mouse button. This will update the limits shown in the <a
+href=conf_graph.html>plot configuration dialog</a>, and those that are
+recorded when you <a href=save.html>save</a> the plot configuration.
+
+<HR>
+Erik Leitch (6-Nov-1999)
+</BODY>

@@ -1,0 +1,536 @@
+<head>
+<title>The  Register List.</title>
+<link rel=stylesheet href="./StyleSheet.css" type="text/css">
+</head>
+
+<body bgcolor="#add8e6">
+<font face="Verdana, Arial, Helvetica, sans-serif"size="2" color="#000000">
+<center><a class=plain href=index.html>Index</a></center>
+<h1>The  Register List.</h1>
+A single frame of data is divided into a three-tiered hierarchy of related data items which I refer to as "registers" in this document. At the lowest level, a register consists of a block of data of arbitrary type, organized into a multi-dimensional array.  These blocks are grouped into logically-related units called "boards", typically representing data from a discrete hardware unit (a CAN module, for example) or a logically distinct operation (for example tracking, as opposed to receiver control). These boards are further grouped into "register maps", which represent data from related subsystems (an antenna, say, or the correlator).
+<p>The <a class=plain href=#reglist>list of register maps</a> is given below.  Clicking on any one will take you to the list of boards for that register map (if several register maps are identical, only the first will be listed).  Clicking on a board will take you to the list of register blocks for that board, each listed using the following columns:
+<p><pre>    registerMap.board.block[valid indices]       (data type) (archive status) (integration status)</pre>
+<p>The data type is one of the following:
+<ul>
+<li><font color="#000080">boolean</font> - A single-byte type, consisting of a 0 (false) or 1 (true), used for storing truth values</li>
+<li><font color="#000080">unsigned char</font> - A single-byte type, used for storing ASCII characters, or small unsigned integers (0 - 255)</li>
+<li><font color="#000080">char</font> - A single-byte type, used for storing ASCII characters, or small signed integers (0 - &#177 127)</li>
+<li><font color="#000080">unsigned short</font> - A two-byte type, used for storing integers (0 - 65535)</li>
+<li><font color="#000080">short</font> - A two-byte type, used for storing signed integers (0 - &#177 32767)</li>
+<li><font color="#000080">unsigned integer</font> - A four-byte type, used for storing unsigned integers (0 - 4.29497e+09)</li>
+<li><font color="#000080">integer</font> - A four-byte type, used for storing signed integers (0 - &#177 2.14748e+09)</li>
+<li><font color="#000080">float</font> - A four-byte type, used for storing floating-point values</li>
+<li><font color="#000080">double</font> - An 8-byte type, used for storing floating-point values</li>
+<li><font color="#000080">date</font> - An 8-byte type, used for storing high-precision dates.  
+Registers of this type can be displayed by appending the following extensions to the register name: </li>
+<ul>
+<li><font color="#000080">(none)</font> - a fractional MJD</li>
+<li><font color="#000080">.date</font> - a UTC date string</li>
+<li><font color="#000080">.time</font> - a time string</li>
+</ul>
+<li><font color="#000080">complex float</font> - An 8-byte type, used for storing complex (re, im) floating-point values  
+Registers of this type can be displayed by appending the following extensions to the register name: </li>
+<ul>
+<li><font color="#000080">(none)</font> - a complex number</li>
+<li><font color="#000080">.real</font> - the real part only</li>
+<li><font color="#000080">.imag</font> - the imaginary part only</li>
+<li><font color="#000080">.amp</font> - the amplitude (magnitude) of the complex number</li>
+<li><font color="#000080">.phase</font> - the phase (in degrees) of the complex number</li>
+</ul>
+</ul>
+<p>The archive status indicates which registers are archived:
+<ul>
+<li><font color="#000080">archived</font> - The register is archived</li>
+<li><font color="#000080">not archived</font> - The register is not archived</li>
+</ul>
+<p>The integration status indicates how the register is treated when frames are combined before being written to disk:
+<ul>
+<li><font color="#000080">summed</font> - The register is simply summed on integration</li>
+<li><font color="#000080">unioned</font> - The register is bit-wise unioned on integration</li>
+<li><font color="#000080">pre-averaged</font> - The register is averaged before being written to disk</li>
+<li><font color="#000080">post-averaged</font> - The register is summed before being written to disk, 
+and divided by the number of frames which were combined on read-in</li>
+<li><font color="#000080">not integrated</font> - Only the last value of the register is archived
+</ul>
+<hr>
+<a name=reglist></a>
+<h1>Index of register maps</h1>
+<dl>
+<dt><a class=plain href=#antenna0>antenna0</a></dt>
+<dd>Antenna</dd>
+<dt><a class=plain href=#array>array</a></dt>
+<dd>General housekeeping</dd>
+</dl>
+<br><br>Array map comprises a total of: 319100 bytes, of which 319100 are archived.<br><br>
+
+<hr>
+<a name=antenna0></a>
+<h2>antenna0
+<h2>Antenna</h2>
+<dl>
+<dt><a class=plain href=#antenna0.frame>frame</a></dt>
+<dd>Information about the data frame</dd>
+<dt><a class=plain href=#antenna0.koekblik>koekblik</a></dt>
+<dd>ADC in the Koekblik</dd>
+<dt><a class=plain href=#antenna0.power>power</a></dt>
+<dd>Ethernet Power Strip registers</dd>
+<dt><a class=plain href=#antenna0.receiver>receiver</a></dt>
+<dd>Receiver registers</dd>
+<dt><a class=plain href=#antenna0.roach1>roach1</a></dt>
+<dd>Data from roach 1</dd>
+<dt><a class=plain href=#antenna0.roach2>roach2</a></dt>
+<dd>Data from roach 2</dd>
+<dt><a class=plain href=#antenna0.servo>servo</a></dt>
+<dd>Servo registers</dd>
+<dt><a class=plain href=#antenna0.thermal>thermal</a></dt>
+<dd>Thermal Module registers</dd>
+<dt><a class=plain href=#antenna0.tracker>tracker</a></dt>
+<dd>Tracking registers</dd>
+</dl>
+<br><br>This register map comprises a total of: 319019 bytes, 
+of which 319019 are archived<br><br>
+<a class=plain href=#reglist>Back to register map list</a>
+
+<hr>
+<a name=antenna0.frame></a>
+<h2>antenna0.frame
+<h2>Information about the data frame</h2>
+<dl>
+<dt><font color="#000080">antenna0.frame.features[0]</font><font color="660066"> (unsigned integer) (archived) (unioned)</font></dt>
+<dd>A bit-mask union of feature markers received from the control program since the last frame was constructed.</dd>
+<dt><font color="#000080">antenna0.frame.markSeq[0]</font><font color="660066"> (unsigned integer) (archived) (not integrated)</font></dt>
+<dd>The sequence mark-command sequence number associated with the current value of the "features" register.</dd>
+<dt><font color="#000080">antenna0.frame.nsnap[0]</font><font color="660066"> (unsigned integer) (archived) (summed)</font></dt>
+<dd>The number of frames which have been integrated to producethis frame</dd>
+<dt><font color="#000080">antenna0.frame.received[0]</font><font color="660066"> (unsigned char) (archived) (unioned)</font></dt>
+<dd>Bit 1 will be high if data in this frame were received duringthe last integration.  If not, bit 0 will be set high</dd>
+<dt><font color="#000080">antenna0.frame.record[0]</font><font color="660066"> (unsigned integer) (archived) (not integrated)</font></dt>
+<dd>A monotonically-increasing record number since the last re-start of the control system</dd>
+<dt><font color="#000080">antenna0.frame.status[0]</font><font color="660066"> (unsigned integer) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">antenna0.frame.utc[0]</font><font color="660066"> (date) (archived) (not integrated)</font></dt>
+<dd>The MJD of this frame</dd>
+</dl>
+<br><br>This board comprises a total of: 29 bytes, 
+of which 29 are archived<br><br>
+<a class=plain href=#antenna0>Back to board list</a>
+
+<hr>
+<a name=antenna0.koekblik></a>
+<h2>antenna0.koekblik
+<h2>ADC in the Koekblik</h2>
+<dl>
+<dt><font color="#000080">antenna0.koekblik.adc[0-11]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>ADC values from labjack</dd>
+<dt><font color="#000080">antenna0.koekblik.status[0]</font><font color="660066"> (unsigned integer) (archived) (not integrated)</font></dt>
+<dd></dd>
+</dl>
+<br><br>This board comprises a total of: 52 bytes, 
+of which 52 are archived<br><br>
+<a class=plain href=#antenna0>Back to board list</a>
+
+<hr>
+<a name=antenna0.power></a>
+<h2>antenna0.power
+<h2>Ethernet Power Strip registers</h2>
+<dl>
+<dt><font color="#000080">antenna0.power.status[0-7]</font><font color="660066"> (double) (archived) (not integrated)</font></dt>
+<dd>Status</dd>
+<dt><font color="#000080">antenna0.power.status[0-7]</font><font color="660066"> (double) (archived) (not integrated)</font></dt>
+<dd>Status</dd>
+</dl>
+<br><br>This board comprises a total of: 68 bytes, 
+of which 68 are archived<br><br>
+<a class=plain href=#antenna0>Back to board list</a>
+
+<hr>
+<a name=antenna0.receiver></a>
+<h2>antenna0.receiver
+<h2>Receiver registers</h2>
+<dl>
+<dt><font color="#000080">antenna0.receiver.drainCurrent[0-3]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>LNA Drain currents</dd>
+<dt><font color="#000080">antenna0.receiver.drainVoltage[0-3]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>LNA Drain voltages</dd>
+<dt><font color="#000080">antenna0.receiver.gateVoltage[0-3]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>LNA Gate voltages</dd>
+<dt><font color="#000080">antenna0.receiver.status[0]</font><font color="660066"> (unsigned integer) (archived) (not integrated)</font></dt>
+<dd></dd>
+</dl>
+<br><br>This board comprises a total of: 52 bytes, 
+of which 52 are archived<br><br>
+<a class=plain href=#antenna0>Back to board list</a>
+
+<hr>
+<a name=antenna0.roach1></a>
+<h2>antenna0.roach1
+<h2>Data from roach 1</h2>
+<dl>
+<dt><font color="#000080">antenna0.roach1.channel[0-63][0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>channel number</dd>
+<dt><font color="#000080">antenna0.roach1.intCount[0][0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>int count</dd>
+<dt><font color="#000080">antenna0.roach1.intLength[0][0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>int length</dd>
+<dt><font color="#000080">antenna0.roach1.LL[0-63][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Left-Left data</dd>
+<dt><font color="#000080">antenna0.roach1.LLfreq[0][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Freq Average Left-Left data</dd>
+<dt><font color="#000080">antenna0.roach1.LLtime[0-63][0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Time Average Left-Left data</dd>
+<dt><font color="#000080">antenna0.roach1.load1[0-63][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Load 1 data</dd>
+<dt><font color="#000080">antenna0.roach1.load1freq[0][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Freq Average Load 1 data</dd>
+<dt><font color="#000080">antenna0.roach1.load1time[0-63][0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Time Average Load 1 data</dd>
+<dt><font color="#000080">antenna0.roach1.load2[0-63][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Load 2 data</dd>
+<dt><font color="#000080">antenna0.roach1.load2freq[0][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Freq Average Load 2 data</dd>
+<dt><font color="#000080">antenna0.roach1.load2time[0-63][0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Time Average Load 2 data</dd>
+<dt><font color="#000080">antenna0.roach1.mode[0][0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>mode</dd>
+<dt><font color="#000080">antenna0.roach1.Q[0-63][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Q data</dd>
+<dt><font color="#000080">antenna0.roach1.Qfreq[0][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Freq Average Q data</dd>
+<dt><font color="#000080">antenna0.roach1.Qtime[0-63][0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Time Average Q data</dd>
+<dt><font color="#000080">antenna0.roach1.RR[0-63][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Right-Right data</dd>
+<dt><font color="#000080">antenna0.roach1.RRfreq[0][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Freq Average Right-Right data</dd>
+<dt><font color="#000080">antenna0.roach1.RRtime[0-63][0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Time Average Right-Right data</dd>
+<dt><font color="#000080">antenna0.roach1.status[0]</font><font color="660066"> (unsigned integer) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">antenna0.roach1.switchstatus[0][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Switch Status Vector</dd>
+<dt><font color="#000080">antenna0.roach1.U[0-63][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>U data</dd>
+<dt><font color="#000080">antenna0.roach1.Ufreq[0][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Freq Average U data</dd>
+<dt><font color="#000080">antenna0.roach1.utc[0][0-99]</font><font color="660066"> (date) (archived) (not integrated)</font></dt>
+<dd>The MJD date and time of each measurement</dd>
+<dt><font color="#000080">antenna0.roach1.Utime[0-63][0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Time Average U data</dd>
+<dt><font color="#000080">antenna0.roach1.version[0][0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>version number</dd>
+</dl>
+<br><br>This board comprises a total of: 159012 bytes, 
+of which 159012 are archived<br><br>
+<a class=plain href=#antenna0>Back to board list</a>
+
+<hr>
+<a name=antenna0.roach2></a>
+<h2>antenna0.roach2
+<h2>Data from roach 2</h2>
+<dl>
+<dt><font color="#000080">antenna0.roach2.channel[0-63][0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>channel number</dd>
+<dt><font color="#000080">antenna0.roach2.intCount[0][0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>int count</dd>
+<dt><font color="#000080">antenna0.roach2.intLength[0][0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>int length</dd>
+<dt><font color="#000080">antenna0.roach2.LL[0-63][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Left-Left data</dd>
+<dt><font color="#000080">antenna0.roach2.LLfreq[0][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Freq Average Left-Left data</dd>
+<dt><font color="#000080">antenna0.roach2.LLtime[0-63][0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Time Average Left-Left data</dd>
+<dt><font color="#000080">antenna0.roach2.load1[0-63][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Load 1 data</dd>
+<dt><font color="#000080">antenna0.roach2.load1freq[0][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Freq Average Load 1 data</dd>
+<dt><font color="#000080">antenna0.roach2.load1time[0-63][0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Time Average Load 1 data</dd>
+<dt><font color="#000080">antenna0.roach2.load2[0-63][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Load 2 data</dd>
+<dt><font color="#000080">antenna0.roach2.load2freq[0][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Freq Average Load 2 data</dd>
+<dt><font color="#000080">antenna0.roach2.load2time[0-63][0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Time Average Load 2 data</dd>
+<dt><font color="#000080">antenna0.roach2.mode[0][0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>mode</dd>
+<dt><font color="#000080">antenna0.roach2.Q[0-63][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Q data</dd>
+<dt><font color="#000080">antenna0.roach2.Qfreq[0][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Freq Average Q data</dd>
+<dt><font color="#000080">antenna0.roach2.Qtime[0-63][0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Time Average Q data</dd>
+<dt><font color="#000080">antenna0.roach2.RR[0-63][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Right-Right data</dd>
+<dt><font color="#000080">antenna0.roach2.RRfreq[0][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Freq Average Right-Right data</dd>
+<dt><font color="#000080">antenna0.roach2.RRtime[0-63][0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Time Average Right-Right data</dd>
+<dt><font color="#000080">antenna0.roach2.status[0]</font><font color="660066"> (unsigned integer) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">antenna0.roach2.switchstatus[0][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Switch Status Vector</dd>
+<dt><font color="#000080">antenna0.roach2.U[0-63][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>U data</dd>
+<dt><font color="#000080">antenna0.roach2.Ufreq[0][0-99]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Freq Average U data</dd>
+<dt><font color="#000080">antenna0.roach2.utc[0][0-99]</font><font color="660066"> (date) (archived) (not integrated)</font></dt>
+<dd>The MJD date and time of each measurement</dd>
+<dt><font color="#000080">antenna0.roach2.Utime[0-63][0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>Time Average U data</dd>
+<dt><font color="#000080">antenna0.roach2.version[0][0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd>version number</dd>
+</dl>
+<br><br>This board comprises a total of: 159012 bytes, 
+of which 159012 are archived<br><br>
+<a class=plain href=#antenna0>Back to board list</a>
+
+<hr>
+<a name=antenna0.servo></a>
+<h2>antenna0.servo
+<h2>Servo registers</h2>
+<dl>
+<dt><font color="#000080">antenna0.servo.az_no_wrap[0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">antenna0.servo.circuit_breaker[0][0-3]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">antenna0.servo.contactor[0][0-3]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">antenna0.servo.drive_lids[0]</font><font color="660066"> (boolean) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">antenna0.servo.fast_az_err[0][0-4]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">antenna0.servo.fast_az_pos[0][0-4]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">antenna0.servo.fast_el_err[0][0-4]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">antenna0.servo.fast_el_pos[0][0-4]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">antenna0.servo.mechanical_brakes[0]</font><font color="660066"> (boolean) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">antenna0.servo.servo_status[0][0-3]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">antenna0.servo.slow_az_pos[0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">antenna0.servo.slow_el_pos[0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">antenna0.servo.status[0]</font><font color="660066"> (unsigned integer) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">antenna0.servo.thermal_cutout[0][0-3]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">antenna0.servo.utc[0][0-4]</font><font color="660066"> (date) (archived) (not integrated)</font></dt>
+<dd>The MJD date and time of each position</dd>
+</dl>
+<br><br>This board comprises a total of: 202 bytes, 
+of which 202 are archived<br><br>
+<a class=plain href=#antenna0>Back to board list</a>
+
+<hr>
+<a name=antenna0.thermal></a>
+<h2>antenna0.thermal
+<h2>Thermal Module registers</h2>
+<dl>
+<dt><font color="#000080">antenna0.thermal.ccHeaterCurrent[0]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">antenna0.thermal.ccTemperatureLoad[0][0-4]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">antenna0.thermal.dlpTemperatureSensors[0-7]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">antenna0.thermal.lsTemperatureSensors[0-7]</font><font color="660066"> (float) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">antenna0.thermal.status[0]</font><font color="660066"> (unsigned integer) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">antenna0.thermal.utc[0][0-4]</font><font color="660066"> (date) (archived) (not integrated)</font></dt>
+<dd>The MJD date and time of each measurement</dd>
+</dl>
+<br><br>This board comprises a total of: 132 bytes, 
+of which 132 are archived<br><br>
+<a class=plain href=#antenna0>Back to board list</a>
+
+<hr>
+<a name=antenna0.tracker></a>
+<h2>antenna0.tracker
+<h2>Tracking registers</h2>
+<dl>
+<dt><font color="#000080">antenna0.tracker.actual[0-1][0]</font><font color="660066"> (double) (archived) (not integrated)</font></dt>
+<dd>The actual position of the telescope at the end of the sample period {Azimuth, Elevation} in milli-arcseconds</dd>
+<dt><font color="#000080">antenna0.tracker.actualCounts[0-1][0]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>The actual move counts {Azimuth, Elevation} (milli-counts/second) </dd>
+<dt><font color="#000080">antenna0.tracker.actualRates[0-1][0]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>The actual move rates {Azimuth, Elevation} (milli-counts/second) </dd>
+<dt><font color="#000080">antenna0.tracker.axis[0]</font><font color="660066"> (unsigned integer) (archived) (not integrated)</font></dt>
+<dd>The pointing model being used (true if radio, false if optical) </dd>
+<dt><font color="#000080">antenna0.tracker.az_limits[0-1]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>The azimuth software limits {min,max} in topocentric mount angles (milli-arcseconds) </dd>
+<dt><font color="#000080">antenna0.tracker.el_limits[0-1]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>The elevation software limits {min,max} in topocentric mount angles (milli-arcseconds) </dd>
+<dt><font color="#000080">antenna0.tracker.encoder_mul[0-1]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>The encoder multiplier</dd>
+<dt><font color="#000080">antenna0.tracker.encoder_off[0-1]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>The encoder zero points {azimuth,elevation} (milli-arcseconds) </dd>
+<dt><font color="#000080">antenna0.tracker.eqneqx[0][0]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>The value of the equation of the equinoxes (milliseconds) </dd>
+<dt><font color="#000080">antenna0.tracker.equat_geoc[0-2][0]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>The geocentric apparent {RA (mas), Dec (mas), Distance (micro-AU)} </dd>
+<dt><font color="#000080">antenna0.tracker.equat_off[0-1][0]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>User-supplied equatorial offsets {RA,Dec} (milli-arcsec) </dd>
+<dt><font color="#000080">antenna0.tracker.errors[0-1][0]</font><font color="660066"> (double) (archived) (not integrated)</font></dt>
+<dd>The difference between the actual and expected positions of the telescope </dd>
+<dt><font color="#000080">antenna0.tracker.expected[0-1][0]</font><font color="660066"> (double) (archived) (not integrated)</font></dt>
+<dd>The expected position of the telescope at the end of the sample period {Azimuth, Elevation} in milli-arcseconds</dd>
+<dt><font color="#000080">antenna0.tracker.expectedCounts[0-1][0]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>The demanded move rates {Azimuth, Elevation} (milli-counts/second) </dd>
+<dt><font color="#000080">antenna0.tracker.expectedRates[0-1][0]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>The demanded move rates {Azimuth, Elevation} (milli-counts/second) </dd>
+<dt><font color="#000080">antenna0.tracker.fixedCollimation[0-1]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>The fixed collimation value {x, y} (milli-arcseconds)</dd>
+<dt><font color="#000080">antenna0.tracker.flexure[0-1]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>The gravitational flexure of the telescope. First index is the coefficient of the sin(el) term (milli-arcseconds per sin(el), second index is the coefficient of the cos(el) term (milli-arcseconds per cos(el))</dd>
+<dt><font color="#000080">antenna0.tracker.horiz_geoc[0-1][0]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>The geocentric apparent {Az,El} (milli-arcseconds) </dd>
+<dt><font color="#000080">antenna0.tracker.horiz_mount[0-1][0]</font><font color="660066"> (double) (archived) (not integrated)</font></dt>
+<dd>The mount {Az,El} (milli-arcseconds) </dd>
+<dt><font color="#000080">antenna0.tracker.horiz_off[0-1][0]</font><font color="660066"> (double) (archived) (not integrated)</font></dt>
+<dd>User-supplied offsets in {Azimuth, Elevation} (milli-arcsec) </dd>
+<dt><font color="#000080">antenna0.tracker.horiz_topo[0-1][0]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>The topocentric apparent {Az,El} (milli-arcseconds) </dd>
+<dt><font color="#000080">antenna0.tracker.lacking[0][0]</font><font color="660066"> (unsigned integer) (archived) (not integrated)</font></dt>
+<dd>A bitwise union of gcp::util::Pointing::Parameter enumerators. Each represents an unreceived pointing model parameter (see gcp::util::Pointing for definitions). </dd>
+<dt><font color="#000080">antenna0.tracker.location[0-2]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>Offset from the nominal site {Up(mm), East(mm), North(mm)}</dd>
+<dt><font color="#000080">antenna0.tracker.lst[0][0]</font><font color="660066"> (unsigned integer) (archived) (not integrated)</font></dt>
+<dd>The local apparent sidereal time (milliseconds)</dd>
+<dt><font color="#000080">antenna0.tracker.mode[0][0]</font><font color="660066"> (unsigned integer) (archived) (not integrated)</font></dt>
+<dd>The tracking mode (A DriveMode enumerator from rtcnetcoms.h) </dd>
+<dt><font color="#000080">antenna0.tracker.motor_current[0-3][0]</font><font color="660066"> (short) (archived) (not integrated)</font></dt>
+<dd>The telescope drive motor currents</dd>
+<dt><font color="#000080">antenna0.tracker.offSource[0][0]</font><font color="660066"> (unsigned char) (archived) (unioned)</font></dt>
+<dd>0 if on source. 1 if off source</dd>
+<dt><font color="#000080">antenna0.tracker.ptel[0]</font><font color="660066"> (unsigned char) (archived) (not integrated)</font></dt>
+<dd>If model is optical, this register encodes the corresponding pointing telescope</dd>
+<dt><font color="#000080">antenna0.tracker.raw_encoder[0-1][0]</font><font color="660066"> (double) (archived) (not integrated)</font></dt>
+<dd>The actual raw elevation encoder positions of the telescope at the end of the sample period in milli-arcseconds</dd>
+<dt><font color="#000080">antenna0.tracker.refraction[0-2][0]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>The A and B refraction terms (micro-arcseconds) and the resulting offset in elevation (milli-arcseconds)</dd>
+<dt><font color="#000080">antenna0.tracker.scan_flag[0][0]</font><font color="660066"> (unsigned integer) (archived) (not integrated)</font></dt>
+<dd>A register that records the scan flag</dd>
+<dt><font color="#000080">antenna0.tracker.scan_ind[0][0]</font><font color="660066"> (unsigned integer) (archived) (not integrated)</font></dt>
+<dd>A register that records the index of the current scan offsets</dd>
+<dt><font color="#000080">antenna0.tracker.scan_mode[0][0]</font><font color="660066"> (unsigned integer) (archived) (unioned)</font></dt>
+<dd>A register that records the current scan mode.</dd>
+<dt><font color="#000080">antenna0.tracker.scan_name[0-29]</font><font color="660066"> (unsigned char) (archived) (not integrated)</font></dt>
+<dd>The '\0' terminated scan name </dd>
+<dt><font color="#000080">antenna0.tracker.scan_off[0-1][0]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>User-supplied offsets in {Azimuth,Elevation} (milli-arcsec)</dd>
+<dt><font color="#000080">antenna0.tracker.scan_rep[0][0]</font><font color="660066"> (unsigned integer) (archived) (not integrated)</font></dt>
+<dd>Which repetition of a multi-rep scan are we on?</dd>
+<dt><font color="#000080">antenna0.tracker.servoBusy[0]</font><font color="660066"> (boolean) (archived) (not integrated)</font></dt>
+<dd>Servo is busy</dd>
+<dt><font color="#000080">antenna0.tracker.siteActual[0-2]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>The actual location of the site {longitude (mas), latitude (mas), altitude (mm)}</dd>
+<dt><font color="#000080">antenna0.tracker.siteFiducial[0-2]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>The fiducial location of the site {longitude (mas), latitude (mas), altitude (mm)}</dd>
+<dt><font color="#000080">antenna0.tracker.sky_xy_off[0-1][0]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>Sky-based offsets {x,y} (milli-arcsec), with y directed towards the zenith along the great circle that joins the zenith and the (un-offset) pointing center, and x directed along the perpendicular great circle that goes through the (un-offset) pointing center and is perpendicular to y</dd>
+<dt><font color="#000080">antenna0.tracker.source[0-29]</font><font color="660066"> (unsigned char) (archived) (not integrated)</font></dt>
+<dd>The '\0' terminated source name </dd>
+<dt><font color="#000080">antenna0.tracker.state[0][0]</font><font color="660066"> (unsigned char) (archived) (unioned)</font></dt>
+<dd>The tracking status, represented by one of the TrackingStatus enumerators defined in gcp::util::TrackingStatus.h:<br><ul><li>0 -- Lacking</li><li>1 -- Time error</li><li>2 -- Updating</li><li>3 -- Halted</li><li>4 -- Slewing</li><li>5 -- Tracking</li><li>6 -- Too low</li><li>7 -- Too high</li></ul></dd>
+<dt><font color="#000080">antenna0.tracker.stateMask[0][0]</font><font color="660066"> (unsigned char) (archived) (unioned)</font></dt>
+<dd>A bit mask of the tracking status:<br><ul><li>Bit 0 high -- Lacking</li><li>Bit 1 high -- Time error</li><li>Bit 2 high -- Updating</li><li>Bit 3 high -- Halted</li><li>Bit 4 high -- Slewing</li><li>Bit 5 high -- Tracking</li><li>Bit 6 high -- Too low</li><li>Bit 7 high -- Too high</li></ul></dd>
+<dt><font color="#000080">antenna0.tracker.status[0]</font><font color="660066"> (unsigned integer) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">antenna0.tracker.sum_tach[0-1][0]</font><font color="660066"> (short) (archived) (not integrated)</font></dt>
+<dd>The telescope elevation drive tachometer readings</dd>
+<dt><font color="#000080">antenna0.tracker.tilt_average_interval[0]</font><font color="660066"> (double) (archived) (not integrated)</font></dt>
+<dd>The interval over which telescope tilt meter readings are averaged (seconds)</dd>
+<dt><font color="#000080">antenna0.tracker.tilt_enabled[0][0]</font><font color="660066"> (boolean) (archived) (not integrated)</font></dt>
+<dd>The telescope tilt meter corrections are enabled by command</dd>
+<dt><font color="#000080">antenna0.tracker.tilt_max[0]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>The maximum allowed absolute value of telescope tilt meter readings (milli-arcseconds)</dd>
+<dt><font color="#000080">antenna0.tracker.tilts[0-2]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>Axis tilts {hour-angle, latitude, elevation} (milli-arcseconds) </dd>
+<dt><font color="#000080">antenna0.tracker.tilt_temp[0][0]</font><font color="660066"> (short) (archived) (not integrated)</font></dt>
+<dd>The telescope tilt meter temperature</dd>
+<dt><font color="#000080">antenna0.tracker.tilt_theta[0]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>The angle between Grid North and telescope tilt meter x axis (milli-arcseconds)</dd>
+<dt><font color="#000080">antenna0.tracker.tilt_xy[0-1][0]</font><font color="660066"> (short) (archived) (not integrated)</font></dt>
+<dd>The raw telescope tilt meter readings (milliradians * 32768 / 8)</dd>
+<dt><font color="#000080">antenna0.tracker.tilt_xy_avg[0-1][0]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>The moving average of telescope tilt meter readings (milli-arcseconds)</dd>
+<dt><font color="#000080">antenna0.tracker.tilt_xy_offset[0-1]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>The zeroing offset added to telescope tilt meter readings when calculating tilts (milli-arcseconds)</dd>
+<dt><font color="#000080">antenna0.tracker.time_diff[0][0]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>The GPS time minus the system time (provided to other systems via Network Time Protocol) at the end of the sample period (nanoseconds)</dd>
+<dt><font color="#000080">antenna0.tracker.ut1utc[0][0]</font><font color="660066"> (integer) (archived) (not integrated)</font></dt>
+<dd>The value of UT1-UTC (milliseconds) </dd>
+<dt><font color="#000080">antenna0.tracker.utc[0][0]</font><font color="660066"> (date) (archived) (not integrated)</font></dt>
+<dd>The MJD date and time of each position</dd>
+</dl>
+<br><br>This board comprises a total of: 460 bytes, 
+of which 460 are archived<br><br>
+<a class=plain href=#antenna0>Back to board list</a>
+
+<hr>
+<a name=array></a>
+<h2>array
+<h2>General housekeeping</h2>
+<dl>
+<dt><a class=plain href=#array.frame>frame</a></dt>
+<dd>Information about the data frame</dd>
+<dt><a class=plain href=#array.weather>weather</a></dt>
+<dd>Registers of the weather station</dd>
+</dl>
+<br><br>This register map comprises a total of: 81 bytes, 
+of which 81 are archived<br><br>
+<a class=plain href=#reglist>Back to register map list</a>
+
+<hr>
+<a name=array.frame></a>
+<h2>array.frame
+<h2>Information about the data frame</h2>
+<dl>
+<dt><font color="#000080">array.frame.features[0]</font><font color="660066"> (unsigned integer) (archived) (unioned)</font></dt>
+<dd>A bit-mask union of feature markers received from the control program since the last frame was constructed.</dd>
+<dt><font color="#000080">array.frame.markSeq[0]</font><font color="660066"> (unsigned integer) (archived) (not integrated)</font></dt>
+<dd>The sequence mark-command sequence number associated with the current value of the "features" register.</dd>
+<dt><font color="#000080">array.frame.nsnap[0]</font><font color="660066"> (unsigned integer) (archived) (summed)</font></dt>
+<dd>The number of frames which have been integrated to producethis frame</dd>
+<dt><font color="#000080">array.frame.received[0]</font><font color="660066"> (unsigned char) (archived) (unioned)</font></dt>
+<dd>Bit 1 will be high if data in this frame were received duringthe last integration.  If not, bit 0 will be set high</dd>
+<dt><font color="#000080">array.frame.record[0]</font><font color="660066"> (unsigned integer) (archived) (not integrated)</font></dt>
+<dd>A monotonically-increasing record number since the last re-start of the control system</dd>
+<dt><font color="#000080">array.frame.status[0]</font><font color="660066"> (unsigned integer) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">array.frame.utc[0]</font><font color="660066"> (date) (archived) (not integrated)</font></dt>
+<dd>The MJD of this frame</dd>
+</dl>
+<br><br>This board comprises a total of: 29 bytes, 
+of which 29 are archived<br><br>
+<a class=plain href=#array>Back to board list</a>
+
+<hr>
+<a name=array.weather></a>
+<h2>array.weather
+<h2>Registers of the weather station</h2>
+<dl>
+<dt><font color="#000080">array.weather.airTemperature[0]</font><font color="660066"> (double) (archived) (pre-averaged)</font></dt>
+<dd>The air temperature around the weather station (C) </dd>
+<dt><font color="#000080">array.weather.pressure[0]</font><font color="660066"> (double) (archived) (pre-averaged)</font></dt>
+<dd>The atmospheric pressure (millibars) </dd>
+<dt><font color="#000080">array.weather.relativeHumidity[0]</font><font color="660066"> (double) (archived) (pre-averaged)</font></dt>
+<dd>The relative humidity (0-1)</dd>
+<dt><font color="#000080">array.weather.status[0]</font><font color="660066"> (unsigned integer) (archived) (not integrated)</font></dt>
+<dd></dd>
+<dt><font color="#000080">array.weather.utc[0]</font><font color="660066"> (date) (archived) (not integrated)</font></dt>
+<dd>Current weather station sample time </dd>
+<dt><font color="#000080">array.weather.windDirection[0]</font><font color="660066"> (double) (archived) (pre-averaged)</font></dt>
+<dd>The azimuth from which the wind is blowing (degrees)</dd>
+<dt><font color="#000080">array.weather.windSpeed[0]</font><font color="660066"> (double) (archived) (pre-averaged)</font></dt>
+<dd>The wind speed measured by the weather station (m/s) </dd>
+</dl>
+<br><br>This board comprises a total of: 52 bytes, 
+of which 52 are archived<br><br>
+<a class=plain href=#array>Back to board list</a>
+<hr><p>Last modified by Erik Leitch (16-MAY-2013 10:56:48.115)
+</body>

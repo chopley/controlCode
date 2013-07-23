@@ -1,0 +1,7 @@
+The bulletin can be retrieved at:
+
+  ftp://maia.usno.navy.mil/ser7/ser7.dat
+
+Then type:
+
+  awk -f ut1utc.awk ser7.dat > ut1utc.ephem

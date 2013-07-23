@@ -1,0 +1,32 @@
+<HEAD><TITLE>The peak command</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><code><a href=../dataTypes/PointingOffset.html>PointingOffset</a> <b>peak</b>(offset)</code> </a></font>
+<P>
+Return the current peak of a given frame grabber image.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/Peak.html>Peak</a> offset</b></code>
+     <DD>The offset of interest (in degrees).
+     </DL>
+<P>
+<DT> Example 1:
+<DD> The following example displays the x-offset of the frame grabber image peak
+
+<pre>
+  print $peak(x)
+</pre>
+<P>
+<DT>Context:
+<DD>When the frame grabber returns an image, the x and y offsets of the peak 
+pixel are automatically computed.  This function returns their value to the 
+scripting interface.
+
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:32 PST 2004)
+</BODY>

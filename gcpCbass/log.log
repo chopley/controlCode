@@ -1,0 +1,279 @@
+cd directives/common;make make_directives
+make[1]: Entering directory `/home/cbassuser/cbass/gcpCbass/directives/common'
+echo "Inside generic make_directives"
+Inside generic make_directives
+make make_make_directives
+make[2]: Entering directory `/home/cbassuser/cbass/gcpCbass/directives/common'
+echo "Inside generic make_make_directives"
+Inside generic make_make_directives
+make[2]: Leaving directory `/home/cbassuser/cbass/gcpCbass/directives/common'
+echo "generic have changed = " n
+generic have changed =  n
+make[1]: Leaving directory `/home/cbassuser/cbass/gcpCbass/directives/common'
+make[1]: Entering directory `/home/cbassuser/cbass/gcpCbass/directives/cbass'
+make make_make_directives
+make[2]: Entering directory `/home/cbassuser/cbass/gcpCbass/directives/cbass'
+make[2]: Leaving directory `/home/cbassuser/cbass/gcpCbass/directives/cbass'
+make[1]: Leaving directory `/home/cbassuser/cbass/gcpCbass/directives/cbass'
+
+-----------------------------------------------------------------------
+      Making libs in directory: antenna/control
+-----------------------------------------------------------------------
+
+make[1]: Entering directory `/home/cbassuser/cbass/gcpCbass/antenna/control/cbass'
+make /home/cbassuser/cbass/gcpCbass/lib/libGcpAntennaControlSpecific.so; 
+make[2]: Entering directory `/home/cbassuser/cbass/gcpCbass/antenna/control/cbass'
+make[2]: `/home/cbassuser/cbass/gcpCbass/lib/libGcpAntennaControlSpecific.so' is up to date.
+make[2]: Leaving directory `/home/cbassuser/cbass/gcpCbass/antenna/control/cbass'
+make[1]: Leaving directory `/home/cbassuser/cbass/gcpCbass/antenna/control/cbass'
+/home/cbassuser/cbass/gcpCbass
+
+-----------------------------------------------------------------------
+      Making libs in directory: pgutil
+-----------------------------------------------------------------------
+
+make[1]: Entering directory `/home/cbassuser/cbass/gcpCbass/pgutil/common'
+make /home/cbassuser/cbass/gcpCbass/lib/libGcpPgUtilCommon.so; 
+make[2]: Entering directory `/home/cbassuser/cbass/gcpCbass/pgutil/common'
+make[2]: `/home/cbassuser/cbass/gcpCbass/lib/libGcpPgUtilCommon.so' is up to date.
+make[2]: Leaving directory `/home/cbassuser/cbass/gcpCbass/pgutil/common'
+make[1]: Leaving directory `/home/cbassuser/cbass/gcpCbass/pgutil/common'
+/home/cbassuser/cbass/gcpCbass
+
+-----------------------------------------------------------------------
+      Making libs in directory: mediator
+-----------------------------------------------------------------------
+
+make[1]: Entering directory `/home/cbassuser/cbass/gcpCbass/mediator/cbass'
+make /home/cbassuser/cbass/gcpCbass/lib/libGcpMediatorSpecific.so; 
+make[2]: Entering directory `/home/cbassuser/cbass/gcpCbass/mediator/cbass'
+make[2]: `/home/cbassuser/cbass/gcpCbass/lib/libGcpMediatorSpecific.so' is up to date.
+make[2]: Leaving directory `/home/cbassuser/cbass/gcpCbass/mediator/cbass'
+make[1]: Leaving directory `/home/cbassuser/cbass/gcpCbass/mediator/cbass'
+/home/cbassuser/cbass/gcpCbass
+
+-----------------------------------------------------------------------
+      Making libs in directory: program
+-----------------------------------------------------------------------
+
+make[1]: Entering directory `/home/cbassuser/cbass/gcpCbass/program/common'
+make /home/cbassuser/cbass/gcpCbass/lib/libGcpProgramCommon.so; 
+make[2]: Entering directory `/home/cbassuser/cbass/gcpCbass/program/common'
+make[2]: `/home/cbassuser/cbass/gcpCbass/lib/libGcpProgramCommon.so' is up to date.
+make[2]: Leaving directory `/home/cbassuser/cbass/gcpCbass/program/common'
+make[1]: Leaving directory `/home/cbassuser/cbass/gcpCbass/program/common'
+/home/cbassuser/cbass/gcpCbass
+
+-----------------------------------------------------------------------
+      Making libs in directory: util
+-----------------------------------------------------------------------
+
+make[1]: Entering directory `/home/cbassuser/cbass/gcpCbass/util/common'
+make /home/cbassuser/cbass/gcpCbass/lib/libGcpUtilCommon.so; 
+make[2]: Entering directory `/home/cbassuser/cbass/gcpCbass/util/common'
+make[2]: `/home/cbassuser/cbass/gcpCbass/lib/libGcpUtilCommon.so' is up to date.
+make[2]: Leaving directory `/home/cbassuser/cbass/gcpCbass/util/common'
+make[1]: Leaving directory `/home/cbassuser/cbass/gcpCbass/util/common'
+make[1]: Entering directory `/home/cbassuser/cbass/gcpCbass/util/cbass'
+make /home/cbassuser/cbass/gcpCbass/lib/libGcpUtilSpecific.so; 
+make[2]: Entering directory `/home/cbassuser/cbass/gcpCbass/util/cbass'
+make[2]: `/home/cbassuser/cbass/gcpCbass/lib/libGcpUtilSpecific.so' is up to date.
+make[2]: Leaving directory `/home/cbassuser/cbass/gcpCbass/util/cbass'
+make[1]: Leaving directory `/home/cbassuser/cbass/gcpCbass/util/cbass'
+/home/cbassuser/cbass/gcpCbass
+
+-----------------------------------------------------------------------
+      Making libs in directory: grabber
+-----------------------------------------------------------------------
+
+make[1]: Entering directory `/home/cbassuser/cbass/gcpCbass/grabber/common'
+make /home/cbassuser/cbass/gcpCbass/lib/libGcpGrabberCommon.so; 
+make[2]: Entering directory `/home/cbassuser/cbass/gcpCbass/grabber/common'
+make[2]: `/home/cbassuser/cbass/gcpCbass/lib/libGcpGrabberCommon.so' is up to date.
+make[2]: Leaving directory `/home/cbassuser/cbass/gcpCbass/grabber/common'
+make[1]: Leaving directory `/home/cbassuser/cbass/gcpCbass/grabber/common'
+/home/cbassuser/cbass/gcpCbass
+
+-----------------------------------------------------------------------
+      Making libs in directory: cfitsio
+-----------------------------------------------------------------------
+
+make[1]: Entering directory `/home/cbassuser/cbass/gcpCbass/cfitsio/common'
+make[1]: Nothing to be done for `libs'.
+make[1]: Leaving directory `/home/cbassuser/cbass/gcpCbass/cfitsio/common'
+/home/cbassuser/cbass/gcpCbass
+
+-----------------------------------------------------------------------
+      Making libs in directory: matlab
+-----------------------------------------------------------------------
+
+make[1]: Entering directory `/home/cbassuser/cbass/gcpCbass/matlab/common'
+make[1]: Nothing to be done for `libs'.
+make[1]: Leaving directory `/home/cbassuser/cbass/gcpCbass/matlab/common'
+/home/cbassuser/cbass/gcpCbass
+
+-----------------------------------------------------------------------
+      Making libs in directory: idl
+-----------------------------------------------------------------------
+
+make[1]: Entering directory `/home/cbassuser/cbass/gcpCbass/idl/common'
+make[1]: Nothing to be done for `libs'.
+make[1]: Leaving directory `/home/cbassuser/cbass/gcpCbass/idl/common'
+/home/cbassuser/cbass/gcpCbass
+cd control;make
+make[1]: Entering directory `/home/cbassuser/cbass/gcpCbass/control'
+make[2]: Entering directory `/home/cbassuser/cbass/gcpCbass/control/code'
+ 
+       **** Building UNIX utility libs ****
+ 
+make[3]: Entering directory `/home/cbassuser/cbass/gcpCbass/control/code/unix'
+ 
+Building lib/libSla.a
+ 
+make[4]: Entering directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libsla_src'
+make[4]: Nothing to be done for `all'.
+make[4]: Leaving directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libsla_src'
+ 
+Building lib/libunix.a
+ 
+make[4]: Entering directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libunix_src/cbass'
+Executing depend rule
+make /home/cbassuser/cbass/gcpCbass/lib/libGcpShareSpecific.so; 
+make[5]: Entering directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libunix_src/cbass'
+make[5]: `/home/cbassuser/cbass/gcpCbass/lib/libGcpShareSpecific.so' is up to date.
+make[5]: Leaving directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libunix_src/cbass'
+make[4]: Leaving directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libunix_src/cbass'
+ 
+Building lib/libunix.a
+ 
+make[4]: Entering directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libunix_src/common'
+Executing depend rule
+make /home/cbassuser/cbass/gcpCbass/lib/libGcpShareCommon.so; 
+make[5]: Entering directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libunix_src/common'
+make[5]: `/home/cbassuser/cbass/gcpCbass/lib/libGcpShareCommon.so' is up to date.
+make[5]: Leaving directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libunix_src/common'
+make[4]: Leaving directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libunix_src/common'
+ 
+Building lib/libGcpSrc.so
+ 
+make[4]: Entering directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libsrc_src'
+Executing depend rule
+g++ -shared -o /home/cbassuser/cbass/gcpCbass/lib/libGcpSrc.so source.o
+make[4]: Leaving directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libsrc_src'
+ 
+Building lib/libGcpScan.so
+ 
+make[4]: Entering directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libscan_src'
+Executing depend rule
+g++ -shared -o /home/cbassuser/cbass/gcpCbass/lib/libGcpScan.so scan.o
+make[4]: Leaving directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libscan_src'
+ 
+Building lib/libGcpTransaction.so
+ 
+make[4]: Entering directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libtransaction_src'
+Executing depend rule
+make /home/cbassuser/cbass/gcpCbass/lib/libGcpTransaction.so; 
+make[5]: Entering directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libtransaction_src'
+make[5]: `/home/cbassuser/cbass/gcpCbass/lib/libGcpTransaction.so' is up to date.
+make[5]: Leaving directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libtransaction_src'
+make[4]: Leaving directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libtransaction_src'
+ 
+Building lib/libscript.a
+ 
+make[4]: Entering directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libscript_src'
+Executing depend rule
+g++ -shared -o /home/cbassuser/cbass/gcpCbass/lib/libGcpScript.so datatype.o expr.o procedure.o scope.o script.o statement.o stringpool.o variable.o
+make[4]: Leaving directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libscript_src'
+ 
+Building lib/libmonitor.a
+ 
+make[4]: Entering directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libmonitor_src'
+Executing depend rule
+g++ -shared -o /home/cbassuser/cbass/gcpCbass/lib/libGcpMonitor.so monitor_stream.o im_monitor_stream.o net_monitor.o net_im_monitor.o file_monitor.o
+make[4]: Leaving directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libmonitor_src'
+ 
+Building lib/libtclcontrol.a and lib/libtclcontrol.so
+ 
+make[4]: Entering directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libtclcontrol_src'
+Executing depend rule
+make /home/cbassuser/cbass/gcpCbass/lib/libGcpTclControl.so; 
+make[5]: Entering directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libtclcontrol_src'
+make[5]: `/home/cbassuser/cbass/gcpCbass/lib/libGcpTclControl.so' is up to date.
+make[5]: Leaving directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libtclcontrol_src'
+make[4]: Leaving directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/libtclcontrol_src'
+ 
+Installing TCL scripts from tcl_lib_src
+ 
+make[4]: Entering directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/tcl_lib_src'
+make[4]: Nothing to be done for `all'.
+make[4]: Leaving directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/tcl_lib_src'
+make[3]: Leaving directory `/home/cbassuser/cbass/gcpCbass/control/code/unix'
+make[2]: Leaving directory `/home/cbassuser/cbass/gcpCbass/control/code'
+make[2]: Entering directory `/home/cbassuser/cbass/gcpCbass/control/code'
+ 
+       **** Building UNIX utility bins ****
+ 
+make[3]: Entering directory `/home/cbassuser/cbass/gcpCbass/control/code/unix'
+ 
+Building control specific
+ 
+make[4]: Entering directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/control_src/cbass'
+Executing depend rule
+make /home/cbassuser/cbass/gcpCbass/lib/libGcpControlSpecific.so; 
+make[5]: Entering directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/control_src/cbass'
+make[5]: `/home/cbassuser/cbass/gcpCbass/lib/libGcpControlSpecific.so' is up to date.
+make[5]: Leaving directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/control_src/cbass'
+make[4]: Leaving directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/control_src/cbass'
+ 
+Building control common
+ 
+make[4]: Entering directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/control_src/common'
+Executing depend rule
+make /home/cbassuser/cbass/gcpCbass/lib/libGcpControlCommon.so; 
+make[5]: Entering directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/control_src/common'
+make[5]: `/home/cbassuser/cbass/gcpCbass/lib/libGcpControlCommon.so' is up to date.
+make[5]: Leaving directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/control_src/common'
+make[4]: Leaving directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/control_src/common'
+make[4]: Entering directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/viewer_src'
+Executing depend rule
+ar ru /home/cbassuser/cbass/gcpCbass/control/code/unix/lib/libtkpanel.a panel.o
+gfortran  -o /home/cbassuser/cbass/gcpCbass/bin/tkviewer monitor_viewer.o tclmonitor.o tclgrabber.o tkviewer.o axes.o netscape_remote.o tclstarplot.o -Xlinker -Bdynamic /home/cbassuser/cbass/gcpCbass/lib/libGcpMonitor.so \
+ -Xlinker -Bstatic -L/home/cbassuser/cbass/gcpCbass/control/code/unix/lib -ltkpanel -Xlinker -Bdynamic -L/home/cbassuser/cbass/gcpCbass/lib \
+	/home/cbassuser/cbass/gcpCbass/lib/libGcpTclControl.so \
+	/home/cbassuser/cbass/gcpCbass/lib/libGcpPgUtilCommon.so \
+	/home/cbassuser/cbass/gcpCbass/lib/libGcpShareCommon.so /home/cbassuser/cbass/gcpCbass/lib/libGcpShareSpecific.so \
+	/home/cbassuser/cbass/gcpCbass/lib/libGcpSla.so /home/cbassuser/cbass/gcpCbass/lib/libGcpSrc.so \
+	/home/cbassuser/cbass/gcpCbass/lib/libGcpUtilCommon.so /home/cbassuser/cbass/gcpCbass/lib/libGcpUtilSpecific.so \
+	/home/cbassuser/cbass/gcpCbass/lib/libGcpGrabberCommon.so \
+	/home/cbassuser/cbass/gcpCbass/lib/libcfitsio.so \
+ -Xlinker -R/home/cbassuser/cbass/cbassTools//lib -L/home/cbassuser/cbass/cbassTools//lib -L/home/cbassuser/cbass/cbassTools//lib -Xlinker -R/home/cbassuser/cbass/cbassTools//lib -lcpgplot -lpgplot  -ltkpgplot -ltk -ltcl -ldl -L/usr/X11R6/lib64 -Xlinker -R/usr/X11R6/lib64 -lX11 -lXmu \
+ -lpthread -lreadline -ltermcap -lcurl -lrt -L/home/cbassuser/cbass/cbassTools//lib -lfftw3 
+g++ -o /home/cbassuser/cbass/gcpCbass/control/code/unix/lib/libtkpanel.so -shared panel.o -L/home/cbassuser/cbass/cbassTools//lib -ltk -ltcl -ldl -L/usr/X11R6/lib64 -Xlinker -R/usr/X11R6/lib64 -lX11 \
+ -lpthread -lreadline -ltermcap -lcurl -lrt -L/home/cbassuser/cbass/cbassTools//lib -lfftw3
+make[4]: Leaving directory `/home/cbassuser/cbass/gcpCbass/control/code/unix/viewer_src'
+make[3]: Leaving directory `/home/cbassuser/cbass/gcpCbass/control/code/unix'
+make[2]: Leaving directory `/home/cbassuser/cbass/gcpCbass/control/code'
+make[1]: Leaving directory `/home/cbassuser/cbass/gcpCbass/control'
+make[1]: Entering directory `/home/cbassuser/cbass/gcpCbass/antenna/control/cbass'
+make[1]: Leaving directory `/home/cbassuser/cbass/gcpCbass/antenna/control/cbass'
+make[1]: Entering directory `/home/cbassuser/cbass/gcpCbass/pgutil/common'
+make[1]: Leaving directory `/home/cbassuser/cbass/gcpCbass/pgutil/common'
+make[1]: Entering directory `/home/cbassuser/cbass/gcpCbass/mediator/cbass'
+make[1]: Leaving directory `/home/cbassuser/cbass/gcpCbass/mediator/cbass'
+make[1]: Entering directory `/home/cbassuser/cbass/gcpCbass/program/common'
+make[1]: Leaving directory `/home/cbassuser/cbass/gcpCbass/program/common'
+make[1]: Entering directory `/home/cbassuser/cbass/gcpCbass/util/common'
+make[1]: Leaving directory `/home/cbassuser/cbass/gcpCbass/util/common'
+make[1]: Entering directory `/home/cbassuser/cbass/gcpCbass/util/cbass'
+make[1]: Leaving directory `/home/cbassuser/cbass/gcpCbass/util/cbass'
+make[1]: Entering directory `/home/cbassuser/cbass/gcpCbass/grabber/common'
+make[1]: Leaving directory `/home/cbassuser/cbass/gcpCbass/grabber/common'
+make[1]: Entering directory `/home/cbassuser/cbass/gcpCbass/cfitsio/common'
+make[1]: Nothing to be done for `bins'.
+make[1]: Leaving directory `/home/cbassuser/cbass/gcpCbass/cfitsio/common'
+make[1]: Entering directory `/home/cbassuser/cbass/gcpCbass/matlab/common'
+make[1]: Nothing to be done for `bins'.
+make[1]: Leaving directory `/home/cbassuser/cbass/gcpCbass/matlab/common'
+make[1]: Entering directory `/home/cbassuser/cbass/gcpCbass/idl/common'
+make[1]: Nothing to be done for `bins'.
+make[1]: Leaving directory `/home/cbassuser/cbass/gcpCbass/idl/common'

@@ -1,0 +1,56 @@
+add_page 421 336 {Pointing Telescopes} beige red yellow 10 13 {12 12 12 12 10 10 10 10 10 10} {} 0 {} 0 {
+  label 0 0 orange black center ptel
+  label 0 1 midnightblue paleturquoise center {0 (boom)}
+  label 0 2 midnightblue paleturquoise center {1 (top)}
+  label 0 3 midnightblue paleturquoise center {2 (side)}
+  label 0 4 orange black center {cabin shutter}
+  label 0 6 orange black center {ptel time}
+  label 0 7 midnightblue paleturquoise center record
+  label 1 0 midnightblue paleturquoise center shutter
+  register 1 1 black green center {array.pointingTel.DIO_Bits[0]} enum 0 0 closed,open 0 1 0.0 0.0 0 1
+  register 1 2 black green center {array.pointingTel.DIO_Bits[1]} enum 0 0 closed,open 0 1 0.0 0.0 0 1
+  register 1 3 black green center {array.pointingTel.DIO_Bits[2]} enum 0 0 closed,open 0 1 0.0 0.0 0 1
+  label 1 4 midnightblue paleturquoise center command
+  register 1 5 black green center {array.pointingTel.DIO_Bits[6]} enum 0 0 closed,open 0 1 0.9 1.1 0 1
+  register 1 6 black green center {array.pointingTel.PollTimestamp.date[0]} date 0 0 closed,open 0 0 0.0 0.0 0 1
+  register 1 7 black green center {array.pointingTel.record[0]} integer 0 0 closed,open 0 0 0.0 0.0 0 1
+  label 2 0 midnightblue paleturquoise center heater
+  register 2 1 black green center {array.pointingTel.DIO_Bits[3]} enum 0 0 off,on 0 1 0.0 0.0 0 1
+  register 2 2 black green center {array.pointingTel.DIO_Bits[4]} enum 0 0 off,on 0 1 0.0 0.0 0 1
+  register 2 3 black green center {array.pointingTel.DIO_Bits[5]} enum 0 0 off,on 0 1 0.0 0.0 0 1
+  label 2 4 midnightblue paleturquoise center SW1
+  register 2 5 black green center {array.pointingTel.DIO_Bits[8]} fixed_point 0 0 {} 0 1 -0.1 0.1 0 1
+  register 2 6 black green center {array.pointingTel.PollTimestamp.time[0]} sexagesimal 0 0 closed,open 0 0 0.0 0.0 0 1
+  label 2 7 midnightblue paleturquoise center received
+  label 3 0 midnightblue paleturquoise center temp
+  register 3 1 black green center {array.pointingTel.AD_Scaled_Values[0]} fixed_point 2 0 closed,open 0 0 0.0 0.0 0 1
+  register 3 2 black green center {array.pointingTel.AD_Scaled_Values[1]} fixed_point 2 0 closed,open 0 0 0.0 0.0 0 1
+  register 3 3 black green center {array.pointingTel.AD_Scaled_Values[2]} fixed_point 2 0 closed,open 0 0 0.0 0.0 0 1
+  label 3 4 midnightblue paleturquoise center SW2
+  register 3 5 black green center {array.pointingTel.DIO_Bits[9]} fixed_point 0 0 {} 0 1 -0.1 0.1 0 1
+  register 3 7 black green center {array.pointingTel.received[0]} integer 0 0 closed,open 0 0 0.0 0.0 0 1
+  label 4 0 midnightblue paleturquoise center Setpoint
+  register 4 1 black green center {array.pointingTel.PIDSetpoints[0]} fixed_point 1 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 4 2 black green center {array.pointingTel.PIDSetpoints[1]} fixed_point 1 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 4 3 black green center {array.pointingTel.PIDSetpoints[2]} fixed_point 1 0 disabled,enabled 0 0 0.0 0.0 0 1
+  label 5 0 midnightblue paleturquoise center PID
+  register 5 1 black green center {array.pointingTel.PIDEnables[0]} enum 0 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 5 2 black green center {array.pointingTel.PIDEnables[1]} enum 0 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 5 3 black green center {array.pointingTel.PIDEnables[2]} enum 0 0 disabled,enabled 0 0 0.0 0.0 0 1
+  label 6 0 midnightblue paleturquoise center P
+  register 6 1 black green center {array.pointingTel.PIDProportionals[0]} fixed_point 2 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 6 2 black green center {array.pointingTel.PIDProportionals[1]} fixed_point 2 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 6 3 black green center {array.pointingTel.PIDProportionals[2]} fixed_point 2 0 disabled,enabled 0 0 0.0 0.0 0 1
+  label 7 0 midnightblue paleturquoise center I
+  register 7 1 black green center {array.pointingTel.PIDIntegrals[0]} fixed_point 5 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 7 2 black green center {array.pointingTel.PIDIntegrals[1]} fixed_point 5 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 7 3 black green center {array.pointingTel.PIDIntegrals[2]} fixed_point 5 0 disabled,enabled 0 0 0.0 0.0 0 1
+  label 8 0 midnightblue paleturquoise center D
+  register 8 1 black green center {array.pointingTel.PIDDerivatives[0]} fixed_point 2 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 8 2 black green center {array.pointingTel.PIDDerivatives[1]} fixed_point 2 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 8 3 black green center {array.pointingTel.PIDDerivatives[2]} fixed_point 2 0 disabled,enabled 0 0 0.0 0.0 0 1
+  label 9 0 midnightblue paleturquoise center Heat
+  register 9 1 black green center {array.pointingTel.PIDDutyCycles[0]} fixed_point 2 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 9 2 black green center {array.pointingTel.PIDDutyCycles[1]} fixed_point 2 0 disabled,enabled 0 0 0.0 0.0 0 1
+  register 9 3 black green center {array.pointingTel.PIDDutyCycles[2]} fixed_point 2 0 disabled,enabled 0 0 0.0 0.0 0 1
+}

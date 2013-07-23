@@ -1,0 +1,4 @@
+cp modprobe.conf /etc/modprobe.conf
+cp ntp.conf /etc/ntp.conf
+cp ntpd /etc/init.d/ntpd
+cp rc.local /etc/rc.d/rc.local

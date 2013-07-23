@@ -1,0 +1,26 @@
+#include <iostream>
+#include <iomanip>
+
+#include "gcp/program/common/Program.h"
+#include "gcp/util/common/CircularBuffer.h"
+
+using namespace std;
+using namespace gcp::util;
+using namespace gcp::program;
+using namespace gcp::program;
+
+KeyTabEntry Program::keywords[] = {
+  { "datfile",    "", "s", "Data file to convert"},
+  { "dirfile",    "", "s", "Dirfile to create"},
+  { END_OF_KEYWORDS,END_OF_KEYWORDS,END_OF_KEYWORDS,END_OF_KEYWORDS},
+};
+
+void Program::initializeUsage() {}
+
+int Program::main()
+{
+  CircularBuffer<unsigned int> cb;
+
+  return 0;
+}
+

@@ -1,0 +1,60 @@
+<center><a href=index.html>Index</a></center>
+<HEAD><TITLE>The schedule queue window</TITLE></HEAD>
+<BODY bgcolor=add8e6>
+<HR>
+<H1>The schedule queue window</H1>
+
+<P>
+
+The schedule-queue status window shows the contents of the schedule
+queue, as well as showing the script that is currently running.
+
+<P>
+
+The topmost line of this window shows the currently running schedule,
+to the right of a small area that either says <b>-></b>, or
+<b>S</b>. The former of these two designations says that the script is
+currently running, whereas the second says that execution of the
+script has temporarily been suspended.
+
+<P>
+<H2>Interactive options</H2>
+
+There are a number of operations that one can perform in the schedule
+status window. All involve clicking the right mouse button over one of
+the scheduling scripts. This then displays a menu of options that can
+be performed on the indicated file. The menu that is displayed when
+one clicks over the currently running schedule, includes the following
+options:
+
+<UL>
+<LI> <b>Abort schedule</b> - This aborts execution of the indicated
+                             schedule, allowing the next schedule in
+                             the queue to start running.
+<LI> <b>Suspend schedule</b> - This temporarily suspends execution of
+                               the current schedule.
+<LI> <b>Resume schedule</b> - This resumes execution of a schedule
+                              that was previously suspended.
+</UL>
+
+The menu that is displayed when one clicks over a schedule that is
+waiting in the schedule queue, includes the following options:
+
+<UL>
+<LI> <b>Discard schedule</b> - This removes the indicated schedule
+                               from the schedule queue.
+<LI> <b>Advance by one entry</b> - This moves the indicated schedule
+                                   one place towards the front of the
+                                   queue, swapping places with the
+                                   schedule that was due to be
+                                   executed before it.
+<LI> <b>Retard by one entry</b> - This moves the indicated schedule
+                                   one place towards the back of the
+                                   queue, swapping places with the
+                                   schedule that was due to be
+                                   executed after it.
+</UL>
+
+<HR>
+Erik Leitch (4-Nov-1999)
+</BODY>

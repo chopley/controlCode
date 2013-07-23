@@ -1,0 +1,33 @@
+<HEAD><TITLE>The "service" command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name="service"> <code><b>service</b> [ant]</code> </a></font>
+<P>
+Send the telescope to the service position.
+<P>
+<DL>
+<DT> Mandatory arguments:
+<DD> (None)
+<DT> Optional Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/Antennas.html>Antennas</a> antennas</b></code>
+     <DD> A set of one or more antennas to which the command should be applied.
+     <DD> Default is controlled by the <code><a href=setDefault../dataTypes/Antennas.html>setDefaultAntennas</a> command.
+     </DL>
+<P>
+<DT> Example:
+<DD> The following example sends the antenna 3 to the service position.
+
+<pre>
+  service ant=ant3
+</pre>
+
+<DT>Context:
+<DD>The service position is currently defined to be AZ = 180, EL = 0
+</DL>
+
+<P>
+<HR>
+Erik Leitch (Tue Mar 30 21:16:50 PST 2004)
+</BODY>

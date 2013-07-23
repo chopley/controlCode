@@ -1,0 +1,56 @@
+<HEAD><TITLE>The "walsh" datatype.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name="walsh"> <code><b>walsh</b> mod|demod|both, receivers, function</code> </a></font>
+<P>
+Change the phase-switch modulation and/or demodulation functions.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/WalshStages.html>WalshStages</a> type</b></code>
+     <DD> The target of the Walsh function, from:
+       <UL>
+       <LI> <code><b>mod</b></code>: Only set the modulation Walsh function.
+       <LI> <code><b>demod</b></code>: Only set the demodulation Walsh
+                                       function.
+       <LI> <code><b>both</b></code>: Set both the modulation and
+                                     demodulation Walsh functions to
+                                     the same value. 
+       </UL>
+     <DT><code><b><a href=../dataTypes/Receivers.html>Receivers</a> ant</b></code>
+     <DD> The set of receivers whose Walsh functions are to be changed.
+     <DT><code><b><a href=../dataTypes/WalshFunction.html>WalshFunction</a> function</b></code>
+     <DD> The hardware Walsh function number (0..31).
+     </DL>
+<P>
+<DT> Examples:
+<DD> The following example sets the modulation Walsh functions of
+     receivers 2 and 4 to the 12th Walsh function. It doesn't change
+     the demodulation function.
+
+<pre>
+  walsh mod, rx2+rx4, 12
+</pre>
+
+     The second example changes both the modulation and demodulation
+     functions of receiver 0 to 12.
+
+<pre>
+  walsh both, rx0, 12
+</pre>
+
+<DT> Context:
+<DD> The number used to select a Walsh function corresponds to the
+     the number of state changes between 0 and 1 within a cycle of 31
+     25.6us steps. This means that walsh function 0 sets all steps to
+     0 (ie. no switching occurs) and walsh function 31 switches state
+     on every step, resulting in a (roughly) 20khz square wave. The
+     forms of the other walsh functions are documented in standard
+     textbooks on the subject.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:17:03 PST 2004)
+</BODY>

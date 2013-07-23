@@ -1,0 +1,6 @@
+add_plot 268 171 Plot 0 0.000489672367201 1 1 maximum 20.0 array.frame.utc.date {} {
+  graph 1514749504 2599764160 {} {{antenna0.roach1.LLtime[0-63][0]} {}} {} 0 1 1 0
+  graph 732028976 2658705552 {} {{antenna0.roach1.RRtime[0-63][0]} {}} {} 0 1 1 0
+  graph 1622852787.2 2610814284.8 {} {{antenna0.roach1.load1time[0-63][0]} {}} {} 0 1 1 0
+  graph 1749695225.6 2423336070.4 {} {{antenna0.roach1.load2time[0-63][0]} {}} {} 0 1 1 0
+} normal 0 0.0 1

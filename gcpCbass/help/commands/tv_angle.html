@@ -1,0 +1,38 @@
+<HEAD><TITLE>The "tv_angle" command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name="tv_angle"> <code><b>tv_angle</b> angle</code> </a></font>
+<P>
+Configure the orientation angle of the TV display.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+    <DT><code><b><a href=../dataTypes/PointingOffset.html>PointingOffset</a> angle</b></code>
+    <DD>The deck angle at which the sky appears to be upright on the TV display.
+     </DL>
+<P>
+<DT> Example:
+<DD> The following example tells the tracker task that the TV display
+     will display an upright image when the deck axis is at 50 degrees.
+<P>
+<pre>
+  tv_angle 50.0
+</pre>
+
+<DT>Context:
+<DD><P>
+    In order for the <a href="tv_offset.html">tv_offset</a> command to
+    be able to convert horizontal and vertical offsets on the TV
+    display into incremental azimuth and elevation tracking offsets,
+    it needs to know the fixed orientation angle of the optical
+    telescope relative to the deck platform. The <code>tv_angle</code>
+    command is the means by which this number if provided. Once the
+    angle has been measured, this command should be placed in the
+    bicepAntennaControl.init startup schedule.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:17:00 PST 2004)
+</BODY>

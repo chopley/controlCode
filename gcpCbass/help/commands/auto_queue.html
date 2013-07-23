@@ -1,0 +1,72 @@
+
+<HEAD><TITLE>The "auto_queue" datatype.</TITLE></HEAD>
+<BODY bgcolor=#add8e6>
+<HR>
+<font color=blue><a name="auto_queue"><code><b>auto_queue</b> [state=?, dt=?, dir=?]</code></a></font>
+<P>
+Control the automatic schedule queuing facility.
+<P>
+<DL>
+<DT> Arguments:<DD> 
+<p>
+     <DL>
+     <DT><code><b><a href=../dataTypes/SwitchState.html>SwitchState</a> state</b></code>
+     <DD> The state of the auto queue
+     <DT><code><b><a href=../dataTypes/Wdir.html>Wdir</a> dir</b></code>
+
+     <DD> The head of the autoqueue directory hierarchy.  The
+     autoqueue facility looks for schedules in dir/pending, and places
+     schedules which have run to completion in dir/done.
+
+     <DT><code><b><a href=../dataTypes/Interval.html>Interval</a> dt</b></code>
+
+     <DD> When the current schedule in the queue has finished, the
+     autoqueue facility will check the dir/pending for the arrival of
+     new files at intervals given by dt.
+
+     </DL>
+<p>
+<dt> Example: <dd>
+<p>
+
+To activate the autoqueue and search the directory
+/data1/dasidaq/autoqueue every twenty seconds for new files:
+
+<dl>
+<dt><p>
+    <code>
+<dd>auto_queue state=on, dt=20s, dir=/data1/dasidaq/autoqueue
+    </code>
+    <p>
+</dl>
+
+<DT> Context: <DD> 
+<p>
+When the autoqueue is activated by issuing the <code>auto_queue
+state=on</code> command, the control program automatically loads
+schedule files to be run on the telescope from a directory specified
+by the <code>dir</code> argument.  This directory should contain the
+subdirectories "pending" and "done".  
+<p>
+Files in the pending directory should be prefixed with a numeric
+priority tag.  Files which do not begin with a numeric tag will be
+ignored.  Files are loaded by priority number, the <i>smallest</i>
+number given the <i>highest</i> priority.  Files with equal priority
+are loaded in order of creation date.  Files with earlier creation
+dates are loaded first.
+<p>
+When a schedule loaded by the autoqueue facility runs to completion,
+it is transferred from the <code>pending</code> directory to the
+<code>done</code> directory.  Schedules which are aborted without
+running to completion will not be removed from the pending directory,
+and will be re-queued in order when the autoqueue is next activated.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:15:44 PST 2004)
+</BODY>
+
+
+
+
+

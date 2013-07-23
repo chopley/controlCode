@@ -1,0 +1,37 @@
+<HEAD><TITLE>The Bands datatype.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+<center><a href=../index.html>Index</a></center>
+<HR>
+<font color=blue><a name=Bands> <code><b>Bands</b></code> </a></font>
+<P>
+A set of zero or more SZA frequency bands.
+<P>
+<DL> 
+<DT> Input Format:
+<P>
+<DD> <DL>
+     <DT> A <a href=dt_class.html#set>set</a> of one or more of:
+<P>
+     <DD><code>band0 band1 band2 ... band15</code>
+     </DL>
+<P>
+     Where each member refers to a particular frequency band of the correlator.
+<P>
+<DT> Examples:
+<DD> 
+
+Enable auto level control for all antennas, bands 4 and 10:
+<pre>
+ifalc on, ant=all, band=band4+band15
+</pre>
+
+<DT> Context:
+<DD> The 8 GHz frequency span of the SZA is separately correlated in 16 
+     adjacent 500 MHz bands. Commands which require a band specification 
+     take a <code>Band</code> argument which enables the user to selectively 
+     configure one or many bands in one command.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:15:45 PST 2004)
+</BODY>

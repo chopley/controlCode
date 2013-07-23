@@ -1,0 +1,151 @@
+-----------------------------------------------------------------------
+                           FORMAL GRAMMAR
+-----------------------------------------------------------------------
+
+Key:
+     [xxxxx]       Names xxxxx as a symbolic name for a terminal.
+     <xxxxx>       Names xxxxx as a variable parameter of the grammar.
+      xxxxx        Names xxxxx as a terminal value.
+      XXXXX        Names XXXXX as a non-terminal defined in this file.
+     x _seq_       Refers to x repeated one or more times.
+     x _clos_      Refers to x repeated zero or more times.
+     x _opt_       Says that x is optional.
+     x _brace_     Refers to x enclosed in braces {}.
+     x _paren_     Refers to x enclosed in parenthesis ().
+     x _square_    Refers to x enclosed in square parenthesis [].
+     x _angle_     Refers to x enclosed in angle parenthesis <>.
+     x _chain_ {y} Refers to one or more instances of x separated by y.
+     {x y}         Groups x and y.
+     'x'           Names x as a punctuation character.
+     x | y         Allows either x or y.
+
+Note that productions can span multiple lines, without needing an
+explicit continuation indicator. (In the customary BNF notation, each
+such line would denote an alternate production).
+-----------------------------------------------------------------------
+
+  PROGRAM:
+    STATEMENT_LIST
+  
+  STATEMENT_LIST:
+    {STATEMENT EOS} _seq_ _brace_
+
+  STATEMENT:
+    COMMAND_DEFN
+    FUNCTION_DEFN
+    TABLE_DECL
+    VARIABLE_DEFN
+    FOREACH_STATEMENT
+    UNTIL_STATEMENT
+    WHILE_STATEMENT
+    CALL_STATEMENT
+    PRINT_STATEMENT
+    IF_STATEMENT
+
+  COMMAND_DEFN:
+    command [ident] {VARIABLE_DECL_LIST} _paren_ STATEMENT_LIST
+
+  FUNCTION_DEFN:
+    function VARIABLE_DECL {VARIABLE_DECL_LIST} _paren_ {ARGUMENT_EXPR} _brace_
+
+  TABLE_DECL:
+    table [ident] {VARIABLE_DECL_LIST} _brace_
+
+  VARIABLE_DEFN:
+    VARIABLE_DECL '=' ARGUMENT_EXPR
+
+  FOREACH_STATEMENT:
+    foreach {VARIABLE_DECL} _paren_ ARGUMENT_EXPR STATEMENT_LIST
+
+  UNTIL_STATEMENT:
+    until BOOLEAN_EXPR
+
+  WHILE_STATEMENT:
+    while BOOLEAN_EXPR STATEMENT_LIST
+
+  CALL_STATEMENT:
+    [ident] ARGUMENT_LIST
+
+  PRINT_STATEMENT:
+    print DOLLAR_EXPR | [string]
+
+  IF_STATEMENT:
+    if {BOOLEAN_EXPR} _paren_ STATEMENT_LIST
+       {else if {BOOLEAN_EXPR} _paren_ STATEMENT_LIST} _clos_
+       {else STATEMENT_LIST} _opt_
+
+  VARIABLE_DECL_LIST:
+    VARIABLE_DECL _chain_ ','
+
+  VARIABLE_DECL:
+    listof _opt_ DATA_TYPE [ident]
+
+  DATA_TYPE:
+    [ident]
+
+  ARGUMENT_EXPR:
+    BOOLEAN_EXPR
+    SET_EXPR
+    CHOICE_EXPR
+    DMS_EXPR
+    HMS_EXPR
+    TIME_EXPR
+    REGNAM_EXPR
+    SOURCE_EXPR
+    UINT_EXPR
+    UDBLE_EXPR
+    LIST<type>_EXPR
+
+  ARGUMENT_LIST:
+    ARGUMENT_EXPR _chain_ ','
+
+  SUB_EXPR<type>:
+    DOLLAR_EXPR | <type>_EXPR _paren_
+
+  DOLLAR_EXPR:
+    FUNCTION_EXPR | VARIABLE_EXPR | CAST_EXPR
+
+  FUNCTION_EXPR:
+    '$' [ident] ARGUMENT_LIST _paren_  {'.' [ident]} _clos_
+
+  VARIABLE_EXPR:
+   '$' [ident] {'.' [ident]} _clos_
+
+  CAST_EXPR:
+   '$' [type] <type>_EXPR _paren_
+
+  LIST<type>_EXPR:
+    {<type>_EXPR _chain_ ','} _brace_ | SUB_EXPR<LIST<type>>
+
+  BOOLEAN_EXPR:
+    {! _opt_ {{false|true} | SUB_EXPR<BOOLEAN>}} _chain_ {& | '|'}
+
+  SET_EXPR:
+    {+|-} _opt_ {[ident] | SUB_EXPR<SET>} _chain_ {+|-}
+
+  CHOICE_EXPR:
+    [ident] | SUB_EXPR<CHOICE>
+
+  DMS_EXPR:
+    [double] | [int]:[uint]:[udouble] | SUB_EXPR<DMS>
+
+  HMS_EXPR:
+    [uint]:[uint]:[udouble] | SUB_EXPR<HMS>
+
+  TIME_EXPR:
+    [uint]@[uint]:[uint]:[udouble] | [uint]:[uint]:[udouble] | SUB_EXPR<TIME>
+
+  REGNAM_EXPR:
+    [ident].[ident] {[uint] | [uint]'-'[uint]} _square_ _opt_ | SUB_EXPR<REGNAM>
+
+  SOURCE_EXPR:
+    [ident]
+
+  UINT_EXPR:
+    [uint] | SUB_EXPR<UINT>
+
+  UDBLE_EXPR:
+    [udouble] | SUB_EXPR<UDBLE>
+
+  STRING_EXPR:
+    [string] | <type> {<type>_EXPR} _paren_ | SUB_EXPR<STRING>

@@ -1,0 +1,375 @@
+#=======================================================================
+# Targets
+#=======================================================================
+
+all: libs bins
+
+ifeq ($(MATLAB),)
+  ifeq ($(IDL),)
+    bins: generic_bins
+  else
+    bins: idl_bins
+  endif
+else
+  bins: matlab_bins
+endif
+
+#=======================================================================
+# Generic rules
+#=======================================================================
+
+# Rule for making .o files from .cc and .cpp files
+
+%.o: %.cc
+	$(CC) $(CCFLAGS) $(CCINC) -DGCPTOP="\"$(GCPTOP)\"" -DHOST="\"$(HOSTNAME)\"" -DNAMESERVER="\"$(HOSTNAME):4000\"" -DEVENTSERVER="\"$(HOSTNAME):4001\"" -DCALFILE="\"$(GCPTOP)/control/conf/$(SPECIFIC)/cal\"" -DHELPDIR="\"$(GCPTOP)/help\"" -DSCHDIR="\"$(GCPTOP)/control/sch\"" -c -o $@ $<
+
+%.o: %.cpp
+	$(CC) $(CCFLAGS) $(CCINC) -DGCPTOP="\"$(GCPTOP)\"" -DHOST="\"$(HOSTNAME)\"" -DNAMESERVER="\"$(HOSTNAME):4000\"" -DEVENTSERVER="\"$(HOSTNAME):4001\"" -DCALFILE="\"$(GCPTOP)/control/conf/$(SPECIFIC)/cal\"" -c -o $@ $<
+
+#=======================================================================
+# Mex file compilation
+#=======================================================================
+
+MEX = 
+ifneq ($(shell which mex), 'mex: Command not found.')
+  MEX := $(shell which mex)
+endif
+
+MATINC = 
+
+# Find one of the many non-standard paths to matlab header files
+
+MATINC_ROTO   = /usr/local/matlab/matlab-14/extern/include/
+MATINC_AUPC2  = /usr/local/matlab7p2/extern/include/
+MATINC_SPT    = /usr/local/matlab7p3/extern/include/
+MATINC_SZAPC5 = /usr/local/matlab7p2/extern/include/
+MATINC_CBASSCONTROL = /opt/Matlab/extern/include
+MATINC_CM     = /opt/Matlab/extern/include
+MATINC_HAGGIS = /usr/local/matlab/matlab-R2009a/extern/include
+MATINC_FALCON = /usr/local/Matlab-2009a/extern/include
+MATINC_ASLX10 = /usr/local/matlab/extern/include
+MATINC_ASLX5 = /usr/local/MATLAB/R2011a/extern/include/
+MATINC_CBAEZAR=/usr/local/MATLAB/R2011b/extern/include/
+
+HOST := $(shell hostname)
+
+ifneq (,$(findstring roto,$(HOST)))
+      MATINC = $(MATINC_ROTO)
+endif
+
+ifneq (,$(findstring aupc2,$(HOST)))
+      MATINC = $(MATINC_AUPC2)
+endif
+
+ifneq (,$(findstring spt,$(HOST)))
+      MATINC = $(MATINC_SPT)
+endif
+
+ifneq (,$(findstring szapc5,$(HOST)))
+      MATINC = $(MATINC_SZAPC5)
+endif
+
+ifneq (,$(findstring cbasscontrol,$(HOST)))
+      MATINC = $(MATINC_CBASSCONTROL)
+endif
+
+ifneq (,$(findstring cm.pvt,$(HOST)))
+      MATINC = $(MATINC_CM)
+endif
+
+ifneq (,$(findstring haggis,$(HOST)))
+      MATINC = $(MATINC_HAGGIS)
+endif
+
+ifneq (,$(findstring falcon,$(HOST)))
+      MATINC = $(MATINC_FALCON)
+endif
+
+ifneq (,$(findstring aslx10,$(HOST)))
+      MATINC = $(MATINC_ASLX10)
+endif
+
+ifneq (,$(findstring aslx5,$(HOST)))
+      MATINC = $(MATINC_ASLX5)
+endif
+
+ifneq (,$(findstring cbaezar,$(HOST)))
+      MATINC = $(MATINC_CBAEZAR)
+endif
+
+
+ifneq ($(MATINC),)
+  CCINC += -I$(MATINC)
+endif
+
+#-----------------------------------------------------------------------
+# List of mex files to compile.  If no mex compiler is present, or the
+# headers are not present, this should be left blank
+#-----------------------------------------------------------------------
+
+MEXOBJ = 
+ifneq ($(MEX),)
+  ifneq ($(MATINC),)
+    ifeq ($(COMPILE_FOR_64BIT),0)
+      MEXALLOBJ =  $(patsubst %.cc,%.mexglx,$(wildcard $(BIN_PREFIX)Mat*.cc)) 
+      MEXOBJ     = $(subst $(BIN_PREFIX),$(BIN_EXE_PREFIX),$(MEXALLOBJ))
+    else
+      MEXALLOBJ =  $(patsubst %.cc,%.mexa64,$(wildcard $(BIN_PREFIX)Mat*.cc)) 
+      MEXOBJ     = $(subst $(BIN_PREFIX),$(BIN_EXE_PREFIX),$(MEXALLOBJ))
+    endif
+  endif
+endif
+
+matlab_bins: $(MEXOBJ)
+
+#-----------------------------------------------------------------------
+# Rule for making .mexglx files from .cc files
+#-----------------------------------------------------------------------
+
+$(BIN_EXE_PREFIX)%.mexglx: $(BIN_PREFIX)%.cc 
+	$(MEX) $< $(GENERIC_FLAGS) $(CCINC) $(LDPATH) $(MATLIBS) -output $(@)
+
+#-----------------------------------------------------------------------
+# Rule for making .mexa64 files from .cc files
+#-----------------------------------------------------------------------
+
+$(BIN_EXE_PREFIX)%.mexa64: $(BIN_PREFIX)%.cc 
+	$(MEX) $< $(GENERIC_FLAGS) $(CCINC) $(LDPATH) $(MATLIBS) -output $(@)
+
+#=======================================================================
+# IDL file compilation
+#=======================================================================
+
+IDLINC = 
+
+# Find one of the many non-standard paths to idl header files
+
+IDLINC_SPT     = /usr/local/IDL/idl_6.3/external/include/ 
+IDLINC_SPTDATA = /usr/local/IDL/idl_6.3/external/include/ 
+IDLINC_CMB     = /usr/local/IDL/idl_6.1/external/include/ 
+IDLINC_ROTO    = /usr/local/rsi/idl_6.3/external/include/
+
+ifneq (,$(findstring roto,$(HOST)))
+      IDLINC = $(IDLINC_ROTO)
+endif
+
+ifneq (,$(findstring spt.uchicago,$(HOST)))
+      IDLINC = $(IDLINC_SPT)
+endif
+
+ifneq (,$(findstring sptdata,$(HOST)))
+      IDLINC = $(IDLINC_SPTDATA)
+endif
+
+ifneq (,$(findstring cmb,$(HOST)))
+      IDLINC = $(IDLINC_CMB)
+endif
+
+ifneq ($(IDLINC),)
+  CCINC += -I$(IDLINC)
+endif
+
+#-----------------------------------------------------------------------
+# List of IDL files to compile.  If the IDL headers are not present,
+# this should be left blank
+#-----------------------------------------------------------------------
+
+IDLOBJ = 
+ifneq ($(IDLINC),)
+  IDLALLOBJ =  $(patsubst %.cc,%.idlso,$(wildcard $(BIN_PREFIX)Idl*.cc)) 
+  IDLOBJ     = $(subst $(BIN_PREFIX),$(BIN_EXE_PREFIX),$(IDLALLOBJ))
+endif
+
+idl_bins: $(IDLOBJ)
+
+#-----------------------------------------------------------------------
+# Rule for making .idlso files from .cc files
+#-----------------------------------------------------------------------
+
+IDLFLAGS = -fPIC 
+
+# The problem with the rules as defined below is that the .idlo files
+# get auto-deleted by make, so they do not exist to check the
+# modification dates.  This means they will be re-created every time
+# and recompiled
+
+#$(BIN_EXE_PREFIX)%.idlso: $(BIN_EXE_PREFIX)%.idlo
+#	$(CC) -shared -o $(BIN_EXE_PREFIX)$*.so $(IDLLIBS) $<
+#
+#$(BIN_EXE_PREFIX)%.idlo: $(BIN_EXE_PREFIX)%.idlcc
+#	$(CC) $(CCFLAGS) $(IDLFLAGS) $(CCINC) -x c++ -c -o $@ $<
+#
+#$(BIN_EXE_PREFIX)%.idlcc: $(BIN_PREFIX)%.cc
+#	$(GCPTOP)/bin/$(BIN_EXE_PREFIX)IdlGenerator file=$< dir=$(GCPTOP)/idl/common \
+#	suffix=idlcc prefix=$(BIN_EXE_PREFIX)$*
+
+# This rule 
+
+$(BIN_EXE_PREFIX)%.idlso: $(BIN_PREFIX)%.cc
+	$(GCPTOP)/bin/$(BIN_EXE_PREFIX)IdlGenerator file=$< dir=$(GCPTOP)/idl/common \
+	suffix=idlcc prefix=$(BIN_EXE_PREFIX)$*
+	$(CC) $(CCFLAGS) $(IDLFLAGS) $(CCINC) -x c++ -c -o $(BIN_EXE_PREFIX)$*.idlso $(BIN_EXE_PREFIX)$*.idlcc
+	$(CC) -shared -o $(BIN_EXE_PREFIX)$*.so $(IDLLIBS) $(BIN_EXE_PREFIX)$*.idlso
+	\rm -f $(BIN_EXE_PREFIX)$*.idlcc $(BIN_EXE_PREFIX)$*.idlso
+
+#=======================================================================
+# Doxygen documentation
+#=======================================================================
+
+# We have to make a phony target so that make will proceed even if
+# there is a file/dir under the current directory with the same name
+
+.PHONY : dox
+
+dox:
+	@echo ' ';echo 'Making Doxygen documentation'; echo ' '
+	doxygen Doxyfile.cfg
+
+clean_dox:
+	@echo ' ';echo 'Removing dox directory'; echo ' '
+	/bin/rm -rf dox
+
+#=======================================================================
+# Library generation: including Makefile should just have to define
+# variable LIBSO
+#=======================================================================
+
+# List the dependencies by substituting from the source directory.
+# This will cause the .o files to be made if they do not already
+# exist.  Otherwise if .o files don't already exist, the library will
+# be made without complaint with no targets
+
+# In wildcard, we use only files beginning with capitals, since these
+# are the class definitions.  Otherwise, threadserver.o and
+# threadclient.o would get built into the library
+
+LIBOBJ  =  $(patsubst %.cc,%.o,$(wildcard [A-Z]*.cc)) 
+LIBOBJ +=  $(patsubst %.cpp,%.o,$(wildcard [A-Z]*.cpp)) 
+
+# If this is a matlab library, and no mex compiler is present, reset
+# the list of object files
+
+ifneq ($(MATLAB),)
+  ifeq ($(MEX),)
+    LIBOBJ =
+  endif
+endif
+
+ifneq ($(IDL),)
+  ifeq ($(IDLINC),)
+    LIBOBJ =
+  endif
+endif
+
+LIBSO = $(LIBSO_PREFIX)$(LIBSO_SUFFIX)
+
+$(LIBDIR)/$(LIBSO): $(LIBOBJ)
+	echo $(IDL)
+	echo $(IDLINC)
+	echo $(LIBOBJ)
+	g++ $(LIBSO_FLAGS) -o $(LIBDIR)/$(LIBSO) $(LIBOBJ)
+
+ifneq ($(LIBOBJ),)
+libs: 	depend $(LIBOBJ)
+	@if [ ! -d $(LIBDIR) ] ; then mkdir $(LIBDIR) ; fi ;
+	$(MAKE) $(LIBDIR)/$(LIBSO); 
+else
+libs:
+
+endif
+
+#=======================================================================
+# Binary generation
+#=======================================================================
+
+BINALLOBJ  = $(patsubst %.cc,%,$(wildcard $(BIN_PREFIX)*.cc)) 
+BINOBJ     = $(filter-out $(BINEXC),$(BINALLOBJ))
+EXEOBJ     = $(subst $(BIN_PREFIX),$(BINDIR)/$(BIN_EXE_PREFIX),$(BINOBJ))
+
+generic_bins: depend $(EXEOBJ)
+	@if [ ! -d $(BINDIR) ] ; then mkdir $(BINDIR) ; fi ;
+
+# Rule for making binaries
+
+$(BINDIR)/$(BIN_EXE_PREFIX)%: $(BIN_PREFIX)%.o
+	$(CC) -o $@ $(CCFLAGS) $(CCINC) $< $(LDPATH) $(RPATH) $(LIBS)
+
+#=======================================================================
+# Directive for compiling test programs
+#=======================================================================
+
+TESTALLOBJ =  $(patsubst %.cc,%,$(wildcard t*.cc)) 
+TESTOBJ     = $(filter-out $(BINEXC),$(TESTALLOBJ))
+
+t%: t%.o
+	$(CC) -o $@ $(CCFLAGS) $(LDPATH) $(RPATH) $(LIBS) $<
+
+generic_test: depend $(TESTOBJ)
+
+test: generic_test
+
+#=======================================================================
+# Include the file in which automatic dependencies are deposited by
+# make depend, above.  But only if it exists.  If not, the rule for
+# depend, below, will make it.  Don't include Makefile.rules until
+# after the desired default target is defined, or Makefile.rules will
+# determine the default target for you!
+#=======================================================================
+
+MAKERULES := $(wildcard Makefile.rules)
+
+ifeq ($(MAKERULES), Makefile.rules)
+	RULES_EXISTS = y
+	include Makefile.rules
+else
+	RULES_EXISTS = n
+endif
+
+#-----------------------------------------------------------------------
+# Make dependencies, if they don't already exist
+#-----------------------------------------------------------------------
+
+RULESFILES  =  $(wildcard *.cc)
+RULESFILES +=  $(wildcard *.cpp)
+
+# If Makefile.rules doesn't exist (see above), executing this rule
+# will cause it to be made and sourced.
+
+depend:
+ifeq ($(RULES_EXISTS),n)
+  ifneq ($(RULESFILES),)
+	$(CC) $(CCFLAGS) $(OPTIONS) $(CCINC) -MM $(RULESFILES) > Makefile.rules
+	@set -e; [ -s Makefile.rules ] ;
+  endif
+endif
+
+#=======================================================================
+# Clean directives
+#=======================================================================
+
+clean_bins:
+	\rm -f $(EXEOBJ)
+
+clean_test_bins:
+	\rm -f $(TESTALLOBJ)
+
+clean_depend:
+	\rm -f Makefile.rules
+
+clean_files:
+	\rm -f *.o
+	\rm -f *.mexOB*
+	\rm -f *.idlcc*
+	\rm -f *.idlso*
+	\rm -f *.so*
+	\rm -f *.dlm*
+
+clean_libs:
+ifneq ($(LIBSO),)
+	\rm -f $(LIBDIR)/$(LIBSO)
+endif
+
+clean_test: clean_test_bins clean_files
+
+clean: clean_bins clean_depend clean_files clean_libs
+

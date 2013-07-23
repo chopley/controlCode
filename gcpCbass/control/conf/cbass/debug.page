@@ -1,0 +1,11 @@
+add_page 531 49 Page black red yellow 10 11 {10 10 10 10 10} {} 0 {} 0 {
+  label 1 0 midnightblue paleturquoise center LST
+  label 1 1 midnightblue paleturquoise center AZ
+  register 2 0 black green center {antenna0.tracker.lst[0][0]} sexagesimal 1 0 {} 0 0 0.0 0.0 0 1
+  register 2 1 black green center {antenna0.tracker.actual[0][0]} floating 5 0 {} 0 0 0.0 0.0 0 1
+  register 3 0 black green center {antenna0.tracker.utc.time[0][0]} sexagesimal 0 0 {} 0 0 0.0 0.0 0 1
+  register 4 0 black green center {antenna0.tracker.siteActual[2]} fixed_point 0 0 {} 0 0 0.0 0.0 0 1
+  register 4 1 black green center {antenna0.tracker.siteFiducial[2]} integer 0 0 {} 0 0 0.0 0.0 0 1
+  register 4 2 black green center {antenna0.tracker.lacking[0][0]} integer 0 0 {} 0 0 0.0 0.0 0 1
+  register 4 3 black green center {antenna0.tracker.source[0-29]} string 0 0 {} 0 0 0.0 0.0 0 1
+}

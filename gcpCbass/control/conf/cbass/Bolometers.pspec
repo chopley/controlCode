@@ -1,0 +1,8 @@
+add_plot 190 143 {Bolometers A1,A2,T8} -2 -1 1 1 disabled 20.0 x {} {
+  graph 0 1 Q8 {{receiver.bolometers.adc[0]} {receiver.bolometers.adc[16]} {receiver.bolometers.adc[1]} {} {}} {} 1
+  graph 0 1 R22 {{receiver.bolometers.adc[160]} {receiver.bolometers.adc[176]} {receiver.bolometers.adc[161]} {}} {} 1
+  graph 0 1 P13 {{receiver.bolometers.adc[320]} {receiver.bolometers.adc[336]} {receiver.bolometers.adc[321]} {}} {} 1
+  graph 0 1 R10 {{receiver.bolometers.adc[480]} {receiver.bolometers.adc[496]} {receiver.bolometers.adc[481]} {} {}} {} 1
+  graph 0 1 P10 {{receiver.bolometers.adc[640]} {receiver.bolometers.adc[656]} {receiver.bolometers.adc[641]} {}} {} 1
+  graph 0 1 Q9 {{receiver.bolometers.adc[800]} {receiver.bolometers.adc[816]} {receiver.bolometers.adc[801]} {}} {} 1
+} powSpec 1000 10

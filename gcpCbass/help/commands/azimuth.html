@@ -1,0 +1,47 @@
+<HEAD><TITLE>A function that returns the azimuth of a source.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><code><a href=../dataTypes/Azimuth.html>Azimuth</a> <b>azimuth</b>(source)</code> </a></font>
+<P>
+Return the current azimuth of a given source.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/Source.html>Source</a> source</b></code>
+     <DD>The source of interest.
+     </DL>
+<P>
+<DT> Example 1:
+<DD> The following example displays the azimuth of mars.
+
+<pre>
+  print $azimuth(mars)
+</pre>
+
+An example of the resulting output would be:
+
+<pre>
+  LOG: 326:05:11.7270
+</pre>
+
+<DT> Example 2:
+<DD> The following example halts script execution until Mars is in the
+     western hemisphere.
+
+<pre>
+ until $azimuth(mars) &gt; 180
+</pre>
+
+<P>
+<DT>Context:
+<DD>The returned azimuths have been corrected for precession and
+    nutation, but not for atmospheric refraction or tilts in the
+    telescope axes.
+
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:15:45 PST 2004)
+</BODY>

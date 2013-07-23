@@ -1,0 +1,42 @@
+<HEAD><TITLE>The if datatype.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+<font color=blue><a name=if> <code><b>if</b>(clause) {commands} <b>else if</b>(clause) {commands} <b>else</b> {commands}</code> </a></font>
+<P>
+Conditionally execute one of a number of blocks of commands.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code>clause</code>
+     <DD> A <a href=../dataTypes/Boolean.html>Boolean</a> expression that determines whether a block of
+          commands will be executed. The block of commands that
+	  follows the first true clause is executed. Otherwise the
+	  else part is executed, if present.
+     <DT><code>commands</code>
+     <DD> A block of commands to be executed if its controlling clause
+          is the first true clause.
+     </DL>
+<P>
+<DT> Example:
+<DD> The following example looks at the current sidereal time to
+     decide which calibration source to observe.
+<pre>
+ if($after(18:45,LST)) {
+   track 3c345
+ } else if($after(12:30,LST)) {
+   track 3c273
+ } else {
+   track 0552+398
+ }
+</pre>
+<DT> Context:
+<DD> The <code>if</code> command executes each <code>if()</code>
+     clause until one evaluates to true, or the else statement is
+     reached. It then executes the block of commands that follow that
+     clause (or else statement), and skips the rest of the
+     <code>else</code> clauses.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:15 PST 2004)
+</BODY>

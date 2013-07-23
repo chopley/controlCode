@@ -1,0 +1,70 @@
+<HEAD><TITLE>The return command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name=return> <code><b>return</b></code> </a></font>
+<P>
+Finish executing the enclosing user-defined command without executing
+any more of its statements.
+<P>
+<DL>
+<DT> Arguments:
+<DD> (none)
+<P>
+<DT> Example:
+<DD> In the following user-defined command, which doesn't use
+     the return command, a mess of nested <a href=if.html>if</a>
+     statements are needed to ensure that after receiving a quit
+     signal, no more of the statements in the command are run.
+
+<pre>
+command do_the_observations() {
+  if(!$signaled(quit)) {
+    track Jupiter
+    until $aquired(source) | $signaled(quit)
+    if(!$signaled(quit)) {
+      noise_cal on
+      until $elapsed > 10s | $signaled(quit)
+      if(!$signaled(quit)) {
+        offset dk=-90
+      }
+    }
+  }
+}
+</pre>
+
+This can be avoided by using the return command, to terminate the
+command early. This would be done by rewriting the above command
+as follows.
+
+<pre>
+command do_the_observations() {
+  if($signaled(quit)) {
+    return
+  }
+  track Jupiter
+  until $aquired(source) | $signaled(quit)
+  if($signaled(quit)) {
+    return
+  }
+  noise_cal on
+  until $elapsed > 10s | $signaled(quit)
+  if($signaled(quit)) {
+    return
+  }
+  offset dk=-90
+}
+
+
+<DT> Context:
+<DD> The <code>return</code> command is generally used to avoid
+     having to have too many nested <a
+     href=if.html><code>if</code></a> statements within a command.
+     It immediately terminates the execution of the enclosing
+     user-defined command. If it is called outside of a command
+     definition, it terminates the whole script.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:43 PST 2004)
+</BODY>

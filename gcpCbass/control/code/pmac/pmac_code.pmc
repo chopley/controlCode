@@ -1,0 +1,1288 @@
+;******************************************************************************
+; Variable Definitions
+;******************************************************************************
+
+; Define all variables etc needed for operation
+; NB: Do not re-define if default value is OK
+
+;******************************************************************************
+; DAC bias required to give 0 at amp fp I mon (measured manually 01/00)
+p011=-62
+p012=32
+p013=23   ;7 This number updated 02/01 so that DAC step on enable small
+p014=91
+p015=25
+
+;******************************************************************************
+; Servo tuning vars
+;
+; i121 S curve time
+; i130 Proportional gain (overall loop gain)
+; i131 Derivative Gain (damping)
+; i132 Velocity feedforward gain
+; i133 Integral Gain
+; i163 Max integral factor
+;
+; 
+
+;******************************************************************************
+; Motor setup
+; Strategy is Chauvin specified max decel on limit.
+; For accel and speed I am using approx half the quoted max values.
+; With long S curve times the max speed could maybe be pushed up a bit.
+; Faster accel on azimuth can make the wheels slip
+
+; AZ MOTOR A
+
+;******************************************************************************
+; Set of values for 4 readhead operation
+; Az axis 260.4 cnts/arcsec (337.64e6 cnts/rev)
+; 2.5 deg/sec = 2340 cnt/msec
+; 1 deg/sec^2 = 0.936 cnt/msec^2
+; Drive ratio 3447
+; MCG ID42002 rated 1000 rpm = 16.66 rev/sec
+; (16.66/3447)*360=1.73 deg/sec
+; (16.66/3447)*337.64e6=1632 cnt/ms
+
+i100=1         ; Enable motor
+i103=$10736    ; stacked value + force software position capture
+i104=$723      ; AzA mtr enc on ch 4
+i109=1176      ; i209=i208*(load res/mtr res)
+i111=8000000   ; Fatal following error (260*60*60*0.5*16=7488000, 0= inactive)
+i112=i111/2    ; Warning following error
+i115=0.94      ; Decel on limit - design max [0.25]
+i116=1200      ; Prog max speed
+i117=0.50      ; Prog max accel
+i119=1000      ; Jog/home accel (control using i121)
+i120=1         ; Jog/home accel time (control using i121)
+i122=1200      ; Jog speed
+i123=-1200     ; Homing speed
+i128=42000     ; In pos band 1/16 cnts (41600=10 arcsec) [160]
+i129=p011      ; DAC bias
+i134=0         ; Integral Gain on all the time
+i169=500       ; Max DAC output (1000 cnt = 12 amp)
+
+; Clem 01/00 (idling 2nd motor)
+;i121=1500 i130=40 i131=2500 i132=0 i133=250 i163=* i168=0
+
+; Yama end winter (single motor)
+;i121=1500 i130=20 i131=40000 i132=0 i133=500 i163=1000000 i168=0
+;i121=1500 i130=20 i131=i130*2000 i132=0 i133=i130*25 i163=1000000 i168=0
+
+; Clem 02/01
+i121=3000 i130=10 i131=i130*8000 i132=i131 i133=i130*150 i163=* i168=150
+
+;******************************************************************************
+; El axis 2.78 cnts/arcsec (3.6e6 cnts/rev)
+; 2.5 deg/sec = 25 cnt/msec
+; 1 deg/sec^2 = 0.01 cnt/msec^2
+; Drive ratio 4000
+; MCG ID42002 rated 1000 rpm = 16.66 rev/sec
+; (16.66/4000)*360=1.50 deg/sec
+; (16.66/4000)*3.6e6=15 cnt/ms
+; However only 10 cnt/ms seems safe right now
+
+; EL MOTOR A
+i200=1         ; Enable motor
+i204=$724      ; ElA mtr enc on ch 5
+i209=11        ; i209=i208*(load res/mtr res)
+i211=322560    ; Fatal following error (2.8*60*60*2*16=322560, 0 = inactive)
+i212=i211/2    ; Warning following error
+i215=0.01      ; Decel on limit - design max [0.25]
+i216=10        ; Prog max speed
+i217=0.005     ; Prog max accel
+i219=1000      ; Jog/home accel (control using i121)
+i220=1         ; Jog/home accel time (control using i121)
+i222=10        ; Jog speed
+i223=-10       ; Homing speed 
+i228=445       ; In pos band 1/16 cnt (445=10 arcsec) [160]
+i229=p012      ; DAC bias
+i234=0         ; Perform pos err int all the time [1]
+i269=700       ; Max DAC output (1000 cnt = 12 amp)
+
+; Clem 01/00 (idling 2nd motor)
+;i221=1000 i230=3000 i231=100000 i232=0 i233=1000 i263=*
+
+; Yama end winter 00 (single motor)
+;i221=2000 i230=3500 i231=475000 i232=0 i233=220 i263=8700 i268=0
+;i221=2000 i230=3500 i231=i230*136 i232=0 i233=i230*0.063 i263=8700 i268=0
+
+; Clem 02/01
+i221=3000 i230=3500 i231=i230*150 i232=i231 i233=i230*2 i263=* i268=150
+
+;******************************************************************************
+; Th axis 39.4 cnt/arcsec (51.1e6 cnt/rev)
+; 5 deg/sec = 709 cnt/msec
+; 2.5 deg/sec^2 = 0.355 cnt/msec^2
+; Drive ratio 1950
+
+i300=1         ; Enable motor
+i304=$725      ; Dk mtr enc on ch 6
+i309=312       ; i309=i308*(load res/mtr res)
+i311=4492800   ; Fatal following error (39*60*60*2*16=4492800, 0 = inactive)
+i312=i311/2    ; Warning following error
+i315=0.36      ; Decel on limit - design max [0.25]
+i316=300       ; Prog max speed
+i317=0.15      ; Prog max accel
+i319=1000      ; Jog/home accel (control using i121)
+i320=1         ; Jog/home accel time (control using i121)
+i322=300       ; Jog speed
+i323=300       ; Homing speed
+i328=6000      ; In pos band 1/16 cnts (6304=10 arcsec) [160]
+i329=p013      ; DAC bias
+i334=0         ; Perform pos err int all the time [1]
+i369=500       ; Max DAC output (1000 cnt = 12 amp)
+; DAC to drive is only few counts - however if set i369 lower there
+; is jerk when loop closed
+
+; Clem 01/00
+;i321=1000 i330=25 i331=7000 i332=0 i333=1000 i363=* i368=0
+
+; Yama end winter 00
+;i321=1000 i330=25 i331=28000 i332=0 i333=1000 i363=* i368=0
+;i321=1000 i330=25 i331=i330*1120 i332=0 i333=i330*40 i363=* i368=0
+
+; Clem 02/01
+i321=2000 i330=25 i331=i330*4000 i332=i331 i333=i330*40 i363=* i368=0
+
+;******************************************************************************
+; Setup coord sys
+i187=250       ; Default prog accel time
+i188=500       ; Default prog S curve time
+i193=$072d     ; timebase entry in enc tab
+i194=8388607   ; max value to allow tb complete control
+&1
+#1->x
+#2->y
+#3->z
+#4->0
+#5->0
+
+;******************************************************************************
+; Global i var
+i2=0                   ; Enable control panel
+i5=2                   ; Background PLC on
+
+; Setup DPRAM comm with VME
+wx$0783,$39,$4,$00,$70,$00,$2,$a1,$70,$e0,$90
+
+;******************************************************************************
+; Encoder setup i var
+; Enc 9-12 are not set up differently by default
+i940=7     ; x4 quad decode CCW
+i945=7
+i950=7
+i955=4     ; pulse and dir ccw on ch12 timebase input
+i941=0     ; filter enable
+i946=0
+i951=0
+i956=0
+
+; Encoder conversion table
+; add 4 more entries like the defaults to make a 12 entry table
+wy$728,$00c020
+wy$729,$00c024
+wy$72a,$00c028
+wy$72b,$00c02c
+wy$72c,$a0c02c  ; trig timebase with enc 12 as source
+wy$72d,$004000  ; scale factor is (ms/cnt)*2^17 = 0.125*2^17 = $4000
+
+; stack az values
+wy$72e,$680720  ; par unfilt x conv unshift nosum from 1st line of table
+wy$72f,$ffffff  ; bit enable word
+wy$730,$01c020  ; 1/t inc summing from enc 9 (1st additional az enc)
+wy$731,$680730
+wy$732,$ffffff
+wy$733,$01c024
+wy$734,$680733
+wy$735,$ffffff
+wy$736,$01c028
+
+;******************************************************************************
+; M VAR DEFS
+; Clear any existing m var def
+m0..1023->*
+
+; ****** PER MOTOR
+
+; mtr act pos (1/(32*ix08) cnts
+m001->d:$002b
+m002->d:$0067
+m003->d:$00a3
+m004->d:$00df
+m005->d:$011b
+
+; mtr dac output
+m011->y:$c003,8,16,s   ; dac1 output
+m012->y:$c002,8,16,s   ; dac2 output
+m013->y:$c00b,8,16,s   ; dac3 output
+m014->y:$c00a,8,16,s
+m015->y:$c013,8,16,s
+
+; aena flags
+m021->x:$c000,14,1
+m022->x:$c004,14,1
+m023->x:$c008,14,1
+m024->x:$c00c,14,1
+m025->x:$c010,14,1
+
+; open loop flags
+m031->x:$003d,18,1
+m032->x:$0079,18,1
+m033->x:$00b5,18,1
+m034->x:$00f1,18,1
+m035->x:$012d,18,1
+
+; home offset - needed when measuring cnt per rev
+m041->y:$0815,0,24,s
+m042->y:$08d5,0,24,s
+m043->y:$0995,0,24,s
+m044->y:$0a55,0,24,s
+m045->y:$0b15,0,24,s
+
+; mtr temps
+m051->y:$c00f,8,16,s  ; az-A temp
+m052->y:$c016,8,16,s  ; el-A temp
+m053->y:$c017,8,16,s  ; dk temp
+m054->y:$c01e,8,16,s  ; az-B temp
+m055->y:$c01f,8,16,s  ; el-B temp
+
+; amp fault flag
+m061->x:$c000,23
+m062->x:$c004,23
+m063->x:$c008,23
+m064->x:$c00c,23
+m065->x:$c010,23
+
+; current monitor adc ch 9-12
+m071->y:$c026,8,16,s  ; az-A current
+m072->y:$c027,8,16,s  ; el-A current
+m073->y:$c02e,8,16,s  ; dk current
+m074->y:$c02f,8,16,s  ; az-B current
+
+; mean/rms command current 08x and 09x
+
+
+; ****** PER ENCODER
+
+; raw encoder values (cnts)
+m101->x:$c001,0,24,s
+m102->x:$c005,0,24,s
+m103->x:$c009,0,24,s
+m104->x:$c00d,0,24,s
+m105->x:$c011,0,24,s
+m106->x:$c015,0,24,s
+m107->x:$c019,0,24,s
+m108->x:$c01d,0,24,s
+m109->x:$c021,0,24,s
+m110->x:$c025,0,24,s
+m111->x:$c029,0,24,s
+m112->x:$c02d,0,24,s
+
+; position capture register (cnts)
+; used when finding cnt per rev
+m121->x:$c003,0,24,s
+m122->x:$c007,0,24,s  ; No use on el?
+m123->x:$c00b,0,24,s
+
+; commanded position
+m124->d:$0028
+
+; cnt err flags
+m131->x:$c000,18
+m132->x:$c004,18
+m133->x:$c008,18
+m134->x:$c00c,18
+m135->x:$c010,18
+m136->x:$c014,18
+m137->x:$c018,18
+m138->x:$c01c,18
+m139->x:$c020,18
+m140->x:$c024,18
+m141->x:$c028,18
+m142->x:$c02c,18
+
+; 15x series are rolled over az enc values
+
+; 16x series are az enc differences
+
+; enc err flag
+m171->x:$c000,20  ; Az1
+m172->x:$c020,20  ; Az2
+m173->x:$c024,20  ; Az3
+m174->x:$c028,20  ; Az4
+m175->x:$c004,20  ; El
+m176->x:$c008,20  ; Dk
+
+; tape gap flag - Renishaw limit indicator
+m181->x:$c00c,20  ; Az1
+m182->x:$c010,20  ; Az2
+m183->x:$c014,20  ; Az3 
+m184->x:$c018,20  ; Az4
+m185->x:$c01c,20  ; Dk
+
+
+; ****** PER AXIS
+
+; act pos duplicate of mtr 1-3 pos in cnt
+
+; fol err (1/(32*ix08) cnts
+m211->d:$0840
+m212->d:$0900
+m213->d:$09c0
+
+; mean/rms fol err 22x and 23x
+
+; limit +
+m241->x:$c000,22,1
+m242->x:$c004,22,1
+m243->x:$c008,22,1
+; limit -
+m244->x:$c000,21,1
+m245->x:$c004,21,1
+m246->x:$c008,21,1
+
+; home complete flag
+m251->y:$0814,10,1
+m252->y:$08d4,10,1
+m253->y:$0994,10,1
+
+; desired velocity zero flag
+m261->x:$003d,13,1
+m262->x:$0079,13,1
+m263->x:$00b5,13,1
+
+; fatal following err flag
+m271->y:$0814,2,1
+m272->y:$08d4,2,1
+m273->y:$0994,2,1
+
+
+; ****** OTHER MONITORING
+
+; ADC channels
+m301->y:$c006,8,16,s  ; x tilt
+m302->y:$c007,8,16,s  ; y tilt
+m303->y:$c00e,8,16,s  ; tilt temp
+
+; timebase
+m311->x:$072d,0,24,u   ; timebase freq
+m312->y:$072c,20,4,u   ; timebase status
+
+; Drive status
+;p320 used to construct drive status word
+m321->x:$0818,0,1	;coord_system1_prog_running
+m322->y:$0817,22,1	;coord_system1_run_time_error
+;p323 is acquired flag
+p324=0 ; stability (rms command current) error flag - reset
+
+
+; pvt move time 33x series
+
+; user count down timer reg
+m391->x:$700,24,s
+
+; VME COMM 400 SERIES
+
+;******************************************************************************
+; DPRAM TRANSFER REGISTERS
+; Scheme is transfer regs are +500 and point to
+; same address in DPRAM
+
+; ****** PER MOTOR
+
+; amp status word
+m500->y:$d500,0,16,u
+
+; Mtr act pos
+m501->x:$d501,0,16,u m506->y:$d501,0,16,u
+m502->x:$d502,0,16,u m507->y:$d502,0,16,u
+m503->x:$d503,0,16,u m508->y:$d503,0,16,u
+m504->x:$d504,0,16,u m509->y:$d504,0,16,u
+m505->x:$d505,0,16,u m510->y:$d505,0,16,u
+
+; DAC values
+m511->y:$d511,0,16,s
+m512->x:$d511,0,16,s
+m513->y:$d512,0,16,s
+m514->x:$d512,0,16,s
+m515->y:$d513,0,16,s
+
+; mtr temps
+m551->y:$d551,0,16,s
+m552->x:$d551,0,16,s
+m553->y:$d552,0,16,s
+m554->x:$d552,0,16,s
+m555->y:$d553,0,16,s
+
+; current monitor
+m571->y:$d571,0,16,s
+m572->x:$d571,0,16,s
+m573->y:$d572,0,16,s
+m574->x:$d572,0,16,s
+
+
+; ****** PER ENCODER
+
+; raw enc values
+m601->x:$d601,0,16,u m613->y:$d601,0,16,u
+m602->x:$d602,0,16,u m614->y:$d602,0,16,u
+m603->x:$d603,0,16,u m615->y:$d603,0,16,u
+m604->x:$d604,0,16,u m616->y:$d604,0,16,u
+m605->x:$d605,0,16,u m617->y:$d605,0,16,u
+m606->x:$d606,0,16,u m618->y:$d606,0,16,u
+m607->x:$d607,0,16,u m619->y:$d607,0,16,u
+m608->x:$d608,0,16,u m620->y:$d608,0,16,u
+m609->x:$d609,0,16,u m621->y:$d609,0,16,u
+m610->x:$d60a,0,16,u m622->y:$d60a,0,16,u
+m611->x:$d60b,0,16,u m623->y:$d60b,0,16,u
+m612->x:$d60c,0,16,u m624->y:$d60c,0,16,u
+
+; cnt error bits
+m630->y:$d630,0,16,u
+
+; rolled over az enc val
+m651->x:$d651,0,16,u m655->y:$d651,0,16,u
+m652->x:$d652,0,16,u m656->y:$d652,0,16,u
+m653->x:$d653,0,16,u m657->y:$d653,0,16,u
+m654->x:$d654,0,16,u m658->y:$d654,0,16,u
+
+; az enc diff
+m660->x:$d660,0,16,u m665->y:$d660,0,16,u
+m661->x:$d661,0,16,u m666->y:$d661,0,16,u
+m662->x:$d662,0,16,u m667->y:$d662,0,16,u
+m663->x:$d663,0,16,u m668->y:$d663,0,16,u
+m664->x:$d664,0,16,u m669->y:$d664,0,16,u
+
+; enc err flags
+m670->y:$d670,0,16,u
+
+; tape gap flag
+m680->y:$d680,0,16,u
+
+
+; ****** PER AXIS
+
+; axis status word
+m700->y:$d700,0,16,u
+
+; act pos
+m701->x:$d701,0,16,u m706->y:$d701,0,16,u
+m702->x:$d702,0,16,u m707->y:$d702,0,16,u
+m703->x:$d703,0,16,u m708->y:$d703,0,16,u
+
+; fol err
+m711->x:$d711,0,16,u m716->y:$d711,0,16,u
+m712->x:$d712,0,16,u m717->y:$d712,0,16,u
+m713->x:$d713,0,16,u m718->y:$d713,0,16,u
+
+; mean fol err
+m721->x:$d721,0,16,u m726->y:$d721,0,16,u
+m722->x:$d722,0,16,u m727->y:$d722,0,16,u
+m723->x:$d723,0,16,u m728->y:$d723,0,16,u
+
+; rms fol err
+m731->x:$d731,0,16,u m736->y:$d731,0,16,u
+m732->x:$d732,0,16,u m737->y:$d732,0,16,u
+m733->x:$d733,0,16,u m738->y:$d733,0,16,u
+
+
+; ****** OTHER MONITORING
+
+; tilts and tilt temp
+m801->y:$d801,0,16,s
+m802->y:$d802,0,16,s
+m803->y:$d803,0,16,s
+
+; timebase
+m811->y:$d811,0,16,u
+m812->y:$d812,0,16,u
+
+; Overall drive status word
+m820->y:$d820,0,16,u
+
+; pvt move times
+m831->y:$d831,0,16,s
+m832->y:$d832,0,16,s
+
+
+; ****** VME COMM 400/900 SERIES
+
+; sync flags
+m900->y:$d900,0,1  ; new position
+m901->y:$d901,0,1  ; position fault
+m902->y:$d902,0,1  ; host read
+m903->y:$d903,0,1  ; host write
+
+; new mode
+m911->y:$d911,0,4,u
+
+; new pos
+m921->x:$d921,0,16,u m926->y:$d921,0,16,u
+m922->x:$d922,0,16,u m927->y:$d922,0,16,u
+m923->x:$d923,0,16,u m928->y:$d923,0,16,u
+
+; new rate
+m931->x:$d931,0,16,u m936->y:$d931,0,16,u
+m932->x:$d932,0,16,u m937->y:$d932,0,16,u
+m933->x:$d933,0,16,u m938->y:$d933,0,16,u
+
+; DPRAM locations used for word swapping new position
+m997->y:$d999,0,16,u  ; low 16 bits
+m998->x:$d999,0,16,u  ; high 16 bits
+m999->dp:$d999        ; m999 is 32 bit signed int
+
+;******************************************************************************
+; Initialization
+;******************************************************************************
+
+open plc 31 clear
+  ; Move to desired end of each axis
+  cmd "#1j+"
+  cmd "#2j+"
+  cmd "#3j-"
+  while (m244&m245&m243=0) ; until limits set
+  endwhile
+  while (m261&m262&m263=0) ; until desired vel zero all axis
+  endwhile
+  
+  ; don't attempt to turnaround instantly
+  ; use timer to wait 2 sec
+  m391=2000*8388608/i10
+  while (m391>0)
+  endwhile
+
+  ; Do the homing move
+  cmd "#1hm"
+  cmd "#2hm"
+  cmd "#3hm"
+  while (m251&m252&m253=0) ; until home complete all axis
+  endwhile
+  while (m261&m262&m263=0) ; until desired vel zero all axis
+  endwhile
+      
+  m004=m001      ; Force secondary motors to see same enc val
+  m005=m002      ; Use Position Offset Reg - see Man 7-14?
+
+  ; reset rolled over az enc values
+  p151=0
+  p152=0
+  p153=0
+  p154=0
+
+  ; here apply torque bias and enable secondary motors
+
+  ; if proceed straight to motion prog gives not ready err
+  ; use timer to wait 0.5 sec
+  m391=500*8388608/i10
+  while (m391>0)
+  endwhile
+      
+  ; now start the motion program
+  cmd "&1b1r"    ; coord sys 1, start of prog, run
+
+  ; run once only at start up
+  disable plc 31
+close
+
+; Dummy plc 31 to disable auto homing on reboot
+;open plc 31 clear
+;close
+
+;******************************************************************************
+; Display panel
+;******************************************************************************
+
+open plc 30 clear
+  ; Clear display
+  disp  0 "                                        "
+  disp 40 "                                        "
+
+  ; Display state of servo loops
+  disp 0 "Loops Az El Dk"
+  if (m031=0)
+    disp 46 "Cl"
+  else
+    disp 46 "Op"
+  endif
+  if (m032=0)
+    disp 49 "Cl"
+  else
+    disp 49 "Op"
+  endif
+  if (m033=0)
+    disp 52 "Cl"
+  else
+    disp 52 "Op"
+  endif
+
+  ; Indicate if homing complete
+  disp 15 "Homing"
+  if (m251&m252&m253=1)
+    disp 55 "Comp"
+  else
+    disp 55 "Incomp"
+  endif
+
+  ; Indicate mode
+  disp 22 "Mode"
+  if (m321=0)
+    disp 62 "Stop"
+  else
+    if (q0=0)
+      disp 62 "Track"
+    endif
+    if (q0=1)
+      disp 62 "Slew"
+    endif
+    if (q0=2)
+      disp 62 "Halt"
+    endif
+    if (q0=3)
+      disp 62 "Sync"
+    endif
+  endif
+
+  ; Indicate state of limit switches
+  disp 28 "Lim Az El Dk"
+  if(m241=0)
+    disp 73 " "
+  else
+    disp 73 "-"
+  endif
+  if(m242=0)
+    disp 76 " "
+  else
+    disp 76 "-"
+  endif
+  if(m243=0)
+    disp 79 " "
+  else
+    disp 79 "-"
+  endif
+  if(m244=0)
+    disp 72 " "
+  else
+    disp 72 "+"
+  endif
+  if(m245=0)
+    disp 75 " "
+  else
+    disp 75 "+"
+  endif
+  if(m246=0)
+    disp 78 " "
+  else
+    disp 78 "+"
+  endif
+close
+enable plc 30
+
+;******************************************************************************
+; Compute rms current and abort if exceeds some level
+; The idea is to protect against oscillations
+;******************************************************************************
+open plc 29 clear
+  p088=20        ; number of samples
+  p089=0         ; loop count
+  ; calc var
+  p085=0         ; az calc var
+  p086=0         ; el calc var
+  p087=0         ; dk calc var
+  p095=0         ; az calc var
+  p096=0         ; el calc var
+  p097=0         ; dk calc var
+  
+  while (p089<p088)
+    p085=p085+m011
+    p086=p086+m012
+    p087=p087+m013
+    p095=p095+m011*m011
+    p096=p096+m012*m012
+    p097=p097+m013*m013
+    p089=p089+1
+  endwhile
+  
+  p081=p085/p088
+  p082=p086/p088
+  p083=p087/p088
+  p091=sqrt(p095/p088-p081*p081)
+  p092=sqrt(p096/p088-p082*p082)
+  p093=sqrt(p097/p088-p083*p083)
+
+  ; Kill the action if looks like oscillation
+  if (p091>300 or p092>300 or p093>300)
+    ;cmd "a#1k#2k#3k"
+    p324=1
+  endif
+close
+enable plc 29
+
+;******************************************************************************
+; Following Error Calculation
+;******************************************************************************
+
+; calc mean and rms following errors
+
+open plc 12 clear
+  p228=20        ; number of samples
+  p229=0         ; loop count
+  ; calc var
+  p225=0         ; az calc var
+  p226=0         ; el calc var
+  p227=0         ; dk calc var
+  p235=0         ; az calc var
+  p236=0         ; el calc var
+  p237=0         ; dk calc var
+  
+  while (p229<p228)
+    p225=p225+m211/(32*i108)
+    p226=p226+m212/(32*i208)
+    p227=p227+m213/(32*i308)
+    p235=p235+(m211/(32*i108))*(m211/(32*i108))
+    p236=p236+(m212/(32*i208))*(m212/(32*i208))
+    p237=p237+(m213/(32*i308))*(m213/(32*i308))
+    p229=p229+1
+  endwhile
+  
+  p221=p225/p228
+  p222=p226/p228
+  p223=p227/p228
+  p231=sqrt(p235/p228-p221*p221)
+  p232=sqrt(p236/p228-p222*p222)
+  p233=sqrt(p237/p228-p223*p223)
+
+  ; Set acquired flag if tracking OK
+  ; Tolerance is 10 arc sec on az, 10 arc sec on el, and 10 arc min on dk
+  if(q0=0 or q0=2)  ; if tracking or halted
+    if (abs(p221)<2600 and abs(p222)<27.8 and abs(p223)<23640)
+    ; and within tolerance
+      p323=1  ; set acquired flag
+    else
+      p323=0  ; clear acquired flag 
+    endif
+  endif  
+
+  ; Convert to milli cnt
+  p221=1000*p221  ; mean az fol err 
+  p222=1000*p222  ; mean el fol err
+  p223=1000*p223  ; mean dk fol err
+  p231=1000*p231  ; rms az fol err
+  p232=1000*p232  ; rms el fol err
+  p233=1000*p233  ; rms dk fol err
+close
+enable plc 12
+
+;******************************************************************************
+; Send Monitor Data to VME Computer
+;******************************************************************************
+
+open plc 9 clear
+    
+  ; PER MOTOR
+  ; compose motor status word
+  p000=0
+
+  ; aena flags
+  p000=p000|m021*1
+  p000=p000|m022*2
+  p000=p000|m023*4
+  p000=p000|m024*8
+  p000=p000|m025*16
+
+  ; open loop flags
+  p000=p000|m031*32
+  p000=p000|m032*64
+  p000=p000|m033*128
+  p000=p000|m034*256
+  p000=p000|m035*512
+
+  ; amp fault flag
+  p000=p000|m061*1024
+  p000=p000|m062*2048
+  p000=p000|m063*4096
+  p000=p000|m064*8192
+  p000=p000|m065*16384
+  
+  ; complete word ready for copy to DPRAM
+  p500=p000
+  
+  ; act pos (cnts)
+  p001=m001/(i108*32)
+  p002=m002/(i208*32)
+  p003=m003/(i308*32)
+  p004=m004/(i408*32)
+  p005=m005/(i508*32)
+
+ 
+  ; PER ENCODER
+
+  ; cnt err flag
+  p130=0
+  p130=p130|m131*1
+  p130=p130|m132*2
+  p130=p130|m133*4
+  p130=p130|m134*8
+  p130=p130|m135*16
+  p130=p130|m136*32
+  p130=p130|m137*64
+  p130=p130|m138*128
+  p130=p130|m139*256
+  p130=p130|m140*512
+  p130=p130|m141*1024
+  p130=p130|m142*2048
+  p630=p130  ; complete word ready for copy to DPRAM
+  
+  ; roll-over az enc values (24 bit to 32 bit)
+  
+  ; az readhead 1 - enc ch 1
+  p100=m101-(p151%-8388608)
+  if (p100 < -10000000)
+    p151=p151+16777216  ; +ve going
+  endif
+  if (p100 > 10000000)
+    p151=p151-16777216  ; -ve going
+  endif
+  p151=p151+p100
+
+  ; az readhead 2 - enc ch 9
+  p100=m109-(p152%-8388608)
+  if (p100 < -10000000)
+    p152=p152+16777216  ; +ve going
+  endif
+  if (p100 > 10000000)
+    p152=p152-16777216  ; -ve going
+  endif
+  p152=p152+p100
+  
+  ; az readhead 3 - enc ch 10
+  p100=m110-(p153%-8388608)
+  if (p100 < -10000000)
+    p153=p153+16777216  ; +ve going
+  endif
+  if (p100 > 10000000)
+    p153=p153-16777216  ; -ve going
+  endif
+  p153=p153+p100
+  
+  ; az readhead 4 - enc ch 11
+  p100=m111-(p154%-8388608)
+  if (p100 < -10000000)
+    p154=p154+16777216  ; +ve going
+  endif
+  if (p100 > 10000000)
+    p154=p154-16777216  ; -ve going
+  endif
+  p154=p154+p100
+
+  ; take az enc diff
+  p160=p151-p152
+  p161=p151-p153
+  p162=p151-p154
+  p163=p152-p154
+  p164=(p151+p153)-(p152+p154)
+
+  ; enc err flags
+  p170=0
+  p170=p170|m171*1      ; Az1
+  p170=p170|m172*2      ; Az2
+  p170=p170|m173*4      ; Az3
+  p170=p170|m174*8      ; Az4  
+  p170=p170|m175*16     ; El
+  p170=p170|m176*32     ; Dk
+  p170=p170^63          ; invert
+  p670=p170
+  
+  ; tape gap flags
+  p180=0
+  p180=p180|m181*1
+  p180=p180|m182*2
+  p180=p180|m183*4
+  p180=p180|m184*8
+  p180=p180|m185*16
+  p180=p180^31
+  p680=p180  ; complete word ready for copy to DPRAM
+  
+  ; PER AXIS
+  ; compose axis status word
+  p200=0
+
+  ; limit switches
+  p200=p200|m241*1
+  p200=p200|m242*2
+  p200=p200|m243*4
+  p200=p200|m244*8
+  p200=p200|m245*16
+  p200=p200|m246*32
+  
+  ; home complete flags
+  p200=p200|m251*64
+  p200=p200|m252*128
+  p200=p200|m253*256
+
+  ; desired velocity zero flags
+  p200=p200|m261*512
+  p200=p200|m262*1024
+  p200=p200|m263*2048
+         
+  ; fatal following err flags
+  p200=p200|m271*4096
+  p200=p200|m272*8192
+  p200=p200|m273*16384
+   
+  ; complete word ready for copy to DPRAM
+  p700=p200  
+
+  ; az_pos and el_pos are modified to make apparent axis offset close to 0
+  p201=p001+172389392 ;+165248904
+  p202=p002+791770
+  p203=p003  
+
+  ; fol err (cnts)
+  p211=m211/(i108*32)
+  p212=m212/(i208*32)
+  p213=m213/(i308*32)
+
+  ; OTHER MON
+
+  ; compose drive status word
+  p320=0
+  p320=p320|m321*1
+  p320=p320|m322*2
+  p320=p320|p323*4
+  p320=p320|p324*8
+  ; complete word ready for copy to DPRAM
+  p820=p320
+
+  ; transfer all ADC readings raw
+
+  ; timebase
+  p311=m311/i10      ; = 10000*(Fin/Frealtime)
+
+  ; if host is not using DPRAM
+  if (m902=0)
+  
+    ; set pmac_write  
+    m903=1
+
+    ; PER MOTOR
+    ; status word
+    m500=p500
+  
+    ; mtr act pos (enc cnt)
+    m501=p001  m506=(p001&$ffff0000)/$10000
+    m502=p002  m507=(p002&$ffff0000)/$10000
+    m503=p003  m508=(p003&$ffff0000)/$10000
+    m504=p004  m509=(p004&$ffff0000)/$10000
+    m505=p005  m510=(p005&$ffff0000)/$10000  
+    
+    ; mtr com I (DAC bits)
+    m511=m011-p011
+    m512=m012-p012
+    m513=m013-p013
+    m514=m014-p014
+    m515=m015-p015
+
+    ; mtr temp
+    m551=m051/8
+    m552=m052/8
+    m553=m053/8
+    m554=m054/8
+    m555=m055/8
+
+    ; current monitor. PMAC ADC has only +/- 2^12 range.
+    m571=m071/8
+    m572=m072/8
+    m573=m073/8
+    m574=m074/8
+
+    ; PER ENCODER
+    ; raw enc values
+    m601=m101  m613=(m101&$ffff0000)/$10000
+    m602=m102  m614=(m102&$ffff0000)/$10000
+    m603=m103  m615=(m103&$ffff0000)/$10000
+    m604=m104  m616=(m104&$ffff0000)/$10000
+    m605=m105  m617=(m105&$ffff0000)/$10000
+    m606=m106  m618=(m106&$ffff0000)/$10000
+    m607=m107  m619=(m107&$ffff0000)/$10000
+    m608=m108  m620=(m108&$ffff0000)/$10000
+    m609=m109  m621=(m109&$ffff0000)/$10000
+    m610=m110  m622=(m110&$ffff0000)/$10000
+    m611=m111  m623=(m111&$ffff0000)/$10000
+    m612=m112  m624=(m112&$ffff0000)/$10000
+
+    ; cnt err flag
+    m630=p630
+
+    ; rolled over az enc val
+    m651=p151  m655=(p151&$ffff0000)/$10000
+    m652=p152  m656=(p152&$ffff0000)/$10000
+    m653=p153  m657=(p153&$ffff0000)/$10000
+    m654=p154  m658=(p154&$ffff0000)/$10000
+
+    ; az enc diff
+    m660=p160  m665=(p160&$ffff0000)/$10000
+    m661=p161  m666=(p161&$ffff0000)/$10000
+    m662=p162  m667=(p162&$ffff0000)/$10000
+    m663=p163  m668=(p163&$ffff0000)/$10000
+    m664=p164  m669=(p164&$ffff0000)/$10000
+
+    ; enc err flags
+    m670=p670
+
+    ; tape gap flag
+    m680=p680
+    
+    ; PER AXIS
+    ; status word
+    m700=p700
+
+    ; act pos is modified mtr 1,2,3 positions
+    m701=p201  m706=(p201&$ffff0000)/$10000
+    m702=p202  m707=(p202&$ffff0000)/$10000
+    m703=p203  m708=(p203&$ffff0000)/$10000
+  
+    ; fol err
+    m711=p211 m716=(p211&$ffff0000)/$10000
+    m712=p212 m717=(p212&$ffff0000)/$10000
+    m713=p213 m718=(p213&$ffff0000)/$10000 
+
+    ; mean fol err
+    m721=p221 m726=(p221&$ffff0000)/$10000
+    m722=p222 m727=(p222&$ffff0000)/$10000
+    m723=p223 m728=(p223&$ffff0000)/$10000
+  
+    ; rms fol err
+    m731=p231 m736=(p231&$ffff0000)/$10000
+    m732=p232 m737=(p232&$ffff0000)/$10000
+    m733=p233 m738=(p233&$ffff0000)/$10000 
+
+    ; OTHER MON
+    ; tilts and tilt temp
+    m801=m301/8
+    m802=m302/8
+    m803=m303/8
+
+    ; timebase
+    m811=p311*10000  ; Fin/Frt * 10000
+    m812=m312
+
+    ; drive status word
+    m820=p820
+
+    ; pvt move times
+    m831=p331       ; move time in ms
+    m832=p332/1000  ; time into track in sec
+    
+    ; clear pmac_write
+    m903=0
+  endif
+close
+enable plc 9
+
+;******************************************************************************
+; Main Motion Control Program
+;******************************************************************************
+
+open prog 1 clear
+  abs            ; absolute move mode
+  
+  ; wait until timebase in range
+  while (p311>1.1 or p311<0.90)
+  endwhile
+
+  ; the main loop runs forever
+  while (1<2)
+  
+    ; wait for host to set new position flag
+    while (m900=0)
+    endwhile
+
+    ; save the previous pos
+    q21=q1  ; az
+    q22=q2  ; za+90
+    q23=q3  ; dk
+    
+    ; get the new position & swap 16-bit words
+    q0=m911  ; new_mode (0=track, 1=slew, 2=halt, 3=sync)
+    
+    ; az_pos
+    q50=m921  ; low 16
+    q51=m926  ; high 16
+    m997=q50  ; low 16
+    m998=q51  ; high 16
+    q1=m999   ; collect 32 bit signed int result (enc cnt)
+    
+    ; el_pos
+    q50=m922  ; low 16
+    q51=m927  ; high 16
+    m997=q50  ; low 16
+    m998=q51  ; high 16
+    q2=m999   ; collect 32 bit signed int result (enc cnt)
+    
+    ; dk_pos
+    q50=m923  ; low 16
+    q51=m928  ; high 16
+    m997=q50  ; low 16
+    m998=q51  ; high 16
+    q3=m999   ; collect 32 bit signed int result (enc cnt)
+    
+    ; az_rate
+    q50=m931  ; low 16
+    q51=m936  ; high 16
+    m997=q50  ; low 16
+    m998=q51  ; high 16
+    q4=m999   ; collect 32 bit signed int result (milli enc cnt per sec)
+    q4=q4/1000 ; (enc cnt per sec)
+    
+    ; el_rate
+    q50=m932  ; low 16
+    q51=m937  ; high 16
+    m997=q50  ; low 16
+    m998=q51  ; high 16
+    q5=m999   ; collect 32 bit signed int result (milli enc cnt per sec)
+    q5=q5/1000 ; (enc cnt per sec)
+    
+    ; dk_rate
+    q50=m933  ; low 16
+    q51=m938  ; high 16
+    m997=q50  ; low 16
+    m998=q51  ; high 16
+    q6=m999   ; collect 32 bit signed int result (milli enc cnt per sec)
+    q6=q6/1000 ; (enc cnt per sec)
+    
+    ; Modify az and el pos such that astronomical axis zero
+    ; points are close to cnt zero points from VME computers
+    ; point of view. See CBI/conf/rtc.init for how
+    ; to calc numbers.
+
+    ; When VME says 0 it means -axis_offset
+    q1=q1-172389392; -165248904
+
+    ; When VME says 0 it means -axis_offset
+    q2=q2-791770
+
+    m901=0    ; new position fault flag
+    
+    ; trap mode out of range
+    if (q0>4 or q0<0)
+      m901=1  ; set fault flag
+      q0=2    ; set mode=halt
+    endif
+    
+    ; if mode=track or sync trap excessive position changes
+    ; Note check against current actual position - not last commanded.
+    if (q0=0 or q0=3)             ; if mode=track or sync    
+      q11=m001/(32*i108)
+      q12=m002/(32*i208)
+      q13=m003/(32*i308)
+      
+      ; 0.1 deg max change on Az and El, 0.5 on Dk to avoid
+      ; repeatative problem due to slow servo loop.
+      if (abs(q1-q11)>0.1*937000)
+        m901=1                     ; set fault
+        q0=2                       ; change to halt
+      endif
+      if (abs(q2-q12)>0.1*10000)
+        m901=1
+        q0=2
+      endif
+      if (abs(q3-q13)>0.5*142000)
+        m901=1
+        q0=2
+      endif
+    endif
+    
+    ; command requested move
+    
+    ; track move
+    if (q0=0)
+      m900=0     ; clear new position flag
+      pvt(q106)  ; set pvt move for required length
+      x(q1):(q4) y(q2):(q5) z(q3):(q6)
+
+      q102=m112                 ; current tb enc val
+
+      if(q102<q101)             ; tb enc has rolled
+        q103=q103+1             ; increment loop cnt
+      endif
+      q101=q102                 ; update last      
+
+      q104=(q102+q103*16777216-q100)/8  ; time since start in ms
+
+      q105=q104%1000            ; remainder - number of ms behind
+      if (q105<500)             ; if we are behind, not ahead
+        q106=1000-q105          ; reduce move time to compensate
+      else
+        q106=1000               ; else stick with 1s
+      endif
+
+      p331=q106                 ; monitor move time
+      p332=q104                 ; monitor time into track
+    endif
+        
+    ; slew move
+    ; speed/time controlled by ix19 to 21 since i50=0 default
+    ; ref manual 8-12
+    if (q0=1)
+      p323=0    ; clear acquired flag
+      rapid
+      x(q1) y(q2) z(q3)
+      dwell 0
+      m900=0    ; clear new position flag  
+    endif
+    
+    ; halt mode
+    if (q0=2)
+      dwell0
+      m900=0    ; clear new position flag
+    endif
+    
+    ; sync mode
+    if (q0=3)
+      p323=0    ; clear acquired flag
+      dwell0    ; stop telescope
+      m900=0    ; clear new position flag
+      pvt(100)  ; set pvt move 1 sec long
+      m312=$9   ; freeze the timebase
+      m312=$b   ; arm for trigger
+      x(q1):(0) y(q2):(0) z(q3):(0)  ; sync move on trigger
+      q100=m112 ; timebase encoder value at start
+      q101=q100 ; last timebase encoder value
+      q103=0    ; number of rollovers
+      q106=1000 ; time for first move
+    endif
+
+    ; reboot mode
+    if (q0=4)
+      cmd "$$$"
+    endif
+        
+  endwhile
+close
+
+;******************************************************************************
+; Test Move Prog
+;******************************************************************************
+
+open prog 2 clear
+  abs
+  linear
+  frax(x)
+  f260           ; 260 cnt/sec is 4 arcsec/sec track rate
+  ; for reasons I don't currently understand the feedrate
+  ; does not control the velocity in prog moves
+  ;i129=q1+10
+  ;i429=q4-10
+  x-10000000 f260
+  ;y-400000
+  dwell3000
+  x0
+  ;i129=q1
+  ;i429=q4
+close
+
+;******************************************************************************
+#1
+;******************************************************************************
+

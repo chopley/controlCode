@@ -1,0 +1,50 @@
+<HEAD><TITLE>Zooming and autoscaling the X-axis of a plot</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+<center><a href=index.html>Index</a></center>
+<HR>
+<center><H1>Zooming and autoscaling the X-axis of a plot</H1></center>
+
+To interactively modify the x-axis range of a plot, start by switching
+to the x-zoom cursor-input mode, either by pressing the
+&quot;<b>x</b>&quot; key within the plot window, or by pulling down
+the <b>Cursor</b> menu of the plot window and selecting <b>Zoom
+X</b>. The cursor will change to a single vertical line. If you want
+to widen the x-axis to display all of the available data, press the
+right mouse button. If you want to temporarily zoom in on the x-axis,
+start by moving the vertical cursor line to one end of the desired
+x-axis range, and click the right mouse button. The cursor will split
+into two vertical lines, one of which stays where you just clicked,
+and the second of which should be moved to the other end of the
+range. Upon clicking the left mouse button again, the plot will be
+zoomed to display the data between the two cursor lines. At this point
+if scrolling was enabled, it will temporarily be disabled until you
+unzoom again. If you didn't zoom far enough, you can repeat the
+above operations to zoom in further. The viewer keeps a stack of
+all these nested zooms, so that unzooming takes you back to the
+previous zoom limits.
+
+<P>
+
+<H2>Unzooming the x-axis</H2>
+
+To unzoom the x-axis after zooming in one or more times, if you aren't
+still in x-zoom cursor input mode, select it as described above, then
+press the right mouse button. Each time that you press this button,
+the plot will unzoom back to the previous zoom limits, until all the
+nested zooms have been undone. If you then press this button again,
+the plot will zoom out further to show all of the data in the plot
+buffer.
+
+<H2>Adopting zoom limits</H2>
+
+If after zooming in, you want to forget about all nested zoom limits
+and adopt the current zoom limits as the normal plot limits, press the
+middle mouse button. This will update the limits shown in the <a
+href=conf_plot.html>plot configuration dialog</a>, and those that are
+recorded when you <a href=save.html>save</a> the plot configuration.
+It will also reenable scrolling if this was enabled before you started
+zooming.
+
+<HR>
+Erik Leitch (6-Nov-1999)
+</BODY>

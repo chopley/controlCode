@@ -1,0 +1,31 @@
+add_page 1040 41 Weather beige red yellow 10 9 {10 10 10 10 10 10} {} 0 {} 0 {
+  label 0 0 midnightblue paleturquoise center day
+  label 0 1 midnightblue paleturquoise center {battery V}
+  label 0 3 midnightblue paleturquoise center {air temp}
+  label 0 4 midnightblue paleturquoise center {wind dir}
+  label 0 6 midnightblue paleturquoise center tau
+  label 0 8 orange black center power
+  register 1 0 black green center {array.weather.day[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 1 1 black green center {array.weather.battery[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 1 3 black green center {array.weather.airTemperature[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 1 4 black green center {array.weather.windDirection[0]} fixed_point 0 0 {} 0 0 0.0 0.0 0 1
+  register 1 6 black green center {array.tipper.tau[0]} fixed_point 2 0 {UPS OK,UPS fail} 0 0 0.0 0.0 0 1
+  register 1 8 gray black center {array.weather.power[0]} bit 0 7 {cabin OK,cabin fail} 0 1 0.0 0.0 0 1
+  label 2 0 midnightblue paleturquoise center hour
+  label 2 1 midnightblue paleturquoise center {int temp}
+  label 2 3 midnightblue paleturquoise center RH
+  label 2 4 midnightblue paleturquoise center {wind speed}
+  label 2 6 midnightblue paleturquoise center Tatm
+  register 2 8 gray black center {array.weather.power[0]} bit 0 6 {UPS OK,UPS fail} 0 1 0.0 0.0 0 1
+  register 3 0 black green center {array.weather.hour[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 3 1 black green center {array.weather.internalTemperature[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 3 3 black green center {array.weather.relativeHumidity[0]} fixed_point 0 0 {} 0 0 0.0 0.0 0 1
+  register 3 4 black green center {array.weather.windSpeed[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 3 6 black green center {array.tipper.tatm[0]} fixed_point 1 0 {UPS OK,UPS fail} 0 0 0.0 0.0 0 1
+  label 4 0 midnightblue paleturquoise center minute
+  label 4 3 midnightblue paleturquoise center pressure
+  label 4 6 midnightblue paleturquoise center {tipper UTC}
+  register 5 0 black green center {array.weather.minute[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 5 3 black green center {array.weather.pressure[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 5 6 black green center {array.tipper.utc.time[0]} sexagesimal 0 0 {UPS OK,UPS fail} 0 0 0.0 0.0 0 1
+}

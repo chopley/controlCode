@@ -1,0 +1,139 @@
+<HEAD><TITLE>The "archive" datatype.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name="archive"> <code><b>archive</b> [combine=number, dir=/whatever, filter=true|false]</code> </a></font>
+<P>
+Configure the data archiver.
+
+<DL>
+<DT> Mandatory Arguments:
+<DD> (none)
+<DT> Optional Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/Count.html>Count</a> combine</b></code>
+     <DD> The number of snapshots from the antenna control CPU to
+          combine to form a recorded archive frame.
+     <DT><code><b><a href=../dataTypes/Wdir.html>Wdir</a> dir</b></code>
+     <DD> The directory in which to place subsequently opened archive files.
+     <DT><code><b><a href=../dataTypes/Boolean.html>Boolean</a> filter</b></code>
+     <DD> Whether to archive all frames received from the antenna control
+          CPU (filter=false), or whether to record only those that
+          have been marked with the <a href=mark.html>mark</a>
+	  command.
+     <DT><code><b><a href=../dataTypes/Count.html>Count</a> file_size</b></code>
+     <DD> The number of frames to record per archive file before
+          starting a new file. The default is 0, which tells the
+          archiver to keep writing to the current file indefinitely.
+     </DL>
+<P>
+<DT> Example 1:
+<DD> The following example tells the archiver to form archived frames
+     by combining 20 successive register snapshots from the antenna control
+     CPU. It also tells the archiver that the next time that a new
+     archive file is created, it should be placed in the /scr/bicep/data
+     directory.
+<pre>
+  archive combine=20, dir=/scr/bicep/data
+</pre>
+
+<DT> Example 2:
+<DD> The following example tells the archiver to record individual
+     snapshots from the antenna control CPU without combining them, but
+     also tells it not to archive snapshots that haven't been marked
+     as special with the <a href=mark.html>mark</a> command. This will
+     be the normal mode for optical pointing, where one wants to just
+     archive the frames which the user marks as having a pointing star
+     centered on the cross-hairs.
+
+<pre>
+  archive combine=1, filter=true
+</pre>
+
+<DT> Example 3:
+<DD> The following example tells the archiver to start a new archive
+     every time that the current file contains 1000 frames. This keeps
+     the size of each file reasonably small, thus enabling faster
+     access to a given start time when the archive is read.
+
+<pre>
+  archive file_size=1000
+</pre>
+
+<DT>Context:
+<DD> The archiver part of the control program receives snapshots of
+     the state of the antenna control system and its hardware, and if asked,
+     records this information to disk. The <code>archive</code>
+     command controls how this is done. It allows one to specify what
+     directory to put archive files in, wether to compress the data by
+     combining a specified number of snapshots and whether to record
+     all combined snapshots or whether to only record those that are
+     marked as special.
+<P>
+<DT> The optional <code>combine</code> argument.
+<DD> The antenna control CPU records a snapshot of the state of the system
+     at intervals determined by the <a href=interval.html>interval</a>
+     command. This interval will usually be 0.84 seconds. This is
+     short enough to be useful for those monitoring the state of the
+     system using the viewer program, but if one were to
+     continuously record 12kb snapshots of the state of the instrument
+     at this rate one would end up with enormous files. Thus during
+     normal observing this command will be used to tell the archiver
+     to reduce the size of the files by a factor of 10 by combining
+     every 10 successive snapshots before writing the resulting
+     combined snapshot to disk. The way that the combination is done
+     differs for different registers in the register map. The
+     correlator and receiver tuning card registers are designed with
+     enough headroom for up to 256 snapshots to be coadded before
+     overflow occurs, so these are coadded to increase their signal to
+     noise ratios. Other registers, particularly those on commercial
+     boards are not designed with this in mind, so of each successive
+     10 snapshots, 9 are discarded and the last is placed in the
+     archived snapshot. The frame.features register, and any other
+     registers that are marked as bit-map unions, are combined by
+     taking their bitwise union. In the case of the frame.features
+     register, this ensures that frame markers aren't lost.
+<P>
+<DT> The optional <code>dir</code> argument.
+<DD> While the directory in which archive files are to be placed can
+     be specified by this command, to explicitly open an archive file
+     you should use the <a href=open.html>open</a> command.
+<P>
+<DT> The optional <code>filter</code> argument.
+<DD> During optical pointing the observer asks the telescope to track
+     a number of stars, one after the other. On reaching each star,
+     the observer adjusts the azimuth and elevation offsets until the
+     star, as seen through the optical pointing telescope, is centered
+     on the cross-hairs of the TV monitor. At that point he or she
+     presses a button that marks the next snapshot of the system as
+     being a pointing reference frame. To ensure that the marked frame
+     isn't corrupted by being combined with snapshots taken when the
+     telescope is moving to the next source, the archive command
+     should be used to tell the archiver not to combine snapshots into
+     composite archived snaphots. This could result in enormous
+     archive files, so given that one is only interested in those few
+     snapshots that have been marked as pointing reference frames, it
+     also makes sense to tell the archiver to only record marked
+     frames. The second example above shows how this is done.
+</DL>
+<P>
+<DT> The optional <code>file_size</code> argument.
+<DD> By default, once an archive file has been opened, the archiver
+     indefinitely records all archive frames in a single file. This
+     has the potential to create a huge file, which then forces the
+     offline analysis software to read a lot of unwanted data to reach
+     samples near the end of the file. To avoid this, the archiver
+     provides the option of breaking up the archive output stream into
+     multiple files of a given maximum size. The size is specified as
+     an integral number of frames. Whenever that number of frames has
+     been written to a given file, that file is closed and a new file
+     is opened. All such files have their start times encoded in their
+     file names, so the offline software can then use this to locate
+     the files that contain a given time range.
+
+     The amount of data recorded per archive frame is around 12K for
+     the BICEP, so specifying a size of 1000 frames will result in
+     individual files of about 12MB in size.
+<HR>
+Erik Leitch (Tue Mar 30 21:15:43 PST 2004)
+</BODY>

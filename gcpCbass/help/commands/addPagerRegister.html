@@ -1,0 +1,49 @@
+<html>
+<head>
+<title>SPT Command List</title>
+<link rel=stylesheet href="../StyleSheet.css" type="text/css">
+</head>
+
+<body bgcolor="#add8e6">
+<font face="Verdana, Arial, Helvetica, sans-serif"size="2" color="#000000">
+<h2>The <span class=command>addPagerRegister</span> command (usage)</h2>
+<hr>
+
+
+<h2><i>Context:</i></h2><p>
+
+The addPagerRegister command adds a register condition that will cause the telescope operator to be paged (by email, pager or phone).
+The condtion consists of a minimum and maximum value, and optional number of frames, delta flag and outOfRange flag.
+
+<p>
+
+By default, a page is sent if the value of the register is greater than or equal to min and less than or equal to 
+max at any time.
+
+<p>
+
+If nFrame is set to greater than one, then the register condition must be met for nFrame consecutive seconds
+for a page to be sent. 
+
+<p>
+
+If outOfRange is true, then a page is sent if the register value is less than min or greater than max.
+
+<p>
+
+If delta is true, then the value compared with minimum and maximum is the difference between the current and previous
+values of the register, rather than its current value.
+
+<p>
+
+If register is the name of an array of register values, then the same condition is set for every element of the array, as if the
+addPagerRegister had command had been given for each array element separately.
+
+<h2><i>Examples:</i></h2><p>
+
+<pre>
+addPagerRegister array.fridge.Temperature[5],0,15,nFrame=5  # Page if fridge temperature 5 is between 0 and 15 degrees for 5 seconds
+addPagerRegister array.weather.power[0],0,0,nFrame=2        # Page if receiver cabin power monitor bits are non-zero for two seconds
+</pre>
+
+</body></html>

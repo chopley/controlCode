@@ -1,0 +1,48 @@
+#ifndef GCP_UTIL_WXCLIENTSA_H
+#define GCP_UTIL_WXCLIENTSA_H
+
+/**
+ * @file WxClientSA.h
+ * 
+ * Tagged: Tue May 15, 2013
+ * 
+ * @author Stephen Muchovej
+ */
+#include "gcp/util/common/Client.h"
+#include "gcp/util/common/Ports.h"
+#include "gcp/util/common/WxDataSA.h"
+
+#include <vector>
+#include <string>
+
+namespace gcp {
+  namespace util {
+    
+    class WxClientSA : public Client {
+    public:
+      
+      /**
+       * Constructor.
+       */
+      WxClientSA(bool spawnThread, std::string host="localhost", 
+	       unsigned port=Ports::wxPort("cbass"));
+      
+      /**
+       * Destructor.
+       */
+      virtual ~WxClientSA();
+      
+    protected:
+      
+      WxDataSA wxData_;
+      std::vector<unsigned char> bytes_;
+      virtual void readServerData(NetHandler& handler);
+      virtual void processServerData() {};
+
+    }; // End class WxClientSA
+    
+  } // End namespace util
+} // End namespace gcp
+
+
+#endif // End #ifndef GCP_UTIL_WXCLIENTSA_H

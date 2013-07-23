@@ -1,0 +1,13 @@
+;;-----------------------------------------------------------------------
+;; Add an href
+;;-----------------------------------------------------------------------
+
+(defun ahref (className)
+  (interactive "sClass Name: ")
+  (insert "<code><a href=" className ".html> " className "</a></code>")
+)
+
+(defun bahref (className)
+  (interactive "sClass Name: ")
+  (insert "<code><b><a href=" className ".html> " className "</a></b></code>")
+)

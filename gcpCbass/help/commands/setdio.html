@@ -1,0 +1,72 @@
+<HEAD><TITLE>The "setdio" command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name="setdio"><code><b>setdio</b> board, set|clear|assign, mask</code></a></font>
+<P>
+Change the value of the output register of a given digital I/O board.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><a href=Dio../dataTypes/Board.html>DioBoard</a> reg</code>
+     <DD> The name of the digital I/O board.
+     <DT><code><a href=../dataTypes/BitMaskOper.html>BitMaskOper</a> operator</code>
+     <DD> The way to combine the template value with the current value
+          of the output register.
+     <DT><code><a href=../dataTypes/BitMask.html>BitMask</a> mask</code>
+     <DD> The template bit-mask to be combined with the current value
+          of the output register.
+     </DL>
+<P>
+<DT> Example 1:
+<DD> The following example sets the states of outputs 0 and 3 of the
+     noise generator digital I/O board to high resistance, without
+     changing the states of the other outputs.
+ 
+<pre>
+  setdio ngen, set, b0 + b3
+</pre>
+
+<DT> Example 2:
+<DD> The following example clears the states of outputs 0 and 3 of the
+     noise generator digital I/O board to low resistance, without
+     changing the states of the other outputs.
+ 
+<pre>
+  setdio ngen, clear, b0 + b3
+</pre>
+
+<DT> Example 3:
+<DD> All of the following examples set all outputs of the noise
+     generator output to states corresponding to the bits of a 32 bit
+     integer. Bits that are set to 1 correspond to high resistance
+     outputs. Bits that are set to 0 correspond to low resistance
+     outputs. In the first case the high resistance bits are specified
+     as a set of bit names. In the second case they are specified as a
+     binary number, in the third as a hexadecimal number, and in the
+     final case, as a decimal number.
+ 
+<pre>
+  setdio ngen, assign, b0 + b3 + b5
+  setdio ngen, assign, 0b101001
+  setdio ngen, assign, 0x29
+  setdio ngen, assign, 41
+</pre>
+
+<DT> Context:
+<DD> The outputs of the National Instruments digital I/O boards that
+     are being used by the BICEP are error-prone to set via the setreg
+     command. The 32 opto-isolator outputs are mapped in a big-endian
+     fashion to the 4 bytes of the output register, such that bit 0
+     corresponds to bit 0 of output[3] and bit 8 corresponds to
+     bit 0 of output[2]. This would be sufficiently confusing on its
+     own if one didn't also have to contend with the fact that to
+     set a given output to logical high (high resistance), one has to
+     set the corresponding bit to low. The setdio command is an
+     attempt to provide a more convenient way to set the outputs.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:46 PST 2004)
+</BODY>

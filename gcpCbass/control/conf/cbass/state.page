@@ -1,0 +1,4 @@
+configure_viewer 1 500000
+add_plot 638 90 {Power Spectrum Plot} 0 100 1 1 disabled 20.0 placeholder {} {
+  graph -1.17549435082229e-34 1.17549435082229e-34 {} {antenna0.frame.record {}} {} 0
+} powSpec 1000 10

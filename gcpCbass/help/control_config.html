@@ -1,0 +1,61 @@
+<HEAD><TITLE>SPT Setup Commands.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+<center><a href=index.html>Index</a></center>
+<H1>Control Program Configuration Commands.</H1>
+
+When the control program is started it executes a configuration script
+called:
+
+<pre>
+ $GCP_DIR/sptArrayControl.init
+</pre>
+
+Where <code>GCP_DIR</code> is an environment variable defined by the
+caller's shell. This script will be rejected if it contains any
+commands that require communication to have been established with the
+antenna control CPU. The commands that were designed with this script in
+mind are listed in the contents page under the title &quot;<a
+href="index.html#cntl_conf_list">Control Program Configuration
+Commands</a>&quot;.
+<P>
+The following is an example of a control-program configuration script.
+
+<pre>
+ # This schedule is executed by sptControl on its startup.
+ # Commands that need a connection to the control system will not
+ # succeed.
+
+ print "Running sptControl startup script.\n"
+
+ # Load the source catalog.
+
+ catalog ~sptdaq/spt/ephem/source.cat
+
+ # Load the ephemeris of UT1-UTC.
+
+ ut1utc ~sptdaq/spt/ephem/ut1utc.ephem
+
+ # Specify the location of the SPT.
+
+ site -118:07:20.1, 34:08:23.9, 366.0
+
+ # Set the number of hardware readouts to integrate for each archive frame.
+
+ archive 10
+
+ # Create a new archive file in ~sptdaq/spt/data/
+
+ arcdir ~sptdaq/spt/data/
+
+ # Create a new log file in ~sptdaq/spt/logs/
+
+ logdir ~sptdaq/spt/logs/
+
+ print "The startup script completed.\n"
+
+</pre>
+
+
+<HR>
+Erik Leitch (Tue Mar 30 21:15:54 PST 2004)
+</BODY>

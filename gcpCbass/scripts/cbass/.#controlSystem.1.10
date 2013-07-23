@@ -1,0 +1,739 @@
+#!/bin/sh
+
+#-----------------------------------------------------------------------
+# Start everything 
+#-----------------------------------------------------------------------
+
+startAll () {
+    
+# available portion of the window appears to be approximately 267x1140
+# pixels from the script, though it is different if windows are
+# started from an xterm!
+    
+    case $1 in
+
+	all)
+	    startAll cbass $2
+	    ;;
+
+	lola)
+	    startAll cbasslola $2
+	    ;;
+
+	lab)
+	    startAll oxlab $2
+	    ;;
+
+	sim)
+	    startAll cbassSim $2
+	    ;;
+
+# All CBASS programs
+
+	cbass)
+	    sleep 2s
+	    start wx $2
+	    sleep 2s
+	    start control $2
+	    sleep 2s
+      	    start mediator $2
+	    sleep 5s
+      	    start antenna $2
+	    sleep 2s
+	    start grabber $2
+	    ;;
+
+# CBASS test suite on lola
+
+	cbasslola)
+	    sleep 2s
+	    start controllola $2
+	    sleep 2s
+      	    start mediatorlola $2
+	    sleep 5s
+      	    start antennalola $2
+	    ;;
+	    
+# All CBASS programs in sim mode
+
+	cbassSim)
+	    start wx $2
+	    sleep 2s
+	    start control $2
+	    sleep 2s
+      	    start mediator $2
+	    sleep 5s
+      	    start antennaSim $2
+	    sleep 2s
+	    start grabber $2
+	    ;;
+
+# CBASS oxford lab
+	oxlab)
+	    start controloxlab $2
+	    sleep 2s
+      	    start mediatoroxlab $2
+	    sleep 2s
+	    start antennaoxlab $2
+	    sleep 2s
+	    ;;
+
+
+# Just the core CBASS programs
+
+	cbassCore)
+	    start control $2
+	    sleep 2s
+      	    start mediator $2
+	    ;;
+
+    esac    
+    
+    return 0
+}
+
+#-----------------------------------------------------------------------
+# Stop everything 
+#-----------------------------------------------------------------------
+
+stopAll () {
+    
+# available portion of the window appears to be approximately 267x1140
+# pixels from the script, though it is different if windows are
+# started from an xterm!
+    
+echo $1 $2
+    case $1 in
+
+# Everything
+
+	all)
+	    stopAll cbass $2
+	    ;;
+
+	lola)
+	    stopAll cbasslola $2
+	    ;;
+
+# CBASS programs
+
+	cbass)
+	    stop control $1
+	    stop mediator $1
+	    stop antenna $1
+	    stop grabber $1
+	    stop wx $1
+#	    stop viewer $1
+	    ;;
+
+# Cbass in oxford lab
+	oxlab)
+	    stop controloxlab $1
+	    stop mediatoroxlab $1
+	    stop antennaoxlab $1
+	    ;;
+
+# CBASS Core programs
+
+	cbassCore)
+	    stop control $1
+	    stop mediator $1
+	    ;;
+
+# CBASS test suite on lola
+
+	cbasslola)
+	    stop controllola $2
+      	    stop mediatorlola $2
+      	    stop mediatorlola $2
+      	    stop antennalola $2
+	    ;;
+
+    esac    
+    
+    return 0
+}
+
+#-----------------------------------------------------------------------
+# Print the status of control system processes
+#-----------------------------------------------------------------------
+
+status () {
+    echo "-----------------------------------------------------------------------"
+    echo " CBASS specific processes:"
+    echo "-----------------------------------------------------------------------"
+    echo 
+    echo "Control process on localhost:"
+    echo 
+    ps -elf | grep -v grep | grep "cbassControl"
+    echo 
+    echo "Mediator process on localhost:"
+    echo 
+    ps -elf | grep -v grep | grep "cbassMediator"
+    echo 
+    echo "Antenna process:"
+    echo 
+    ps -elf | grep -v grep | grep "cbassAntennaControl"
+    echo 
+    echo "Frame Grabber process:"
+    echo 
+    ps -elf | grep -v grep | grep "cbassGrabber"
+    echo 
+    echo "Weather Station Server"
+    echo 
+    ps -elf | grep -v grep | grep "cbassWxServer"
+
+    return 0
+}
+
+#-----------------------------------------------------------------------
+# Start anything
+#-----------------------------------------------------------------------
+
+start () {
+    
+    case $1 in
+	
+# Start the control control program
+	
+	control)
+	    echo "Starting cbassControl on cbasscontrol"
+	    case $2 in
+	        fg)
+		    \xterm +vb -geometry 70x30+900+0    -bg DarkOliveGreen      -T "cbassControl" -e ssh -X -Y cbasscontrol 'cbassControl logd=$CBASS_DIR/runlogs logf=cbassControl &' &
+		    ;;
+		bg)
+		    ssh -X -Y cbasscontrol 'cbassControl logd=$CBASS_DIR/runlogs logf=cbassControl < /dev/null >& /dev/null &'
+		    ;;
+	    esac
+	    ;;
+
+# Start the control control program
+	
+	controloxlab)
+	    echo "Starting cbassControl on oxlab"
+	    case $2 in
+	        fg)
+		    \xterm +vb -geometry 70x30+900+0    -bg DarkOliveGreen      -T "cbassControl" -e cbassControl logd=$CBASS_DIR/runlogs logf=cbassControl & 
+		    ;;
+		bg)
+		    ssh -X -Y localhost 'cbassControl logd=$CBASS_DIR/runlogs logf=cbassControl </dev/null>  & /dev/null &'
+		    ;;
+	    esac
+	    ;;
+	
+# Start the control program on lola
+	
+	controllola)
+	    echo "Starting cbassControl on lola"
+	    case $2 in
+	        fg)
+		    \xterm +vb -geometry 70x30+900+0    -bg DarkOliveGreen      -T "cbassControl" -e ssh -X -Y lola 'cbassControl logd=$CBASS_DIR/runlogs logf=cbassControl &' &
+		    ;;
+		bg)
+		    ssh -X -Y lola 'cbassControl logd=$CBASS_DIR/runlogs logf=cbassControl < /dev/null >& /dev/null &'
+		    ;;
+	    esac
+	    ;;
+	
+
+# Start the mediator on lola
+	
+	mediatorlola)
+	    echo "Starting cbassMediator on lola"
+	    case $2 in
+		fg)
+		    \xterm +vb -geometry 70x30+450+0  -bg goldenrod -fg black -T "cbassMediator"   -e  ssh -X -Y lola 'cbassMediator logd=$CBASS_DIR/runlogs logf=cbassMediator ctlhost=lola wxhost=cbasscontrol &' &
+		    ;;
+		bg)
+		    ssh -X -Y lola 'cbassMediator logd=$CBASS_DIR/runlogs logf=cbassMediator ctlhost=lola wxhost=cbasscontrol < /dev/null >& /dev/null &' &
+		    ;;
+	    esac
+	    ;;
+	
+# Start the mediator
+	
+	mediator)
+	    echo "Starting cbassMediator on cbassdaq"
+	    case $2 in
+		fg)
+		    \xterm +vb -geometry 70x30+450+0  -bg goldenrod -fg black -T "cbassMediator"   -e  ssh -X -Y cbassdaq 'cbassMediator logd=$CBASS_DIR/runlogs logf=cbassMediator ctlhost=cbasscontrol wxhost=cbasscontrol &' &
+		    ;;
+		bg)
+		    ssh -X -Y cbassdaq 'cbassMediator logd=$CBASS_DIR/runlogs logf=cbassMediator ctlhost=cbasscontrol wxhost=cbasscontrol < /dev/null >& /dev/null &' &
+		    ;;
+	    esac
+	    ;;
+
+# Start the mediator at oxford
+	
+	mediatoroxlab)
+	    echo "Starting cbassMediator on cbaezar"
+	    case $2 in
+		fg)
+		    \xterm +vb -geometry 70x30+450+0  -bg goldenrod -fg black -T "cbassMediator"   -e  cbassMediator logd=$CBASS_DIR/runlogs logf=cbassMediator ctlhost=localhost & 
+		    ;;
+		bg)
+		    ssh -X -Y localhost 'cbassMediator logd=$CBASS_DIR/runlogs logf=cbassMediator ctlhost=localhost  < /dev/null >& /dev/null & '
+		    ;;
+	    esac
+	    ;;
+	
+# Start antenna 
+
+	antenna)
+    	    echo "Starting cbassAntennaControl on cbassdaq"
+	    case $2 in
+		fg)
+		    \xterm +vb -geometry 70x30+0+0      -bg MistyRose4   -T "cbassAntennaControl"        -e ssh -X -Y cbassdaq 'startCbassAntennaControl &' &
+		    ;;
+		bg)
+		    ssh -X -Y cbassdaq 'startCbassAntennaControl < /dev/null >& /dev/null &' &
+		    ;;
+	    esac
+	    ;;
+
+# Start antennaoxlab 
+
+	antennaoxlab)
+    	    echo "Starting cbassAntennaControl on oxlab"
+	    case $2 in
+		fg)
+		    \xterm +vb -geometry 70x30+0+0      -bg MistyRose4   -T "cbassAntennaControl"        -e startCbassAntennaControl & 
+		    ;;
+		bg)
+		    ssh -X -Y localhost 'startCbassAntennaControl < /dev/null >& /dev/null & '
+		    ;;
+	    esac
+	    ;;
+
+# Start antenna on lola
+
+	antennalola)
+    	    echo "Starting cbassAntennaControl on lola"
+	    case $2 in
+		fg)
+		    \xterm +vb -geometry 70x30+0+0      -bg MistyRose4   -T "cbassAntennaControl"        -e ssh -X -Y lola 'startCbassAntennaControl &' &
+		    ;;
+		bg)
+		    ssh -X -Y lola 'startCbassAntennaControl < /dev/null >& /dev/null &' &
+		    ;;
+	    esac
+	    ;;
+
+# Start antenna 
+
+	antennaSim)
+    	    echo "Starting cbassAntennaControl in sim mode"
+	    case $2 in
+		fg)
+		    \xterm +vb -geometry 70x30+0+0      -bg MistyRose4   -T "Antenna0 (sim)"        -e cbassAntennaControl logd=$CBASS_DIR/runlogs logf=cbassAntennaControl simpmac=t &
+		    ;;
+		bg)
+		    ssh localhost '$CBASS_DIR/scripts/specific/startCbassAntennaControl logd=$CBASS_DIR/runlogs logf=cbassAntennaControl simpmac=t < /dev/null >& /dev/null &'
+		    ;;
+	    esac
+	    ;;
+
+# Start the frame grabber server                                                                   
+
+        grabber)
+            echo "Starting cbassGrabber on cbassdaq"
+            case $2 in
+                fg)
+                    \xterm +vb -geometry 70x30+900+500    -fg black -bg PowderBlue      -T "cbassGrabber" -e ssh -X -Y cbassdaq 'cbassGrabber logd=$CBASS_DIR/runlogs logf=cbassGrabber simulate=f ctlhost=cbassdaq imhost=cbasscontrol &' &
+                    ;;
+                bg)
+                    ssh -X -Y cbassdaq '$CBASS_DIR/bin/cbassGrabber simulate=f ctlhost=cbassdaq imhost=cbasscontrol < /dev/null >& /dev/null &' &
+                    ;;
+            esac
+            ;;
+
+# Start the weather station server
+
+        wx)
+            echo "Starting cbassWxServer on cbasscontrol"
+            case $2 in
+                fg)
+                    \xterm +vb -geometry 70x30+450+500    -fg black -bg Plum      -T "cbassWxServer" -e ssh -X -Y cbasscontrol 'cbassWxServer logd=$CBASS_DIR/runlogs logf=cbassWx &' &
+                    ;;
+                bg)
+                    ssh -X -Y cbasscontrol 'cbassWxServer  logd=$CBASS_DIR/runlogs logf=cbassWx < /dev/null >& /dev/null &' &
+                    ;;
+            esac
+            ;;
+
+# Viewer
+
+	viewer)
+	    $CBASS_DIR/bin/cbassViewer monitor localhost $CBASS_DIR/control/conf/cbass/status.page < /dev/null >& /dev/null &
+
+	esac
+
+    return 0
+}
+
+#-----------------------------------------------------------------------
+# Stop anything
+#-----------------------------------------------------------------------
+
+stop () {
+    
+    case $1 in
+	
+# Stop the frame grabber server
+	
+	grabber)
+	    echo "Killing cbassGrabber"
+	    ssh cbassdaq '$CBASS_DIR/scripts/common/killAll cbassGrabber'
+	    ;;
+	
+# Stop the control control program on lola
+	
+	controllola)
+	    echo "Killing cbassControl on lola"
+	    ssh lola '$CBASS_DIR/scripts/common/killAll cbassControl'
+	    ;;
+
+# Stop the control control program at oxford lab
+	
+	controloxlab)
+	    echo "Killing cbassControl at oxford"
+	    $CBASS_DIR/scripts/common/killAll cbassControl
+	    ;;
+
+# Stop the control control program
+	
+	control)
+	    echo "Killing cbassControl"
+	    ssh cbasscontrol '$CBASS_DIR/scripts/common/killAll cbassControl'
+	    ;;
+
+# Stop the mediator on lola
+	
+	mediatorlola)
+	    echo "Killing cbassMediator on lola"
+	    ssh lola '$CBASS_DIR/scripts/common/killAll cbassMediator'
+	    ;;
+
+# Stop the mediator
+	
+	mediator)
+	    echo "Killing cbassMediator"
+	    ssh cbassdaq '$CBASS_DIR/scripts/common/killAll cbassMediator'
+	    ;;
+
+# Stop the mediator at oxford
+	
+	mediatoroxlab)
+	    echo "Killing cbassMediator"
+	    $CBASS_DIR/scripts/common/killAll cbassMediator
+	    ;;
+
+# Stop antenna on lola
+
+	antennalola)
+	    echo "Killing cbassAntennaControl on lola"
+	    ssh lola '$CBASS_DIR/scripts/specific/stopAntennaControl'
+	    ;;
+
+# Stop antenna on oxlab
+
+	antennaoxlab)
+	    echo "Killing cbassAntennaControl in oxford lab"
+	    $CBASS_DIR/scripts/specific/stopAntennaControl
+	    ;;
+
+
+
+
+# Stop antenna
+
+	antenna)
+	    echo "Killing cbassAntennaControl"
+	    ssh -X -Y cbassdaq '$CBASS_DIR/scripts/specific/stopAntennaControl'
+	    ;;
+
+# Stop the weather station server
+
+	wx)
+	    echo "Killing cbassWxServer"
+	    ssh cbasscontrol '$CBASS_DIR/scripts/common/killAll cbassWxServer'
+	    ;;
+
+# Stop the viewer
+
+	viewer)
+	    echo "Killing cbassViewer"
+	    ssh localhost '$CBASS_DIR/scripts/common/killAll cbassViewer'
+	    ;;
+
+	*)
+            echo "Bad parameter to stop()" $1
+	    printUsage
+	    return 1
+	    ;;
+    esac
+    
+    return 0
+}
+
+#-----------------------------------------------------------------------
+# Print usage
+#-----------------------------------------------------------------------
+
+printUsage () {
+
+    echo "-----------------------------------------------------------------------"
+    echo " Usage:"
+    echo "-----------------------------------------------------------------------"
+    echo ""
+    echo "To restart the entire control system in separate xterms, use: "
+    echo ""
+    echo "    controlSystem start"
+    echo ""
+    echo "To start the entire control system in separate xterms, use: "
+    echo ""
+    echo "    controlSystem start"
+    echo ""
+    echo "To start the entire control system in the background, use: "
+    echo ""
+    echo "    controlSystem restartd"
+    echo ""
+    echo "or"
+    echo ""
+    echo "    controlSystem startd"
+    echo ""
+    echo "-----------------------------------------------------------------------"
+    echo "To stop the control system, use: "
+    echo ""
+    echo "    controlSystem stop"
+    echo ""
+    echo "-----------------------------------------------------------------------"
+    echo ""
+    echo "To start/stop individual pieces of the control system, use: "
+    echo ""
+    echo "    controlSystem start(d)|stop|restart(d) whatever"
+    echo ""
+    echo "where the (d) version will start the processes in the background, and"
+    echo "where 'whatever' can be any of the following:"
+    echo ""
+    echo "       cbass -- suite of CBASS-specific control programs:"
+    echo "       ---"
+    echo ""
+    echo "          cbassCore -- the following:"
+    echo "          -------"
+    echo ""
+    echo "              1) control  -- the control control process"
+    echo "                 -----"
+    echo ""
+    echo "              2) mediator -- the mediator process"
+    echo "                 --------"
+    echo ""
+    echo "          3) antenna  -- antenna control program"
+    echo "             -------"
+    echo ""
+    echo "          4) grabber  -- the frame grabber process"
+    echo "             -------"
+    echo ""
+    echo "          5) wx       -- the weather station server"
+    echo "             --"
+    echo ""
+    echo ""
+    echo "Note for instance that if you are user cbass and your CBASS_DIR variable"
+    echo "is set to: "
+    echo ""
+    echo "         /home/cbass/gcpCbass"
+    echo ""
+    echo "you will have to add the following lines to /etc/sudoers:"
+    echo ""
+    echo "cbass cbasscontrol = NOPASSWD: /home/cbass/gcpCbass/scripts/common/killAll"
+    echo "cbass cbasscontrol = NOPASSWD: /home/cbass/gcpCbass/scripts/specific/startAntennaControl"
+    echo "cbass cbasscontrol = NOPASSWD: /home/cbass/gcpCbass/scripts/specific/stopAntennaControl"
+    echo "cbass cbasscontrol = NOPASSWD: /home/cbass/gcpCbass/scripts/specific/startMediator"
+    echo "cbass cbasscontrol = NOPASSWD: /home/cbass/gcpCbass/scripts/specific/stopMediator"
+    echo ""
+    echo "To use this script without being prompted for the root password"
+    echo ""
+}
+
+#-----------------------------------------------------------------------
+# Parse arguments to this script
+#-----------------------------------------------------------------------
+
+case $1 in
+
+# If starting the control system in the foreground
+
+    status)
+	status
+	;;
+
+    start)
+	case $# in
+	    1)
+		startAll all fg
+		;;
+	    2)
+		case $2 in
+		    cbass)
+			startAll cbass fg
+			;;
+		    cbassSim)
+			startAll sim fg
+			;;
+		    oxlab)
+			startAll oxlab fg
+			;;
+		    cbassCore)
+			startAll cbassCore fg
+			;;
+		    lola)
+			startAll lola fg
+			;;
+		    *)
+			start $2 fg
+			;;
+		esac
+	esac
+	;;
+
+    restart)
+	case $# in
+	    1)
+		stopAll all
+		startAll all fg
+		;;
+	    2)
+		case $2 in
+		    cbass)
+			stopAll cbass
+			sleep 2s
+			startAll cbass fg
+			;;
+		    oxlab)
+			stopAll oxlab
+			sleep 2s
+			startAll oxlab fg
+			;;
+                    cbassSim)
+			stopAll sim
+			sleep 2s
+			startAll sim fg
+                        ;;
+		    cbassCore)
+			stopAll cbassCore
+			sleep 2s
+			startAll cbassCore fg
+			;;
+		    *)
+			stop $2
+			sleep 2s
+			start $2 fg
+			;;
+		esac
+	esac
+	;;
+
+    startd)
+	case $# in
+	    1)
+		startAll all bg
+		;;
+	    2)
+		case $2 in
+		    cbass)
+			startAll cbass bg
+			;;
+		    oxlab)
+			startAll oxlab bg
+			;;
+		    cbassSim)
+			startAll sim bg
+			;;
+		    cbassCore)
+			startAll cbassCore bg
+			;;
+		    *)
+			start $2 bg
+			;;
+		esac
+	esac
+	;;
+
+    restartd)
+	case $# in
+	    1)
+		stopAll all
+		startAll all bg
+		;;
+	    2)
+		case $2 in
+		    cbass)
+			stopAll cbass
+			startAll cbass bg
+			;;
+                    cbassSim)
+                        stopAll cbass 
+                        startAll sim bg
+                        ;;
+                    oxlab)
+                        stopAll oxlab
+			sleep 2s;
+                        startAll oxlab bg
+                        ;;
+		    cbassCore)
+			stopAll cbassCore
+			startAll cbassCore bg
+			;;
+		    *)
+			stop $2
+			start $2 bg
+			;;
+		esac
+	esac
+	;;
+
+    stop)
+	case $# in
+	    1)
+		stopAll all
+		;;
+	    2)
+		case $2 in
+		    cbass)
+			echo $1 $2
+			stopAll cbass
+			;;
+		    oxlab)
+			echo $1 $2
+			stopAll oxlab
+			;;
+		    cbassSim)
+			echo $1 $2
+			stopAll sim
+			;;
+		    cbassCore)
+			echo $1 $2
+			stopAll cbassCore
+			;;
+		    lola)
+			echo $1 $2
+			stopAll lola
+			;;
+
+		    *)
+			echo $1 $2
+			stop $2
+			;;
+		esac
+	esac
+	;;
+
+    *)
+        echo "Bad script argument " $1
+	printUsage
+	exit 1
+esac
+
+exit 0

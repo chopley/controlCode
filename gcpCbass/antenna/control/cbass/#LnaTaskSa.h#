@@ -1,0 +1,127 @@
+#ifndef GCP_ANTENNA_CONTROL_LNATASKSA_H
+#define GCP_ANTENNA_CONTROL_LNATASKSA_H
+
+/**
+ * @file LnaTask.h
+ * 
+ * @author sjcm
+ */
+#include <iostream>
+
+#include "gcp/util/common/GenericTask.h"
+#include "gcp/util/common/GenericTaskMsg.h"
+#include "gcp/util/common/SpawnableTask.h"
+#include "gcp/util/common/TimeOut.h"
+#include "util/common/TimeVal.h"
+#include "gcp/util/specific/CbassPowerSupply.h"
+#include "gcp/antenna/control/specific/AntennaLnaMsg.h"
+#include "gcp/antenna/control/specific/AntennaMasterMsg.h"
+#include "gcp/antenna/control/specific/Board.h"
+#include "gcp/antenna/control/specific/SpecificTask.h"
+#include "gcp/util/specific/Directives.h"
+#include "gcp/control/code/unix/libunix_src/common/tcpip.h"
+#include "gcp/control/code/unix/libunix_src/common/regmap.h"
+
+
+
+#define PERIODIC_TIMER_HANDLER(fn) void (fn)(void* args)
+
+namespace gcp {
+  namespace antenna {
+    namespace control {
+
+      class SpecificShare;
+      class AntennaControl;
+
+      //------------------------------------------------------------
+      // Main class definition
+      //------------------------------------------------------------
+      
+      class LnaTask : public gcp::util::SpawnableTask<AntennaLnaMsg>, public Board {
+
+      public:
+	
+	/**
+	 * Constructor.
+	 */
+	LnaTask();
+	LnaTask(SpecificShare* share, std::string name);
+	
+	/**
+	 * Destructor.
+	 */
+	virtual ~LnaTask();
+
+	/**
+	 *  Power Supply Object
+	 */
+	gcp::util::CbassPowerSupply ps_;
+
+
+	/**
+	 *  Connect
+	 */
+	void connect();
+
+	/**
+	 *  Disconnect
+	 */
+	void disconnect();
+
+	/**
+	 *  readData
+	 */
+	void readData();
+
+	/**
+	 *  executeMsg
+	 */
+	void executeMsg(AntennaLnaMsg msg);
+
+
+      private:
+
+	// Board object to be able to write data
+        Board* receiverBoard_;
+
+        // Declare AntennaControl a friend so that the parent has 
+        // access to our private members
+        friend class AntennaControl;
+
+	// A pointer to the parent task resources
+        AntennaControl* parent_;
+
+	/**
+         * The data registers we will store
+         */
+	RegMapBlock* drainCurrent_;
+	RegMapBlock* drainVoltage_;
+	RegMapBlock* gateVoltage_;
+  
+	//-----------------------------------------------------------------------
+	// Methods called in response to messages received on our message queue
+	//-----------------------------------------------------------------------
+	
+	void executeReadWriteData();
+	void executeLnaCmd(int cmdId, float drainVoltage, float drainCurrent, int lnaNumber, int stageNumber);
+	
+	//-----------------------------------------------------------------------
+	// Run methods used by this class
+	//-----------------------------------------------------------------------
+	
+	void processMsg(AntennaLnaMsg* msg);
+
+	// React to a timeout in select
+	
+	void registerTimeOut();
+	
+      }; // End class LnaTask
+
+    } // End namespace control
+    
+  } // End namespace antenna
+} // End namespace gcp
+
+
+
+#endif // End #ifndef GCP_ANTENNA_CONTROL_LNATASK_H

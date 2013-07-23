@@ -1,0 +1,39 @@
+<HEAD><TITLE>A function that returns the archiving interval.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><code><a href=../dataTypes/Count.html>Count</a> <b>archiving_interval</b>()</code> </a></font>
+<P>
+Return the number of integrations per archive frame.
+<P>
+<DL>
+<DT> Arguments: (none)
+<DD> <DL>
+     <DT>(none)
+     </DL>
+<P>
+<DT> Example 1:
+<DD> The following example shows an example of how a command can
+     restore the previous archive interval after changing it
+     temporarily.
+
+<pre>
+  command fire_noise_cal() {
+    Count old = $archiving_interval
+    archive combine=1
+    noise_cal on
+    until $elapsed > 10s
+    archive combine=$old
+  }
+</pre>
+
+<P>
+<DT>Context:
+<DD>This function is intended for library commands that need to change
+    the archiving interval termporarily, then restore it to its original
+    value before returning to the caller.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:15:43 PST 2004)
+</BODY>

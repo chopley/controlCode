@@ -1,0 +1,47 @@
+<HEAD><TITLE>The "radec_offset" command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><code><b>radec_offset</b>/add [ra, dec, ant]</code></font>
+<P>
+Change the equatorial tracking offsets.
+<P>
+<DL>
+<DT> Optional qualifier arguments:
+<DD> <DL>
+     <DT><code>/add</code>
+     <DD> If this modifier is present the offsets will be added to the
+          existing offsets. Otherwise they will replace them.
+     </DL>
+<DT> Mandatory arguments:
+<DD> (none)
+<DT> Optional Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/PointingOffset.html>PointingOffset</a> ra</b></code>
+     <DD> The offset to substitute for or add to the current
+          right-ascension offset. 
+     <DT><code><b><a href=../dataTypes/PointingOffset.html>PointingOffset</a> dec</b></code>
+     <DD> The offset to substitute for or add to the current declination offset.
+     <DT><code><b><a href=../dataTypes/Antennas.html>Antennas</a> ant</b></code>
+     <DD> A set of one or more antennas to which the command should be applied.
+     <DD> Default is controlled by the <code><a href=setDefault../dataTypes/Antennas.html>setDefaultAntennas</a> command.
+     </DL>
+<P>
+<DT> Example:
+<DD> The following example adds an additional 10 arcseconds to the
+     geocentric apparent declination of the source that is being
+     tracked, and to subsequently tracked sources.
+
+<pre>
+  radec_offset/add, dec=0:0:10
+</pre>
+
+
+<DT>Context:
+<DD>The Right Ascension and Declination offsets are added to the
+    apparent geocentric equatorial coordinates of the source.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:39 PST 2004)
+</BODY>

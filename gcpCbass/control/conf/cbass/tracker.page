@@ -1,0 +1,110 @@
+add_page 18 44 Tracker black red yellow 10 9 {12 12 12 12 3 12} antenna 0 {} 0 {
+  label 0 0 MidnightBlue PaleTurquoise center {Tracker mode}
+  label 0 1 MidnightBlue PaleTurquoise center LST
+  label 0 2 midnightblue paleturquoise center Source
+  label 0 3 MidnightBlue PaleTurquoise center {utc day}
+  label 0 4 midnightblue paleturquoise center {utc time}
+  label 0 5 orange black center site
+  label 0 6 MidnightBlue PaleTurquoise center actual
+  label 0 7 MidnightBlue PaleTurquoise center fiducial
+  label 0 8 orange black center location
+  label 0 13 MidnightBlue PaleTurquoise center -lim
+  label 0 14 MidnightBlue PaleTurquoise center +lim
+  label 0 15 MidnightBlue PaleTurquoise center zero
+  label 0 17 MidnightBlue PaleTurquoise center Tilts
+  label 0 18 MidnightBlue PaleTurquoise center Model
+  label 0 19 midnightblue paleturquoise center Collimation
+  label 0 20 midnightblue paleturquoise center Flexure
+  label 0 23 midnightblue paleturquoise center {expect rates}
+  label 0 24 MidnightBlue PaleTurquoise center {actual rates}
+  label 0 25 MidnightBlue PaleTurquoise center expected
+  label 0 26 MidnightBlue PaleTurquoise center actual
+  label 0 27 MidnightBlue PaleTurquoise center error
+  label 0 28 midnightblue paleturquoise center state
+  label 0 29 midnightblue paleturquoise center Status
+  label 0 31 MidnightBlue PaleTurquoise center {Horiz Off}
+  label 0 32 MidnightBlue PaleTurquoise center {RaDec Off}
+  label 0 33 midnightblue paleturquoise center {Sky Off}
+  label 0 34 midnightblue paleturquoise center {Scan Off}
+  label 0 35 orange black center {GPS Time}
+  label 0 36 midnightblue paleturquoise center Locked
+  label 0 37 midnightblue paleturquoise center {Time Offset}
+  label 0 38 midnightblue paleturquoise center {Freq Offset}
+  register 1 0 black green center {antenna0.tracker.mode[0][0]} enum 0 0 {track, slew, halt, sync} 0 0 0.0 0.0 0 1
+  register 1 1 black green center {antenna0.tracker.lst[0][0]} sexagesimal 0 0 {} 0 0 0.0 0.0 0 1
+  register 1 2 black green center {antenna0.tracker.source[0]} string 15 0 {not acq, acquired} 0 0 0.0 0.0 0 1
+  register 1 3 black green center {antenna0.frame.utc[0]} date 0 0 {} 0 0 0.0 0.0 0 1
+  register 1 4 black green center {antenna0.tracker.utc.time[0][0]} sexagesimal 0 0 {not acq, acquired} 0 0 0.0 0.0 0 1
+  label 1 5 MidnightBlue PaleTurquoise center longitude
+  register 1 6 black green center {antenna0.tracker.siteActual[0][0]} sexagesimal 1 0 optical,radio 0 0 0.0 0.0 0 1
+  register 1 7 black green center {antenna0.tracker.siteFiducial[0][0]} sexagesimal 1 0 optical,radio 0 0 0.0 0.0 0 1
+  label 1 8 MidnightBlue PaleTurquoise center {up (m)}
+  register 1 9 black green center {antenna0.tracker.location[0][0]} fixed_point 4 0 optical,radio 0 0 0.0 0.0 0 1
+  label 1 12 purple PaleTurquoise center az
+  register 1 13 black green center {antenna0.tracker.az_limits[0][0]} sexagesimal 0 3 {enc limits,enc limits} 0 0 0.0 0.0 0 1
+  register 1 14 black green center {antenna0.tracker.az_limits[1][0]} sexagesimal 0 0 {enc limits,enc limits} 0 0 0.0 0.0 0 1
+  register 1 15 black green center {antenna0.tracker.encoder_off[0][0]} fixed_point 4 0 {track, slew, halt, sync} 0 0 0.0 0.0 0 1
+  register 1 17 black green center {antenna0.tracker.tilts[0][0]} fixed_point 4 0 optical,radio 0 0 0.0 0.0 0 1
+  register 1 18 black green center {antenna0.tracker.axis[0][0]} enum 0 0 optical,radio 0 0 0.0 0.0 0 1
+  register 1 19 black green center {antenna0.tracker.fixedCollimation[0][0]} fixed_point 4 0 optical,radio 0 0 0 0 0 1
+  register 1 20 black green center {antenna0.tracker.flexure[0][0]} fixed_point 4 0 optical,radio 0 0 0.0 0.0 0 1
+  register 1 23 black green center {antenna0.tracker.expected_rates[0][0]} fixed_point 4 0 {} 0 0 0.0 0.0 0 1
+  register 1 24 black green center {antenna0.tracker.actual_rates[0][0]} fixed_point 4 0 {} 0 0 0.0 0.0 0 1
+  register 1 25 black green center {antenna0.tracker.expected[0][0]} fixed_point 6 0 {} 1 0 0.0 0.0 0 1
+  register 1 26 black green center {antenna0.tracker.actual[0][0]} fixed_point 6 0 {not acq, acquired} 1 0 0.0 0.0 0 1
+  register 1 27 black green center {antenna0.tracker.errors[0][0]} fixed_point 6 0 {} 1 0 0.0 0.0 0 1
+  register 1 28 black green center {antenna0.acu.state[0]} enum 0 0 idle,tracking,restart 0 1 1 1 0 1
+  register 1 29 black green center antenna0.acu.status hex 0 0 Manual,Computer 0 1 1 1 0 1
+  register 1 31 black green center {antenna0.tracker.horiz_off[0][0]} sexagesimal 1 0 {stop, run} 0 0 0.0 0.0 0 1
+  register 1 32 black green center {antenna0.tracker.equat_off[0][0]} sexagesimal 1 0 {stop, run} 0 0 0.0 0.0 0 1
+  register 1 33 black green center {antenna0.tracker.sky_xy_off[0][0]} sexagesimal 1 0 optical,radio 0 0 0.0 0.0 0 1
+  register 1 34 black green center {antenna0.tracker.scan_off[0][0]} sexagesimal 1 0 {} 0 0 0.0 0.0 0 1
+  register 1 36 black green center {antenna0.gpsTime.locked[0]} enum 0 0 true,false 0 1 0 0 0 1
+  register 1 37 black green center {antenna0.gpsTime.timeOffset[0]} enum 0 0 {< 5 us, > 5 us} 0 1 0 0 0 1
+  register 1 38 black green center {antenna0.gpsTime.freqOffset[0]} enum 0 0 {< 5 x 10^-8, > 5 x 10^-8} 0 1 0 0 0 1
+  label 2 0 MidnightBlue PaleTurquoise center state
+  label 2 1 MidnightBlue PaleTurquoise center tracking?
+  label 2 2 midnightblue paleturquoise center Control
+  label 2 5 MidnightBlue PaleTurquoise center latitude
+  register 2 6 black green center {antenna0.tracker.siteActual[1][0]} sexagesimal 1 0 optical,radio 0 0 0.0 0.0 0 1
+  register 2 7 black green center {antenna0.tracker.siteFiducial[1][0]} sexagesimal 1 0 optical,radio 0 0 0.0 0.0 0 1
+  label 2 8 MidnightBlue PaleTurquoise center {east (m)}
+  register 2 9 black green center {antenna0.tracker.location[1][0]} fixed_point 4 0 optical,radio 0 0 0.0 0.0 0 1
+  label 2 12 purple PaleTurquoise center el
+  register 2 13 black green center {antenna0.tracker.el_limits[0][0]} sexagesimal 0 2 {enc limits,enc limits} 0 0 0.0 0.0 0 1
+  register 2 14 black green center {antenna0.tracker.el_limits[1][0]} sexagesimal 0 2 {enc limits,enc limits} 0 0 0.0 0.0 0 1
+  register 2 15 black green center {antenna0.tracker.encoder_off[1][0]} fixed_point 4 0 {track, slew, halt, sync} 0 0 0.0 0.0 0 1
+  register 2 17 black green center {antenna0.tracker.tilts[1][0]} fixed_point 4 0 optical,radio 0 0 0.0 0.0 0 1
+  register 2 19 black green center {antenna0.tracker.fixedCollimation[1][0]} fixed_point 4 0 optical,radio 0 0 0.0 0.0 0 1
+  register 2 20 black green center {antenna0.tracker.flexure[1][0]} fixed_point 4 0 optical,radio 0 0 0.0 0.0 0 1
+  register 2 23 black green center {antenna0.tracker.expected_rates[1][0]} fixed_point 4 0 {} 0 0 0.0 0.0 0 1
+  register 2 24 black green center {antenna0.tracker.actual_rates[1][0]} fixed_point 4 0 {} 0 0 0.0 0.0 0 1
+  register 2 25 black green center {antenna0.tracker.expected[1][0]} fixed_point 6 0 {} 1 0 0.0 0.0 0 1
+  register 2 26 black green center {antenna0.tracker.actual[1][0]} fixed_point 6 0 {} 1 0 0.0 0.0 0 1
+  register 2 27 black green center {antenna0.tracker.errors[1][0]} fixed_point 6 0 {} 1 0 0.0 0.0 0 1
+  register 2 31 black green center {antenna0.tracker.horiz_off[1][0]} sexagesimal 1 0 {stop, run} 0 0 0.0 0.0 0 1
+  register 2 32 black green center {antenna0.tracker.equat_off[1][0]} sexagesimal 1 0 {stop, run} 0 0 0.0 0.0 0 1
+  register 2 33 black green center {antenna0.tracker.sky_xy_off[1][0]} sexagesimal 1 0 optical,radio 0 0 0.0 0.0 0 1
+  register 2 34 black green center {antenna0.tracker.scan_off[1][0]} sexagesimal 1 0 {} 0 0 0.0 0.0 0 1
+  register 3 0 black green center {antenna0.tracker.state[0][0]} enum 0 0 lacking,time-err,updating,halt,slew,track,too-low,too-high 0 0 0.0 0.0 0 1
+  register 3 1 black green center {antenna0.tracker.off_source[0][0]} enum 0 0 {acquired, not acq} 0 1 0 0 0 1
+  register 3 2 black green center {antenna0.tracker.inControl[0][0]} enum 0 0 Manual,Computer 0 1 1 1 0 1
+  label 3 5 MidnightBlue PaleTurquoise center altitude
+  register 3 6 black green center {antenna0.tracker.siteFiducial[2][0]} fixed_point 1 0 optical,radio 0 0 0.0 0.0 0 1
+  register 3 7 black green center {antenna0.tracker.siteActual[2][0]} fixed_point 1 0 optical,radio 0 0 0.0 0.0 0 1
+  label 3 8 MidnightBlue PaleTurquoise center {north (m)}
+  register 3 9 black green center {antenna0.tracker.location[2][0]} fixed_point 4 0 optical,radio 0 0 0.0 0.0 0 1
+  register 3 17 black green center {antenna0.tracker.tilts[2][0]} fixed_point 3 0 {enc limits,enc limits} 0 0 0 0 0 1
+  label 5 0 orange black center lacking?
+  register 5 1 black green center {antenna0.tracker.lacking[0][0]} bit 0 0 site,site 0 1 0 0 0 1
+  register 5 2 black green center {antenna0.tracker.lacking[0][0]} bit 0 10 location,location 0 1 0 0 0 1
+  register 5 3 black green center {antenna0.tracker.lacking[0][0]} bit 0 1 {atmosphere , atmosphere} 0 1 0 0 0 1
+  register 5 4 black green center {antenna0.tracker.lacking[0][0]} bit 0 2 {ut1utc, ut1utc} 0 1 0 0 0 1
+  register 5 5 black green center {antenna0.tracker.lacking[0][0]} bit 0 3 eqneqx,eqneqx 0 1 0 0 0 1
+  register 5 6 black green center {antenna0.tracker.lacking[0][0]} bit 0 4 {enc rev cnts,enc rev cnts} 0 1 0 0 0 1
+  register 5 7 black green center {antenna0.tracker.lacking[0][0]} bit 0 7 {enc limits,enc limits} 0 1 0 0 0 1
+  register 5 8 black green center {antenna0.tracker.lacking[0][0]} bit 0 9 {enc zeros,enc zeros} 0 1 0 0 0 1
+  register 5 9 black green center {antenna0.tracker.lacking[0][0]} bit 0 5 tilts,tilts 0 1 0 0 0 1
+  register 5 10 black green center {antenna0.tracker.lacking[0][0]} bit 0 6 collimation,collimation 0 1 0 0 0 1
+  register 5 11 black green center {antenna0.tracker.lacking[0][0]} bit 0 8 flexure,flexure 0 1 0 0 0 1
+}

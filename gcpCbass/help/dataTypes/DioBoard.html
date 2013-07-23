@@ -1,0 +1,33 @@
+<HEAD><TITLE>The DioBoard datatype.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+<center><a href=../index.html>Index</a></center>
+<HR>
+<font color=blue><a name=DioBoard> <code><b>DioBoard</b></code> </a></font>
+<P>
+The name of a digital I/O board.
+<P>
+<DL>
+<DT> Input Format:
+<P>
+<DD> The name of a digital board as an unquoted string of alphanumeric
+     characters.
+<P>
+<DT> Example:
+<DD> The following example changes outputs 0 and 4 of the noise generator
+     digital I/O board (called ngen) to high resistance.
+
+<pre>
+ setdio ngen, set, b0+b4
+</pre>
+
+<DT> The current list of digital I/O board names is:
+<DD><UL>
+    <LI> <code><b>ngen</b></code>  - The noise generator digital I/O board.
+    <LI> <code><b>rxsim</b></code> - The receiver simulator digital I/O board.
+    <LI> <code><b>chzr</b></code>  - The channelizer digital I/O board.
+    </UL>
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:15:58 PST 2004)
+</BODY>

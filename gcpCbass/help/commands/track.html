@@ -1,0 +1,67 @@
+<HEAD><TITLE>The "track" datatype.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name="track"> <code><b>track</b> source, [type, ant]</code></a></font>
+<P>
+Start tracking a new source.
+<P>
+<DL>
+<DT> Mandatory Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/Source.html>Source</a> source</b></code>
+     <DD> A source in the source catalog.
+     </DL>
+<DT> Optional Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/Tracking.html>Tracking</a> type</b></code>
+     <DD> The type of tracking center.
+     <DD> Default is: both
+     <DT><code><b><a href=../dataTypes/Antennas.html>Antennas</a> ant</b></code>
+     <DD> A set of one or more antennas to which the command should be applied.
+     <DD> Default is controlled by the <code><a href=setDefault../dataTypes/Antennas.html>setDefaultAntennas</a> command.
+     </DL>
+<P>
+<DT> Examples:
+<DD> The following example slews the telescope to the current position
+     of 3c273, then procedes to track it.
+
+<pre>
+  track 3c273
+</pre>
+
+<DT>
+<DD> The following example parks the telescope at the zenith.
+
+<pre>
+  track zenith
+</pre>
+
+<DT> Context:
+<DD> Sources in the source catalog include sidereal J2000 source
+     positions, solar-system objects located via ephemerides, and
+     fixed azimuth, elevation and deck angle pointings. The latter
+     are transparently translated to <a href=slew.html>slew</a> commands.
+<P>
+     If while tracking a source, the source falls below the minimum
+     elevation reachable by the BICEP, the control system will continue
+     to track the source in azimuth, but the elevation will be held at
+     its lower limit until the source rises above it.
+<P>
+     Antennas can be separately commanded to track different
+     sources. allowing the BICEP to be used as several independent
+     subarrays.  If no optional antenna argument is specified, the set
+     of antennas to be commanded defaults to what was set by the last
+     <a href=setDefault../dataTypes/Antennas.html>setDefaultAntennas</a> command.
+<P>
+     Gross delays are digitally removed in the correlator and fine
+     delays are removed by the lobe rotator, by inserting appropriate
+     phase shifts at the inputs to the correlator for each antenna.
+     Delays are calculated from the observing frequency, and tracking
+     and phase center for each antenna.  The <tt>type</tt> parameter
+     lets you set either the pointing or phase center, or both, for
+     the specified antenna set.
+<P>
+<HR>
+Erik Leitch (Tue Mar 30 21:17:00 PST 2004)
+</BODY>

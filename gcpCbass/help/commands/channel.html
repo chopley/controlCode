@@ -1,0 +1,52 @@
+<HEAD><TITLE>The "channel" command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name="channel"> <code><b>channel</b> receivers, bands, on|off</code> </a></font>
+<P>
+Switch the IF amplifiers of selected correlator channels on or off.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/Receivers.html>Receivers</a> receivers</b></code>
+     <DD> The set of receivers to target.
+     <DT><code><b><a href=../dataTypes/Bands.html>Bands</a> bands</b></code>
+     <DD> The set of frequency bands to target.
+     <DT><code><b><a href=../dataTypes/SwitchState.html>SwitchState</a> state</b></code>
+     <DD> The desired state of the selected channels: <code>on</code> or <code>off</code>.
+     </DL>
+<P>
+<DT> Example 1:
+<DD> The following example turns off the IF amplifiers that connect
+     signals from all receivers except rx1 and rx2 to the correlator
+     of band3.
+<pre>
+ channel all-rx1-rx2, band3, off
+</pre>
+
+<DT> Example 2:
+<DD> The next example turns off all of the IF amplifers that
+     connect receiver 4 to each correlator.
+<pre>
+ channel rx4, all, off
+</pre>
+
+<P>
+<DT> Context:
+<DD> The BICEP has 13 receivers (rx0..rx12) whose 10GHz bandpasses are
+     split into 10 bands (band0..band9) by a channelizer. The
+     resulting 130 signal paths are refered to as channels. Each of
+     these channels contains an IF amplifier to boost the received
+     signals before feeding them into one correlator module per band.
+     The channelizer provides switches to enable or disable these IF
+     amplifiers. Disabling an IF amplifier effectively disconnects the
+     the input signal from its target correlator input and thus can be
+     used to measure correlator offsets.
+<P>
+     Note that all of the IFs are switched on when the system starts.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:15:51 PST 2004)
+</BODY>

@@ -1,0 +1,2 @@
+sudo $GCP_DIR/scripts/specific/stopUAntennaControl
+

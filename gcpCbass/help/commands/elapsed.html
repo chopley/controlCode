@@ -1,0 +1,25 @@
+<HEAD><TITLE>The "elapsed" datatype.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name="elapsed"> <code><a href=../dataTypes/Interval.html>Interval</a> <b>elapsed</b>()</code> </a></font>
+<P>
+Return the time spent within an enclosing loop or <code>until</code> statement.
+<P>
+<DL>
+<DT> Arguments:
+<DD> (none)
+<P>
+<DT> Example:
+<DD> The following example causes a delay of 5 minutes in the
+     execution of a schedule. Note that it doesn't have any effect on
+     the control system.
+<pre>
+ until $elapsed &gt;= 5m
+</pre>
+
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:01 PST 2004)
+</BODY>

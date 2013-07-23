@@ -1,0 +1,531 @@
+configure_viewer 1 500000
+add_plot 238 936 {Bolometers A1,A2,T8,K2,J7,C2,R7} 0 0.00994168447692 1 0 maximum 20.0 {receiver.bolometers.utc.date[0]} {} {
+  graph -7528.24676513672 2810.99456787109 Q8 {{receiver.bolometers.adc[0]} {receiver.bolometers.adc[16]} {receiver.bolometers.adc[1]} {receiver.bolometers.adc[65]} {receiver.bolometers.adc[107]} {receiver.bolometers.adc[157]} {receiver.bolometers.adc[30]} {} {} {} {}} {} 0
+  graph -4976.68509521484 2456.42606201172 R22 {{receiver.bolometers.adc[160]} {receiver.bolometers.adc[176]} {receiver.bolometers.adc[161]} {receiver.bolometers.adc[225]} {receiver.bolometers.adc[267]} {receiver.bolometers.adc[317]} {receiver.bolometers.adc[190]} {} {} {}} {} 0
+  graph -7551.87965087891 1594.47559814453 P13 {{receiver.bolometers.adc[320]} {receiver.bolometers.adc[336]} {receiver.bolometers.adc[321]} {receiver.bolometers.adc[385]} {receiver.bolometers.adc[427]} {receiver.bolometers.adc[477]} {receiver.bolometers.adc[350]} {}} {} 0
+  graph -3004.32784423828 2687.67183837891 R10 {{receiver.bolometers.adc[480]} {receiver.bolometers.adc[496]} {receiver.bolometers.adc[481]} {receiver.bolometers.adc[545]} {receiver.bolometers.adc[587]} {receiver.bolometers.adc[637]} {receiver.bolometers.adc[510]} {}} {} 0
+  graph -2429.89577636719 2398.78249511719 P10 {{receiver.bolometers.adc[640]} {receiver.bolometers.adc[656]} {receiver.bolometers.adc[641]} {receiver.bolometers.adc[705]} {receiver.bolometers.adc[747]} {receiver.bolometers.adc[797]} {receiver.bolometers.adc[670]} {} {} {} {}} {} 0
+  graph -4028.84446411133 1808.72300415039 Q9 {{receiver.bolometers.adc[800]} {receiver.bolometers.adc[816]} {receiver.bolometers.adc[801]} {receiver.bolometers.adc[865]} {receiver.bolometers.adc[907]} {receiver.bolometers.adc[957]} {receiver.bolometers.adc[830]} {}} {} 0
+} normal 0 0.0
+add_plot 697 350 {Tracking error} 0 0.012523593306 1 1 maximum 20.0 {antenna0.tracker.utc.date[0]} {} {
+  graph -.005 .005 {AZ error} {{antenna0.tracker.errors[0]} {} {} {} {} {} {} {} {} {}} {} 0
+  graph -.005 .005 {EL error} {{antenna0.tracker.errors[1]} {} {} {} {} {}} {} 0
+  graph 0 360 AZ {{antenna0.tracker.actual[0]} {antenna0.tracker.expected[0]} {} {} {} {} {} {} {} {}} {} 0
+  graph 0 95 EL {{antenna0.tracker.actual[1]} {antenna0.tracker.expected[1]} {} {} {}} {} 0
+  graph -1.17549435082229e-34 1.17549435082229e-34 {AZ scan} {{antenna0.tracker.scan_off[0]} {}} {} 0
+  graph 0.116824541772255 0.547485695761197 {EL offset} {{antenna0.tracker.horiz_off[1]} {}} {} 0
+  graph -1.17549435082229e-34 1.17549435082229e-34 {inv seq} {{antenna0.tracker.invalidSeq[0]} {} {} {}} {} 0
+  graph 0.25 0.3 UC {{array.fridge.Temperature[0]} {} {}} {} 0
+} normal 0 0.0
+add_plot 125 1048 Metrology 0 0.00188434829537 1 0 maximum 20.0 {antenna0.tracker.utc.date[0]} {} {
+  graph 8.85276489257813 9.44130249023437 {LGDT (mm)} {{antenna0.tracker.linear_sensor[0-3]} {antenna0.tracker.linear_sensor_avg[0-3]} {}} {} 0
+  graph -1.53091015625 27.71753125 {tilt (arcsec)} {{antenna0.tracker.tilt_xy[0-1]} {antenna0.tracker.tilt_xy_avg[0-1]} {}} {} 0
+  graph 200.654898462758 204.47471522585 AZ {{antenna0.tracker.actual[0]} {} {}} {} 0
+  graph 61.3268052277063 61.4220451394615 EL {{antenna0.tracker.actual[1]} {} {}} {} 0
+} normal 0 0.0
+add_page 349 247 Status beige red yellow 10 9 {18 10 12 13 11} {} 0 {} 0 {
+  label 0 0 midnightblue paleturquoise center Array
+  label 0 1 midnightblue paleturquoise center Antenna
+  label 0 3 midnightblue paleturquoise center Receiver
+  label 0 4 midnightblue paleturquoise center Bolometers
+  label 0 5 midnightblue paleturquoise center Squids
+  label 0 6 midnightblue paleturquoise center {FPGA Config}
+  label 0 7 midnightblue paleturquoise center {Squid Control Config}
+  label 0 9 midnightblue paleturquoise center Deicing
+  label 0 10 midnightblue paleturquoise center Fridge
+  label 0 11 midnightblue paleturquoise center Optics
+  label 0 12 midnightblue paleturquoise center Ptel
+  register 1 0 black green center array.frame.record integer 0 0 {} 0 0 0.0 0.0 0 1
+  register 1 1 black green center antenna0.frame.record integer 0 0 {} 0 0 0.0 0.0 0 1
+  register 1 3 black green center receiver.frame.record integer 0 0 {unknown,not received,received} 0 0 0.0 0.0 0 1
+  register 1 4 black green center {receiver.frame.record[0]} integer 0 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 1 5 black green center {receiver.squids.record[0]} integer 0 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 1 6 black green center {array.fpga.record[0]} integer 0 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 1 7 black green center {array.squidController.record[0]} integer 0 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 1 9 black green center {array.deicing.record[0]} integer 0 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 1 10 black green center {array.fridge.record[0]} integer 0 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 1 11 black green center {array.optics.record[0]} integer 0 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 1 12 black green center {array.pointingTel.record[0]} integer 0 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 2 0 black green center {array.frame.utc.date[0]} date 0 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 2 1 black green center {antenna0.frame.utc.date[0]} date 0 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 2 3 black green center {receiver.frame.utc.date[0]} date 0 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 2 4 black green center {receiver.bolometers.utc.date[0][99]} date 0 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 2 5 black green center {receiver.squids.utc.date[0]} date 0 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 2 6 black green center {array.fpga.utc.date[0]} date 0 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 2 7 black green center {array.squidController.utc.date[0]} date 0 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 2 9 black green center {array.deicing.utc.date[0]} date 0 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 2 10 black green center {array.fridge.utc.date[0]} date 0 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 2 11 black green center {array.optics.utc.date[0]} date 0 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 2 12 black green center {array.pointingTel.utc.date[0]} date 0 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 3 0 black green center {array.frame.utc.time[0]} sexagesimal 3 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 3 1 black green center {antenna0.frame.utc.time[0]} sexagesimal 3 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 3 3 black green center {receiver.frame.utc.time[0]} sexagesimal 3 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 3 4 black green center {receiver.bolometers.utc.time[0][99]} sexagesimal 3 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 3 5 black green center {receiver.squids.utc.time[0]} sexagesimal 3 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 3 6 black green center {array.fpga.utc.time[0]} sexagesimal 3 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 3 7 black green center {array.squidController.utc.time[0]} sexagesimal 3 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 3 9 black green center {array.deicing.utc.time[0]} sexagesimal 3 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 3 10 black green center {array.fridge.utc.time[0]} sexagesimal 3 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 3 11 black green center {array.optics.utc.time[0]} sexagesimal 3 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 3 12 black green center {array.pointingTel.utc.time[0]} sexagesimal 3 0 {unknown,not received,received} 0 0 2 2 0 1
+  register 4 0 black green center {array.frame.received[0]} enum 0 0 {unknown,not received,received} 0 0 0.0 0.0 0 1
+  register 4 1 black green center {antenna0.frame.received[0]} enum 0 0 {unknown,not received,received} 0 1 2 2 0 1
+  register 4 3 black green center {receiver.frame.received[0]} enum 0 0 {unknown,not received,received} 0 1 2 2 0 1
+}
+add_page 799 921 {Optical Bench} beige red yellow 10 9 {12 10 10 10 10 12} {} 0 {} 0 {
+  label 0 0 orange black center {position (mm)}
+  label 0 1 midnightblue paleturquoise center Y1
+  label 0 2 midnightblue paleturquoise center Y2
+  label 0 3 midnightblue paleturquoise center Y3
+  label 0 4 midnightblue paleturquoise center X4
+  label 0 5 midnightblue paleturquoise center X5
+  label 0 6 midnightblue paleturquoise center Z6
+  label 0 8 midnightblue paleturquoise center focus
+  label 0 9 midnightblue paleturquoise center deadband
+  label 0 10 midnightblue paleturquoise center {acq thresh}
+  label 1 0 midnightblue paleturquoise center zero
+  register 1 1 black green center {antenna0.scu.benchZeros[0][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 1 2 black green center {antenna0.scu.benchZeros[1][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 1 3 black green center {antenna0.scu.benchZeros[2][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 1 4 black green center {antenna0.scu.benchZeros[3][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 1 5 black green center {antenna0.scu.benchZeros[4][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 1 6 black green center {antenna0.scu.benchZeros[5][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 1 8 black green center {antenna0.scu.benchFocus[0][0]} fixed_point 3 0 locked,missing 0 0 0.0 0.0 0 1
+  register 1 9 black green center {antenna0.scu.benchDeadBand[0][0]} fixed_point 3 0 locked,missing 0 0 0.0 0.0 0 1
+  register 1 10 black green center {antenna0.scu.benchAcquiredThreshold[0][0]} fixed_point 3 0 locked,missing 0 0 0.0 0.0 0 1
+  label 2 0 midnightblue paleturquoise center offset
+  register 2 1 black green center {antenna0.scu.benchOffsets[0][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 2 2 black green center {antenna0.scu.benchOffsets[1][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 2 3 black green center {antenna0.scu.benchOffsets[2][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 2 4 black green center {antenna0.scu.benchOffsets[3][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 2 5 black green center {antenna0.scu.benchOffsets[4][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 2 6 black green center {antenna0.scu.benchOffsets[5][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  label 2 8 midnightblue paleturquoise center {pri state}
+  label 2 9 midnightblue paleturquoise center {sec state}
+  label 3 0 midnightblue paleturquoise center expected
+  register 3 1 black green center {antenna0.scu.benchExpected[0][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 3 2 black green center {antenna0.scu.benchExpected[1][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 3 3 black green center {antenna0.scu.benchExpected[2][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 3 4 black green center {antenna0.scu.benchExpected[3][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 3 5 black green center {antenna0.scu.benchExpected[4][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 3 6 black green center {antenna0.scu.benchExpected[5][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 3 8 black green center {antenna0.scu.benchPrimaryState[0][0]} enum 0 0 stop,PD,manual 0 0 0.0 0.0 0 1
+  register 3 9 black green center {antenna0.scu.benchSecondaryState[0][0]} enum 0 0 {reset,transition,active,off target,stop,disabled,pending,wait to start,finished,pos hold} 0 0 0.0 0.0 0 1
+  register 3 10 black green center {antenna0.scu.benchFault[0][0]} enum 0 0 {no fault, fault} 0 1 0 0 0 1
+  label 4 0 midnightblue paleturquoise center actual
+  register 4 1 black green center {antenna0.scu.benchActual[0][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 4 2 black green center {antenna0.scu.benchActual[1][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 4 3 black green center {antenna0.scu.benchActual[2][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 4 4 black green center {antenna0.scu.benchActual[3][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 4 5 black green center {antenna0.scu.benchActual[4][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 4 6 black green center {antenna0.scu.benchActual[5][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  label 4 8 midnightblue paleturquoise center IRIG-B
+  label 5 0 midnightblue paleturquoise center error
+  register 5 1 black green center {antenna0.scu.benchErrors[0][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 5 2 black green center {antenna0.scu.benchErrors[1][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 5 3 black green center {antenna0.scu.benchErrors[2][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 5 4 black green center {antenna0.scu.benchErrors[3][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 5 5 black green center {antenna0.scu.benchErrors[4][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 5 6 black green center {antenna0.scu.benchErrors[5][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 5 8 black green center {antenna0.scu.timeLocked[0][0]} enum 0 0 locked,fail 0 1 0 0 0 1
+  register 5 9 black green center {antenna0.scu.benchSampleTime[0][0]} date 0 0 locked,fail 0 0 0 0 0 1
+  register 5 10 black green center {antenna0.scu.benchSampleTime.time[0][0]} sexagesimal 0 0 locked,fail 0 0 0 0 0 1
+}
+add_page 326 760 {Pointing Telescopes} beige red yellow 10 9 {12 12 12 12} {} 0 {} 0 {
+  label 0 0 orange black center ptel
+  label 0 1 midnightblue paleturquoise center {0 (boom)}
+  label 0 2 midnightblue paleturquoise center {1 (top)}
+  label 0 3 midnightblue paleturquoise center {2 (side)}
+  label 0 4 orange black center {cabin shutter}
+  label 0 6 orange black center {ptel time}
+  label 0 7 midnightblue paleturquoise center record
+  label 1 0 midnightblue paleturquoise center shutter
+  register 1 1 black green center {array.pointingTel.DIO_Bits[0]} enum 0 0 closed,open 0 1 0.0 0.0 0 1
+  register 1 2 black green center {array.pointingTel.DIO_Bits[1]} enum 0 0 closed,open 0 1 0.0 0.0 0 1
+  register 1 3 black green center {array.pointingTel.DIO_Bits[2]} enum 0 0 closed,open 0 1 0.0 0.0 0 1
+  label 1 4 midnightblue paleturquoise center command
+  register 1 5 black green center {array.pointingTel.DIO_Bits[6]} enum 0 0 closed,open 0 1 0.9 1.1 0 1
+  register 1 6 black green center {array.pointingTel.PollTimestamp.date[0]} date 0 0 closed,open 0 0 0.0 0.0 0 1
+  register 1 7 black green center {array.pointingTel.record[0]} integer 0 0 closed,open 0 0 0.0 0.0 0 1
+  label 2 0 midnightblue paleturquoise center heater
+  register 2 1 black green center {array.pointingTel.DIO_Bits[3]} enum 0 0 off,on 0 1 0.0 0.0 0 1
+  register 2 2 black green center {array.pointingTel.DIO_Bits[4]} enum 0 0 off,on 0 1 0.0 0.0 0 1
+  register 2 3 black green center {array.pointingTel.DIO_Bits[5]} enum 0 0 off,on 0 1 0.0 0.0 0 1
+  label 2 4 midnightblue paleturquoise center SW1
+  register 2 5 black green center {array.pointingTel.DIO_Bits[8]} fixed_point 0 0 {} 0 1 -0.1 0.1 0 1
+  register 2 6 black green center {array.pointingTel.PollTimestamp.time[0]} sexagesimal 0 0 closed,open 0 0 0.0 0.0 0 1
+  label 2 7 midnightblue paleturquoise center received
+  label 3 0 midnightblue paleturquoise center temp
+  register 3 1 black green center {array.pointingTel.AD_Scaled_Values[0]} fixed_point 1 0 closed,open 0 0 0.0 0.0 0 1
+  register 3 2 black green center {array.pointingTel.AD_Scaled_Values[1]} fixed_point 1 0 closed,open 0 0 0.0 0.0 0 1
+  register 3 3 black green center {array.pointingTel.AD_Scaled_Values[2]} fixed_point 1 0 closed,open 0 0 0.0 0.0 0 1
+  label 3 4 midnightblue paleturquoise center SW2
+  register 3 5 black green center {array.pointingTel.DIO_Bits[9]} fixed_point 0 0 {} 0 1 -0.1 0.1 0 1
+  register 3 7 black green center {array.pointingTel.received[0]} integer 0 0 closed,open 0 0 0.0 0.0 0 1
+}
+add_page 57 942 Weather beige red yellow 10 9 {10 10 10 10 10 10} {} 0 {} 0 {
+  label 0 0 midnightblue paleturquoise center day
+  label 0 1 midnightblue paleturquoise center {battery V}
+  label 0 3 midnightblue paleturquoise center {air temp}
+  label 0 4 midnightblue paleturquoise center {wind dir}
+  label 0 6 midnightblue paleturquoise center tau
+  label 0 8 orange black center power
+  register 1 0 black green center {array.weather.day[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 1 1 black green center {array.weather.battery[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 1 3 black green center {array.weather.airTemperature[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 1 4 black green center {array.weather.windDirection[0]} fixed_point 0 0 {} 0 0 0.0 0.0 0 1
+  register 1 6 black green center {array.tipper.tau[0]} fixed_point 2 0 {UPS OK,UPS fail} 0 0 0.0 0.0 0 1
+  register 1 8 gray black center {array.weather.power[0]} bit 0 7 {cabin OK,cabin fail} 0 1 0.0 0.0 0 1
+  label 2 0 midnightblue paleturquoise center hour
+  label 2 1 midnightblue paleturquoise center {int temp}
+  label 2 3 midnightblue paleturquoise center RH
+  label 2 4 midnightblue paleturquoise center {wind speed}
+  label 2 6 midnightblue paleturquoise center Tatm
+  register 2 8 gray black center {array.weather.power[0]} bit 0 6 {UPS OK,UPS fail} 0 1 0.0 0.0 0 1
+  register 3 0 black green center {array.weather.hour[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 3 1 black green center {array.weather.internalTemperature[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 3 3 black green center {array.weather.relativeHumidity[0]} fixed_point 0 0 {} 0 0 0.0 0.0 0 1
+  register 3 4 black green center {array.weather.windSpeed[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 3 6 black green center {array.tipper.tatm[0]} fixed_point 1 0 {UPS OK,UPS fail} 0 0 0.0 0.0 0 1
+  label 4 0 midnightblue paleturquoise center minute
+  label 4 3 midnightblue paleturquoise center pressure
+  label 4 6 midnightblue paleturquoise center {tipper UTC}
+  register 5 0 black green center {array.weather.minute[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 5 3 black green center {array.weather.pressure[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 5 6 black green center {array.tipper.utc.time[0]} sexagesimal 0 0 {UPS OK,UPS fail} 0 0 0.0 0.0 0 1
+}
+add_page 228 310 Receiver beige red yellow 13 9 {12 10 10} {} 0 {} 0 {
+  label 0 0 midnightblue paleturquoise center Thermometer
+  label 0 2 midnightblue paleturquoise center MAINPLATE
+  label 0 3 midnightblue paleturquoise center {IC HEAD}
+  label 0 4 midnightblue paleturquoise center {IC STAGE}
+  label 0 5 midnightblue paleturquoise center {UC HEAD}
+  label 0 6 midnightblue paleturquoise center UCSTAGE
+  label 0 8 midnightblue paleturquoise center 4HEPUMP
+  label 0 9 midnightblue paleturquoise center UCPUMP
+  label 0 10 midnightblue paleturquoise center {IC PUMP}
+  label 0 12 midnightblue paleturquoise center 4HESW
+  label 0 13 midnightblue paleturquoise center ICSW
+  label 0 14 midnightblue paleturquoise center UCSW
+  label 0 16 midnightblue paleturquoise center Heater1
+  label 0 17 midnightblue paleturquoise center Heater2
+  label 0 19 midnightblue paleturquoise center HEX
+  label 0 20 midnightblue paleturquoise center DIODEB1
+  label 0 21 midnightblue paleturquoise center DIODEB2
+  label 0 22 midnightblue paleturquoise center DIODEB3
+  label 0 23 midnightblue paleturquoise center DIODEB4
+  label 1 0 midnightblue paleturquoise center {Temp [K]}
+  register 1 2 black green center {array.fridge.Temperature[5]} fixed_point 2 0 {} 0 1 0.0 4 0 1
+  register 1 3 black green center {array.fridge.Temperature[3]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 1 4 black green center {array.fridge.Temperature[2]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 1 5 black green center {array.fridge.Temperature[0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 1 6 black green center {array.fridge.Temperature[1]} fixed_point 3 0 {} 0 1 0.0 0.275 0 1
+  register 1 8 black green center {array.fridge.Temperature[7]} fixed_point 2 0 {} 0 0 0.0 0.0 0 1
+  register 1 9 black green center {array.fridge.Temperature[6]} fixed_point 2 0 {} 0 0 0.0 0.0 0 1
+  register 1 10 black green center {array.fridge.Temperature[12]} fixed_point 2 0 {} 0 0 0.0 0.0 0 1
+  register 1 12 black green center {array.fridge.Temperature[13]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 1 13 black green center {array.fridge.Temperature[8]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 1 14 black green center {array.fridge.Temperature[15]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 1 19 black green center {array.fridge.Temperature[4]} fixed_point 2 0 {} 0 0 0.0 0.0 0 1
+  register 1 20 black green center {array.fridge.Temperature[9]} fixed_point 2 0 {} 0 0 0.0 0.0 0 1
+  register 1 21 black green center {array.fridge.Temperature[10]} fixed_point 2 0 {} 0 0 0.0 0.0 0 1
+  register 1 22 black green center {array.fridge.Temperature[11]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 1 23 black green center {array.fridge.Temperature[14]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  label 2 0 midnightblue paleturquoise center {I (mA)}
+  register 2 8 black green center {array.fridge.HeaterCurrent[1]} fixed_point 1 0 {} 0 1 -.2 2 0 1
+  register 2 9 black green center {array.fridge.HeaterCurrent[0]} fixed_point 1 0 {} 0 1 -.2 2 0 1
+  register 2 10 black green center {array.fridge.HeaterCurrent[2]} fixed_point 1 0 {} 0 1 -.2 2 0 1
+  register 2 12 black green center {array.fridge.HeaterCurrent[6]} fixed_point 1 0 {} 0 1 -1 1 0 1
+  register 2 13 black green center {array.fridge.HeaterCurrent[5]} fixed_point 1 0 {} 0 1 -1 1 0 1
+  register 2 14 black green center {array.fridge.HeaterCurrent[4]} fixed_point 1 0 {} 0 1 -1 1 0 1
+  register 2 16 black green center {array.fridge.HeaterCurrent[3]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 2 17 black green center {array.fridge.HeaterCurrent[7]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+}
+add_page 896 676 Metrology black red yellow 10 9 {10 10 10 10} {} 0 {} 0 {
+  register 0 0 pink black center {antenna0.tracker.linear_sensor_enabled[0][0]} enum 0 0 {lgdt off,lgdt on} 0 1 0.9 1.1 0 1
+  label 0 1 midnightblue paleturquoise center L1
+  label 0 2 midnightblue paleturquoise center L2
+  label 0 3 midnightblue paleturquoise center R1
+  label 0 4 midnightblue paleturquoise center R2
+  label 0 5 midnightblue paleturquoise center {range (mm)}
+  register 0 6 pink black center {antenna0.tracker.tilt_enabled[0][0]} enum 0 0 {tiltmeter off,tiltmeter on} 0 1 0.9 1.1 0 1
+  label 0 7 midnightblue paleturquoise center X
+  label 0 8 midnightblue paleturquoise center Y
+  label 0 9 midnightblue paleturquoise center {temp (C)}
+  label 0 10 midnightblue paleturquoise center {range (deg)}
+  label 1 0 midnightblue paleturquoise center {raw (mm)}
+  register 1 1 black green center {antenna0.tracker.linear_sensor[0][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 1 2 black green center {antenna0.tracker.linear_sensor[1][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 1 3 black green center {antenna0.tracker.linear_sensor[2][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 1 4 black green center {antenna0.tracker.linear_sensor[3][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 1 5 black green center {antenna0.tracker.linear_sensor_range[0]} fixed_point 1 0 {tiltmeter off,tiltmeter on} 0 0 0.0 0.0 0 1
+  label 1 6 midnightblue paleturquoise center {raw (")}
+  register 1 7 black green center {antenna0.tracker.tilt_xy[0][0]} fixed_point 1 0 {lgdt off,lgdt on} 0 0 0.0 0.0 0 1
+  register 1 8 black green center {antenna0.tracker.tilt_xy[1][0]} fixed_point 1 0 {lgdt off,lgdt on} 0 0 0.0 0.0 0 1
+  register 1 9 black green center {antenna0.tracker.tilt_temp[0][0]} fixed_point 2 0 {lgdt off,lgdt on} 0 0 0.0 0.0 0 1
+  register 1 10 black green center {antenna0.tracker.tilt_max[0]} fixed_point 1 0 {tiltmeter off,tiltmeter on} 0 0 0.0 0.0 0 1
+  label 2 0 midnightblue paleturquoise center {avg (mm)}
+  register 2 1 black green center {antenna0.tracker.linear_sensor_avg[0][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 2 2 black green center {antenna0.tracker.linear_sensor_avg[1][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 2 3 black green center {antenna0.tracker.linear_sensor_avg[2][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 2 4 black green center {antenna0.tracker.linear_sensor_avg[3][0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  label 2 6 midnightblue paleturquoise center {avg (")}
+  register 2 7 black green center {antenna0.tracker.tilt_xy_avg[0][0]} fixed_point 1 0 {lgdt off,lgdt on} 0 0 0.0 0.0 0 1
+  register 2 8 black green center {antenna0.tracker.tilt_xy_avg[1][0]} fixed_point 1 0 {lgdt off,lgdt on} 0 0 0.0 0.0 0 1
+  label 2 10 midnightblue paleturquoise center {angle (deg)}
+  label 3 0 midnightblue paleturquoise center {offset (mm)}
+  register 3 1 black green center {antenna0.tracker.linear_sensor_offset[0]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 3 2 black green center {antenna0.tracker.linear_sensor_offset[1]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 3 3 black green center {antenna0.tracker.linear_sensor_offset[2]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 3 4 black green center {antenna0.tracker.linear_sensor_offset[3]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  label 3 6 midnightblue paleturquoise center {offset (")}
+  register 3 7 black green center {antenna0.tracker.tilt_xy_offset[0]} fixed_point 1 0 {tiltmeter off,tiltmeter on} 0 0 0.0 0.0 0 1
+  register 3 8 black green center {antenna0.tracker.tilt_xy_offset[1]} fixed_point 1 0 {tiltmeter off,tiltmeter on} 0 0 0.0 0.0 0 1
+  register 3 10 black green center {antenna0.tracker.tilt_theta[0]} fixed_point 1 0 {tiltmeter off,tiltmeter on} 0 0 0.0 0.0 0 1
+}
+add_page 1236 714 {Cabin Temp} beige red yellow 10 9 {15 5 8} {} 0 {} 0 {
+  label 0 0 orange black center location
+  label 0 1 midnightblue paleturquoise center {rcvr cabin air}
+  label 0 2 midnightblue paleturquoise center {jack 1}
+  label 0 3 midnightblue paleturquoise center {optics front}
+  label 0 4 midnightblue paleturquoise center {rcvr PT valve}
+  label 0 5 midnightblue paleturquoise center {rcvr top}
+  label 0 6 midnightblue paleturquoise center {optics flange}
+  label 0 7 orange black center {sample time}
+  register 0 8 black green center {antenna0.scu.tempSampleTime[0]} date 0 0 locked,fail 0 0 0.0 0.0 0 1
+  register 0 9 black green center {antenna0.scu.tempSampleTime.time[0]} sexagesimal 0 0 locked,fail 0 0 0.0 0.0 0 1
+  label 1 0 orange black center chan
+  label 1 1 midnightblue paleturquoise center 1
+  label 1 2 midnightblue paleturquoise center 2
+  label 1 3 midnightblue paleturquoise center 3
+  label 1 4 midnightblue paleturquoise center 4
+  label 1 5 midnightblue paleturquoise center 5
+  label 1 6 midnightblue paleturquoise center 6
+  label 2 0 purple paleturquoise center {temp (C)}
+  register 2 1 black green center {antenna0.scu.temp[20]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 2 2 black green center {antenna0.scu.temp[21]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 2 3 black green center {antenna0.scu.temp[22]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 2 4 black green center {antenna0.scu.temp[23]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 2 5 black green center {antenna0.scu.temp[24]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 2 6 black green center {antenna0.scu.temp[25]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+}
+add_page 1349 79 Tracker black red yellow 10 9 {13 12 12 12} antenna 0 {} 0 {
+  label 0 0 MidnightBlue PaleTurquoise center {utc day}
+  label 0 1 midnightblue paleturquoise center {utc time}
+  label 0 2 midnightblue paleturquoise center Source
+  label 0 4 orange black center position
+  label 0 5 MidnightBlue PaleTurquoise center actual
+  label 0 6 MidnightBlue PaleTurquoise center expected
+  label 0 7 MidnightBlue PaleTurquoise center error
+  label 0 8 MidnightBlue PaleTurquoise center {actual rate}
+  label 0 9 midnightblue paleturquoise center {expected rate}
+  label 0 10 orange black center offset
+  label 0 11 MidnightBlue PaleTurquoise center horiz
+  label 0 12 MidnightBlue PaleTurquoise center RaDec
+  label 0 13 midnightblue paleturquoise center sky
+  label 0 14 midnightblue paleturquoise center scan
+  label 0 15 orange black center {limits & zeros}
+  label 0 16 MidnightBlue PaleTurquoise center -lim
+  label 0 17 MidnightBlue PaleTurquoise center +lim
+  label 0 18 MidnightBlue PaleTurquoise center zero
+  label 0 19 orange black center {pointing model}
+  label 0 20 MidnightBlue PaleTurquoise center Tilts
+  label 0 21 midnightblue paleturquoise center Collimation
+  label 0 22 midnightblue paleturquoise center Flexure
+  label 0 23 orange black center site
+  label 0 24 MidnightBlue PaleTurquoise center actual
+  label 0 25 MidnightBlue PaleTurquoise center fiducial
+  label 0 26 orange black center location
+  label 0 29 midnightblue paleturquoise center {ACU state}
+  label 0 30 MidnightBlue PaleTurquoise center {tracker mode}
+  label 0 31 midnightblue paleturquoise center control
+  label 0 32 orange black center lacking
+  register 0 33 black green center {antenna0.tracker.lacking[0][0]} bit 0 2 {ut1utc, ut1utc} 0 1 0 0 0 1
+  register 0 34 black green center {antenna0.tracker.lacking[0][0]} bit 0 9 {enc zeros,enc zeros} 0 1 0 0 0 1
+  label 0 35 orange black center {GPS Time}
+  register 1 0 black green center {antenna0.frame.utc[0]} date 0 0 Manual,Computer 0 0 0.0 0.0 0 1
+  register 1 1 black green center {antenna0.tracker.utc.time[0][0]} sexagesimal 0 0 {not acq, acquired} 0 0 0.0 0.0 0 1
+  register 1 2 black green center antenna0.tracker.source string 30 0 {not acq, acquired} 0 0 0.0 0.0 0 1
+  label 1 4 purple PaleTurquoise center az
+  register 1 5 black green center {antenna0.tracker.actual[0][0]} sexagesimal 3 0 {not acq, acquired} 1 0 0.0 0.0 0 1
+  register 1 6 black green center {antenna0.tracker.expected[0][0]} sexagesimal 3 0 {not acq, acquired} 1 0 0.0 0.0 0 1
+  register 1 7 black green center {antenna0.tracker.errors[0][0]} sexagesimal 3 0 {not acq, acquired} 1 0 0.0 0.0 0 1
+  register 1 8 black green center {antenna0.tracker.actual_rates[0][0]} sexagesimal 3 0 {not acq, acquired} 1 0 0.0 0.0 0 1
+  register 1 9 black green center {antenna0.tracker.expected_rates[0][0]} sexagesimal 3 0 {not acq, acquired} 1 0 0.0 0.0 0 1
+  register 1 11 black green center {antenna0.tracker.horiz_off[0][0]} sexagesimal 1 0 {stop, run} 0 0 0.0 0.0 0 1
+  register 1 12 black green center {antenna0.tracker.equat_off[0][0]} sexagesimal 1 0 {stop, run} 0 0 0.0 0.0 0 1
+  register 1 13 black green center {antenna0.tracker.sky_xy_off[0][0]} sexagesimal 1 0 optical,radio 0 0 0.0 0.0 0 1
+  register 1 14 black green center {antenna0.tracker.scan_off[0][0]} sexagesimal 1 0 Manual,Computer 0 0 0.0 0.0 0 1
+  register 1 16 black green center {antenna0.tracker.az_limits[0]} sexagesimal 0 3 {enc limits,enc limits} 0 0 0.0 0.0 0 1
+  register 1 17 black green center {antenna0.tracker.az_limits[1]} sexagesimal 0 0 {enc limits,enc limits} 0 0 0.0 0.0 0 1
+  register 1 18 black green center {antenna0.tracker.encoder_off[0]} fixed_point 4 0 {track, slew, halt, sync} 0 0 0.0 0.0 0 1
+  register 1 19 black green center {antenna0.tracker.axis[0]} enum 0 0 optical,radio 0 1 1 1 0 1
+  register 1 20 black green center {antenna0.tracker.tilts[0]} fixed_point 4 0 optical,radio 0 0 0.0 0.0 0 1
+  register 1 21 black green center {antenna0.tracker.fixedCollimation[0]} fixed_point 4 0 optical,radio 0 0 0 0 0 1
+  register 1 22 black green center {antenna0.tracker.flexure[0]} fixed_point 4 0 optical,radio 0 0 0.0 0.0 0 1
+  label 1 23 MidnightBlue PaleTurquoise center longitude
+  register 1 24 black green center {antenna0.tracker.siteActual[0]} sexagesimal 1 0 optical,radio 0 0 0.0 0.0 0 1
+  register 1 25 black green center {antenna0.tracker.siteFiducial[0]} sexagesimal 1 0 optical,radio 0 0 0.0 0.0 0 1
+  label 1 26 MidnightBlue PaleTurquoise center {up (m)}
+  register 1 27 black green center {antenna0.tracker.location[0]} fixed_point 4 0 optical,radio 0 0 0.0 0.0 0 1
+  register 1 29 black green center {antenna0.acu.state[0]} enum 0 0 idle,tracking,restart 0 1 1 1 0 1
+  register 1 30 black green center {antenna0.tracker.mode[0][0]} enum 0 0 {track, slew, halt, sync} 0 0 0.0 0.0 0 1
+  register 1 31 black green center {antenna0.tracker.inControl[0][0]} enum 0 0 Manual,Computer 0 1 1 1 0 1
+  register 1 32 black green center {antenna0.tracker.lacking[0][0]} bit 0 0 site,site 0 1 0 0 0 1
+  register 1 33 black green center {antenna0.tracker.lacking[0][0]} bit 0 3 eqneqx,eqneqx 0 1 0 0 0 1
+  register 1 34 black green center {antenna0.tracker.lacking[0][0]} bit 0 5 tilts,tilts 0 1 0 0 0 1
+  register 1 35 black green center {antenna0.tracker.lacking[0][0]} bit 0 11 locked,fail 0 1 0 0 0 1
+  label 2 0 MidnightBlue PaleTurquoise center LST
+  register 2 2 black green center {antenna0.tracker.off_source[0][0]} enum 0 0 {acquired, not acq} 0 1 0 0 0 1
+  label 2 4 purple PaleTurquoise center el
+  register 2 5 black green center {antenna0.tracker.actual[1][0]} sexagesimal 3 0 {not acq, acquired} 1 0 0.0 0.0 0 1
+  register 2 6 black green center {antenna0.tracker.expected[1][0]} sexagesimal 3 0 {not acq, acquired} 1 0 0.0 0.0 0 1
+  register 2 7 black green center {antenna0.tracker.errors[1][0]} sexagesimal 3 0 {not acq, acquired} 1 0 0.0 0.0 0 1
+  register 2 8 black green center {antenna0.tracker.actual_rates[1][0]} sexagesimal 3 0 {not acq, acquired} 1 0 0.0 0.0 0 1
+  register 2 9 black green center {antenna0.tracker.expected_rates[1][0]} sexagesimal 3 0 {not acq, acquired} 1 0 0.0 0.0 0 1
+  register 2 11 black green center {antenna0.tracker.horiz_off[1][0]} sexagesimal 1 0 {stop, run} 0 0 0.0 0.0 0 1
+  register 2 12 black green center {antenna0.tracker.equat_off[1][0]} sexagesimal 1 0 {stop, run} 0 0 0.0 0.0 0 1
+  register 2 13 black green center {antenna0.tracker.sky_xy_off[1][0]} sexagesimal 1 0 optical,radio 0 0 0.0 0.0 0 1
+  register 2 14 black green center {antenna0.tracker.scan_off[1][0]} sexagesimal 1 0 Manual,Computer 0 0 0.0 0.0 0 1
+  register 2 16 black green center {antenna0.tracker.el_limits[0]} sexagesimal 0 2 {enc limits,enc limits} 0 0 0.0 0.0 0 1
+  register 2 17 black green center {antenna0.tracker.el_limits[1]} sexagesimal 0 2 {enc limits,enc limits} 0 0 0.0 0.0 0 1
+  register 2 18 black green center {antenna0.tracker.encoder_off[1]} fixed_point 4 0 {track, slew, halt, sync} 0 0 0.0 0.0 0 1
+  register 2 19 black green center {antenna0.tracker.ptel[0]} enum 0 0 none,ptel0,ptel1,n/a,ptel2 0 1 0 0 0 1
+  register 2 20 black green center {antenna0.tracker.tilts[1]} fixed_point 4 0 optical,radio 0 0 0.0 0.0 0 1
+  register 2 21 black green center {antenna0.tracker.fixedCollimation[1]} fixed_point 4 0 optical,radio 0 0 0.0 0.0 0 1
+  register 2 22 black green center {antenna0.tracker.flexure[1]} fixed_point 4 0 optical,radio 0 0 0.0 0.0 0 1
+  label 2 23 MidnightBlue PaleTurquoise center latitude
+  register 2 24 black green center {antenna0.tracker.siteActual[1]} sexagesimal 1 0 optical,radio 0 0 0.0 0.0 0 1
+  register 2 25 black green center {antenna0.tracker.siteFiducial[1]} sexagesimal 1 0 optical,radio 0 0 0.0 0.0 0 1
+  label 2 26 MidnightBlue PaleTurquoise center {east (m)}
+  register 2 27 black green center {antenna0.tracker.location[1]} fixed_point 4 0 optical,radio 0 0 0.0 0.0 0 1
+  label 2 29 midnightblue paleturquoise center {drive status}
+  label 2 30 MidnightBlue PaleTurquoise center {tracker state}
+  register 2 32 black green center {antenna0.tracker.lacking[0][0]} bit 0 10 location,location 0 1 0 0 0 1
+  register 2 33 black green center {antenna0.tracker.lacking[0][0]} bit 0 4 {enc rev cnts,enc rev cnts} 0 1 0 0 0 1
+  register 2 34 black green center {antenna0.tracker.lacking[0][0]} bit 0 6 collimation,collimation 0 1 0 0 0 1
+  register 3 0 black green center {antenna0.tracker.lst[0][0]} sexagesimal 0 0 Manual,Computer 0 0 0.0 0.0 0 1
+  register 3 20 black green center {antenna0.tracker.tilts[2]} fixed_point 3 0 {enc limits,enc limits} 0 0 0 0 0 1
+  label 3 23 MidnightBlue PaleTurquoise center altitude
+  register 3 24 black green center {antenna0.tracker.siteFiducial[2]} fixed_point 1 0 optical,radio 0 0 0.0 0.0 0 1
+  register 3 25 black green center {antenna0.tracker.siteActual[2]} fixed_point 1 0 optical,radio 0 0 0.0 0.0 0 1
+  label 3 26 MidnightBlue PaleTurquoise center {north (m)}
+  register 3 27 black green center {antenna0.tracker.location[2]} fixed_point 4 0 optical,radio 0 0 0.0 0.0 0 1
+  register 3 29 black green center {antenna0.acu.acu_status[0]} binary 0 0 {} 0 0 0 0 0 1
+  register 3 30 black green center {antenna0.tracker.state[0][0]} enum 0 0 lacking,time-err,updating,halt,slew,track,too-low,too-high 0 0 0.0 0.0 0 1
+  register 3 32 black green center {antenna0.tracker.lacking[0][0]} bit 0 1 {atmosphere , atmosphere} 0 1 0 0 0 1
+  register 3 33 black green center {antenna0.tracker.lacking[0][0]} bit 0 7 {enc limits,enc limits} 0 1 0 0 0 1
+  register 3 34 black green center {antenna0.tracker.lacking[0][0]} bit 0 8 flexure,flexure 0 1 0 0 0 1
+}
+add_page 199 58 Optics beige red yellow 10 9 {17 7 10} {} 0 {} 0 {
+  label 0 0 orange black center diode
+  label 0 1 midnightblue paleturquoise center {G10 Tube}
+  label 0 2 midnightblue paleturquoise center {10K rec, op}
+  label 0 3 midnightblue paleturquoise center 10KG10fin
+  label 0 4 midnightblue paleturquoise center {10K filter}
+  label 0 5 midnightblue paleturquoise center {10K rec cone}
+  label 0 6 midnightblue paleturquoise center {F spider, cone b.c.}
+  label 0 7 midnightblue paleturquoise center {10K near filter}
+  label 0 8 midnightblue paleturquoise center {Sec Mirror}
+  label 0 9 midnightblue paleturquoise center {10K cone near sec}
+  label 0 10 midnightblue paleturquoise center {77K PT head}
+  label 0 11 midnightblue paleturquoise center {Back Spid b.c.}
+  label 0 12 midnightblue paleturquoise center {77K HS cone}
+  label 0 13 midnightblue paleturquoise center {10K PT head}
+  label 0 14 midnightblue paleturquoise center {10K H.S. cone}
+  label 0 15 midnightblue paleturquoise center {Back Spid by strap}
+  label 0 16 midnightblue paleturquoise center {77K Backplate, top}
+  label 0 17 midnightblue paleturquoise center {Rod 5, 4K end}
+  label 0 18 midnightblue paleturquoise center {Rod 4, H.S.}
+  label 0 19 midnightblue paleturquoise center {Rod 5 between}
+  label 0 20 midnightblue paleturquoise center {Rod 5, H.S.}
+  label 0 21 midnightblue paleturquoise center {77K Back by strap}
+  label 0 22 midnightblue paleturquoise center {77K filter}
+  label 0 23 midnightblue paleturquoise center {77K by filter}
+  label 0 24 midnightblue paleturquoise center {77K rec cone}
+  label 0 25 midnightblue paleturquoise center {77K rec, op}
+  label 0 26 midnightblue paleturquoise center {77K cone near sec}
+  label 0 27 orange black center cernox
+  label 0 28 midnightblue paleturquoise center {10K rec cone top}
+  label 0 29 midnightblue paleturquoise center {10K cone near sec}
+  label 0 30 midnightblue paleturquoise center {Sec Mirror}
+  label 0 31 midnightblue paleturquoise center {10K PT head}
+  label 0 32 orange black center thermocouple
+  label 0 33 midnightblue paleturquoise center CalSource
+  label 0 34 midnightblue paleturquoise center Pressure
+  label 0 35 midnightblue paleturquoise center record
+  label 0 36 midnightblue paleturquoise center received
+  label 0 37 midnightblue paleturquoise center UTC
+  label 0 38 midnightblue paleturquoise center group1
+  label 0 39 midnightblue paleturquoise center group2
+  label 1 0 purple PaleTurquoise center number
+  label 1 1 midnightblue paleturquoise center 1
+  label 1 2 midnightblue paleturquoise center 2
+  label 1 3 midnightblue paleturquoise center 3
+  label 1 4 midnightblue paleturquoise center 4
+  label 1 5 midnightblue paleturquoise center 5
+  label 1 6 midnightblue paleturquoise center 6
+  label 1 7 midnightblue paleturquoise center 7
+  label 1 8 midnightblue paleturquoise center 8
+  label 1 9 midnightblue paleturquoise center 9
+  label 1 10 midnightblue paleturquoise center 10
+  label 1 11 midnightblue paleturquoise center 11
+  label 1 12 midnightblue paleturquoise center 12
+  label 1 13 midnightblue paleturquoise center 13
+  label 1 14 midnightblue paleturquoise center 14
+  label 1 15 midnightblue paleturquoise center 15
+  label 1 16 midnightblue paleturquoise center 16
+  label 1 17 midnightblue paleturquoise center 17
+  label 1 18 midnightblue paleturquoise center 18
+  label 1 19 midnightblue paleturquoise center 19
+  label 1 20 midnightblue paleturquoise center 20
+  label 1 21 midnightblue paleturquoise center 21
+  label 1 22 midnightblue paleturquoise center 22
+  label 1 23 midnightblue paleturquoise center 23
+  label 1 24 midnightblue paleturquoise center 24
+  label 1 25 midnightblue paleturquoise center 25
+  label 1 26 midnightblue paleturquoise center 26
+  label 1 28 midnightblue paleturquoise center 1
+  label 1 29 midnightblue paleturquoise center 2
+  label 1 30 midnightblue paleturquoise center 3
+  label 1 31 midnightblue paleturquoise center 4
+  label 1 33 midnightblue paleturquoise center TCT1
+  register 1 35 black green center {array.optics.record[0]} integer 0 0 {} 0 0 0.0 0.0 0 1
+  register 1 36 black green center {array.optics.received[0]} binary 0 0 {} 0 0 0.0 0.0 0 1
+  register 1 37 black green center {array.optics.utc.time[0]} sexagesimal 0 0 {} 0 0 0.0 0.0 0 1
+  register 1 38 black green center {array.optics.Group1TimeStamp.time[0]} sexagesimal 0 0 {} 0 0 0.0 0.0 0 1
+  register 1 39 black green center {array.optics.Group2TimeStamp.time[0]} sexagesimal 0 0 {} 0 0 0.0 0.0 0 1
+  label 2 0 purple PaleTurquoise center K
+  register 2 1 black green center {array.optics.TDiode1[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 2 2 black green center {array.optics.TDiode2[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 2 3 black green center {array.optics.TDiode3[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 2 4 black green center {array.optics.TDiode4[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 2 5 black green center {array.optics.TDiode5[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 2 6 black green center {array.optics.TDiode6[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 2 7 black green center {array.optics.TDiode7[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 2 8 black green center {array.optics.TDiode8[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 2 9 black green center {array.optics.TDiode9[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 2 10 black green center {array.optics.TDiode10[0]} fixed_point 0 0 {} 0 0 0.0 0.0 0 1
+  register 2 11 black green center {array.optics.TDiode11[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 2 12 black green center {array.optics.TDiode12[0]} fixed_point 0 0 {} 0 0 0.0 0.0 0 1
+  register 2 13 black green center {array.optics.TDiode13[0]} fixed_point 1 0 {} 0 1 0.0 10.0 0 1
+  register 2 14 black green center {array.optics.TDiode14[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 2 15 black green center {array.optics.TDiode15[0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 2 16 black green center {array.optics.TDiode16[0]} fixed_point 0 0 {} 0 0 0.0 0.0 0 1
+  register 2 17 black green center {array.optics.TDiode17[0]} fixed_point 0 0 {} 0 0 0.0 0.0 0 1
+  register 2 18 black green center {array.optics.TDiode18[0]} fixed_point 0 0 {} 0 0 0.0 0.0 0 1
+  register 2 19 black green center {array.optics.TDiode19[0]} fixed_point 0 0 {} 0 0 0.0 0.0 0 1
+  register 2 20 black green center {array.optics.TDiode20[0]} fixed_point 0 0 {} 0 0 0.0 0.0 0 1
+  register 2 21 black green center {array.optics.TDiode21[0]} fixed_point 0 0 {} 0 0 0.0 0.0 0 1
+  register 2 22 black green center {array.optics.TDiode22[0]} fixed_point 0 0 {} 0 0 0.0 0.0 0 1
+  register 2 23 black green center {array.optics.TDiode23[0]} fixed_point 0 0 {} 0 0 0.0 0.0 0 1
+  register 2 24 black green center {array.optics.TDiode24[0]} fixed_point 0 0 {} 0 0 0.0 0.0 0 1
+  register 2 25 black green center {array.optics.TDiode25[0]} fixed_point 0 0 {} 0 0 0.0 0.0 0 1
+  register 2 26 black green center {array.optics.TDiode26[0]} fixed_point 0 0 {} 0 0 0.0 0.0 0 1
+  register 2 28 black green center {array.optics.TCernox1[0][0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 2 29 black green center {array.optics.TCernox2[0][0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 2 30 black green center {array.optics.TCernox3[0][0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 2 31 black green center {array.optics.TCernox4[0][0]} fixed_point 1 0 {} 0 0 0.0 0.0 0 1
+  register 2 33 black green center {array.optics.TCT1[0]} floating 3 0 {} 0 1 0.0 350 0 1
+  register 2 34 black green center {array.optics.CPressure1[0]} floating 15 0 {} 0 0 0.0 0.0 0 1
+}

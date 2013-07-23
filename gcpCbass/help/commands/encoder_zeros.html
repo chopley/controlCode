@@ -1,0 +1,25 @@
+<html>
+<head>
+<title>BICEP Command List</title>
+<link rel=stylesheet href="../StyleSheet.css" type="text/css">
+</head>
+
+<body bgcolor="#add8e6">
+<font face="Verdana, Arial, Helvetica, sans-serif"size="2" color="#000000">
+<h2>The <span class=command>encoder_zeros</span> command (usage)</h2>
+<hr>
+<p>
+
+<h2><i>Context:</i></h2><p>
+The encoder_zeros command is intended to be used in the control program startup script $GCP_DIR/control/conf/specific/pointing.init 
+to set the offset which is added to commanded positions just before they are send to the ACU and subtracted from actual 
+positions reported by the ACU, to adjust for the zero point of the encoders. 
+<h2><i>Examples:</i></h2><p>
+
+<dd>The following example sets the encoder zero points
+
+<pre>
+  encoderZeros -0.012603, 0, 0
+</pre>
+
+</body></html>

@@ -1,0 +1,78 @@
+<HEAD><TITLE>Specifying registers in sptViewer</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+<center><a href=index.html>Index</a></center>
+<HR>
+<center><H1>Specifying registers in sptViewer</H1></center>
+
+The antenna control control system samples and archives about 3000 different
+quantities pertaining to its status. This includes information
+pertaining to the health of the instrument, environmental information,
+such as the current weather conditions, and the current time, where
+the telescope is pointing, and the output data of the correlator to be
+processed off-line. These quantities are refered to as registers, and
+are identified by the board that they belong to, and their name. Many
+of these registers are arrays. Thus <code>corr0.tp[4]</code> refers to
+element 4 of the total power registers on correlator board 0. More
+specifically register specifications can have the following syntaxes:
+
+<UL>
+<LI> <b>board.name</b>
+<BR> This refers to all of the elements in a register called
+     <u>name</u> on the board named <u>board</u>.
+
+<LI> <b>board.name[index]</b>
+<BR> This selects array element <u>index</u> of the <u>board.name</u>
+     register.
+
+
+<LI> <b>board.name[index1-index2]</b>
+<BR> This selects all array elements between <u>index1</u> and
+     <u>index2</u> of the <u>board.name</u> register.
+
+<LI> <b>board.name.aspect</b>
+<BR> This selects all elements of the <u>board.name</u> register after
+     combining neighboring pairs of elements to form the type of value
+     specified by <u>aspect</u>. This can only be used with
+     <b>complex</b> and <b>utc</b> registers.
+
+     <H4>Complex Register Aspects</H4>
+
+     The following combinational aspect names are supported for
+     complex registers.
+
+     <UL>
+     <LI><b>real</b>  -  The real part of a complex pair of register elements.
+     <LI><b>imag</b>  -  The imaginary part of a complex pair of
+                         register elements.
+     <LI><b>amp</b>   -  The amplitude of a complex pair of register elements.
+     <LI><b>phase</b> -  The phase of a complex pair of register
+                         elements.
+     </UL>
+
+     <H4>UTC Register Aspects</H4>
+
+     The following combinational aspect names are supported for
+     registers that contain the date and time in Universal coordinated
+     time. By convention all such registers are named <code><u>board</u>.utc</code>.
+
+     <UL>
+     <LI><b>date</b>  -  The Modified Julian Day number part of the register.
+     <LI><b>time</b>  -  The time part of the register in hours.
+     </UL>
+<P>
+
+<LI> <b>board.name.aspect[index]</b>
+<BR> This selects the <u>index</u>'th pair of register elements after
+     they have been combined as described above for board.name. Thus
+     <code>corr0.vis.amp[3]</code> selects the amplitude of the complex
+     register pair <code>(corr0.vis[6],corr0.vis[7])</code>.
+
+<LI> <b>board.name.aspect[index1-index2]</b>
+<BR> This selects the <u>index1</u>'th to <u>index2</u>'th pairs of
+     register elements after they have been combined as described
+     above for board.name.
+</UL>
+
+<HR>
+Erik Leitch (4-Nov-1999)
+</BODY>

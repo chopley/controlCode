@@ -1,0 +1,36 @@
+<HEAD><TITLE>Configuring general properties of the viewer</TITLE></HEAD>
+<BODY bgcolor=add8e6>
+<center><a href=index.html>Index</a></center>
+<HR>
+<center><H1>Configuring general properties of the viewer</H1></center>
+
+There are a couple of properties that globally effect the
+viewer. These are the sub-sampling interval to use when reading data,
+and the size of the plot buffer.
+
+<H4>Sub-sampling the incoming data</H4>
+
+Sub-sampling of the data can be used to speed up reading from the
+archive. To disable sub-sampling, specify this as 1. A sub-sampling
+interval of <u>n</u> means that every <u>n</u>'th sample is read.
+
+<H4>Setting the size of the plot buffer</H4>
+
+The viewer contains a circular buffer which maintains plotted data in
+memory. Its size is specified as the number of register values that
+can be stored in the buffer. By default this is 500000.  These 500000
+elements are then divided up between all of the registers that are
+being plotted. For example, if one were to have 4 graphs, each one
+displaying a single register, then these 4 registers plus the x-axis
+register constitute 5 registers to be stored, per snapshot received
+from the control program. Thus one could display 100000 points per
+graph. Beyond this point, the oldest data is deleted to make way for
+new data as it arrives.  Clearly the larger you make this buffer, the
+more data you will be able to display. Unfortunately enlarging the
+buffer doesn't come without consequences. Excessive memory usage can
+make the computer thrash when you replot a graph, and replotting or
+zooming a graph with a lot of points can be painfully slow.
+
+<HR>
+Erik Leitch (6-Nov-1999)
+</BODY>

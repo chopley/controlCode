@@ -1,0 +1,43 @@
+<HEAD><TITLE>The PhaseShift datatype.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+<center><a href=../index.html>Index</a></center>
+<HR>
+<font color=blue><a name=PhaseShift> <code><b>PhaseShift</b></code> </a></font>
+<P>
+The target encoder reading of a phase-shift motor.
+<P>
+<DL>
+<DT> Input Format:
+<P>
+<p>
+    <UL>
+        <LI> <code><b>off</b></code></font> - Turn the phase shifters off
+	<LI> <code><b>left</b></code></font> - The encoder position corresponding to left circular polarization for these receivers (see Context, below)
+	<LI> <code><b>right</b></code></font> - The encoder position corresponding to right circular polarization for these receivers (see Context, below)
+     </UL>
+
+<P>
+<DT> Use with do-loops:
+<DD> When a PhaseShift variable is used as the dependent variable of a
+     <a href="../commands/do.html">do-loop</a>, the associated loop increment is
+     specified as an <a href="Integer.html">Integer</a> constant.
+
+<P>
+<DT> Context:
+<DD> 
+
+     Each receiver of the SZA has an associated phase shifter
+     motor. The PhaseShift type is used by the <a
+     href=../commands/pshifter.html>pshifter</a> command to set the target
+     position of a phase-shift motor. The legal range of encoder
+     readings corresponds to a phase shift of approximately 4.PI.
+     When preset encoder positions for left and right circular
+     polarization are defined using the <a href=../commands/polar.html>polar</a>
+     command, the words <code>left</code> and <code>right</code> may
+     be used to request these positions.
+
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:33 PST 2004)
+</BODY>

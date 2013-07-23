@@ -1,0 +1,37 @@
+<HEAD><TITLE>The QuadPhase datatype.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+<center><a href=../index.html>Index</a></center>
+<HR>
+<font color=blue><a name=PhaseStep> <code><b>PhaseStep</b></code> </a></font>
+<P>
+A phase-shift motor step size (full or half).
+<P>
+<DL>
+<DT> Input Format:
+<P>
+<DD> One of the following:
+    <UL>
+    <LI> <code><b>full</b></code> - Position the phase-shift motor
+                                    to within a full step of the
+				    requested position.
+    <LI> <code><b>half</b></code> - Position the phase-shift motor
+                                    to within a half step of the
+				    requested position.
+    </UL>
+<P>
+
+<DT> Context:
+<DD> The phase-shift motors in the receiver cryostats are stepper
+     motors. The resolution of these motors is thus nominally one
+     step, but, at the expense of having to keep the motor coils
+     continually energised, one can alternatively hold the motor half
+     way between two steps, thus doubling the accuracy with which the
+     motors can be positioned.  The PhaseStep datatype is used with
+     the <a href=../commands/pshifter.html>pshifter</a> command to specify which
+     of these two modes to use.
+
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:33 PST 2004)
+</BODY>

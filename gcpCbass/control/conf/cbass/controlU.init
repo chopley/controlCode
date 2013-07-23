@@ -1,0 +1,58 @@
+# This schedule is executed by sptArrayControl on its startup.
+# Commands that need a connection to the control system will not
+# succeed.
+
+# Start logging if running on sptnet.  Use the fully-qualified name of
+# the host, as that is what is returned by gethostname()
+
+ifhost sptcontrol {
+#  open log, dir=/data/sptdaq/log
+}
+
+print "Running sptArrayControl startup script."
+
+# Load the script that is used to initialize the real-time environment
+# whenever the real-time cpu reboots.
+
+load_reboot_script "$CBASS_DIR/control/conf/specific/mediatorU.init"
+
+# Load the source catalog.
+
+catalog "$CBASS_DIR/control/ephem/source.cat"
+scan_catalog "$CBASS_DIR/control/scan/scan.cat"
+
+# Load the ephemeris of UT1-UTC.
+
+ut1utc "$CBASS_DIR/control/ephem/ut1utc.ephem"
+
+# Location of South Pole (long, lat, altitude (meters))
+
+#site 40:00:00.0, -40:00:00.0, 3000 
+#site -87:00:00.0, 41:00:00.0, 180
+
+# South Pole Telescope
+site -44:39, -89:59.464, 2843
+
+# Specify the horizon to be used by the "show" command.
+
+horizon 12
+
+# Specify the number of samples to include in each archive frame.
+# Also specify the number of samples to record before starting a new file.
+
+ifhost sptcontrol {
+  archive combine=1, filter=false, file_size=1000, dir="/data/sptdaq/arc"
+
+  # Start archiving
+
+#  open archive
+}
+
+# Setup auto queue, but don't turn on
+#ifhost sptnet {
+#  auto_queue state=off, dt=10s, dir=/data/sptdaq/autoqueue
+#}
+
+#pagerEmailAddress add, email="kenaird@.uchicago.edu"
+
+print "Startup script ended."

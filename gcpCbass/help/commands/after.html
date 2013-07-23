@@ -1,0 +1,54 @@
+<HEAD><TITLE>The "after" datatype.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+<font color=blue><a name="after"> <code><a
+href=../dataTypes/Boolean.html>Boolean</a> <b>after</b>(time, utc|lst)</code> </a></font>
+<P>
+Return true if the current time is after a given time-of-day.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><a href=../dataTypes/Time.html>Time</a> time</code>
+     <DD> The time of day in hours.
+     <DT><code><a href=../dataTypes/TimeScale.html>TimeScale</a> scale</code>
+     <DD> The timescale of $time, from:
+         <UL>
+	 <LI> utc - Universal Coordinated Time.
+         <LI> lst - Local Sidereal Time.
+         </UL>
+     </DL>
+<P>
+<DT> Example 1:
+<DD> The following example tests whether the local sidereal time is between 03:45
+     and 15:45.
+
+<pre>
+ if($after(03:45,lst)) {
+   print &quot;Too late to start schedule!\n&quot;
+   exit
+ }
+</pre>
+
+<DT> Example 2:
+<DD> The following example tests whether the time is after midday but before
+     midnight.
+
+<pre>
+ if($after(12,utc)) {
+   print &quot;Good afternoon.\n&quot;
+ } else {
+   print &quot;Good morning.\n&quot;
+ }
+</pre>
+
+
+<DT> Context:
+<DD> This function is useful if a process is to be started or stopped
+     daily at a given time-of-day. It returns true if the time of day
+     is within the 12 hours following the specified time, modulo 24
+     hours. Thus 03:00 is after 23:00, but it is not after 14:59.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:15:41 PST 2004)
+</BODY>

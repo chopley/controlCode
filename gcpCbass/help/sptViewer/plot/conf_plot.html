@@ -1,0 +1,69 @@
+<HEAD><TITLE>Setting the general characteristics of a plot</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+<center><a href=index.html>Index</a></center>
+<HR>
+<center><H1>Setting the general characteristics of a plot</H1></center>
+
+The plot configuration dialog is displayed whenever one creates a
+plot, and when one pulls down the <b>Configure</b> menu of a plot, and
+selects <b>&quot;Modify Plot&quot;</b>. This dialog allows the title
+of the plot to be specified, the x-axis to be configured, and the
+specification of plotting attributes. The fields are as follows:
+
+<P>
+<UL>
+<LI><b>Plot title</b>
+<BR> Use this to set the title of the plot. This title is displayed
+     within the plot itself, and is also used as the X-window title of
+     the window both when visible and when iconized.
+<LI><b>Register</b>
+<BR> This is the register who's value is to be plotted along the
+     X-axis. It should be a single element <a
+     href=../regspec.html>register specification</a>.
+
+<LI><b>Label</b>
+<BR> This is the label to draw under the x-axis.
+<LI><b>xmin</b>
+<BR> This is the value to give the left end of the x-axis. This
+     should be zero when scrolling is enabled.
+<LI><b>xmax</b>
+<BR> This is the value to give the right end of the x-axis.
+     When scrolling is enabled, this specifies the length of
+     the x-axis.
+<LI><b>Scroll margin</b>
+<BR> When the plot scrolls, a margin of this amount is left
+     in the direction in which the data is moving along the
+     x-axis. This ensures that the plot only has to scroll
+     every so often. The margin is specified as a percentage
+     of the width of the x-axis.
+<LI><b>Scrolling mode</b>
+<BR> This specifies whether and in which direction to scroll. The
+     possible values are:
+
+     <UL>
+     <LI> <b>maximum</b>
+     <BR> Scroll whenever data falls beyond the right edge of the
+          plot.
+     <LI> <b>minimum</b>
+     <BR> Scroll whenever data falls beyond the left edge of the
+          plot.
+     <LI> <b>disabled</b>
+     <BR> Don't scroll at all. The x-axis will have exactly the
+          limits specified by <b>xmin</b> and <b>xmax</b>.
+     </UL>
+<LI><b>Marker size</b>
+<BR> This specifies how wide the plotted dots and lines appear, in
+     multiples of 0.005 inches. Note that the limited resolution of
+     Sun displays means that one has to increase the width to 6 before
+     any change is seen compared to a width of 1. This is not the case
+     on modern printers, so the result is that a given width
+     specification may look different when displaying on the screen
+     than on a printer.
+<LI><b>Draw lines between points</b>
+<BR> With this button depressed, lines are drawn between points that
+     were recorded sequentially in time by the antenna control system.
+</UL>
+
+<HR>
+Erik Leitch (6-Nov-1999)
+</BODY>

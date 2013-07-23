@@ -1,0 +1,8 @@
+! Started logfile: dasilog on Thu Feb 12 21:48:43 2009
+! com_open: Unable to open command file: /home/eml/.dasi.boot
+! The file name was taken from environment variable DASI_LOGIN
+print 60 /2.35
+! 25.5319 
+exit
+! Exiting program
+! Log file dasilog closed on Fri Feb 13 09:25:58 2009

@@ -1,0 +1,29 @@
+
+<HEAD><TITLE>The "coldhead" command.</TITLE></HEAD>
+<BODY bgcolor=add8e6>
+<HR>
+<font color=blue><a name="coldhead"> <code><b>coldhead</b> receivers, on|off</code> </a></font>
+<P>
+Switch the coldheads of selected receivers on or off.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/Receivers.html>Receivers</a> receivers</b></code>
+     <DD> The set of receivers to target.
+     <DT><code><b><a href=../dataTypes/SwitchState.html>SwitchState</a> state</b></code>
+     <DD> The desired state of the selected coldheads: <code>on</code> or <code>off</code>.
+     </DL>
+<P>
+<DT> Example 1:
+<DD> The following example turns off the coldheads for all receivers except 
+rx1 and rx2.
+<pre>
+ coldhead all-rx1-rx2, off
+</pre>
+
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:15:53 PST 2004)
+</BODY>

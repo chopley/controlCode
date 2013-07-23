@@ -1,0 +1,81 @@
+<HEAD><TITLE>The "tp" command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name="tp"> <code><b>tp</b> receivers, bands, power</code> </a></font>
+<P>
+Specify the target total-power output of one or more correlator channels.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/Receivers.html>Receivers</a> receivers</b></code>
+     <DD> The set of receivers to target.
+     <DT><code><b><a href=../dataTypes/Bands.html>Bands</a> bands</b></code>
+     <DD> The set of frequency bands to target.
+     <DT><code><b><a href=../dataTypes/TotalPower.html>TotalPower</a> power</b></code>
+     <DD> The desired total-power level after the removal of the
+          offsets of the individual total power detectors.
+     </DL>
+<P>
+<DT> Example 1:
+<DD> The following example asks the channelizer task to find the
+     attenuations that will result in a total power detector output of
+     2.5 units from each correlator channel. This initiates a lengthy
+     (up to 20 seconds) process that adjusts the individual
+     attenuators until the best match in power outputs is found. In
+     the example, the <code><a href=acquired.html>acquired</a></code>
+     function is used to wait for this process to complete (or fail).
+<pre>
+ tp all, all, 2.5
+ until $acquired(channels)
+</pre>
+
+<P>
+<DT> Context:
+<DD> The BICEP has 13 receivers (rx0..rx12) whose 10GHz bandpasses are
+     split into 10 bands (band0..band9) by a channelizer. The
+     resulting 130 signal paths are refered to as channels. Every
+     channel contains a programmable attenuator for setting the input
+     power to the corresponding correlator input. The amount of
+     attenuation needed by each channel depends on the sensitivity of
+     the various components in the signal path and the brightness of
+     the source. For bright planets more attenuation will be needed
+     than when observing the CMB. This attenuation can be set directly
+     using the <code><a href=attenuate.html>attenuate</a></code>
+     command, or it can be set with a target total-power output in
+     mind using the <code>tp</code> command. The latter command allows
+     a target total power detector output to be specified for one or
+     more channels at a time. For each channel it sets the attenuation
+     to the maximum value available, then gradually decreases it until
+     two total power levels that bracket the requested level are
+     found. It then chooses the closest. One iteration of this process
+     is performed on every second integration until the optimal
+     attenuations of all of the target channels have been found (or an
+     error occurs). At this point the control program is notified of
+     the completion and the <code>$acquired(tp)</code> returns
+     <code>true</code>.
+<P>
+     The scale factor used to convert ADC units into the units used
+     by this command is set using the <code>
+     <a href=tpcal.html>tpcal</a></code> command.
+<P>
+     Note that if any command that involves the channelizer, such as
+     the <code><a href=channel.html>channel</a></code>, <code><a
+     href=attenuate.html>attenuate</a></code>, <code><a
+     href=channelizer.html>channelizer</a></code>, <code><a
+     href=tpzero.html>tpzero</a></code> or another <code><a
+     href=tp.html>tp</a></code> command, is initiated before a
+     previous <code>tp</code> (or <code>tpzero</code>) command is
+     complete, the new command replaces the previous one, but only in
+     those channels that are common to both commands. In particular
+     the &quot;<code>channelizer off</code>&quot; command cancels any
+     ongoing commands in all channels.
+<P>
+     Note that all of the attenuators are set to maximum attenuation
+     when the control system starts.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:59 PST 2004)
+</BODY>

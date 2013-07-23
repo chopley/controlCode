@@ -1,0 +1,56 @@
+<HEAD><TITLE>The "encoder_zero_points" command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><code><b>encoder_zero_points</b> az_zero, el_zero, dk_zero</code></font>
+<P>
+Specify the encoder angles at zero azimuth, elevation and deck angle.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/PointingOffset.html>PointingOffset</a> az</b></code>
+     <DD> The azimuth encoder angle that corresponds to zero azimuth,
+          measured in the direction of increasing azimuth.
+     <DT><code><b><a href=../dataTypes/PointingOffset.html>PointingOffset</a> el</b></code>
+     <DD> The elevation encoder angle that corresponds to zero elevation,
+          measured in the direction of increasing elevation.
+     <DT><code><b><a href=../dataTypes/PointingOffset.html>PointingOffset</a> dk</b></code>
+     <DD> The deck encoder angle that corresponds to the chosen zero
+          point of the deck axis, measured in the direction of
+	  increasing deck angle.
+     </DL>
+<P>
+<DT> Example:
+<DD> The following example tells the control system that when the
+     telescope is pointing north, the azimuth encoder actually reads
+     10.5 degrees. Also that when the telescope is pointing at zero
+     elevation that the elevation encoder reports an elevation of -4.3
+     degrees. And finally that when the deck encoder reads -50.0
+     degrees the deck angle should be considered to be zero.
+
+<pre>
+ encoder_zero_points 10.5, -4.3, -50.0
+</pre>
+
+<P>
+<DT> Context:
+<DD> The angles at which azimuth and elevation encoders report zero
+     counts do not correspond to the zeroes of topocentric azimuth and
+     elevation. This is both because manually positioning the encoders
+     to arcsecond accuracy is virtually impossible, and because the
+     zero points will gradually change as the telescope base sinks and
+     other parts of the telescope relax. Instead these zero points are
+     deduced by offline software while fitting the pointing model of
+     the telescope, ready to be installed with the encoder_zero_points
+     command.
+<P>
+     Note that after a reboot the control system will refuse to track
+     a source or slew the telescope until this command has been
+     called, so this should be done from the
+     <code>$BICEP_DIR/conf/bicepAntennaControl.init</code> boot script.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:04 PST 2004)
+</BODY>

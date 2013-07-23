@@ -1,0 +1,46 @@
+<HEAD><TITLE>The "turnPower" command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name="turnPower"> <code><b>turnPower</b></code> </a></font>
+<P>
+Turn power on/off to one or more antennas.
+<P>
+<DL> 
+<DT> Mandatory Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/SwitchState.html>SwitchState</a> state</b></code>
+     <DD> on/off to turn power onn or off.
+     </DL>
+<DT> Optional Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/Integer.html>Integer</a> outlet</b></code>
+     <DD> The outlet to control (1-4). Setting a value of 0 (the default) sets the state of all the outlets.
+     <DT><code><b><a href=../dataTypes/Antennas.html>Antennas</a> antennas</b></code>
+     <DD> The set of antennas to which the command should be applied.
+     </DL>
+<P>
+<DT> Examples:
+<DD> 
+
+<pre>
+# Turn the power strips off for all antennas:
+
+turnPower off
+
+# Turn outlet 1 on for antennas 2 and 3:
+
+turnPower on, outlet=1, ant=ant2+ant3
+
+</pre>
+<DT> Context: <DD> Each antenna cabinet contains an
+ethernet-controllable BayTech power strip to which various peripherals
+will be attached.  This command lets you selectively turn power on or
+off to outlets on the antenna power strips.
+<P>
+
+</DL>
+
+<HR>
+Erik Leitch (Wed Jul 21 11:23:42 PDT 2004)
+</BODY>

@@ -1,0 +1,25 @@
+To: tjp@astro.caltech.edu
+Subject: Re: Planetary ephemerides
+
+>From: Tim Pearson <tjp@astro.caltech.edu>
+>...
+>Examples are on OVMM, in directory USER:[EPHEM]. There are supposedly
+>identical copies on OVCM. These files have been generated from the JPL
+>ephemerides, but I don't know how; you would need to ask Steve Scott.
+
+While awaiting your reply I searched the web for references to the JPL
+ephemerides. I found reference to a JPL service called Horizons
+through which you can interactively request customized ascii
+ephemerides. These are then sent to you via E-mail. The URL of the
+service is:
+
+  telnet://ssd.jpl.nasa.gov:6775
+
+and documentation for it can be found at:
+
+  ftp://naif-sun.jpl.nasa.gov/pub/ssd/Horizons_doc.ps
+
+This looks quite adaquate for our needs, so we won't need any software
+of our own to generate ephemerides.
+
+Martin

@@ -1,0 +1,6 @@
+#!/bin/tcsh
+nice -20 $GCP_DIR/bin/sptUAntennaControl simacu=t simscu=t host=localhost logd=$GCP_DIR/runlogs logf=sptUAntennaControl debuglevel=0
+
+
+
+

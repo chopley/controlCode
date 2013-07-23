@@ -1,0 +1,38 @@
+/.cvsignore/1.1.1.1/Mon Jul  6 23:57:08 2009//
+/horizons/1.1.1.1/Mon Jul  6 23:57:08 2009//
+/junk.cat/1.3/Tue Feb 23 17:19:57 2010//
+/jupiter_3yr.ephem/1.1/Mon Nov 22 21:35:21 2010//
+/kstars.ephem/1.1.1.1/Mon Jul  6 23:57:08 2009//
+/mars_3yr.ephem/1.1/Mon Nov 22 21:35:21 2010//
+/mars_delay_1h.ephem/1.1.1.1/Mon Jul  6 23:57:08 2009//
+/mercury.ephem/1.1.1.1/Mon Jul  6 23:57:08 2009//
+/moon_3yr.ephem/1.1/Mon Nov 22 21:35:21 2010//
+/moon_delay_1h.ephem/1.1.1.1/Mon Jul  6 23:57:09 2009//
+/moon_delay_2.5h.ephem/1.1.1.1/Mon Jul  6 23:57:09 2009//
+/mstars.ephem/1.1.1.1/Mon Jul  6 23:57:09 2009//
+/neptune.ephem/1.1.1.1/Mon Jul  6 23:57:09 2009//
+/neptune_3yr.ephem/1.1/Mon Nov 22 21:35:21 2010//
+/pluto.ephem/1.1.1.1/Mon Jul  6 23:57:09 2009//
+/pluto_3yr.ephem/1.1/Mon Nov 22 21:35:21 2010//
+/saturn_3yr.ephem/1.1/Mon Nov 22 21:35:21 2010//
+/spt_source_20070501_JV.cat/1.2/Mon Jul 13 22:00:34 2009//
+/spt_source_20070710_JV.cat/1.2/Mon Jul 13 22:00:34 2009//
+/starList.cat/1.1/Mon Feb 22 21:19:27 2010//
+/stars.cat/1.1.1.1/Mon Jul  6 23:57:09 2009//
+/sun_3yr.ephem/1.1/Mon Nov 22 21:35:21 2010//
+/trans.cat/1.1.1.1/Mon Jul  6 23:57:09 2009//
+/uranus_3yr.ephem/1.1/Mon Nov 22 21:35:21 2010//
+/venus_3yr.ephem/1.1/Mon Nov 22 21:35:21 2010//
+/vla_5ghz_list.cat/1.1/Mon Feb 22 21:19:27 2010//
+D/batch////
+D/doc////
+D/scripts////
+/jupiter.ephem/1.3/Fri Mar 23 17:00:39 2012//
+/mars.ephem/1.3/Fri Mar 23 17:00:40 2012//
+/moon.ephem/1.3/Fri Mar 23 17:00:41 2012//
+/saturn.ephem/1.3/Fri Mar 23 17:00:42 2012//
+/source.cat/1.9/Fri Mar 23 17:00:42 2012//
+/sun.ephem/1.3/Fri Mar 23 17:00:43 2012//
+/uranus.ephem/1.3/Fri Mar 23 17:00:43 2012//
+/ut1utc.ephem/1.4/Fri Mar 23 17:00:43 2012//
+/venus.ephem/1.3/Fri Mar 23 17:00:43 2012//

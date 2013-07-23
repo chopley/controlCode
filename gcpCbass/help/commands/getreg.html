@@ -1,0 +1,31 @@
+<HEAD><TITLE>The "getreg" datatype.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a href=../dataTypes/RegValue.html><code>RegValue</a><b> getreg</b> register</code></a></font>
+<P>
+Return the value of a BICEP register.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code><a href=../dataTypes/Register.html>Register</a> reg</code>
+     <DD> The name of the register to be returned.
+     </DL>
+<P>
+<DT> Example:
+<DD> The following example returns the value of the first element of the rxsim
+card's output array. Note that array indexes start at 0.
+<pre>
+  print $getreg(rxsim.output[0])
+</pre>
+</DL>
+<DT> Context:
+<DD> This function returns the value of any of the BICEP's registers, as unsigned
+integers.  When the <code><a href=setreg.html>setreg</a> command is used to
+set the value of a register, the <code><a href=acquired.html>acquired</a> function can be used to check whether the current frame buffer reflects the changed
+register values before issuing the <code>getreg</code> command.
+<HR>
+Erik Leitch (Tue Mar 30 21:16:08 PST 2004)
+</BODY>
+

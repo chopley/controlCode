@@ -1,0 +1,78 @@
+<HEAD><TITLE>Configuring a graph</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+<center><a href=index.html>Index</a></center>
+<HR>
+<center><H1>Configuring a graph</H1></center>
+
+The graph configuration dialog is automatically displayed whenever you
+create a new graph. To reconfigure a graph after it has been created,
+switch to the graph reconfiguration cursor mode, either by pressing
+the &quot;<b>g</b>&quot; within the plot window, or by pulling down
+the <b>Cursor</b> plot menu and selecting <b>Modify Graph</b>. The
+cursor will change to a cross hair. Place this cross hair over the
+graph that you wish to reconfigure and press the left mouse button.
+This will bring up the dialog.
+
+ whenever To add a new graph to a plot, either
+hit the &quot;<b>a</b>&quot; key on the keyboard, while the mouse
+cursor is within the plot window, or pull down the <b>Configure</b>
+menu of the plot window, and select <b>Add Graph</b>. In both cases, a
+<a href=conf_graph.html>graph-configuration dialog</a> will be
+displayed. Within this dialog you will see the following entry fields:
+
+<UL>
+<LI> <b>Registers (one per line)</b>
+<BR> Each graph can be used to display multiple registers against the
+     same x and y axes. The registers are specified in this field, one
+     per line. When a register specification selects a register that
+     contains an array of values, one can specify any contiguous range
+     of elements from this register to be displayed. For example,
+     given the 13 element total power register, <code>corr0.tp</code>.
+<P>
+     <UL>
+     <LI> <b>corr0.tp</b>
+     <BR> Means display all 13 elements of the array.
+     <LI> <b>corr0.tp[3]</b>
+     <BR> Means display just element 3 of the array. 
+     <LI> <b>corr0.tp[3-5]</b>
+     <BR> Means display elements 3,4 and 5 of the array.  Note that if
+          the number before the hyphen had been omitted, 0 would have
+          been substituted. Similarly, if the number after the hyphen
+          had been omitted, the index of the last element in the
+          array, (12 in this case) would have been substituted.
+     </UL>
+
+<P>
+     The easiest way to select a particular register is to click on
+     the green <b>list</b> button next to the register entry field.
+     This results in a menu of board names being displayed, and when
+     the mouse is placed over one of these board names, a sub-menu is
+     displayed, listing the names of the registers on that
+     board. Selecting one of these registers results in the
+     corresponding register specification being appended to the list
+     of selected registers. If needed, you can then edit this
+     specification to specify which elements to display.
+
+<P>
+<LI> <b>Label</b>
+<BR> This specifies the label to display along the y-axis of the
+     graph.
+
+<P>
+<LI> <b>Range</b>
+<BR> This specifies the initial limits of the y-axis.
+
+<P>
+<LI> <b>Bit numbers (eg. 0,1..)</b>
+<BR> This optional field allows you to request that one or more bits
+     from the least significant 32 bits of the integral part of the
+     number be displayed. The values of the bits are displayed by
+     showing logical 0 as the bit number minus 0.25, and logical 1 as
+     0.25 plus the number of the bit. Thus if bit 12 is selected for
+     display, on the graph it toggles between values of 11.75 and
+     12.25.
+</UL>
+
+<HR>
+Erik Leitch (4-Nov-1999)
+</BODY>

@@ -1,0 +1,143 @@
+######################################################
+#-----------------------------------------------------
+#   CBASS scan catalog
+#
+#------------------------------------------------------
+#######################################################
+
+
+#-----------------------------
+# az scan files.  in nomenclature:  az - speed - range - full/half - repeats - scan
+#-----------------------------
+
+NORMAL az-4ds-360d-full-single-scan $CBASS_DIR/control/scan/full_az_scan_cbass.scan
+NORMAL az-2ds-360d-full-single-scan $CBASS_DIR/control/scan/full_az_scan_2ds.scan
+NORMAL az-4ds-360d-full-10reps-scan $CBASS_DIR/control/scan/full_az_10reps.scan
+NORMAL az-4ds-360d-half-single-scan $CBASS_DIR/control/scan/cbass_az_scan.scan
+NORMAL az-0.02ds-4d-half-single-scan $CBASS_DIR/control/scan/short_az_scan.scan
+NORMAL az-1ds-20d-full-single-scan   $CBASS_DIR/control/scan/az_20d_1ds_scan.scan
+NORMAL az-0.5ds-20d-full-single-scan   $CBASS_DIR/control/scan/az_20d_0.5ds_scan.scan
+NORMAL az-0.5ds-10d-full-single-scan   $CBASS_DIR/control/scan/az_20d_0.5ds_scan.scan
+NORMAL az-1ds-10d-full-single-scan   $CBASS_DIR/control/scan/az_10d_1ds_scan.scan
+NORMAL az_10d_0.5ds_PosNeg $CBASS_DIR/control/scan/az_10d_0.5ds_PosNeg.scan
+
+
+CONTINUOUS az-4ds-360d-n-scan $CBASS_DIR/control/scan/full_az_repeat_scan.scan
+CONTINUOUS repeat_test $CBASS_DIR/control/scan/repeat_test.scan
+
+CONTINUOUS az-20d-el35 $CBASS_DIR/control/scan/az_20deg_el35.scan
+CONTINUOUS az-20d-el45 $CBASS_DIR/control/scan/az_20deg_el45.scan
+CONTINUOUS az-20d-el55 $CBASS_DIR/control/scan/az_20deg_el55.scan
+CONTINUOUS az-20d-el65 $CBASS_DIR/control/scan/az_20deg_el65.scan
+CONTINUOUS az-20d-el75 $CBASS_DIR/control/scan/az_20deg_el75.scan
+
+
+
+
+#-----------------------------
+# el scan files.  in nomenclature:  el - speed - range - full/half - repeats - scan
+#-----------------------------
+NORMAL el-0.5ds-70d-up-scan   $CBASS_DIR/control/scan/el_70d_05ds_up_scan.scan
+NORMAL el-0.5ds-70d-down-scan $CBASS_DIR/control/scan/el_70d_05ds_down_scan.scan
+NORMAL el-0.5ds-20d-down-scan $CBASS_DIR/control/scan/el_20d_05ds_down_scan.scan
+NORMAL el-0.1ds-70d-up-scan   $CBASS_DIR/control/scan/el_scan_0.1ds_up.scan
+NORMAL el-0.1ds-70d-down-scan $CBASS_DIR/control/scan/el_scan_0.1ds_down.scan
+NORMAL el-0.05ds-70d-up-scan   $CBASS_DIR/control/scan/el_scan_0.05ds_up.scan
+NORMAL el-0.05ds-70d-down-scan $CBASS_DIR/control/scan/el_scan_0.05ds_down.scan
+NORMAL el-1ds-70d-up-scan   $CBASS_DIR/control/scan/el_scan_1ds_up.scan
+NORMAL el-1ds-70d-down-scan $CBASS_DIR/control/scan/el_scan_1ds_down.scan
+NORMAL el-0.5ds-10d-down-scan $CBASS_DIR/control/scan/el_10d_scan.scan
+NORMAL el_10d_0.5ds_UpDown $CBASS_DIR/control/scan/el_10d_0.5ds_UpDown.scan
+CONTINUOUS el-0.5ds-10d-updown-scan $CBASS_DIR/control/scan/el_10d_0.5ds_repeat.scan
+
+#-----------------------------
+# source scan files.  in nomenclature:  src - az speed - az range - el step - el range - scan
+#-----------------------------
+
+NORMAL src-az1ds-az10d-el0.25d-el10d  $CBASS_DIR/control/scan/source_scan.scan
+NORMAL src-az1ds-az10d-el0.5d-el10d  $CBASS_DIR/control/scan/source_az1ds_az10d_el0.5_el10d.scan
+NORMAL src-az1ds-az20d-el0.5d-el20d  $CBASS_DIR/control/scan/cbass_largeSource.scan
+NORMAL big-sun  $CBASS_DIR/control/scan/big_sun_scan.scan
+NORMAL source-scan  $CBASS_DIR/control/scan/source_scan.scan
+NORMAL large-source-scan  $CBASS_DIR/control/scan/cbass_largeSource.scan
+NORMAL source-scan-2by2 $CBASS_DIR/control/scan/source_scan_2by2.scan
+NORMAL square-field-15deg $CBASS_DIR/control/scan/grid_scan_30deg.scan
+NORMAL square-field-15deg-az $CBASS_DIR/control/scan/grid_az_scan_30deg.scan
+NORMAL square-field-5deg-az  $CBASS_DIR/control/scan/source_10deg.scan 
+
+#-----------------------------
+# pointing scan files
+#-----------------------------
+NORMAL point_cross_10daz_10del_0.5ds $CBASS_DIR/control/scan/point_scan_10daz_10del_0.5ds.scan
+NORMAL point_cross_10daz_10del_1ds $CBASS_DIR/control/scan/point_scan_10daz_10del_1ds.scan
+NORMAL point_cross_20daz_20del_1ds $CBASS_DIR/control/scan/point_scan_20daz_20del_1ds.scan
+NORMAL point_10d_0.5step  $CBASS_DIR/control/scan/source_az1ds_az10d_el0.5_el10d.scan
+NORMAL point_10d_0.2step  $CBASS_DIR/control/scan/source_az1ds_az10d_el0.2_el10d.scan
+NORMAL point_10d_0.25step  $CBASS_DIR/control/scan/source_az1ds_az10d_el0.25_el10d.scan
+NORMAL raster_4x4x0.2 $CBASS_DIR/control/scan/raster_4x4x0.2_1ds.scan
+NORMAL raster_8x4x0.2 $CBASS_DIR/control/scan/raster_8x4x0.2_1ds.scan
+
+
+#-----------------------------
+# ncp survey scan files (MAS)
+#-----------------------------
+NORMAL az-1.0ds-ncp-9.0r-single $CBASS_DIR/control/scan/ncp/ncp_9.0r_1.0d_norm.scan
+NORMAL az-1.0ds-ncp-8.5r-single $CBASS_DIR/control/scan/ncp/ncp_8.5r_1.0d_norm.scan
+NORMAL az-1.0ds-ncp-8.0r-single $CBASS_DIR/control/scan/ncp/ncp_8.0r_1.0d_norm.scan
+NORMAL az-1.0ds-ncp-7.5r-single $CBASS_DIR/control/scan/ncp/ncp_7.5r_1.0d_norm.scan
+NORMAL az-1.0ds-ncp-7.0r-single $CBASS_DIR/control/scan/ncp/ncp_7.0r_1.0d_norm.scan
+NORMAL az-1.0ds-ncp-6.5r-single $CBASS_DIR/control/scan/ncp/ncp_6.5r_1.0d_norm.scan
+NORMAL az-1.0ds-ncp-6.0r-single $CBASS_DIR/control/scan/ncp/ncp_6.0r_1.0d_norm.scan
+NORMAL az-1.0ds-ncp-5.5r-single $CBASS_DIR/control/scan/ncp/ncp_5.5r_1.0d_norm.scan
+NORMAL az-1.0ds-ncp-5.0r-single $CBASS_DIR/control/scan/ncp/ncp_5.0r_1.0d_norm.scan
+NORMAL az-1.0ds-ncp-4.5r-single $CBASS_DIR/control/scan/ncp/ncp_4.5r_1.0d_norm.scan
+NORMAL az-1.0ds-ncp-4.0r-single $CBASS_DIR/control/scan/ncp/ncp_4.0r_1.0d_norm.scan
+NORMAL az-1.0ds-ncp-3.5r-single $CBASS_DIR/control/scan/ncp/ncp_3.5r_1.0d_norm.scan
+NORMAL az-1.0ds-ncp-3.0r-single $CBASS_DIR/control/scan/ncp/ncp_3.0r_1.0d_norm.scan
+NORMAL az-1.0ds-ncp-2.5r-single $CBASS_DIR/control/scan/ncp/ncp_2.5r_1.0d_norm.scan
+NORMAL az-1.0ds-ncp-2.0r-single $CBASS_DIR/control/scan/ncp/ncp_2.0r_1.0d_norm.scan
+
+CONTINUOUS az-1.0ds-ncp-14.0r $CBASS_DIR/control/scan/ncp/ncp_14.0r_1.0d_cont.scan
+CONTINUOUS az-1.0ds-ncp-13.5r $CBASS_DIR/control/scan/ncp/ncp_13.5r_1.0d_cont.scan
+CONTINUOUS az-1.0ds-ncp-13.0r $CBASS_DIR/control/scan/ncp/ncp_13.0r_1.0d_cont.scan
+CONTINUOUS az-1.0ds-ncp-12.5r $CBASS_DIR/control/scan/ncp/ncp_12.5r_1.0d_cont.scan
+CONTINUOUS az-1.0ds-ncp-12.0r $CBASS_DIR/control/scan/ncp/ncp_12.0r_1.0d_cont.scan
+CONTINUOUS az-1.0ds-ncp-11.5r $CBASS_DIR/control/scan/ncp/ncp_11.5r_1.0d_cont.scan
+CONTINUOUS az-1.0ds-ncp-11.0r $CBASS_DIR/control/scan/ncp/ncp_11.0r_1.0d_cont.scan
+CONTINUOUS az-1.0ds-ncp-10.5r $CBASS_DIR/control/scan/ncp/ncp_10.5r_1.0d_cont.scan
+CONTINUOUS az-1.0ds-ncp-10.0r $CBASS_DIR/control/scan/ncp/ncp_10.0r_1.0d_cont.scan
+CONTINUOUS az-1.0ds-ncp-9.5r $CBASS_DIR/control/scan/ncp/ncp_9.5r_1.0d_cont.scan
+CONTINUOUS az-1.0ds-ncp-9.0r $CBASS_DIR/control/scan/ncp/ncp_9.0r_1.0d_cont.scan
+CONTINUOUS az-1.0ds-ncp-8.5r $CBASS_DIR/control/scan/ncp/ncp_8.5r_1.0d_cont.scan
+CONTINUOUS az-1.0ds-ncp-8.0r $CBASS_DIR/control/scan/ncp/ncp_8.0r_1.0d_cont.scan
+CONTINUOUS az-1.0ds-ncp-7.5r $CBASS_DIR/control/scan/ncp/ncp_7.5r_1.0d_cont.scan
+CONTINUOUS az-1.0ds-ncp-7.0r $CBASS_DIR/control/scan/ncp/ncp_7.0r_1.0d_cont.scan
+CONTINUOUS az-1.0ds-ncp-6.5r $CBASS_DIR/control/scan/ncp/ncp_6.5r_1.0d_cont.scan
+CONTINUOUS az-1.0ds-ncp-6.0r $CBASS_DIR/control/scan/ncp/ncp_6.0r_1.0d_cont.scan
+CONTINUOUS az-1.0ds-ncp-5.5r $CBASS_DIR/control/scan/ncp/ncp_5.5r_1.0d_cont.scan
+CONTINUOUS az-1.0ds-ncp-5.0r $CBASS_DIR/control/scan/ncp/ncp_5.0r_1.0d_cont.scan
+CONTINUOUS az-1.0ds-ncp-4.5r $CBASS_DIR/control/scan/ncp/ncp_4.5r_1.0d_cont.scan
+CONTINUOUS az-1.0ds-ncp-4.0r $CBASS_DIR/control/scan/ncp/ncp_4.0r_1.0d_cont.scan
+CONTINUOUS az-1.0ds-ncp-3.5r $CBASS_DIR/control/scan/ncp/ncp_3.5r_1.0d_cont.scan
+CONTINUOUS az-1.0ds-ncp-3.0r $CBASS_DIR/control/scan/ncp/ncp_3.0r_1.0d_cont.scan
+CONTINUOUS az-1.0ds-ncp-2.5r $CBASS_DIR/control/scan/ncp/ncp_2.5r_1.0d_cont.scan
+CONTINUOUS az-1.0ds-ncp-2.0r $CBASS_DIR/control/scan/ncp/ncp_2.0r_1.0d_cont.scan
+
+
+
+
+
+
+#-----------------------------
+# etc scans files.  
+#-----------------------------
+
+NORMAL cw-scan $CBASS_DIR/control/scan/cw_source_raster.scan
+NORMAL scanfile_charles $CBASS_DIR/control/scan/scanfile_charles.scan
+NORMAL scanfile_charles1 $CBASS_DIR/control/scan/scanfile_charles1.scan
+
+# other
+NORMAL short-az-scan $CBASS_DIR/control/scan/short_az_scan.scan
+
+NORMAL eml $CBASS_DIR/control/scan/eml.scan
+

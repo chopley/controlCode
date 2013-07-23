@@ -1,0 +1,58 @@
+<HEAD><TITLE>The log command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><a name=log> <code><b>log</b> $datatype(expr) | $function(args) | $variable | &quot;string&quot;, ...</code> </a></font>
+<P>
+Record a message in the log file and send it to control clients.
+<P>
+<DL>
+<DT> Arguments:
+<DD> <DL>
+     <DT><code>argument</code>
+     <DD> A value to be logged. This can have any one of the
+          following forms:
+          <UL>
+          <LI> <code>$datatype(expression)</code><BR>
+               Where <code>datatype</code> is the name of a datatype,
+	       and <code>expression</code> is an expression of that
+	       type.
+          <LI> <code>$function(args)</code><BR>
+               Where <code>function</code> is the name of any function
+	       and <code>args</code> are its arguments.
+          <LI> <code>$variable</code><BR>
+               Where <code>variable</code> is the name of a scalar variable.
+               If this is an aggregate type then it must be followed
+	       by a valid field selection expression that refers
+	       to a scalar member of the aggregate, or that of a
+	       sub-aggregate.
+          <LI> <code>&quot;string&quot;</code><BR>
+               Where <code>&quot;string&quot;</code> is an ASCII string,
+	       optionally containing C-style escape sequences.
+          </UL>
+     </DL>
+<P>
+<DT> Example:
+<DD> The following example logs the start of each new source.
+<pre>
+ foreach(Source s) {3c345, 3c273, 0552+398} {
+   log &quot;Starting observation of &quot;, $s, &quot; at &quot;, $time(UTC), &quot;.&quot;
+   track $s
+   until $elapsed &gt; 1m
+ }
+</pre>
+
+<DT> Context:
+<DD> The <code>log</code> command is used to record messages in the
+     log. If a log file is open then the messages will be recorded
+     there. They are also sent to be displayed in the log window
+     of any connected viewer programs.
+<P>
+     Note that unlike the similar <a href=print.html><code>print</code></a>
+     command, the <code>log</code> behaves the same regardless of
+     whether it is used interactively or in a script.
+</DL>
+
+<HR>
+Erik Leitch (Tue Mar 30 21:16:23 PST 2004)
+</BODY>

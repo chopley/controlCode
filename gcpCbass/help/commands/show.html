@@ -1,0 +1,101 @@
+<HEAD><TITLE>The "slew" command.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+
+<HR>
+<font color=blue><code><b>show</b> source, [utc=?, horizon=?, ant=?]</code></font>
+<P>
+Display contemporary information about a source.
+<P>
+<DL>
+<DT> Mandatory Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/Source.html>Source</a> source</b></code>
+     <DD> The source to describe.
+     </DL>
+<DT> Optional Arguments:
+<DD> <DL>
+     <DT><code><b><a href=../dataTypes/Date.html>Date</a> utc</b></code>
+     <DD> The date/time to use when calculating the displayed
+          statistics. When this argument is omitted the date and time
+          at which the command is executed are used instead.
+     <DT><code><b><a href=../dataTypes/Elevation.html>Elevation</a> horizon</b></code>
+     <DD> The elevation of the local horizon to be used when
+          calculating the rise and set times. When this argument is
+	  omitted the value that was last set via the <a
+	  href=horizon.html>horizon</a> command, is used.
+     <DT><code><b><a href=../dataTypes/Antennas.html>Antennas</a> ant</b></code>
+     <DD> When the source is given as 'current', this argument specifies 
+          the antennas for which current source information is desired.  
+	  For explicitly named sources, this argument is ignored.  If no 
+	  antennas are specified, the set of antennas defaults to what was set 
+	  in the last call to 
+	  <a href=setDefault../dataTypes/Antennas.html>setDefaultAntennas</a>.
+     </DL>
+<P>
+<DT> Example:
+<DD> The following example shows contemporary details about the moon.
+
+<pre>
+  show moon
+</pre>
+
+An example of the possible output is:
+
+<pre>
+  Source: moon  (31-JAN-1999 23:57:19 UTC)
+   AZ:  55:14:50.329  EL: -19:30:22.728  PA: -44:43:35.743
+   RA:   9:14:47.196 DEC:  14:54:40.407
+   Currently below the 43 degree horizon (rising).
+   Next rises in 5.5 hours, and sets in 11.9 hours.
+</pre>
+
+Note that the 43 degree horizon that is shown here implies that prior
+to this command, eg. in the initialization file, the following command
+was invoked.
+
+<pre>
+  horizon 43
+</pre>
+
+To override this temporarily, for example to see when the sun is going
+to set, you could use the optional horizon argument of the show
+command, as follows:
+
+<pre>
+  show sun, horizon=0
+</pre>
+
+Similarly, to show the position and almanac of a source at a different
+time, one can use the optional utc argument, as follows:
+
+<pre>
+  show moon, utc=$date+1
+</pre>
+
+where in this example the expression <code>$date+1</code> has been
+used to ask for the position of the moon in 24 hours. See the
+documentation of the <a href=../dataTypes/Date.html>Date</a> datatype for details
+on date specifications. For the above case I could also have specified
+the time explicitly, like:
+
+<pre>
+  show moon, utc=1-FEB-1999:23:57:19
+</pre>
+
+to achieve the same effect.
+
+ 
+<P>
+<DT>Context:
+<DD>The show command displays the location of the source after
+    correcting for precession and nutation. The reported horizon
+    coordinates do not take atmospheric refraction or telescope
+    tilts into account, so they will differ slightly from the actual
+    locations used by the control system.
+
+</DL>
+
+<P>
+<HR>
+Erik Leitch (Tue Mar 30 21:16:47 PST 2004)
+</BODY>

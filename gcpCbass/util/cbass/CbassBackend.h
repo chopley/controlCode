@@ -1,0 +1,213 @@
+#ifndef GCP_UTIL_CBASSBACKEND_H
+#define GCP_UTIL_CBASSBACKEND_H
+
+/*
+ *  CbassBackend.h
+ *  cbass_interface
+ *
+ *  Created by Stephen Muchovej on 11/17/09
+ *
+ */
+
+#include <iostream>
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <vector>
+
+#include "gcp/util/common/Directives.h"
+
+#if DIR_HAVE_USB
+#include "usb.h"
+#endif
+
+#define VendorID 0x04B4
+#define ProductID 0x0081
+#define	cy8051_CPUCS 0xE600
+#define BACKEND_TIMEOUT 15
+#define MAX_HEX_LENGTH 16
+
+//#define convToV 1.25/8191
+#define convToV 1/1024   //to keep the same level as before.
+#define convToV2 1/65536   //to keep the same level as before.
+
+namespace gcp {
+  namespace util {
+
+    // Class to Communicate with the Backend
+
+    class CbassBackend { 
+    public:
+
+      /**
+       *  Constructor
+       */
+      CbassBackend();
+
+      /**
+       * Destructor 
+       */ 
+      virtual ~CbassBackend();
+
+      /**
+       * if we are connected
+       */ 
+      bool connected_;
+      
+      /**
+       *  define the hex record and add it to the class
+       */
+      typedef struct {
+	int  	Length;
+	int   	Address;
+	int  	Type;
+	char  	Data[MAX_HEX_LENGTH];
+      } hexRecord;
+      
+      hexRecord record_;
+
+      /**
+       *  device handle over which we're talking
+       */
+#if DIR_HAVE_USB
+      usb_dev_handle* devHandle_;
+#endif
+      
+      /**
+       *  current sorted data
+       */
+      // timeVals_ should be a vector of time samples
+      // dataVals_ should be a 2D vector
+      std::vector<float> sortTimeVals_;
+      std::vector<float> sortTimeVals2_;
+      std::vector<float> sortBackendVersion_;
+      std::vector<uint> sortAvgSec_;
+      std::vector<std::vector<float> > sortDataVals_;
+      std::vector<std::vector<float> > sortRegData_;
+      std::vector<std::vector<float> > sortDiagnostics_;
+      std::vector<std::vector<float> > sortAlpha_;
+      std::vector<std::vector<float> > sortNonlin_;
+      std::vector<unsigned short> sortFlags_;
+      int startIndex_;
+      int currentIndex_;
+      bool burst_;  // indicates whether we're in burst mode.
+      int numFrames_; // how many frames are to be parsed
+
+      /**
+       *  data to be sorted
+       */
+      char data_[512];
+      std::vector<float> timeVals_;
+      std::vector<float> timeVals2_;
+      std::vector<std::vector<float> > dataVals_;
+      std::vector<std::vector<float> > regData_;
+      std::vector<unsigned short> flags_;
+      std::vector<float> packetVals_;
+      int arrayIndex_;
+
+      /**
+       * function to connect
+       */ 
+      void backendConnect();
+
+      /**
+       * disconnect
+       */
+      void backendDisconnect();
+
+      /**
+       *  hexRead
+       */
+      void hexRead(FILE* hexFile);
+
+      /** 
+       * load the hex file
+       */
+      void loadHex();
+
+      /**
+       *  Command types
+       */
+      enum Command {
+	INVALID           ,
+	READ_DATA          ,
+	FPGA_RESET        , 
+	FIFO_RESET        , 
+	SET_SWITCH_PERIOD ,
+	SET_INT_PERIOD    ,
+	SET_BURST_LENGTH  ,
+	SETUP_ADC         ,
+	TRIGGER           ,  
+	ACQUIRE_DATA      ,
+	ENABLE_CONTINUOUS ,
+	ENABLE_SIMULATOR  ,
+	ENABLE_NOISE      ,
+	ENABLE_WALSH      ,
+	ENABLE_WALSH_ALT  ,
+	ENABLE_WALSH_FULL ,
+	NON_LINEARITY     ,
+	WALSH_TRIM_LENGTH ,
+	SET_NONLIN        ,
+	SET_ALPHA         ,
+	ENABLE_ALPHA
+      };
+
+      /**
+       *  parse the data into a sensible format.
+       */
+      void parseData2(int bytesTransferred);
+      void parseData1(int bytesTransferred); 
+      void parseDataOld(int bytesTransferred);
+      void parseData(int bytesTransferred);
+      void parseData2011(int bytesTransferred);
+
+      /**
+       *  sort the data into sensible entries
+       */
+      void sortData(int numSamples);
+
+      /**
+       *  Generalized pack&issue command 
+       */
+      int issueCommand(Command type);
+      int issueCommand(Command type, unsigned char address);
+      int issueCommand(Command type, unsigned char* period);
+      int issueCommand(Command type, unsigned char address, unsigned char* period);
+      int issueCommand(Command type, unsigned char address, unsigned char* period, unsigned char channel, unsigned char stage);
+
+      /**
+       *  Obsolte old commands
+       */
+      int fpgaReset();
+      int usbReset();
+      int fifoReset();
+      int setSwPeriod(unsigned char period);
+      int setIntPeriod(unsigned char* period);
+      int setBurstLength(unsigned char* length);
+      int setupAdc();
+      int setBit(unsigned char address, unsigned char bit, unsigned char value);
+      int storeData(unsigned char address, unsigned char value);
+      int trigger();
+      int acquireData(unsigned char enable);
+      int enableContinuous(unsigned char enable);
+      int enableSimulator(unsigned char enable);
+      int enableNoise(unsigned char enable);
+      int enableSwitch(unsigned char enable);
+      int enableSwitchAlt(unsigned char enable);
+      int getData();
+
+
+    private:
+      void printBits(unsigned char feature);
+
+      /** 
+       *  function for bulk transfer.  wrapper for other functions
+       */
+      int bulkTransfer(char* data);
+      int bulkTransfer(char* data, int size);
+
+    }; // End class CbassBackend
+  }; // End namespace util
+}; // End namespace gcp
+#endif

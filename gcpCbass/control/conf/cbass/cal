@@ -1,0 +1,83 @@
+#-----------------------------------------------------------------------
+# This is an SZA register calibration file. Each line has one of the
+# following formats:
+#
+#   register offset factor
+#
+#  or
+#
+#   register {offset factor, offset factor, ...}
+#
+# In the first form, one offset and factor pair is assigned to each of
+# the specified elements of the register. In the second form a different
+# offset and factor can be assigned to each of the specified elements.
+# The register specification can be in any of the normally recognized
+# formats. The following are examples of some legal specifications:
+#
+#   board.reg       -  All elements of register 'reg' on board 'board'.
+#   board.reg[]     -  All elements of register 'reg' on board 'board'.
+#   board.reg[2-]   -  All but the first two elements of register 'reg' on
+#                      board 'board'.
+#   board.reg[-20]  -  Elements 0..20 of register 'reg' on board 'board'.
+#   board.reg[3-25] -  Elements 3..25 of register 'reg' on board 'board'.
+#
+# The calibrated value of a register is given by:
+#
+#   real = offset + register_value * factor
+#
+# For complex registers four calibration numbers are expected per register.
+# These are offset, factor, relative imaginary gain and imaginary
+# phase-offset. The real part of each register pair is calibrated as above.
+# The imaginary part is calibrated as:
+#
+#   imag = offset + factor * (imag/imag_gain + real * sin(phase)) /cos(phase)
+#
+# Note that any of the calibration factors and offsets can be expressed
+# as quotients by providing two numbers separated by a '/' character.
+#-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+# Register      Offset       Factor      Imag gain   Imag phase (degrees)
+#-----------------------------------------------------------------------
+
+#array.frame.lst             0        1/3.6e6              # msec -> hours
+antenna*.tracker.lst        0        1/3.6e6              # msec -> hours
+antenna*.tracker.ut1utc     0        1/1000               # msec -> sec
+antenna*.tracker.eqneqx     0        1/1000               # msec -> sec
+antenna*.tracker.refraction[0-1] 0        1/3.6e9         # uas -> degrees
+antenna*.tracker.refraction[2]   0        1/3.6e6         # mas -> degrees
+antenna*.tracker.encoder_off     0   1/3.6e6              # mas -> deg (az, el, dk)
+antenna*.tracker.az_limits       0   1/3.6e6              # mas -> deg (min, max)
+antenna*.tracker.el_limits       0   1/3.6e6              # mas -> deg (min, max)
+antenna*.tracker.tilts      0        1/3.6e6              # mas -> degrees
+antenna*.tracker.flexure    0        1/3.6e6              # mas/cos(el) -> deg/cos(el)
+#antenna*.tracker.collimation 0       1/3.6e6              # mas -> deg (mag, dir)
+antenna*.tracker.fixedCollimation 0       1/3.6e6              # mas -> deg (mag, dir)
+antenna*.tracker.siteFiducial[0-1] 0 1/3.6e6              # mas -> deg (lat, long)
+antenna*.tracker.siteFiducial[2]   0 1/1000               # mm -> meters (altitude)
+antenna*.tracker.siteActual[0-1]   0 1/3.6e6              # mas -> deg (lat, long)
+antenna*.tracker.siteActual[2]     0 1/1000               # mm -> meters (altitude)
+antenna*.tracker.location          0 1/1000               # mm -> meters 
+antenna*.tracker.equat_geoc[0]   0   1/54e6               # mas -> hours (ra)
+antenna*.tracker.equat_geoc[1]   0   1/3.6e6              # mas -> deg (dec)
+antenna*.tracker.equat_geoc[2]   0   1/1e6                # micro-AU -> AU (distance)
+antenna*.tracker.equat_off[0]    0   1/54e6               # mas -> hours (ra)
+antenna*.tracker.equat_off[1]    0   1/3.6e6              # mas -> deg (dec)
+antenna*.tracker.horiz_geoc      0   1/3.6e6              # mas -> deg (az, el, pa)
+antenna*.tracker.horiz_topo      0   1/3.6e6              # mas -> deg (az, el, pa)
+antenna*.tracker.horiz_mount     0   57.2958              # radians -> deg (az, el, pa)
+antenna*.tracker.horiz_off       0   57.2958              # radians -> deg (az, el, pa)
+antenna*.tracker.sky_xy_off      0   1/3.6e6              # mas -> deg (az, el, dk)
+antenna*.tracker.actual          0   57.2958              # radians -> deg (az, el, pa)
+antenna*.tracker.expected        0   57.2958              # radians -> deg (az, el, pa)
+antenna*.tracker.errors          0   57.2958              # radians -> deg (az, el, pa)
+antenna*.tracker.scan_off        0   1/3.6e6              # mas -> deg (az, el, dk)
+antenna*.tracker.expected_rates  0   1/3.6e6              # mas -> deg (az, el, dk)
+antenna*.tracker.actual_rates[0]    0   1.0725/3.6e6              # mas -> deg (az, el, dk) ACU max az speed 4.29deg/s
+antenna*.tracker.actual_rates[1]    0   0.4625/3.6e6              # mas -> deg (az, el, dk) ACU max el speed 1.85deg/s
+
+antenna*.servo.fast_az_err       0 1/1000  # milli-degrees to degrees
+antenna*.servo.fast_el_err       0 1/1000  # milli-degrees to degrees
+
+array.weather.relativeHumidity           0 100
+

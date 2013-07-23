@@ -1,0 +1,39 @@
+<HEAD><TITLE>SPT Datatypes.</TITLE></HEAD>
+<BODY bgcolor="#add8e6">
+<center><a href=../index.html>Index</a></center>
+<H1>SPT Datatypes.</H1>
+
+Unlike many languages, the SPT control language doesn't rely on
+general purpose datatypes. Instead it provides a collection of
+specifically targetted datatypes.  This allows the compiler to
+validate all entered values for range and type before a schedule
+runs. This is important in a language that is designed for unattended
+operation of a telescope. The builtin datatypes are listed under the
+heading <a href="../index.html#spt_dt">SPT Datatypes</a> in the contents
+page.
+
+<P>
+
+Users can also define aggregates of the builtin datatypes to form <a
+href=group.html#group>group</a> datatypes.
+
+<P>
+
+Many of the SPT datatypes are derived from more general datatype
+classes. All datatypes of a given class understand the same syntax and
+expressions, but they differ in the range of values that they
+allow. For further details, see the section on <a
+href=dt_class.html>datatype classes</a> or follow the links from the
+index below.
+
+<UL>
+<LI> <code><a href=dt_class.html#pathname>File and directory path names.</a></code>
+<LI> <code><a href=dt_class.html#set>Sets of named members.</a></code>
+<LI> <code><a href=dt_class.html#option>Named options.</a></code>
+<LI> <code><a href=dt_class.html#float>Floating Point numbers.</a></code>
+<LI> <code><a href=dt_class.html#unsigned>Unsigned integers.</a></code>
+<LI> <code><a href=dt_class.html#sexagesimal>Sexagesimal numbers.</a></code>
+</UL>
+
+Erik Leitch (Tue Mar 30 21:16:01 PST 2004)
+</BODY>

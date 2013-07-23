@@ -1,0 +1,388 @@
+From horizons@ssd.jpl.nasa.gov Tue Jul 15 15:00:57 1997
+Return-Path: <horizons@ssd.jpl.nasa.gov>
+Received: from ssd.jpl.nasa.gov by phobos
+	(4.1/DEI:4.43) id AA06285; Tue, 15 Jul 97 15:00:55 PDT
+Received: (from horizons@localhost) by ssd.jpl.nasa.gov (8.7.5/8.7.5) id OAA14402; Tue, 15 Jul 1997 14:59:52 -0700 (PDT)
+Date: Tue, 15 Jul 1997 14:59:52 -0700 (PDT)
+From: Horizons On-Line Ephemeris System <horizons@ssd.jpl.nasa.gov>
+Message-Id: <199707152159.OAA14402@ssd.jpl.nasa.gov>
+To: szadaq@szanet.ovro.caltech.edu
+Subject: Re: HORIZONS-BATCH-LONG
+References: <199707152200.PAA09023@goblin>
+In-Reply-To: <199707152200.PAA09023@goblin>
+Status: R
+Content-Length: 14377
+
+!$$SOF (ssd)         JPL/Horizons Execution Control VARLIST          July, 1997
+!         ftp://ssd.jpl.nasa.gov/pub/ssd/horizons_batch_example.long
+!++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+!
+! 1) First line in submitted job (this file) MUST begin !$$SOF
+! 2) Last line in submitted job (this file) MUST begin !$$EOF
+! 3) Lines in between must be a variable assignment, be blank, or start with !
+! 4) Variable assignment with SPACE OR COMMA in it MUST be enclosed in quotes. 
+! 5) Detailed explanation of batch job submittal at end of file.
+!
+!++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+! EMAIL_ADDR sets e-mail address output is sent to. Enclose in quotes. Null 
+! assignment uses mailer return address.
+
+ EMAIL_ADDR =  
+
+! COMMAND for program to execute. For program documentation explaining the
+! allowed commands, set to '?' (brief) or '?!' (long). Must be non-null. 
+! Examples: 'Moon' or '1;' or 'A<2.5; IN>7.8; STYP=S;'
+
+ COMMAND    = '?'
+
+! OBJ_DATA toggles return of object summary data. Values: YES or NO
+
+ OBJ_DATA   = YES 
+
+! MAKE_EPHEM toggles generation of ephemeris, if possible. Values: YES or NO
+
+ MAKE_EPHEM = YES 
+
+! TABLE_TYPE selects type of table to generate, if possible. 
+! Values: OBSERVER, ELEMENTS, VECTORS (or unique abbreviation)
+
+ TABLE_TYPE = OBS 
+
+! CENTER selects coordinate origin. Can be observing site name, ID#, 'coord' 
+! (which uses values stored in "SITE_COORD" and "COORD_TYPE") or 'geo' 
+! (geocentric). There are 600+ sites on file, so be as specific as possible 
+! or you will get a return listing of possible matching sites and will need 
+! to re-submit. ID code numbers are unique, if you know them. They can be
+! obtained from a string search.
+
+ CENTER     = Arecibo
+
+! REF_PLANE table reference plane; ECLIPTIC, FRAME or 'BODY EQUATOR' (or 
+! abbreviation [E,F,B]).  Used for TABLE_TYPE=VECTOR or TABLE_TYPE=ELEM only.
+
+ REF_PLANE  = ECLIPTIC
+
+! COORD_TYPE selects type of user coordinates in SITE_COORD. Used only 
+! when CENTER = 'coord'. Values: GEODETIC or CYLINDRICAL
+
+ COORD_TYPE = GEODETIC
+
+! SITE_COORD sets coordinates of type COORD_TYPE. If COORD_TYPE=GEODETIC,
+! then SITE_COORD is assumed to be the set {E. long., lat, height} (KM and DEG).
+! If COORD_TYPE=CYCLINDRICAL, SITE_COORD is assumed to be {E.lon,Dxy,Dz} also
+! in KM and DEG. Quotes ALWAYS necessary here! See main doc for more details.
+
+ SITE_COORD = '0,0,0'
+
+! START_TIME specifies ephemeris start time (i.e. YYYY-MMM-DD {HH:MM} )
+! ...where braces "{}" denote optional inputs. See program long doc for lists
+! of the numerous ways to specify times.
+
+ START_TIME = '1996-JAN-1 10:00'
+
+! STOP_TIME specifies ephemeris stop time (i.e. YYYY-MMM-DD {HH:MM})
+
+ STOP_TIME  = 1996-JAN-2 
+
+! STEP_SIZE gives ephemeris output print step in form: integer# {units}. 
+! Examples: '12 hours', '7 days', '60 minutes'
+
+ STEP_SIZE  = '60 min'
+
+! QUANTITIES is used only when TABLE_TYPE=OBS. It is a list of desired output
+! quantity codes. If multiple quantities, separate with commas and enclose in
+! quotes...
+!
+!  Select output quantities by the codes below, SEPARATED BY COMMAS:
+!("*" denotes output affected by setting of "APPARENT" variable (refraction))
+!
+! 1. Astrometric RA & DEC 10. Illuminated fraction   19. Helio range & rng rate
+!*2. Apparent RA & DEC    11. Defect of illumination 20. Obsrv range & rng rate
+! 3.   Rates; RA & DEC    12. Sat. angular separ/vis 21. One-Way Light-Time
+!*4. Apparent AZ & EL     13. Target angular diam.   22. Speed wrt Sun & obsrvr
+! 5.   Rates; AZ & EL     14. Obs sub-long & sub-lat 23. Sun-Earth-Object angle
+! 6. RA & DEC Offset      15. Sun sub-long & sub-lat 24. Sun-Object-Earth angle
+! 7. Local app. sid. time 16. Sub Sun Pos. Ang & Dis 25. Obj-Earth-Moon/Illum%
+! 8. Airmass              17. N. Pole Pos. Ang & Dis 26. Earth-Primary-Obj ang.
+! 9. Vis mag. & Surf Brt  18. Helio eclip. lon & lat 27. Pos. Ang;radius & -vel
+!                                                    28. Orbit Plane Angle
+!
+! ... OR select ONE of the pre-defined alphabetic formats below:
+! A = All quantities      B = Geocentric only        C = Small-body geocentric
+! D = Small-body topo.    E = Spacecraft geocentric  F = Spacecraft topocentric
+!
+
+ QUANTITIES = A
+
+! REF_SYSTEM specifies reference frame for any geometric and astrometric 
+! quantities. Values: 'J2000' for ICRF/J2000.0, or 'B1950' for FK4/1950.0
+
+ REF_SYSTEM = J2000 
+
+! OUT_UNITS selects output units when TABLE_TYPE=VECTOR or ELEMENT. Values
+! can be KM-S, AU-D, KM-D indicating distance and time units.
+
+ OUT_UNITS  = KM-S
+
+! VECT_TABLE selects table format when TABLE_TYPE=VECTOR. Values can be a 
+! single integer from 1 to 6 (see main doc for explanation).
+
+ VECT_TABLE = 3 
+
+! VEC_CORR selects level of correction to output vectors when TABLE_TYPE=VECTOR.
+! Values are NONE (geometric states), 'LT' (astrometric states) or 'LT+S'
+! (astrometric states corrected for stellar aberration ... NOT apparent).
+
+ VECT_CORR  = NONE
+
+! CAL_FORMAT selects type of date output when TABLE_TYPE=OBSERVER. Values can
+! be CAL, JD or BOTH
+
+ CAL_FORMAT = CAL
+
+! ANG_FORMAT selects RA/DEC output when TABLE_TYPE=OBSERVER. Values can be 
+! HMS or DEG
+
+ ANG_FORMAT = HMS
+
+! APPARENT toggles refraction correction of apparent coordinates if  
+! users set TABLE_TYPE=OBSERVER. Values can be "AIRLESS" or "REFRACTED".
+
+ APPARENT   = AIRLESS
+
+! TIME_TYPE selects input/output time type when TABLE_TYPE=OBSERVER. Values 
+! can be either UTC or TT. 
+
+ TIME_TYPE  = UTC
+
+! ELEV_CUTOFF an integer from -90 to 90 degrees, used when TABLE_TYPE=OBS to
+! skip printout when object elevation is less than specified.
+
+ ELEV_CUT   = -90
+
+! SKIP_DAYLT toggles skipping of print-out when daylight at observing site.
+! Used only when TABLE_TYPE=OBS. Values are YES or NO.
+
+ SKIP_DAYLT = NO
+
+! AIRMASS select airmass cutoff; print-out is suspended if relative optical
+! airmass is greater than the single floating point value specified. Note
+! than 1.0=zenith, 38.0 ~= local-horizon. If value is set >= 38.D0, this
+! turns OFF the filtering effect. Used only when TABLE_TYPE=OBS
+
+ AIRMASS    = 38.D0 
+
+! EXTRA_PREC toggles additional output digits on RA/DEC when TABLE_TYPE=OBS
+! Values are YES or NO.
+
+ EXTRA_PREC = NO
+
+! CSV_FORMAT toggles output of table in comma-separated-value format, suitable
+!for import into spreadsheet programs.
+
+ CSV_FORMAT = NO
+
+!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+! The remaining inputs are used ONLY when defining an arbitrary body for the
+! integrator (COMMAND=;) using HELIOCENTRIC ECLIPTIC OSCULATING ELEMENTS.
+!
+!     OBJECT ....  Name of user input object.
+!     EPOCH .....  Julian ephemeris date (TDB) of osculating elements
+!     FRAME .....  Reference ecliptic frame of elements. Values: J2000 or B1950
+!      EC .......  Eccentricity
+!      QR .......  Perihelion distance in (AU)
+!      TP .......  Perihelion Julian date
+!      OM .......  Longitude of ascending node (DEGREES) wrt ecliptic
+!      W ........  Argument of perihelion (DEGREES) wrt ecliptic
+!      IN .......  Inclination (DEGREES) wrt ecliptic
+!
+! Instead of {TP, QR}, {MA, A} or {MA,N} may be specified (not both):
+!      MA .......  Mean anomaly (DEGREES)
+!      A ........  Semi-major axis (AU)
+!      N ........  Mean motion (DEG/DAY)
+!
+! Note that if you specify elements with MA, {TP, QR} will be computed from
+! them. The program always uses TP and QR.
+! 
+! OPTIONAL INPUTS
+! ---------------
+!       RAD ......  Object radius (KM)
+! 
+!  For asteroids, additional OPTIONAL parameters can be given:
+!       H ........  Absolute magnitude parameter (asteroid)
+!       G ........  Magnitude slope parameter; can be < 0 (asteroid)
+! 
+!  For comets, additional OPTIONAL parameters can be given:
+!       M1 ........ Total absolute magnitude (comet)
+!       M2 ........ Nuclear absolute magnitude (comet)
+!       K1 ........ Total magnitude scaling factor (comet)
+!       K2 ........ Nuclear magnitude scaling factor (comet)
+!       PHCOF ..... Phase coefficient for k2=5 (comet)
+!       A1 ........ Radial non-grav accel (comet), AU/d^2
+!       A2 ........ Transverse non-grav accel (comet),  AU/d^2
+!
+ OBJECT =
+ EPOCH  = 
+ FRAME  =
+ EC     =
+ QR     =
+ TP     =
+ OM     =
+ W      =
+ IN     =
+ MA     =
+ A      =
+ N      =
+ RAD    =
+
+! Next two (H and G) for asteroids only
+ H      =
+ G      =
+
+! Next group for comets only
+ M1     =
+ M2     =
+ K1     =
+ K2     =
+ PHCOF  =
+ A1     =
+ A2     =
+!
+!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!
+!++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+!
+! INTRODUCTION:
+! =============
+!   This file is an example run-stream input for e-mail job submittals. It is
+! recommended this original be preserved and that you modify copies of it for 
+! subsequent runs, perhaps deleting these explanatory comments in your working
+! copy.
+!
+!   Horizons can be FULLY accessed by telnet or e-mail. A subset of 
+! capabilities can be accessed in GUI form via WWW browser. There are three
+! ways to obtain complete program documentation:
+!
+!   #1) Anonymous FTP (PostScript doc)
+!             ftp://ssd.jpl.nasa.gov/pub/ssd/Horizons_doc.ps
+!
+!   #2) E-mail "horizons@ssd.jpl.nasa.gov" with message subject header of
+!         "HORIZONS-DOC-TEXT"    (ASCII file)
+!               or
+!         "HORIZONS-DOC-PS"      (PostScript file)
+!
+!   #3) E-mail this file with "COMMAND = '?!'" to "horizons@ssd.jpl.nasa.gov"
+!       with subject header "JOB-SUBMITTAL" (segmented ASCII file returned) 
+!
+!
+! ACCESSING HORIZONS:
+! ===================
+!
+!  1) TELNET (full, interactive access w/prompts, on-line help, customized 
+!             output, mail, FTP and Kermit transfer): 
+!       telnet ssd.jpl.nasa.gov 6775
+!
+!  2) WWW (partial, passive interactive GUI-style access to major features):
+!       Point WWW browser to "http://ssd.jpl.nasa.gov/cgi-bin/eph_form"
+!
+!  3) E-MAIL (full, batch type access)
+!       E-mail a modified version of this text file to Horizons and receive 
+!       output back, also by e-mail. 
+!
+!
+! BATCH JOB SUBMITTAL:
+! ====================
+!   This file is called a "varlist". It is similar in concept to FORTRAN 
+! namelists, but more flexible. It is a way of loading variables into a 
+! running program from outside the program. Within a line, everything after 
+! an exclamation mark (!) is considered a comment and ignored. You may
+! comment your own run-streams when you develop them.
+!
+! MAJOR POINTS:
+! ------------
+! 1) One important thing to remember is .... variables that are lists (contain
+!    spaces or are comma-delimited), MUST be enclosed in quotes. For example,
+!
+!                     QUANTITIES = 1,3,5,6 
+!                     COMMAND = A > 10; A < 12;
+!                     START_TIME = 1996-jan-1 10:00
+!                     STOP_TIME = 1996-jan-2 10:00
+!
+! ... WON'T WORK. Enclose them in quotes as below:
+!
+!                     QUANTITIES = '1,3,5,6'
+!                     COMMAND = 'A > 10; A < 12;'
+!                     START_TIME = '1996-jan-1 10:00'
+!                     START_TIME = '1996-jan-2 10:00'
+!
+! 2) The order of the variables in this file doesn't matter,
+!
+! 3) Not all variables need to be set. For example, if you want to produce an
+!    observer table (TABLE_TYPE=OBS), VECT_TABLE is ignored by the program.
+!
+! 4) If you neglect to specify a variable that IS needed, the program will 
+!    assume pre-set default values. 
+!
+! HOW TO SUBMIT A JOB:
+! --------------------
+!
+!   #1) Edit this text file, changing the variables to produce desired output
+!
+!   #2) Mail the final ASCII file to: "horizons@ssd.jpl.nasa.gov". 
+!
+!        The message SUBJECT line must read "JOB-SUBMITTAL" (case insensitive).
+!
+!        - If the message arrives without this keyword as the subject, your job 
+!          will not be executed.
+!        - If the first characters in this file are not "!$$SOF", your job will 
+!          not be executed. 
+!        - If you send the file as a MIME-encoded attachment or PostScript
+!          file or in some proprietary word-processor format, your job will 
+!          not be executed. Readable ASCII text only!
+!
+! Horizons will then read these variables and execute accordingly. Output
+! will be returned by e-mail immediately upon program completion. This should
+! normally take seconds to minutes, depending on run length. However, e-mail
+! transmission delays are unpredictable functions of the network state. Thus, 
+! the reception delay you experience might vary day-to-day.
+!
+! It is helpful to read the main program documentation or execute Horizons
+! interactively with the telnet interface a few times, to understand the effect
+! of each variable.
+!
+! UPDATES:
+!
+!   Check the anonymous ftp site for the files 
+!
+!       ftp://ssd.jpl.nasa.gov/pub/ssd/horizons_batch_example.long
+!       ftp://ssd.jpl.nasa.gov/pub/ssd/horizons_batch_example.brief
+!
+! ... occasionally. They will be updated to reflect new program capabilities, 
+! when they are installed. You could also periodically submit a batch job with 
+! "COMMAND=NEWS" to retrieve any program announcements about new features or,
+! of course, connect to the telnet port directly and do the same thing.
+!
+!   It is also possible to retrieve the latest example batch-files by sending
+! an e-mail request. Mail to "horizons@ssd.jpl.nasa.gov" with one of these
+! phrases in the SUBJECT line of the message:
+!
+!   "HORIZONS-BATCH-LONG"   (latest fully commented example run-stream)
+!   "HORIZONS-BATCH-BRIEF"  (latest example run-stream without comments)
+!
+!
+! SUMMARY OF SERVER COMMANDS:
+!
+! The message SUBJECT line sent to "horizons@ssd.jpl.nasa.gov" must be one of
+! those shown below:
+!
+!    SUBJECT HEADER        MEANING
+!    --------------------  -----------------------------------------------------
+!    JOB-SUBMITTAL         (Horizons run-stream)
+!    HORIZONS-BATCH-LONG   (Request latest fully commented example batch file)
+!    HORIZONS-BATCH-BRIEF  (Request latest example batch file without comments)
+!    HORIZONS-DOC-TEXT     (Request ASCII version of current documentation)
+!    HORIZONS-DOC-PS       (Request PostScript version of current documentation)
+!    HORIZONS-QUESTION     (Message fowarded to cognizant engineer) 
+!
+!$$EOF+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+

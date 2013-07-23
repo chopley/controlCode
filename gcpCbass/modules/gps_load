@@ -1,0 +1,38 @@
+#!/bin/sh
+module="gps"
+device="gps"
+mode="664"
+
+os=`uname -r`
+kernel=`expr substr $os 1 3`
+
+# remove other drivers that use parallel port
+#/sbin/rmmod lp
+#/sbin/rmmod parport_pc
+
+# invoke insmod with all arguments we were passed
+# and use a pathname, as newer modutils don't look in . by default
+
+if [ "$kernel" == "2.6" ]; then
+/sbin/insmod -f ./$module.ko $* || exit 1
+else
+/sbin/insmod -f ./$module.o $* || exit 1
+fi
+
+# remove stale nodes
+rm -f /dev/${device}0
+
+major=`awk "\\$2==\"$module\" {print \\$1}" /proc/devices`
+
+echo $major
+
+mknod /dev/${device}0 c $major 0
+
+# give appropriate group/permissions, and change the group.
+# Not all distributions have staff; some have "wheel" instead.
+group="staff"
+grep '^staff:' /etc/group > /dev/null || group="wheel"
+
+chgrp $group /dev/${device}0
+chmod $mode /dev/${device}0
+

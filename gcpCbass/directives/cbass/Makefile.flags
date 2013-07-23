@@ -1,0 +1,73 @@
+# Add include directories for the common library
+
+INC  += -I$(GCPTOP)
+
+#-----------------------------------------------------------------------
+# Makefile.directives should contain a bunch of environment variables
+# which will control how code for each experiment is compiled.  Make sure these are
+# defined.
+#
+# Makefile.directives is derived from a template file called 
+# Makefile.directives.template.  After a fresh checkout, 
+# Makefile.directives can be created by the make_make_directives rule.  
+#
+# If no Makefile.directives file exists, it will be automatically created
+# from the template file.
+#
+# Now see if any directives have changed since the last time we compiled,
+# and store the new values.
+#-----------------------------------------------------------------------
+
+DIRECTIVES := $(wildcard $(GCPTOP)/directives/$(SPECIFIC)/Makefile.directives)
+ifeq ($(DIRECTIVES), $(GCPTOP)/directives/$(SPECIFIC)/Makefile.directives)
+  include $(GCPTOP)/directives/$(SPECIFIC)/Makefile.directives
+else 
+  include directives/$(SPECIFIC)/Makefile.directives.template
+endif
+
+ifeq ($(strip $(HAVE_USB)),)
+ $(error HAVE_USB (1/0) has not been defined.  Set up your environment)
+endif
+
+# These must be individually exported or a later substitution in a sub
+# make file work. There must be a way to get Make to expand these
+# on-definition below, but I don't know how to do it.
+
+export HAVE_USB
+
+# Create a flag string we can export to avoid having to explicitly
+# construct this mess in each makefile below us
+
+export SPECIFIC_FLAGS := -DHAVE_USB=$(HAVE_USB)
+
+CCFLAGS += $(SPECIFIC_FLAGS)
+
+#-----------------------------------------------------------------------
+# See if directives have changed.  The make_directives rule causes the
+# current flags to be written into a file Makefile.directives.last.
+# If this file exists in the current directory, source it now, to
+# check the last value of each flag against the current one.
+#-----------------------------------------------------------------------
+
+OLDDIRECTIVES := $(wildcard $(GCPTOP)/directives/$(SPECIFIC)/Makefile.directives.last)
+
+# If the file exists, OLDDIRECTIVES should be non-empty on return from
+# the wildcard function
+
+ifeq ($(OLDDIRECTIVES), $(GCPTOP)/directives/$(SPECIFIC)/Makefile.directives.last)
+
+  include $(GCPTOP)/directives/$(SPECIFIC)/Makefile.directives.last
+
+  SPECIFIC_DIR_HAVE_CHANGED = n
+
+  ifneq ($(HAVE_USB), $(OLD_HAVE_USB))
+    SPECIFIC_DIR_HAVE_CHANGED = y
+  endif
+
+# If the file doesn't exist, assume that directives have changed
+
+else
+  SPECIFIC_DIR_HAVE_CHANGED = y
+endif
+
+export SPECIFIC_DIR_HAVE_CHANGED
