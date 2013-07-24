@@ -119,7 +119,7 @@ bool Labjack::connect(int serialNumber)
 	//	COUT("THIS SERIAL: " << serial);
 	if( serial == localID ){ 
 	  hDevice_  = hDevice_;
-	  //	  COUT("Found our device");
+	  COUT("Found our device");
 	  //now we get the calibration information that we watn
 	  getCalibrationInfo();
 	  connected_ = true;
@@ -128,7 +128,14 @@ bool Labjack::connect(int serialNumber)
 	  break;
 	}  else {
 	  //No matches, not our device
-	  LJUSB_CloseDevice(hDevice_);
+	  try{
+		LJUSB_CloseDevice(hDevice_);
+	  }
+	  catch(...){
+	  COUT("Failed to close device");
+		}
+	  connected_ = false;
+	  hDevice_ = 0;
 	}
       } //else localID >= 0 end
     } //if hDevice != NULL end
