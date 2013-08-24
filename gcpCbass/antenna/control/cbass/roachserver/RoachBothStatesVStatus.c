@@ -477,6 +477,13 @@ void *test_thread(void *arg){
 					printf("ERROR connection closed\n",n);
 					break;
 				}
+				if(changeMode!=0){
+					printf("Closing polarization thread \n");
+					close(childfd);
+					close(sock);
+					pthread_exit(&retThread1);
+					break;
+				}
 		//		printf("recv 1b blocking %d %d %s\n",n,childfd,buf);
 		//		printf("server received %d %d %d bytes: %s\n", n, buf,childfd);
 			//////////////////////definitions of the parsers///////////
@@ -650,12 +657,6 @@ void *test_thread(void *arg){
 
 						}
 					}
-				if(changeMode!=0){
-					printf("Closing thread \n");
-					close(childfd);
-					close(sock);
-					pthread_exit(&retThread1);
-				}
 			////////////////////////end of Parser//////////////////////////////
 				if(returnDataSize>0){//i.e we have received data from the control system 
 			//		printf("Attempting to send a reply %d\n",n);
