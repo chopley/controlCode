@@ -468,6 +468,18 @@ void *test_thread(void *arg){
 					recv(childfd, buf, 1024,0);
 					//printf("Receiving %d\n",n);
 				}
+				if (closeThread1 !=0){
+					if(changeMode!=0){
+					printf("Changing Mode\n",n);
+					}
+					printf("Shutting down the polarization thread\n",n);
+					closeThread1=0; //reset the global variable
+					shutdown(childfd,SHUT_RDWR);
+					shutdown(sock,SHUT_RDWR);
+					printf("Closing thread \n");
+					pthread_exit(&retThread1);
+					}
+
 				if (n <0){
 					printf("ERROR reading from socket\n",n);
 					shutdown(childfd,SHUT_RDWR);
@@ -525,8 +537,10 @@ void *test_thread(void *arg){
 					writeVal=atoi(&commandValue);
 					printf("buf %s %d %d\n",buf,commandValue,writeVal);	
 					changeMode=writeVal;
+					printf("buf1 %s %d %d\n",buf,commandValue,writeVal);	
 					returnDataPtr=(char *)&changeModeCommand;
 					returnDataSize=sizeof(changeModeCommand);
+					printf("buf2 %s %d %d\n",buf,commandValue,writeVal);
 				}
 				else if(!strncmp(buf,PhaseShifterCommand,10)){
 					printf("PhaseShifter Command\n");
@@ -616,14 +630,6 @@ void *test_thread(void *arg){
 				}
 				
 
-				}
-
-				if(closeThread1!=0){
-					printf("Closing thread \n");
-					shutdown(childfd,SHUT_RDWR);
-					shutdown(sock,SHUT_RDWR);
-					closeThread1=0;
-					pthread_exit(&retThread1);
 				}
 			////////////////////////end of Parser//////////////////////////////
 
@@ -1163,7 +1169,7 @@ void *packROACHpacket_thread(void *arg){
 		timediff_usec=t1.tv_usec-t2.tv_usec;
 		tottimediff=timediff+timediff_usec/1000000;
 		if(closeThread2!=0){
-			printf("Closing thread \n");
+			printf("Closing packing thread \n");
 			closeThread2=0;
 			pthread_exit(&retThread2);
 		}
@@ -1871,35 +1877,70 @@ void initCoeffs(){
 
 	
 	while(i<16){
-		printf("i=%d\n",i);
+	//	printf("i=%d\n",i);
 		sprintf(path_to_registerNames[i],"/proc/%s/hw/ioreg/%s",job[1],registerNames[i]);
-		printf("%s\n",path_to_registerNames[i]);
+	//	printf("%s\n",path_to_registerNames[i]);
 		fp=fopen(filenames[i], "r");
 		fpreg=fopen(path_to_registerNames[i],"w");
 		j=0;
 		while(fgets(line, 80, fp) != NULL)
 			{ /* get a line, up to 80 chars from fr.  done if NULL */
 			 sscanf(line, "%ld", &ampcoffs[j]);
-			 printf("%d %d\n",j,ampcoffs[j]);
+		//	 printf("%d %d\n",j,ampcoffs[j]);
 			 j++;
 			}
-		printf("j=%d\n",j);
+	//	printf("j=%d\n",j);
 		fclose(fp);
-		printf("j=%d\n",j);
+	//	printf("j=%d\n",j);
 		fwrite(&ampcoffs[0], 32*4, 1, fpreg);
 		fclose(fpreg);
-		printf("j=%d\n",j);
+	//	printf("j=%d\n",j);
 		i++;
 	}
 	
 }
 
+void initStandardCoeffs(){
+//this functtion reads in the coefficients stored as text files on the Power PC. These are used to correct the gain/phase of the 4 RF data streams used in the C-BASS survey
+	FILE *fp,*fpreg;
+	extern char *job[5];
+	char line[80];
+	char registerNames[16][50]={"amp_EQ0_coeff_real","amp_EQ1_coeff_real","amp_EQ2_coeff_real","amp_EQ3_coeff_real","amp_EQ4_coeff_real","amp_EQ5_coeff_real","amp_EQ6_coeff_real","amp_EQ7_coeff_real","amp_EQ0_coeff_imag","amp_EQ1_coeff_imag","amp_EQ2_coeff_imag","amp_EQ3_coeff_imag","amp_EQ4_coeff_imag","amp_EQ5_coeff_imag","amp_EQ6_coeff_imag","amp_EQ7_coeff_imag"};
+	char path_to_registerNames[16][50];
+	char path_timeStamp[128];			// Path to acc_num counter data
+	char path_acc_cnt[128];			// Path to acc_num counter data
+	//sprintf(path_amp0realcoffs, "/proc/%s/hw/ioreg/amp_EQ0_coeff_real", job[1]);
+	unsigned int ampcoffs[35];
+        int acc_new,acc_old,acc_cntr,timeStamp;
+
+	unsigned int i=0;
+	unsigned int j=0;
+	i=0;
+	sprintf(path_timeStamp, "/proc/%s/hw/ioreg/Subsystem1_timeStamp", job[1]);
+	sprintf(path_acc_cnt, "/proc/%s/hw/ioreg/Subsystem1_readAccumulation", job[1]);
+
+	for(i=0;i<=34;i++){
+		ampcoffs[i]=1000;
+		printf("ampcoffs i %d\n",ampcoffs[i]);
+	}
+	while(i<16){
+	//	printf("i=%d\n",i);
+		sprintf(path_to_registerNames[i],"/proc/%s/hw/ioreg/%s",job[1],registerNames[i]);
+	//	printf("%s\n",path_to_registerNames[i]);
+		fpreg=fopen(path_to_registerNames[i],"w");
+		fwrite(&ampcoffs[0], 32*4, 1, fpreg);
+		fclose(fpreg);
+	//	printf("j=%d\n",j);
+		i++;
+	}
+	
+}
 
 int main(int argc, char *argv[])
 {
 //the main loop- this loop starts up the other threads, and also allows one to switch between operating modes (i.e between power observation and polarisation observation
         int sock, connected, bytes_recieved , true = 1,r; 
-	int t=1;
+	int t=1,sleepCounter=0;
         char send_data [1024] , recv_data[1024];       
 	pthread_t testThread_id;
 	pthread_t testThreadPower_id;
@@ -1949,38 +1990,71 @@ int main(int argc, char *argv[])
 	pthread_create(&testThread_id,NULL,test_thread,NULL);
 	pthread_create(&packROACHpacket_thread_id,NULL,packROACHpacket_thread,NULL);
         printf("Here started thread\n");
-
+	changeMode=0;	
         while(1){
 	sleep(2);
 	if(changeMode!=0){
-		printf("Need to change the mode");
+		printf("Need to change the mode %d",changeMode);
 		if(changeMode==1){
+			printf("changeMode ==1\n");
+			sleep(2);
 			changeMode=0; //reset the global variable
 			closeThread1=1;
 			closeThread2=1;
+			//pthread_cancel(testThread_id, 0); 
+		//	pthread_cancel(packROACHpacket_thread_id, 0) ;
 			//if the thread is still open wait for it to die
-			if(pthread_kill(test_thread, 0) == 0)
-			{
-			while(closeThread1!=0){
-				usleep(100000);
-				printf("Here");
-				}
+		//f(pthread_kill(&testThread_id, 0) == 0){
+			sleepCounter=0;
+			while(closeThread1!=0) {
+			usleep(100000);
+			printf("Here closeThread1");
+			if(sleepCounter>100){	//this is terrible coding 
+				closeThread1=0;
 			}
-			while(closeThread2!=0){
-				usleep(100000);
+			sleepCounter++;
 			}
+			
+			sleepCounter=0;
+			while(closeThread2!=0) {
+			usleep(100000);
+			printf("Here closeThread1");
+			if(sleepCounter>100){	//this is terrible coding 
+				closeThread2=0;
+			}
+			sleepCounter++;
+			}
+		//	
+	//		sleepCounter=0;
+	//		while(pthread_kill(&testThread_id, 0) == 0){
+	//			usleep(100000);
+	//			printf("Here closeThread1");
+	//			if(sleepCounter>100){	//this is terrible coding
+	//				closeThread1=0; 
+	//				break;
+	//			}
+	//			sleepCounter++;
+	//		}
+			
+			
+			
+	//		if(pthread_kill(&packROACHpacket_thread_id) == 0){
+	//		while(closeThread2!=0){
+	//			usleep(100000);
+	//		}
+	//		}
 			VERSION=1;
 			printf("Changing to Polarisation");
 			sprintf(commandStr,"kill -kill %s",pidStr);
 			printf("%s",commandStr);
 			system(commandStr) ;
 			sleep(2);
+			//start the polarization bof file
 			system(polProg);
 			sleep(2);
 			system("pidof -s rx_10dec_stat_2013_Jan_11_1059.bof > pid.txt");
-			
 			sleep(2);
-
+			/////
 			fp=fopen("pid.txt", "r");
 			j=0;
 			while(fgets(line, 80, fp) != NULL)
@@ -1992,32 +2066,62 @@ int main(int argc, char *argv[])
 			fclose(fp);
 			j=sprintf(pidStr,"%d",pidProg);//global variable for access in the loop
 			job[1]=&pidStr;
+			sleep(2);
+			initCoeffs();
+			printf("Initiating Coeffs\n");
+			sleep(2);
 			pthread_create(&testThread_id,NULL,test_thread,NULL);
 			pthread_create(&packROACHpacket_thread_id,NULL,packROACHpacket_thread,NULL);
-			printf("Starting up the roachn");
-			initCoeffs();
+			printf("Here started thread\n");
+			}
 		}
-		else if(changeMode==2){
-			VERSION=10000;
+		if(changeMode==2){
+			printf("changeMode ==2\n");
+			sleep(2);
 			changeMode=0; //reset the global variable
 			closeThread1=1;
 			closeThread2=1;
-			while(closeThread1!=0){
-				usleep(100000);
-			}
-			while(closeThread2!=0){
-				usleep(100000);
-			}
-			printf("Changing to Power");
-			sprintf(commandStr,"kill -kill %s",pidStr);
-			system(commandStr) ;
-			sleep(0.5);
-			system(powerProg);
-			sleep(1);
-			system("pidof -s rx_10dec_stat_pow_2013_Jan_11_1408.bof > pid.txt");
+			//pthread_cancel(testThread_id, 0); 
+		//	pthread_cancel(packROACHpacket_thread_id, 0) ;
+			//if the thread is still open wait for it to die
+		//	if(pthread_kill(&testThread_id, 0) == 0)
+		//	{
 			
-			sleep(0.2);
-
+			sleepCounter=0;
+			while(closeThread1!=0) {
+			usleep(100000);
+			printf("Here closeThread1");
+			if(sleepCounter>100){	//this is terrible coding 
+				closeThread1=0;
+			}
+			sleepCounter++;
+			}
+			
+			sleepCounter=0;
+			while(closeThread2!=0) {
+			usleep(100000);
+			printf("Here closeThread1");
+			if(sleepCounter>100){	//this is terrible coding 
+				closeThread2=0;
+			}
+			sleepCounter++;
+			}
+			
+			VERSION=10000;
+			printf("Changing to PowerMode\n");
+			sprintf(commandStr,"kill -kill %s",pidStr);
+			printf("%s",commandStr);
+			system(commandStr) ;
+			sleep(2);
+			//start the polarization bof file
+			system(powerProg);
+			sleep(2);
+			system("pidof -s rx_10dec_stat_pow_2013_Jan_11_1408.bof > pid.txt");
+			//system(polProg);
+			//sleep(2);
+			//system("pidof -s rx_10dec_stat_2013_Jan_11_1059.bof > pid.txt");
+			sleep(2);
+			/////
 			fp=fopen("pid.txt", "r");
 			j=0;
 			while(fgets(line, 80, fp) != NULL)
@@ -2029,11 +2133,20 @@ int main(int argc, char *argv[])
 			fclose(fp);
 			j=sprintf(pidStr,"%d",pidProg);//global variable for access in the loop
 			job[1]=&pidStr;
-			pthread_create(&testThreadPower_id,NULL,test_threadPower,NULL);
-			pthread_create(&packROACHpacket_threadPower_id,NULL,packROACHpacket_threadPower,NULL);
+			sleep(2);
 			initCoeffs();
+			//initCoeffs();
+			printf("Initiating Coeffs\n");
+			sleep(2);
+			pthread_create(&testThread_id,NULL,test_thread,NULL);
+			pthread_create(&packROACHpacket_thread_id,NULL,packROACHpacket_threadPower,NULL);
+			printf("Here started thread\n");
+			}
 		}
-	}
+	
 
-	}
-} 
+}
+ 
+		//	system(powerProg);
+		//	sleep(2);
+	//		system("pidof -s rx_10dec_stat_pow_2013_Jan_11_1408.bof > pid.txt");
