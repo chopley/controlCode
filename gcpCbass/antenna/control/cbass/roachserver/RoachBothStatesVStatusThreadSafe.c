@@ -39,6 +39,9 @@ volatile int changeMode=0;
 volatile int closeThread1=0;
 volatile int closeThread2=0;
 volatile int VERSION=1;
+pthread_mutex_t lock_testThread;
+pthread_mutex_t lock_packRoach;
+pthread_mutex_t lock_changeMode;
 typedef struct circular_buffer
 {
     void *buffer;     // data buffer
@@ -276,7 +279,9 @@ void *test_threadPower(void *arg){
 					commandValue=buf[11];	
 					writeVal=atoi(&commandValue);
 					printf("buf %s %d %d\n",buf,commandValue,writeVal);	
-					changeMode=writeVal;
+					pthread_mutex_lock(&lock_changeMode);
+						changeMode=writeVal;
+					pthread_mutex_unlock(&lock_changeMode);
 					returnDataPtr=(char *)&changeModeCommand;
 					returnDataSize=sizeof(changeModeCommand);
 				}
@@ -299,13 +304,15 @@ void *test_threadPower(void *arg){
 					returnDataSize=12;
 
 				}
-				if(closeThread1!=0){//cleanup thread and close it up
-					printf("Closing thread \n");
-					shutdown(childfd,SHUT_RDWR);
-					shutdown(sock,SHUT_RDWR);
-					closeThread1=0;
-					pthread_exit(&retThread1);
-				}
+					if(closeThread1!=0){//cleanup thread and close it up
+						printf("Closing thread \n");
+						shutdown(childfd,SHUT_RDWR);
+						shutdown(sock,SHUT_RDWR);
+						pthread_mutex_lock(&lock_testThread);
+							closeThread1=0;
+						pthread_mutex_unlock(&lock_testThread);
+						pthread_exit(&retThread1);
+					}
 			////////////////////////end of Parser//////////////////////////////
 				if(n>=0){//i.e we have received data from the control system 
 			//		printf("Attempting to send a reply %d\n",n);
@@ -324,13 +331,13 @@ void *test_threadPower(void *arg){
 
 			printf("server closing connection with control system\n");
 
-			shutdown(childfd,SHUT_RDWR);
-			shutdown(sock,SHUT_RDWR);
+		//	shutdown(childfd,SHUT_RDWR);
+		//	shutdown(sock,SHUT_RDWR);
 		}
 		CATCH{
 			printf("server closing connection with control system\n");
-			shutdown(childfd,SHUT_RDWR);
-			shutdown(sock,SHUT_RDWR);
+			//shutdown(childfd,SHUT_RDWR);
+			//shutdown(sock,SHUT_RDWR);
 			printf("Exception in the TCP server catch\n");}
 		ETRY;
 	}
@@ -343,6 +350,7 @@ void *test_thread(void *arg){
 //this is a thread that runs when we are in the polarisation mode- you can define commands from the control system and data feed back in here
 	int sd,rc,n, cliLen,read_ret,n2;
 	extern volatile int changeMode,closeThread1;
+	int changeModeTemp,closeThread1Temp;
 	int i,ij;
 	int childfd;
 	struct sockaddr_in cliAddr, servAddr;
@@ -373,6 +381,9 @@ void *test_thread(void *arg){
 	extern volatile globalStatus;
 	struct timeval tvchildfd;
 	fd_set readfds,writefds,readsockfds;
+	extern pthread_mutex_t lock_testThread;
+	extern pthread_mutex_t lock_packRoach;
+	extern pthread_mutex_t lock_changeMode;
 
 
 	sprintf(path_noise_diode, "/proc/%s/hw/ioreg/gpio_set4", job[1]);
@@ -427,11 +438,15 @@ void *test_thread(void *arg){
 	tvchildfd.tv_usec=0; //do this to zero this value
 	n=select(sock+1,&readsockfds,NULL,NULL,&tvchildfd); //and set up the select timeout
 	if(n<=0){
-		printf("Error\n");
-		changeMode=1;
-		shutdown(childfd,SHUT_RDWR);
-		shutdown(sock,SHUT_RDWR);
+		printf("Error n<=0\n");
+		//shutdown(sock,SHUT_RDWR);
+		close(sock);
+		pthread_mutex_lock(&lock_changeMode);
+			changeMode=1;
+		pthread_mutex_unlock(&lock_changeMode);
+		printf("exiting Thread\n");
 		pthread_exit(&retThread1);
+		printf("exiting Thread2n\n");
 	}
 	if(FD_ISSET(sock,&readsockfds)){
 		childfd=accept(sock,(struct sockaddr *) &cliAddr,&cliLen);}
@@ -439,6 +454,9 @@ void *test_thread(void *arg){
 			perror("Error on Accept\n");
 	printf("Got connection\n");
 		
+	pthread_mutex_lock(&lock_testThread);
+		closeThread1=0;
+	pthread_mutex_unlock(&lock_testThread);
 	
 	hostp = (struct hostent*)gethostbyaddr((const char *)&cliAddr.sin_addr.s_addr,sizeof(cliAddr.sin_addr.s_addr), AF_INET);
 
@@ -468,23 +486,36 @@ void *test_thread(void *arg){
 					recv(childfd, buf, 1024,0);
 					//printf("Receiving %d\n",n);
 				}
-				if (closeThread1 !=0){
-					if(changeMode!=0){
-					printf("Changing Mode\n",n);
+				//if we've been signalled from the main thread then close the sockets and close the thread
+			//	if(closeThread1!=0){
+			//		printf("Closing thread \n");
+			//		shutdown(childfd,SHUT_RDWR);
+			//		shutdown(sock,SHUT_RDWR);
+			//		closeThread1=0;
+			//		pthread_exit(&retThread1);
+			//	}
+				pthread_mutex_lock(&lock_testThread);
+					closeThread1Temp=closeThread1;
+				pthread_mutex_unlock(&lock_testThread);
+					if(closeThread1Temp!=0){
+						printf("Closing thread temp\n");
+						shutdown(childfd,SHUT_RDWR);
+						shutdown(sock,SHUT_RDWR);
+						pthread_mutex_lock(&lock_testThread);
+							closeThread1=0;
+						pthread_mutex_unlock(&lock_testThread);
+						pthread_mutex_lock(&lock_changeMode);
+							changeMode=1;
+						pthread_mutex_unlock(&lock_changeMode);
+						pthread_exit(&retThread1);
 					}
-					printf("Shutting down the polarization thread\n",n);
-					closeThread1=0; //reset the global variable
-					shutdown(childfd,SHUT_RDWR);
-					shutdown(sock,SHUT_RDWR);
-					printf("Closing thread \n");
-					pthread_exit(&retThread1);
-					}
-
 				if (n <0){
 					printf("ERROR reading from socket\n",n);
 					shutdown(childfd,SHUT_RDWR);
 					shutdown(sock,SHUT_RDWR);
-					changeMode=1;
+					pthread_mutex_lock(&lock_changeMode);
+						changeMode=1;
+					pthread_mutex_unlock(&lock_changeMode);
 					printf("Closing thread \n");
 					pthread_exit(&retThread1);
 					}
@@ -492,7 +523,9 @@ void *test_thread(void *arg){
 					printf("ERROR connection closed\n",n);
 					shutdown(childfd,SHUT_RDWR);
 					shutdown(sock,SHUT_RDWR);
-					changeMode=1;
+					pthread_mutex_lock(&lock_changeMode);
+						changeMode=1;
+					pthread_mutex_unlock(&lock_changeMode);
 					printf("Closing thread \n");
 					pthread_exit(&retThread1);
 				}
@@ -536,11 +569,11 @@ void *test_thread(void *arg){
 					commandValue=buf[11];	
 					writeVal=atoi(&commandValue);
 					printf("buf %s %d %d\n",buf,commandValue,writeVal);	
-					changeMode=writeVal;
-					printf("buf1 %s %d %d\n",buf,commandValue,writeVal);	
+					pthread_mutex_lock(&lock_changeMode);
+						changeMode=writeVal;
+					pthread_mutex_unlock(&lock_changeMode);
 					returnDataPtr=(char *)&changeModeCommand;
 					returnDataSize=sizeof(changeModeCommand);
-					printf("buf2 %s %d %d\n",buf,commandValue,writeVal);
 				}
 				else if(!strncmp(buf,PhaseShifterCommand,10)){
 					printf("PhaseShifter Command\n");
@@ -594,8 +627,10 @@ void *test_thread(void *arg){
 					returnDataSize=0;
 					shutdown(childfd,SHUT_RDWR);
 					shutdown(sock,SHUT_RDWR);
-					changeMode=1;
-				//	printf("Closing thread \n");
+					pthread_mutex_lock(&lock_changeMode);
+						changeMode=1;
+					pthread_mutex_unlock(&lock_changeMode);
+					printf("Closing thread garbage\n");
 					pthread_exit(&retThread1);
 
 				}
@@ -609,17 +644,20 @@ void *test_thread(void *arg){
 					printf("ERROR writing to socket\n",n);
 					shutdown(childfd,SHUT_RDWR);
 					shutdown(sock,SHUT_RDWR);
-					changeMode=1;
-					printf("Closing thread \n");
+					pthread_mutex_lock(&lock_changeMode);
+						changeMode=1;
+					pthread_mutex_unlock(&lock_changeMode);
+					printf("Closing thread socket \n");
 					pthread_exit(&retThread1);
 					}
 				if(n==0){
 					printf("ERROR connection closed\n",n);
 					shutdown(childfd,SHUT_RDWR);
 					shutdown(sock,SHUT_RDWR);
-					printf("Closing thread \n");
-					closeThread1=0;
-					changeMode=1;
+					printf("Closing thread n==0 \n");
+					pthread_mutex_lock(&lock_changeMode);
+						changeMode=1;
+					pthread_mutex_unlock(&lock_changeMode);
 					pthread_exit(&retThread1);
 				}
 				if(FD_ISSET(childfd,&writefds)){
@@ -630,7 +668,13 @@ void *test_thread(void *arg){
 				}
 				
 
-				}
+			}
+			pthread_mutex_lock(&lock_changeMode);
+				changeMode=1;
+				shutdown(childfd,SHUT_RDWR);
+				shutdown(sock,SHUT_RDWR);
+			pthread_mutex_unlock(&lock_changeMode);
+
 			////////////////////////end of Parser//////////////////////////////
 
 	
@@ -646,6 +690,7 @@ void *packROACHpacket_thread(void *arg){
 ///this is the main roach loop when operating in the polarisation mode- this will run continuously giving accurate 10ms integrations. Data is read in from the powerPc and packed into a circular buffer. This is then read at 100ms intervals giving 10 packets per data transfer to the control pc 
         struct tempDataPacket tempPack;	
 	extern volatile int changeMode,closeThread2;
+	int changeModeTemp,closeThread2Temp;
 	int MSBshift;
 	int test;
 	int64_t val;
@@ -979,6 +1024,9 @@ void *packROACHpacket_thread(void *arg){
 		fclose(fpCh6LSBodd);
 	
 
+		pthread_mutex_lock(&lock_packRoach);
+			closeThread2=0;
+		pthread_mutex_unlock(&lock_packRoach);
 
 	while(1){
 		packedDataCounter++;
@@ -1168,9 +1216,14 @@ void *packROACHpacket_thread(void *arg){
 		timediff=t1.tv_sec-t2.tv_sec;
 		timediff_usec=t1.tv_usec-t2.tv_usec;
 		tottimediff=timediff+timediff_usec/1000000;
-		if(closeThread2!=0){
-			printf("Closing packing thread \n");
-			closeThread2=0;
+		pthread_mutex_lock(&lock_packRoach);
+			closeThread2Temp=closeThread2;
+		pthread_mutex_unlock(&lock_packRoach);
+		if(closeThread2Temp!=0){
+			printf("Closing thread \n");
+			pthread_mutex_lock(&lock_packRoach);
+				closeThread2=0;
+			pthread_mutex_unlock(&lock_packRoach);
 			pthread_exit(&retThread2);
 		}
 
@@ -1187,6 +1240,7 @@ void *packROACHpacket_threadPower(void *arg){
         struct tempDataPacket tempPack;	
 	int MSBshift;	
 	extern volatile int changeMode,closeThread2;
+	int changeModeTemp,closeThread2Temp;
         struct UDPCBASSpkt pkt;
         struct timeval t1,t2;
 	double timediff,timediff_usec,tottimediff;
@@ -1574,9 +1628,15 @@ void *packROACHpacket_threadPower(void *arg){
 		tottimediff=timediff+timediff_usec/1000000;
 		acc_old = acc_new;
 		cbassPKT.data_switchstatus[packedDataCounter]=statusBit; //status register
-		if(closeThread2!=0){
+		pthread_mutex_lock(&lock_packRoach);
+			closeThread2Temp=closeThread2;
+		pthread_mutex_unlock(&lock_packRoach);
+		
+		if(closeThread2Temp!=0){
 			printf("Closing thread \n");
-			closeThread2=0;
+			pthread_mutex_lock(&lock_packRoach);
+				closeThread2=0;
+			pthread_mutex_unlock(&lock_packRoach);
 			pthread_exit(&retThread2);
 		}
 
@@ -1877,79 +1937,45 @@ void initCoeffs(){
 
 	
 	while(i<16){
-	//	printf("i=%d\n",i);
+		printf("i=%d\n",i);
 		sprintf(path_to_registerNames[i],"/proc/%s/hw/ioreg/%s",job[1],registerNames[i]);
-	//	printf("%s\n",path_to_registerNames[i]);
+		printf("%s\n",path_to_registerNames[i]);
 		fp=fopen(filenames[i], "r");
 		fpreg=fopen(path_to_registerNames[i],"w");
 		j=0;
 		while(fgets(line, 80, fp) != NULL)
 			{ /* get a line, up to 80 chars from fr.  done if NULL */
 			 sscanf(line, "%ld", &ampcoffs[j]);
-		//	 printf("%d %d\n",j,ampcoffs[j]);
+			 printf("%d %d\n",j,ampcoffs[j]);
 			 j++;
 			}
-	//	printf("j=%d\n",j);
+		printf("j=%d\n",j);
 		fclose(fp);
-	//	printf("j=%d\n",j);
+		printf("j=%d\n",j);
 		fwrite(&ampcoffs[0], 32*4, 1, fpreg);
 		fclose(fpreg);
-	//	printf("j=%d\n",j);
+		printf("j=%d\n",j);
 		i++;
 	}
 	
 }
 
-void initStandardCoeffs(){
-//this functtion reads in the coefficients stored as text files on the Power PC. These are used to correct the gain/phase of the 4 RF data streams used in the C-BASS survey
-	FILE *fp,*fpreg;
-	extern char *job[5];
-	char line[80];
-	char registerNames[16][50]={"amp_EQ0_coeff_real","amp_EQ1_coeff_real","amp_EQ2_coeff_real","amp_EQ3_coeff_real","amp_EQ4_coeff_real","amp_EQ5_coeff_real","amp_EQ6_coeff_real","amp_EQ7_coeff_real","amp_EQ0_coeff_imag","amp_EQ1_coeff_imag","amp_EQ2_coeff_imag","amp_EQ3_coeff_imag","amp_EQ4_coeff_imag","amp_EQ5_coeff_imag","amp_EQ6_coeff_imag","amp_EQ7_coeff_imag"};
-	char path_to_registerNames[16][50];
-	char path_timeStamp[128];			// Path to acc_num counter data
-	char path_acc_cnt[128];			// Path to acc_num counter data
-	//sprintf(path_amp0realcoffs, "/proc/%s/hw/ioreg/amp_EQ0_coeff_real", job[1]);
-	unsigned int ampcoffs[35];
-        int acc_new,acc_old,acc_cntr,timeStamp;
-
-	unsigned int i=0;
-	unsigned int j=0;
-	i=0;
-	sprintf(path_timeStamp, "/proc/%s/hw/ioreg/Subsystem1_timeStamp", job[1]);
-	sprintf(path_acc_cnt, "/proc/%s/hw/ioreg/Subsystem1_readAccumulation", job[1]);
-
-	for(i=0;i<=34;i++){
-		ampcoffs[i]=1000;
-		printf("ampcoffs i %d\n",ampcoffs[i]);
-	}
-	while(i<16){
-	//	printf("i=%d\n",i);
-		sprintf(path_to_registerNames[i],"/proc/%s/hw/ioreg/%s",job[1],registerNames[i]);
-	//	printf("%s\n",path_to_registerNames[i]);
-		fpreg=fopen(path_to_registerNames[i],"w");
-		fwrite(&ampcoffs[0], 32*4, 1, fpreg);
-		fclose(fpreg);
-	//	printf("j=%d\n",j);
-		i++;
-	}
-	
-}
 
 int main(int argc, char *argv[])
 {
 //the main loop- this loop starts up the other threads, and also allows one to switch between operating modes (i.e between power observation and polarisation observation
         int sock, connected, bytes_recieved , true = 1,r; 
-	int t=1,sleepCounter=0;
+	int t=1;
         char send_data [1024] , recv_data[1024];       
 	pthread_t testThread_id;
 	pthread_t testThreadPower_id;
 	pthread_t packROACHpacket_thread_id;
 	pthread_t packROACHpacket_threadPower_id;
         struct sockaddr_in server_addr,client_addr;    
-        int sin_size,j,pidProg;
+        int sin_size,j,pidProg,n;
 	extern char *job[5];
 	extern volatile int changeMode,closeThread1,closeThread2;
+	int changeModeTemp,closeThread1Temp,closeThread2Temp;
 	extern volatile int VERSION;
 	FILE *fp;
 	char line[80];
@@ -1987,166 +2013,179 @@ int main(int argc, char *argv[])
 	sleep(2);
 	initCoeffs();
 	sleep(2);
+	//mutex for the first thread /closeThread1
+	if (pthread_mutex_init(&lock_testThread, NULL) != 0)
+	    {
+		printf("\n mutex init testThread failed\n");
+		return 1;
+	    }
+	//mutex for the second thread closeThread2
+	if (pthread_mutex_init(&lock_packRoach, NULL) != 0)
+	    {
+		printf("\n mutex init packRoach failed\n");
+		return 1;
+	    }
+	//mutex for the changeMode
+	if (pthread_mutex_init(&lock_changeMode, NULL) != 0)
+	    {
+		printf("\n mutex init changeMode failed\n");
+		return 1;
+	    }
 	pthread_create(&testThread_id,NULL,test_thread,NULL);
 	pthread_create(&packROACHpacket_thread_id,NULL,packROACHpacket_thread,NULL);
         printf("Here started thread\n");
-	changeMode=0;	
+
         while(1){
 	sleep(2);
-	if(changeMode!=0){
-		printf("Need to change the mode %d",changeMode);
-		if(changeMode==1){
-			printf("changeMode ==1\n");
-			sleep(2);
-			changeMode=0; //reset the global variable
-			closeThread1=1;
-			closeThread2=1;
-			//pthread_cancel(testThread_id, 0); 
-		//	pthread_cancel(packROACHpacket_thread_id, 0) ;
-			//if the thread is still open wait for it to die
-		//f(pthread_kill(&testThread_id, 0) == 0){
-			sleepCounter=0;
-			while(closeThread1!=0) {
-			usleep(100000);
-			printf("Here closeThread1");
-			if(sleepCounter>100){	//this is terrible coding 
-				closeThread1=0;
-			}
-			sleepCounter++;
-			}
-			
-			sleepCounter=0;
-			while(closeThread2!=0) {
-			usleep(100000);
-			printf("Here closeThread1");
-			if(sleepCounter>100){	//this is terrible coding 
-				closeThread2=0;
-			}
-			sleepCounter++;
-			}
-		//	
-	//		sleepCounter=0;
-	//		while(pthread_kill(&testThread_id, 0) == 0){
-	//			usleep(100000);
-	//			printf("Here closeThread1");
-	//			if(sleepCounter>100){	//this is terrible coding
-	//				closeThread1=0; 
-	//				break;
-	//			}
-	//			sleepCounter++;
-	//		}
-			
-			
-			
-	//		if(pthread_kill(&packROACHpacket_thread_id) == 0){
-	//		while(closeThread2!=0){
-	//			usleep(100000);
-	//		}
-	//		}
-			VERSION=1;
-			printf("Changing to Polarisation");
-			sprintf(commandStr,"kill -kill %s",pidStr);
-			printf("%s",commandStr);
-			system(commandStr) ;
-			sleep(2);
-			//start the polarization bof file
-			system(polProg);
-			sleep(2);
-			system("pidof -s rx_10dec_stat_2013_Jan_11_1059.bof > pid.txt");
-			sleep(2);
-			/////
-			fp=fopen("pid.txt", "r");
-			j=0;
-			while(fgets(line, 80, fp) != NULL)
-					{ /* get a line, up to 80 chars from fr.  done if NULL */
-				 sscanf(line, "%ld", &pidProg);
-				 printf("%d %d\n",j,pidProg);
-					 j++;
+	pthread_mutex_lock(&lock_changeMode);
+		if(changeMode!=0){
+			printf("Need to change the mode");
+			if(changeMode==1){
+				changeMode=0; //reset the global variable
+				printf("Here changeMode==1");
+				pthread_mutex_lock(&lock_testThread);
+					closeThread1=1;
+				pthread_mutex_unlock(&lock_testThread);
+				pthread_mutex_lock(&lock_packRoach);
+					closeThread2=1;
+				pthread_mutex_unlock(&lock_packRoach);
+				//if the thread is still open wait for it to die
+				n=pthread_kill(test_thread, 0) ;
+				printf("n=%d \n",n);
+				if(n==0){
+					pthread_mutex_lock(&lock_testThread);
+						closeThread1=1;
+					pthread_mutex_unlock(&lock_testThread);
+					pthread_mutex_lock(&lock_testThread);
+						closeThread1Temp=closeThread1;
+					pthread_mutex_unlock(&lock_testThread);
+					while(closeThread1Temp!=0){
+						pthread_mutex_lock(&lock_testThread);
+							closeThread1Temp=closeThread1;
+						pthread_mutex_unlock(&lock_testThread);
+						usleep(100000);
+						printf("Here");
 					}
-			fclose(fp);
-			j=sprintf(pidStr,"%d",pidProg);//global variable for access in the loop
-			job[1]=&pidStr;
-			sleep(2);
-			initCoeffs();
-			printf("Initiating Coeffs\n");
-			sleep(2);
-			pthread_create(&testThread_id,NULL,test_thread,NULL);
-			pthread_create(&packROACHpacket_thread_id,NULL,packROACHpacket_thread,NULL);
-			printf("Here started thread\n");
-			}
-		}
-		if(changeMode==2){
-			printf("changeMode ==2\n");
-			sleep(2);
-			changeMode=0; //reset the global variable
-			closeThread1=1;
-			closeThread2=1;
-			//pthread_cancel(testThread_id, 0); 
-		//	pthread_cancel(packROACHpacket_thread_id, 0) ;
-			//if the thread is still open wait for it to die
-		//	if(pthread_kill(&testThread_id, 0) == 0)
-		//	{
-			
-			sleepCounter=0;
-			while(closeThread1!=0) {
-			usleep(100000);
-			printf("Here closeThread1");
-			if(sleepCounter>100){	//this is terrible coding 
-				closeThread1=0;
-			}
-			sleepCounter++;
-			}
-			
-			sleepCounter=0;
-			while(closeThread2!=0) {
-			usleep(100000);
-			printf("Here closeThread1");
-			if(sleepCounter>100){	//this is terrible coding 
-				closeThread2=0;
-			}
-			sleepCounter++;
-			}
-			
-			VERSION=10000;
-			printf("Changing to PowerMode\n");
-			sprintf(commandStr,"kill -kill %s",pidStr);
-			printf("%s",commandStr);
-			system(commandStr) ;
-			sleep(2);
-			//start the polarization bof file
-			system(powerProg);
-			sleep(2);
-			system("pidof -s rx_10dec_stat_pow_2013_Jan_11_1408.bof > pid.txt");
-			//system(polProg);
-			//sleep(2);
-			//system("pidof -s rx_10dec_stat_2013_Jan_11_1059.bof > pid.txt");
-			sleep(2);
-			/////
-			fp=fopen("pid.txt", "r");
-			j=0;
-			while(fgets(line, 80, fp) != NULL)
-					{ /* get a line, up to 80 chars from fr.  done if NULL */
-				 sscanf(line, "%ld", &pidProg);
-				 printf("%d %d\n",j,pidProg);
-					 j++;
+				}
+				printf("Here22");
+				sleep(1);
+				printf("Here22");
+				sleep(1);
+				if(pthread_kill(packROACHpacket_thread, 0) == 0){
+					sleep(10);
+					printf("Here33");
+					pthread_mutex_lock(&lock_packRoach);
+						closeThread2=1;
+					pthread_mutex_unlock(&lock_packRoach);
+					pthread_mutex_lock(&lock_packRoach);
+						closeThread2Temp=closeThread2;
+					pthread_mutex_unlock(&lock_packRoach);
+					while(closeThread2Temp!=0){
+						usleep(100000);
+						printf("Here packRoach");
+						pthread_mutex_lock(&lock_packRoach);
+							closeThread2Temp=closeThread2;
+						pthread_mutex_unlock(&lock_packRoach);
 					}
-			fclose(fp);
-			j=sprintf(pidStr,"%d",pidProg);//global variable for access in the loop
-			job[1]=&pidStr;
-			sleep(2);
-			initCoeffs();
-			//initCoeffs();
-			printf("Initiating Coeffs\n");
-			sleep(2);
-			pthread_create(&testThread_id,NULL,test_thread,NULL);
-			pthread_create(&packROACHpacket_thread_id,NULL,packROACHpacket_threadPower,NULL);
-			printf("Here started thread\n");
-			}
-		}
-	
+				}
+				VERSION=1;
+				printf("Changing to Polarisation");
+				sprintf(commandStr,"kill -kill %s",pidStr);
+				printf("%s",commandStr);
+				system(commandStr) ;
+				sleep(2);
+				system(polProg);
+				sleep(2);
+				system("pidof -s rx_10dec_stat_2013_Jan_11_1059.bof > pid.txt");
+				
+				sleep(2);
 
-}
- 
-		//	system(powerProg);
-		//	sleep(2);
-	//		system("pidof -s rx_10dec_stat_pow_2013_Jan_11_1408.bof > pid.txt");
+				fp=fopen("pid.txt", "r");
+				j=0;
+				while(fgets(line, 80, fp) != NULL)
+						{ /* get a line, up to 80 chars from fr.  done if NULL */
+					 sscanf(line, "%ld", &pidProg);
+					 printf("%d %d\n",j,pidProg);
+						 j++;
+						}
+				fclose(fp);
+				j=sprintf(pidStr,"%d",pidProg);//global variable for access in the loop
+				job[1]=&pidStr;
+				pthread_create(&testThread_id,NULL,test_thread,NULL);
+				pthread_create(&packROACHpacket_thread_id,NULL,packROACHpacket_thread,NULL);
+				printf("Starting up the roachn");
+				initCoeffs();
+			}
+			else if(changeMode==2){
+					
+				changeMode=0; //reset the global variable
+				pthread_mutex_lock(&lock_testThread);
+					closeThread1=1;
+				pthread_mutex_unlock(&lock_testThread);
+				pthread_mutex_lock(&lock_packRoach);
+					closeThread2=1;
+				pthread_mutex_unlock(&lock_packRoach);
+				//if the thread is still open wait for it to die
+				if(pthread_kill(test_thread, 0) == 0){
+					pthread_mutex_lock(&lock_testThread);
+						closeThread1Temp=closeThread1;
+					pthread_mutex_unlock(&lock_testThread);
+					while(closeThread1Temp!=0){
+						pthread_mutex_lock(&lock_testThread);
+							closeThread1Temp=closeThread1;
+						pthread_mutex_unlock(&lock_testThread);
+						usleep(100000);
+						printf("Here");
+					}
+				}
+				pthread_mutex_lock(&lock_packRoach);
+					closeThread2Temp=closeThread2;
+				pthread_mutex_unlock(&lock_packRoach);
+				while(closeThread2Temp!=0){
+					usleep(100000);
+					pthread_mutex_lock(&lock_packRoach);
+						closeThread2Temp=closeThread2;
+					pthread_mutex_unlock(&lock_packRoach);
+				}
+				VERSION=10000;
+				printf("Changing to Power");
+				sprintf(commandStr,"kill -kill %s",pidStr);
+				printf("%s",commandStr);
+				system(commandStr) ;
+				sleep(2);
+				system(polProg);
+				sleep(2);
+				system("pidof -s rx_10dec_stat_2013_Jan_11_1059.bof > pid.txt");
+				//system(powerProg);
+				//sleep(2);
+				//system("pidof -s rx_10dec_stat_pow_2013_Jan_11_1408.bof > pid.txt");
+				
+				sleep(2);
+
+				fp=fopen("pid.txt", "r");
+				j=0;
+				while(fgets(line, 80, fp) != NULL)
+						{ /* get a line, up to 80 chars from fr.  done if NULL */
+					 sscanf(line, "%ld", &pidProg);
+					 printf("%d %d\n",j,pidProg);
+						 j++;
+						}
+				fclose(fp);
+				j=sprintf(pidStr,"%d",pidProg);//global variable for access in the loop
+				job[1]=&pidStr;
+				pthread_create(&testThread_id,NULL,test_thread,NULL);
+				pthread_create(&packROACHpacket_thread_id,NULL,packROACHpacket_thread,NULL);
+				printf("Starting up the roachn");
+				initCoeffs();
+				
+
+
+				//pthread_create(&testThreadPower_id,NULL,test_threadPower,NULL);
+				//pthread_create(&packROACHpacket_threadPower_id,NULL,packROACHpacket_threadPower,NULL);
+				//initCoeffs();
+			}
+		}
+	pthread_mutex_unlock(&lock_changeMode);
+
+	}
+} 
