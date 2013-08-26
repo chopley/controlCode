@@ -2088,33 +2088,34 @@ int main(int argc, char *argv[])
 						pthread_mutex_unlock(&lock_packRoach);
 					}
 				}
-				VERSION=1;
-				printf("Changing to Polarisation");
-				sprintf(commandStr,"kill -kill %s",pidStr);
-				printf("%s",commandStr);
-				system(commandStr) ;
-				sleep(2);
-				system(polProg);
-				sleep(2);
-				system("pidof -s rx_10dec_stat_2013_Jan_11_1059.bof > pid.txt");
-				
-				sleep(2);
+				if(VERSION!=1){//if the VERSION is not ~=1 then we don't have the polarization running and need to stop the bof file and restart with polarization mode
+					VERSION=1;
+					printf("Changing to Polarisation");
+					sprintf(commandStr,"kill -kill %s",pidStr);
+					printf("%s",commandStr);
+					system(commandStr) ;
+					sleep(2);
+					system(polProg);
+					sleep(2);
+					system("pidof -s rx_10dec_stat_2013_Jan_11_1059.bof > pid.txt");
+					sleep(2);
 
-				fp=fopen("pid.txt", "r");
-				j=0;
-				while(fgets(line, 80, fp) != NULL)
-						{ /* get a line, up to 80 chars from fr.  done if NULL */
-					 sscanf(line, "%ld", &pidProg);
-					 printf("%d %d\n",j,pidProg);
-						 j++;
-						}
-				fclose(fp);
-				j=sprintf(pidStr,"%d",pidProg);//global variable for access in the loop
-				job[1]=&pidStr;
+					fp=fopen("pid.txt", "r");
+					j=0;
+					while(fgets(line, 80, fp) != NULL)
+							{ /* get a line, up to 80 chars from fr.  done if NULL */
+						 sscanf(line, "%ld", &pidProg);
+						 printf("%d %d\n",j,pidProg);
+							 j++;
+							}
+					fclose(fp);
+					j=sprintf(pidStr,"%d",pidProg);//global variable for access in the loop
+					job[1]=&pidStr;
+					initCoeffs();
+				}
 				pthread_create(&testThread_id,NULL,test_thread,NULL);
 				pthread_create(&packROACHpacket_thread_id,NULL,packROACHpacket_thread,NULL);
 				printf("Starting up the roachn");
-				initCoeffs();
 			}
 			else if(changeMode==2){
 					
