@@ -1078,6 +1078,7 @@ void *packROACHpacket_thread(void *arg){
 				
 		tDiff[packedDataCounter]=(int)timeStamp-(int)tDiff[packedDataCounter];
 	  	if(tDiff[packedDataCounter]<=0){
+//			printf("PPS Acc %d Time %d:%d \n",timeStamp,t2.tv_sec,t2.tv_usec);
 			if(timeStamp!=2499976){
 				printf("1PPS Not connected %d %d %d %d %d\n",timeStamp,acc_cntr,acc_new,tDiff[packedDataCounter],statusBit);
 			}
