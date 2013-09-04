@@ -511,18 +511,32 @@ void *test_thread(void *arg){
 						pthread_mutex_lock(&lock_testThread);
 							closeThread1=0;
 						pthread_mutex_unlock(&lock_testThread);
-						pthread_mutex_lock(&lock_changeMode);
-							changeMode=1;
-						pthread_mutex_unlock(&lock_changeMode);
+						if(VERSION==1){
+							pthread_mutex_lock(&lock_changeMode);
+								changeMode=1;
+							pthread_mutex_unlock(&lock_changeMode);
+						}
+						else if(VERSION==10000){
+							pthread_mutex_lock(&lock_changeMode);
+								changeMode=2;
+							pthread_mutex_unlock(&lock_changeMode);
+						}
 						pthread_exit(&retThread1);
 					}
 				if (n <0){
 					printf("ERROR reading from socket\n",n);
 					shutdown(childfd,SHUT_RDWR);
 					shutdown(sock,SHUT_RDWR);
-					pthread_mutex_lock(&lock_changeMode);
-						changeMode=1;
-					pthread_mutex_unlock(&lock_changeMode);
+					if(VERSION==1){
+						pthread_mutex_lock(&lock_changeMode);
+							changeMode=1;
+						pthread_mutex_unlock(&lock_changeMode);
+					}
+					else if(VERSION==10000){
+						pthread_mutex_lock(&lock_changeMode);
+							changeMode=2;
+						pthread_mutex_unlock(&lock_changeMode);
+					}
 					printf("Closing thread \n");
 					pthread_exit(&retThread1);
 					}
@@ -530,9 +544,16 @@ void *test_thread(void *arg){
 					printf("ERROR connection closed\n",n);
 					shutdown(childfd,SHUT_RDWR);
 					shutdown(sock,SHUT_RDWR);
-					pthread_mutex_lock(&lock_changeMode);
-						changeMode=1;
-					pthread_mutex_unlock(&lock_changeMode);
+					if(VERSION==1){
+						pthread_mutex_lock(&lock_changeMode);
+							changeMode=1;
+						pthread_mutex_unlock(&lock_changeMode);
+					}
+					else if(VERSION==10000){
+						pthread_mutex_lock(&lock_changeMode);
+							changeMode=2;
+						pthread_mutex_unlock(&lock_changeMode);
+					}
 					printf("Closing thread \n");
 					pthread_exit(&retThread1);
 				}
@@ -636,9 +657,16 @@ void *test_thread(void *arg){
 					returnDataSize=0;
 					shutdown(childfd,SHUT_RDWR);
 					shutdown(sock,SHUT_RDWR);
-					pthread_mutex_lock(&lock_changeMode);
-						changeMode=1;
-					pthread_mutex_unlock(&lock_changeMode);
+					if(VERSION==1){
+						pthread_mutex_lock(&lock_changeMode);
+							changeMode=1;
+						pthread_mutex_unlock(&lock_changeMode);
+					}
+					else if(VERSION==10000){
+						pthread_mutex_lock(&lock_changeMode);
+							changeMode=2;
+						pthread_mutex_unlock(&lock_changeMode);
+					}
 					printf("Closing thread garbage\n");
 					pthread_exit(&retThread1);
 
@@ -653,9 +681,16 @@ void *test_thread(void *arg){
 					printf("ERROR writing to socket\n",n);
 					shutdown(childfd,SHUT_RDWR);
 					shutdown(sock,SHUT_RDWR);
-					pthread_mutex_lock(&lock_changeMode);
-						changeMode=1;
-					pthread_mutex_unlock(&lock_changeMode);
+					if(VERSION==1){
+						pthread_mutex_lock(&lock_changeMode);
+							changeMode=1;
+						pthread_mutex_unlock(&lock_changeMode);
+					}
+					else if(VERSION==10000){
+						pthread_mutex_lock(&lock_changeMode);
+							changeMode=2;
+						pthread_mutex_unlock(&lock_changeMode);
+					}
 					printf("Closing thread socket \n");
 					pthread_exit(&retThread1);
 					}
@@ -664,9 +699,16 @@ void *test_thread(void *arg){
 					shutdown(childfd,SHUT_RDWR);
 					shutdown(sock,SHUT_RDWR);
 					printf("Closing thread n==0 \n");
-					pthread_mutex_lock(&lock_changeMode);
-						changeMode=1;
-					pthread_mutex_unlock(&lock_changeMode);
+					if(VERSION==1){
+						pthread_mutex_lock(&lock_changeMode);
+							changeMode=1;
+						pthread_mutex_unlock(&lock_changeMode);
+					}
+					else if(VERSION==10000){
+						pthread_mutex_lock(&lock_changeMode);
+							changeMode=2;
+						pthread_mutex_unlock(&lock_changeMode);
+					}
 					pthread_exit(&retThread1);
 				}
 				if(FD_ISSET(childfd,&writefds)){
@@ -678,11 +720,18 @@ void *test_thread(void *arg){
 				
 
 			}
-			pthread_mutex_lock(&lock_changeMode);
-				changeMode=1;
-				shutdown(childfd,SHUT_RDWR);
-				shutdown(sock,SHUT_RDWR);
-			pthread_mutex_unlock(&lock_changeMode);
+			if(VERSION==1){
+				pthread_mutex_lock(&lock_changeMode);
+					changeMode=1;
+				pthread_mutex_unlock(&lock_changeMode);
+			}
+			else if(VERSION==10000){
+				pthread_mutex_lock(&lock_changeMode);
+					changeMode=2;
+				pthread_mutex_unlock(&lock_changeMode);
+			}
+			shutdown(childfd,SHUT_RDWR);
+			shutdown(sock,SHUT_RDWR);
 
 			////////////////////////end of Parser//////////////////////////////
 
@@ -1988,7 +2037,7 @@ int main(int argc, char *argv[])
 	pthread_t packROACHpacket_thread_id;
 	pthread_t packROACHpacket_threadPower_id;
         struct sockaddr_in server_addr,client_addr;    
-        int sin_size,j,pidProg,n,n2;
+        int sin_size,j,pidProg,n,n2,readVersion;
 	extern char *job[5];
 	extern volatile int changeMode,closeThread1,closeThread2;
 	int changeModeTemp,closeThread1Temp,closeThread2Temp;
@@ -2009,12 +2058,27 @@ int main(int argc, char *argv[])
 	//set up the Ctrl-C handlers
 	signal(SIGINT, sigint_handler);
 	signal(SIGKILL, sigint_handler);
-	system(polProg);
-	sleep(1);
-	system("pidof -s rx_10dec_stat_2013_Jan_11_1059.bof > pid.txt");
 	
 	sleep(1);
 
+	fp=fopen("version.txt", "r");
+	j=0;
+	while(fgets(line, 80, fp) != NULL)
+			{ /* get a line, up to 80 chars from fr.  done if NULL */
+		 sscanf(line, "%ld", &readVersion);
+		 printf("%d %d\n",j,readVersion);
+			 j++;
+			}
+	fclose(fp);
+	VERSION=readVersion;
+	//look for the appropriate PID
+	if(VERSION==1){
+		system("pidof -s rx_10dec_stat_2013_Jan_11_1059.bof > pid.txt");
+	}
+	else if(VERSION==10000){
+		system("pidof -s rx_10dec_stat_pow_2013_Jan_11_1408.bof > pid.txt");
+	}
+	//get the PID of the programm from the text file
 	fp=fopen("pid.txt", "r");
 	j=0;
 	while(fgets(line, 80, fp) != NULL)
@@ -2026,8 +2090,43 @@ int main(int argc, char *argv[])
 	fclose(fp);
 	j=sprintf(pidStr,"%d",pidProg);//global variable for access in the loop
 	job[1]=&pidStr;
+
+	sprintf(commandStr,"kill -kill %s",pidStr);
+	printf("%s",commandStr);
+	system(commandStr) ;
+
+	printf("Killed the old PIDs\n");
+
 	sleep(2);
+	if(VERSION==1){
+		system(polProg);
+	}
+	else if(VERSION==10000){
+		system(powerProg);
+	}
+	sleep(2);
+////////////////////////////////////////////
+	if(VERSION==1){
+		system("pidof -s rx_10dec_stat_2013_Jan_11_1059.bof > pid.txt");
+	}
+	else if(VERSION==10000){
+		system("pidof -s rx_10dec_stat_pow_2013_Jan_11_1408.bof > pid.txt");
+	}
+	//get the PID of the programm from the text file
+	fp=fopen("pid.txt", "r");
+	j=0;
+	while(fgets(line, 80, fp) != NULL)
+			{ /* get a line, up to 80 chars from fr.  done if NULL */
+		 sscanf(line, "%ld", &pidProg);
+		 printf("%d %d\n",j,pidProg);
+			 j++;
+			}
+	fclose(fp);
+	j=sprintf(pidStr,"%d",pidProg);//global variable for access in the loop
+	job[1]=&pidStr;
+///////////////////////////////////////
 	initCoeffs();
+	printf("Finished initiation coeffs\n");
 	sleep(2);
 	//mutex for the first thread /closeThread1
 	if (pthread_mutex_init(&lock_testThread, NULL) != 0)
@@ -2048,8 +2147,14 @@ int main(int argc, char *argv[])
 		return 1;
 	    }
 	pthread_create(&testThread_id,NULL,test_thread,NULL);
-	pthread_create(&packROACHpacket_thread_id,NULL,packROACHpacket_thread,NULL);
-	packROACHpacket_threadPower_id=packROACHpacket_thread_id;//initialize this temporarily
+	if(VERSION==1){
+		pthread_create(&packROACHpacket_thread_id,NULL,packROACHpacket_thread,NULL);
+		packROACHpacket_threadPower_id=packROACHpacket_thread_id;//initialize this temporarily
+	}
+	else if(VERSION==10000){
+		pthread_create(&packROACHpacket_threadPower_id,NULL,packROACHpacket_threadPower,NULL);
+		packROACHpacket_thread_id=packROACHpacket_threadPower_id;//initialize this temporarily
+	}
         printf("Here started thread\n");
 
         while(1){
@@ -2071,7 +2176,7 @@ int main(int argc, char *argv[])
 					closeThread2=1;
 				pthread_mutex_unlock(&lock_packRoach);
 				//if the thread is still open wait for it to die
-				n=pthread_kill(testThread_id, 0) ;
+				n=pthread_kill(testThread_id, 0) ; //if n==0 then the thread is still running-otherwise it is not running
 				printf("ntestThread=%d \n",n);
 				if(n==0){
 					pthread_mutex_lock(&lock_testThread);
@@ -2125,6 +2230,7 @@ int main(int argc, char *argv[])
 					sleep(2);
 		//		if(VERSION!=1){//if the VERSION is not ~=1 then we don't have the polarization running and need to stop the bof file and restart with polarization mode
 					VERSION=1;
+					system("echo 1 > version.txt");
 					printf("Changing to Polarisation");
 					sprintf(commandStr,"kill -kill %s",pidStr);
 					printf("%s",commandStr);
@@ -2217,6 +2323,7 @@ int main(int argc, char *argv[])
 					sleep(2);
 		//		if(VERSION!=1){//if the VERSION is not ~=1 then we don't have the polarization running and need to stop the bof file and restart with polarization mode
 					VERSION=10000;
+					system("echo 10000 > version.txt");
 					printf("Changing to Power");
 					sprintf(commandStr,"kill -kill %s",pidStr);
 					printf("%s",commandStr);
