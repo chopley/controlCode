@@ -2059,7 +2059,6 @@ int main(int argc, char *argv[])
 	signal(SIGINT, sigint_handler);
 	signal(SIGKILL, sigint_handler);
 	
-	sleep(1);
 
 	fp=fopen("version.txt", "r");
 	j=0;
@@ -2097,7 +2096,6 @@ int main(int argc, char *argv[])
 
 	printf("Killed the old PIDs\n");
 
-	sleep(2);
 	if(VERSION==1){
 		system(polProg);
 	}
@@ -2127,7 +2125,6 @@ int main(int argc, char *argv[])
 ///////////////////////////////////////
 	initCoeffs();
 	printf("Finished initiation coeffs\n");
-	sleep(2);
 	//mutex for the first thread /closeThread1
 	if (pthread_mutex_init(&lock_testThread, NULL) != 0)
 	    {
@@ -2165,202 +2162,26 @@ int main(int argc, char *argv[])
 		if(changeModeTemp!=0){
 			printf("Need to change the mode");
 			if(changeModeTemp==1){
-				pthread_mutex_lock(&lock_changeMode);
-					changeMode=0; //reset the global variable
-				pthread_mutex_unlock(&lock_changeMode);
-				printf("Here changeMode==1\n");
-				pthread_mutex_lock(&lock_testThread);
-					closeThread1=1;
-				pthread_mutex_unlock(&lock_testThread);
-				pthread_mutex_lock(&lock_packRoach);
-					closeThread2=1;
-				pthread_mutex_unlock(&lock_packRoach);
-				//if the thread is still open wait for it to die
-				n=pthread_kill(testThread_id, 0) ; //if n==0 then the thread is still running-otherwise it is not running
-				printf("ntestThread=%d \n",n);
-				if(n==0){
-					pthread_mutex_lock(&lock_testThread);
-						closeThread1=1;
-					pthread_mutex_unlock(&lock_testThread);
-					pthread_mutex_lock(&lock_testThread);
-						closeThread1Temp=closeThread1;
-					pthread_mutex_unlock(&lock_testThread);
-					while((closeThread1Temp!=0)&&(n==0)){
-						pthread_mutex_lock(&lock_testThread);
-							closeThread1Temp=closeThread1;
-						pthread_mutex_unlock(&lock_testThread);
-						usleep(100000);
-						printf("Here");
-						n=pthread_kill(testThread_id, 0) ;
-					}
-				}
-				pthread_mutex_lock(&lock_testThread);
-					closeThread1=0;
-				pthread_mutex_unlock(&lock_testThread);
-				printf("Here22aa");
-				//	sleep(2);
-				n= pthread_kill(packROACHpacket_thread_id, 0);
-				n2= pthread_kill(packROACHpacket_threadPower_id, 0);
-			//	n2=3;
-				printf("nROACHPAcket=%d \n",n);
-				if((n==0) ||(n2==0) ){
-					printf("Here33");
-					sleep(1);
-					pthread_mutex_lock(&lock_packRoach);
-						closeThread2=1;
-					pthread_mutex_unlock(&lock_packRoach);
-					pthread_mutex_lock(&lock_packRoach);
-						closeThread2Temp=closeThread2;
-					pthread_mutex_unlock(&lock_packRoach);
-					while((closeThread2Temp!=0) &&((n==0) ||(n2==0))){
-						usleep(100000);
-						printf("Here packRoach");
-						pthread_mutex_lock(&lock_packRoach);
-							closeThread2Temp=closeThread2;
-						pthread_mutex_unlock(&lock_packRoach);
-						n= pthread_kill(packROACHpacket_thread_id, 0);
-						n2= pthread_kill(packROACHpacket_threadPower_id, 0);
-					}
-				}
-				pthread_mutex_lock(&lock_packRoach);
-					closeThread2=0;
-				pthread_mutex_unlock(&lock_packRoach);
-				sleep(2);
-				printf("Here22ab");
-					sleep(2);
-		//		if(VERSION!=1){//if the VERSION is not ~=1 then we don't have the polarization running and need to stop the bof file and restart with polarization mode
 					VERSION=1;
 					system("echo 1 > version.txt");
 					printf("Changing to Polarisation");
 					sprintf(commandStr,"kill -kill %s",pidStr);
 					printf("%s",commandStr);
 					system(commandStr) ;
-					sleep(2);
-					system(polProg);
-					sleep(2);
-					system("pidof -s rx_10dec_stat_2013_Jan_11_1059.bof > pid.txt");
-					sleep(2);
+					exit(0);
 
-					fp=fopen("pid.txt", "r");
-					j=0;
-					while(fgets(line, 80, fp) != NULL)
-							{ /* get a line, up to 80 chars from fr.  done if NULL */
-						 sscanf(line, "%ld", &pidProg);
-						 printf("%d %d\n",j,pidProg);
-							 j++;
-							}
-					fclose(fp);
-					j=sprintf(pidStr,"%d",pidProg);//global variable for access in the loop
-					job[1]=&pidStr;
-					initCoeffs();
-		//		}
-				pthread_create(&testThread_id,NULL,test_thread,NULL);
-				pthread_create(&packROACHpacket_thread_id,NULL,packROACHpacket_thread,NULL);
-				printf("Starting up the roachn");
 			}
 			else if(changeModeTemp==2){
-				pthread_mutex_lock(&lock_changeMode);
-					changeMode=0; //reset the global variable
-				pthread_mutex_unlock(&lock_changeMode);
-				printf("Here changeMode==1\n");
-				pthread_mutex_lock(&lock_testThread);
-					closeThread1=1;
-				pthread_mutex_unlock(&lock_testThread);
-				pthread_mutex_lock(&lock_packRoach);
-					closeThread2=1;
-				pthread_mutex_unlock(&lock_packRoach);
-				//if the thread is still open wait for it to die
-				n=pthread_kill(testThread_id, 0) ;
-				printf("ntestThread=%d \n",n);
-				if(n==0){
-					pthread_mutex_lock(&lock_testThread);
-						closeThread1=1;
-					pthread_mutex_unlock(&lock_testThread);
-					pthread_mutex_lock(&lock_testThread);
-						closeThread1Temp=closeThread1;
-					pthread_mutex_unlock(&lock_testThread);
-					while((closeThread1Temp!=0)&&(n==0)){
-						pthread_mutex_lock(&lock_testThread);
-							closeThread1Temp=closeThread1;
-						pthread_mutex_unlock(&lock_testThread);
-						usleep(100000);
-						printf("Here");
-						n=pthread_kill(testThread_id, 0) ;
-					}
-				}
-				pthread_mutex_lock(&lock_testThread);
-					closeThread1=0;
-				pthread_mutex_unlock(&lock_testThread);
-				printf("Here22aa");
-				//	sleep(2);
-				n= pthread_kill(packROACHpacket_thread_id, 0);
-				n2= pthread_kill(packROACHpacket_threadPower_id, 0);
-				printf("nROACHPAcket=%d \n",n);
-				if((n==0) ||(n2==0) ){
-					printf("Here33");
-					sleep(1);
-					pthread_mutex_lock(&lock_packRoach);
-						closeThread2=1;
-					pthread_mutex_unlock(&lock_packRoach);
-					pthread_mutex_lock(&lock_packRoach);
-						closeThread2Temp=closeThread2;
-					pthread_mutex_unlock(&lock_packRoach);
-					while((closeThread2Temp!=0) &&((n==0) ||(n2==0))){
-						usleep(100000);
-						printf("Here packRoach");
-						pthread_mutex_lock(&lock_packRoach);
-							closeThread2Temp=closeThread2;
-						pthread_mutex_unlock(&lock_packRoach);
-						n= pthread_kill(packROACHpacket_thread_id, 0);
-						n2= pthread_kill(packROACHpacket_threadPower_id, 0);
-					}
-				}
-				pthread_mutex_lock(&lock_packRoach);
-					closeThread2=0;
-				pthread_mutex_unlock(&lock_packRoach);
-				sleep(2);
-				printf("Here22ab");
-					sleep(2);
-		//		if(VERSION!=1){//if the VERSION is not ~=1 then we don't have the polarization running and need to stop the bof file and restart with polarization mode
 					VERSION=10000;
 					system("echo 10000 > version.txt");
 					printf("Changing to Power");
 					sprintf(commandStr,"kill -kill %s",pidStr);
 					printf("%s",commandStr);
 					system(commandStr) ;
-					sleep(2);
-					system(powerProg);
-					sleep(2);
-					system("pidof -s rx_10dec_stat_pow_2013_Jan_11_1408.bof > pid.txt");
-				//	rystem("pidof -s rx_10dec_stat_2013_Jan_11_1059.bof > pid.txt");
-					sleep(2);
-
-					fp=fopen("pid.txt", "r");
-					j=0;
-					while(fgets(line, 80, fp) != NULL)
-							{ /* get a line, up to 80 chars from fr.  done if NULL */
-						 sscanf(line, "%ld", &pidProg);
-						 printf("%d %d\n",j,pidProg);
-							 j++;
-							}
-					fclose(fp);
-					j=sprintf(pidStr,"%d",pidProg);//global variable for access in the loop
-					job[1]=&pidStr;
-					initCoeffs();
-		//		}
-				pthread_create(&testThread_id,NULL,test_thread,NULL);
-				pthread_create(&packROACHpacket_threadPower_id,NULL,packROACHpacket_threadPower,NULL);
-				printf("Starting up the roachn");
-					
+				        exit(0);	
 
 			}
 		}
 
 	}
 } 
-				//system(powerProg);
-				//sleep(2);
-				//system("pidof -s rx_10dec_stat_pow_2013_Jan_11_1408.bof > pid.txt");
-				//pthread_create(&testThreadPower_id,NULL,test_threadPower,NULL);
-				//pthread_create(&packROACHpacket_threadPower_id,NULL,packROACHpacket_threadPower,NULL);
-				//initCoeffs();
