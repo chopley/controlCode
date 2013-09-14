@@ -1131,6 +1131,7 @@ void *packROACHpacket_thread(void *arg){
 		/*statusBit=0;
 		statusBit=globalStatus;*/
 		cbassPKT.tstart[packedDataCounter]=timeStamp;//packet timestamp
+		cbassPKT.tsecond[packedDataCounter]=t2.tv_sec;//packet timestamp in ROACH second time
 		memcpy(&cbassPKT.data_switchstatus[packedDataCounter],&statusBit,sizeof(int));
 //		cbassPKT.data_switchstatus[packedDataCounter]=statusBit; //status register
 				
@@ -2045,6 +2046,12 @@ int main(int argc, char *argv[])
 	FILE *fp;
 	char line[80];
 	extern volatile char pidStr[5];
+        
+	struct timeval tv;
+	time_t nowtime;
+	struct tm *nowtm;
+	char tmbuf[64], buf[64];
+	
 	char commandStr[30];
 	pthread_attr_t tattr;
 	signal(SIGINT, cleanup);
@@ -2095,6 +2102,13 @@ int main(int argc, char *argv[])
 	system(commandStr) ;
 
 	printf("Killed the old PIDs\n");
+
+	gettimeofday(&tv,NULL);
+	nowtime = tv.tv_sec;
+	nowtm = localtime(&nowtime);
+	strftime(tmbuf, sizeof tmbuf, "%Y-%m-%d %H:%M:%S", nowtm);
+	snprintf(buf, sizeof buf, "%s.%06d", tmbuf, tv.tv_usec);
+	printf("%s",tmbuf);
 
 	if(VERSION==1){
 		system(polProg);
