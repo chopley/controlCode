@@ -159,196 +159,10 @@ void cb_pop_front10(circular_buffer *cb, void *item)
 }
 
 
-void *test_threadPower(void *arg){
-//this is a thread that runs when we are in the power mode- you can define commands from the control system and data feed back in here
-	int sd,rc,n, cliLen,read_ret;
-	int i,ij;
-	int childfd;
-	struct sockaddr_in cliAddr, servAddr;
-        struct sockaddr_in server_addr,client_addr;    
-	int optval;
-	struct hostent *hostp; /* client host info */
-	char *hostaddrp;
-	int coordinate_type;
-	char buf[1024],send_data[1024];
-        int sock, connected, bytes_recieved , true = 1;  
-        struct timeval t1,t2;
-	double timediff,timediff_usec,tottimediff;
-	char *returnDataPtr;
-	unsigned int returnDataSize;
-	extern struct circular_buffer buffer;//reference to the circular buffer struct set up in the other data readout thread
-	extern struct circular_buffer* bufferptr;//pointer thats is set to the circular buffer
-	struct UDPCBASSpkt controlSystemtcp; //local copy of data structure that will be sent to the control system
-	char path_noise_diode[128];			// Path to acc_num counter data
-	FILE *fp,*fp1;
-	int writeVal;
-	char commandValue;
-	extern volatile int intensityShift,polarisationShift,changeMode,closeThread1;
-	sprintf(path_noise_diode, "/proc/%s/hw/ioreg/gpio_set4", job[1]);
 
-        printf("starting TCP server thread\n");
- 
-        if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
-            perror("Socket");
-            exit(1);
-        }
+void *command_thread(void *arg){
 
-        if (setsockopt(sock,SOL_SOCKET,SO_REUSEADDR,&true,sizeof(int)) == -1) {
-            perror("Setsockopt");
-            exit(1);
-        }
-        
-        server_addr.sin_family = AF_INET;         
-        server_addr.sin_port = htons(PORT);     
-        server_addr.sin_addr.s_addr = INADDR_ANY; 
-        bzero(&server_addr.sin_zero,8); 
-
-        if (bind(sock, (struct sockaddr *)&server_addr, sizeof(struct sockaddr)) == -1) {
-            perror("Unable to bind");
-            exit(1);
-        }
-
-	printf("Waiting for ROACH_BACKEND data commands on PORT TCP %u\n",PORT);
-        fflush(stdout);
-        strcpy(send_data,"brazil will never win the WC again!! \r");
-	printf("size of cbass pkt %u\n",sizeof(cbassPKT));
-	printf("%s\n",getDataCommand);		
-	
-	while(1)
-	{	printf("Waiting for Connection\n");
-		if(listen(sock,5)<0) //allows 5 request
-			perror("Error on listening\n");
-		cliLen=sizeof(cliAddr);
-		childfd=accept(sock,(struct sockaddr *) &cliAddr,&cliLen);
-		printf("Got connection\n");
-		if(childfd <0)
-			perror("Error on Accept\n");
-
-	
-	 	hostp = (struct hostent*)gethostbyaddr((const char *)&cliAddr.sin_addr.s_addr,sizeof(cliAddr.sin_addr.s_addr), AF_INET);
-
-  	  	if (hostp == NULL)
-     	 		perror("ERROR on gethostbyaddr");
-   	 	hostaddrp = inet_ntoa(cliAddr.sin_addr);
-   	 	if (hostaddrp == NULL){
-	   		perror("ERROR on inet_ntoa\n");
-			}
-			
-                n=1;
-		TRY{	
-			while(n>=0){//while we're still able to send/receive data from the control system keep the tcp connection open
-				gettimeofday(&t1,NULL);
-				timediff=t1.tv_sec-t2.tv_sec;
-				timediff_usec=t1.tv_usec-t2.tv_usec;
-				tottimediff=timediff+timediff_usec/1000000;
-			 //	printf("server established connection with %s (%s) %u\n",hostp->h_name, hostaddrp,PORT);
-
-				  //first clear the incoming structure and then receive the binary data into it!
-		//		printf("recv 1a blocking %d %d\n",n,childfd);
-				n = recv(childfd, buf, 1024,0);
-		//		printf("recv 1b blocking %d %d %s\n",n,childfd,buf);
-				if (n <0){
-					printf("ERROR reading from socket\n");
-				//	close(childfd); 
-					}
-				if(n==0){
-					printf("ERROR connection closed-legacy from original code\n");
-				}
-			//	printf("server received %d %d %d bytes: %s\n", n, buf,childfd);
-			//////////////////////definitions of the parsers///////////	
-				if(!strncmp(buf,getDataCommand,10)){
-			//		printf("getDataCommand %s %d\n",buf,n);
-					cb_pop_front(bufferptr, &controlSystemtcp);//get the packet from 10 integrations ago to send to the control system
-				//	printf("Sending the following in the struct :%d %d %d %d\n",controlSystemtcp.version,controlSystemtcp.data_ch0odd[2],controlSystemtcp.data_ch0odd[3]);
-				//	printf("acc count 3  %lu  %lu %lu %lu %lu %lu %lu %lu %lu %lu %lu %lu %d\n",controlSystemtcp.version,controlSystemtcp.tstart[0],controlSystemtcp.tstart[1],controlSystemtcp.tstart[2]);
-					returnDataPtr=(char *)&controlSystemtcp;
-					returnDataSize=sizeof(controlSystemtcp);
-				}
-				else if(!strncmp(buf,NoiseDiodeCommand,10)){
-					printf("setNoiseDiode Command\n");
-					commandValue=buf[11];	
-					writeVal=atoi(&commandValue);
-					printf("buf %s %d %d\n",buf,commandValue,writeVal);	
-					fp = fopen(path_noise_diode, "w"); 
-					fwrite(&writeVal, 4, 1, fp);
-					fclose(fp);
-					returnDataPtr=(char *)&NoiseDiodeCommand;
-					returnDataSize=sizeof(NoiseDiodeCommand);
-				}
-				else if(!strncmp(buf,changeModeCommand,10)){
-					printf("change Operational Mode command\n");
-					commandValue=buf[11];	
-					writeVal=atoi(&commandValue);
-					printf("buf %s %d %d\n",buf,commandValue,writeVal);	
-					pthread_mutex_lock(&lock_changeMode);
-						changeMode=writeVal;
-					pthread_mutex_unlock(&lock_changeMode);
-					returnDataPtr=(char *)&changeModeCommand;
-					returnDataSize=sizeof(changeModeCommand);
-				}
-				else if(!strncmp(buf,intensityShiftCommand,10)){
-					printf("intensityShift command\n");
-					commandValue=buf[11];	
-					writeVal=atoi(&commandValue);
-					printf("buf %s %d %d\n",buf,commandValue,writeVal);	
-					intensityShift=writeVal;
-					returnDataPtr=(char *)&intensityShiftCommand;
-					returnDataSize=sizeof(intensityShiftCommand);
-				}
-				else {
-					printf("Garbage sent\n");
-					strncpy(Temp,buf,10);
-				  	Temp[10] = '\0';
-					strcat(Temp,",1");
-					printf("Garbage sent %s \n",Temp);
-					returnDataPtr=(char *)&Temp;
-					returnDataSize=12;
-
-				}
-					if(closeThread1!=0){//cleanup thread and close it up
-						printf("Closing thread \n");
-						shutdown(childfd,SHUT_RDWR);
-						shutdown(sock,SHUT_RDWR);
-						pthread_mutex_lock(&lock_testThread);
-							closeThread1=0;
-						pthread_mutex_unlock(&lock_testThread);
-						pthread_exit(&retThread1);
-					}
-			////////////////////////end of Parser//////////////////////////////
-				if(n>=0){//i.e we have received data from the control system 
-			//		printf("Attempting to send a reply %d\n",n);
-					n=send(childfd, returnDataPtr,returnDataSize,0);
-					if(n<0){
-						printf("Error on sending reply\n");
-						 }
-			//		printf("Sent %u bytes\n",n);       
-					}
-				
-				
-				//cb_pop_front10(bufferptr, &controlSystemtcp);//get the packet from 10 integrations ago to send to the control system
-			//	printf("Sending Reply\n");
-
-				}
-
-			printf("server closing connection with control system\n");
-
-		//	shutdown(childfd,SHUT_RDWR);
-		//	shutdown(sock,SHUT_RDWR);
-		}
-		CATCH{
-			printf("server closing connection with control system\n");
-			//shutdown(childfd,SHUT_RDWR);
-			//shutdown(sock,SHUT_RDWR);
-			printf("Exception in the TCP server catch\n");}
-		ETRY;
-	}
-
-
-}
-
-void *test_thread(void *arg){
-
-//this is a thread that runs when we are in the polarisation mode- you can define commands from the control system and data feed back in here
+//this is a thread that runs and handles communications with the gcp control system
 	int sd,rc,n, cliLen,read_ret,n2;
 	extern volatile int changeMode,closeThread1;
 	int changeModeTemp,closeThread1Temp;
@@ -429,9 +243,9 @@ void *test_thread(void *arg){
 	printf("size of cbass pkt %u\n",sizeof(cbassPKT));
 	printf("%s\n",getDataCommand);		
 	
-	if(listen(sock,2)<0) //allows 5 request
+	if(listen(sock,1)<0) //allows 1 equest
 		perror("Error on listening\n");
-	printf("Waiting for Connection\n");
+	printf("Waiting for Connection command_thread\n");
 	cliLen=sizeof(cliAddr);
 	FD_ZERO(&readsockfds); //zero the select file descriptor
 	FD_SET(sock, &readsockfds); //and add childfd to the set
@@ -440,7 +254,6 @@ void *test_thread(void *arg){
 	n=select(sock+1,&readsockfds,NULL,NULL,&tvchildfd); //and set up the select timeout
 	if(n<=0){
 		printf("Error n<=0\n");
-		//shutdown(sock,SHUT_RDWR);
 		close(sock);
 		pthread_mutex_lock(&lock_changeMode);
 			changeMode=1;
@@ -493,14 +306,6 @@ void *test_thread(void *arg){
 					recv(childfd, buf, 1024,0);
 					//printf("Receiving %d\n",n);
 				}
-				//if we've been signalled from the main thread then close the sockets and close the thread
-			//	if(closeThread1!=0){
-			//		printf("Closing thread \n");
-			//		shutdown(childfd,SHUT_RDWR);
-			//		shutdown(sock,SHUT_RDWR);
-			//		closeThread1=0;
-			//		pthread_exit(&retThread1);
-			//	}
 				pthread_mutex_lock(&lock_testThread);
 					closeThread1Temp=closeThread1;
 				pthread_mutex_unlock(&lock_testThread);
@@ -2033,8 +1838,7 @@ int main(int argc, char *argv[])
         int sock, connected, bytes_recieved , true = 1,r; 
 	int t=1;
         char send_data [1024] , recv_data[1024];       
-	pthread_t testThread_id;
-	pthread_t testThreadPower_id;
+	pthread_t commandThread_id;
 	pthread_t packROACHpacket_thread_id;
 	pthread_t packROACHpacket_threadPower_id;
         struct sockaddr_in server_addr,client_addr;    
@@ -2157,7 +1961,7 @@ int main(int argc, char *argv[])
 		printf("\n mutex init changeMode failed\n");
 		return 1;
 	    }
-	pthread_create(&testThread_id,NULL,test_thread,NULL);
+	pthread_create(&commandThread_id,NULL,command_thread,NULL);
 	if(VERSION==1){
 		pthread_create(&packROACHpacket_thread_id,NULL,packROACHpacket_thread,NULL);
 		packROACHpacket_threadPower_id=packROACHpacket_thread_id;//initialize this temporarily
