@@ -120,14 +120,16 @@ void cb_push_back(circular_buffer *cb, const void *item)
     cb->count++; //increment the count of how many objects have been stored
 }
 
-void cb_pop_front(circular_buffer *cb, void *item)
+int cb_pop_front(circular_buffer *cb, void *item)
 {//function to get data back off the ring buffer stack
+	int returnValue;
     if(cb->count <= 0){
-	printf("No data in ring buffer\n");
+	returnValue=1;
     }
         // handle error
    // memcpy(item, cb->tail, cb->sz); //memcpy from the pointer cb->tail to pointer item
     if((cb->count>0)){
+	returnValue=0;
     	memcpy(item, cb->tail, cb->sz); //memcpy from the pointer cb->head10 to pointer item-this gets the data from 10 packets ago to send to the control system
     	cb->tail = (char*)cb->tail + cb->sz;//try to increment the tail pointer
     //	printf("removing item %d %d\n",cb->sz,cb->tail);
@@ -137,12 +139,13 @@ void cb_pop_front(circular_buffer *cb, void *item)
 		}
     cb->count--;//decrement the count of the number of objects in the ring buffer
 	}
+	return returnValue;
 }
 
 void cb_pop_front10(circular_buffer *cb, void *item)
 {//function to get data back off the ring buffer stack
     if(cb->count == 0){
-	printf("No data in ring buffer\n");
+	printf("No data in ring buffer pop10\n");
     }
         // handle error
    // memcpy(item, cb->tail, cb->sz); //memcpy from the pointer cb->tail to pointer item
@@ -167,6 +170,7 @@ void *command_thread(void *arg){
 	extern volatile int changeMode,closeThread1;
 	int changeModeTemp,closeThread1Temp;
 	int i,ij;
+	int bufferReads=0;
 	int childfd;
 	struct sockaddr_in cliAddr, servAddr;
         struct sockaddr_in server_addr,client_addr;    
@@ -175,7 +179,8 @@ void *command_thread(void *arg){
 	char *hostaddrp;
 	int coordinate_type;
 	char buf[1024],send_data[1024];
-        int sock, connected, bytes_recieved , true = 1;  
+        int sock, connected, bytes_recieved , true = 1; 
+	int funcReturn; 
         struct timeval t1,t2;
 	double timediff,timediff_usec,tottimediff;
 	char *returnDataPtr;
@@ -364,7 +369,17 @@ void *command_thread(void *arg){
 				}
 				if(!strncmp(buf,getDataCommand,10)){
 			//		printf("getDataCommand %s %d\n",buf,n);
-					cb_pop_front(bufferptr, &controlSystemtcp);//get the packet from 10 integrations ago to send to the control system
+				//	usleep(100);
+					funcReturn=cb_pop_front(bufferptr, &controlSystemtcp);//get the packet from 10 integrations ago to send to the control system	      
+					if(funcReturn!=0){
+						bufferReads++;
+						if(bufferReads>10){
+							printf("No data in ring buffer Loop\n");
+						}
+					}
+					else if(funcReturn==0){
+						bufferReads=0;
+					}
 					returnDataPtr=(char *)&controlSystemtcp;
 					returnDataSize=sizeof(controlSystemtcp);
 				}
@@ -460,6 +475,7 @@ void *command_thread(void *arg){
 					printf("Garbage sent %s \n",Temp);
 					returnDataPtr=(char *)&Temp;
 					returnDataSize=0;
+					n=0;
 					shutdown(childfd,SHUT_RDWR);
 					shutdown(sock,SHUT_RDWR);
 					if(VERSION==1){
@@ -911,13 +927,14 @@ void *packROACHpacket_thread(void *arg){
 			cb_push_back(bufferptr,&cbassPKT); //add the last packet to the circular buffer
 		}
 	//FIRST WAIT FOR THE ROACH BEFORE SENDING ANY DATA
+		usleep(100);
 		gettimeofday(&t2,NULL);
 		
 		while(acc_new==acc_old){
 			fp = fopen(path_acc_cnt, "r"); 
 			fread(&acc_new, 4, 1, fp);
 			fclose(fp);
-			
+			usleep(10);
 			}
 		acc_old = acc_new;
 		
@@ -944,7 +961,7 @@ void *packROACHpacket_thread(void *arg){
 	  	if(tDiff[packedDataCounter]<=0){
 			//printf("PPS Acc %d Time %d:%d \n",timeStamp,t2.tv_sec,t2.tv_usec);
 			if(timeStamp!=2499976){
-				printf("1PPS Not connected %d %d %d %d %d\n",timeStamp,acc_cntr,acc_new,tDiff[packedDataCounter],statusBit);
+		//		printf("1PPS Not connected %d %d %d %d %d\n",timeStamp,acc_cntr,acc_new,tDiff[packedDataCounter],statusBit);
 			}
 
 			acc_cntr=acc_new;
@@ -1325,7 +1342,11 @@ void *packROACHpacket_threadPower(void *arg){
 	acc_new=0;
 	packedDataCounter=0;
 	timeStamp=0;
-	cb_push_back(bufferptr,&cbassPKT); //add the last packet to the circular buffer	
+	cb_push_back(bufferptr,&cbassPKT); //add the last packet to the circular buffer
+	while(1){
+		printf("waiting");
+		sleep(1);
+	}	
 	while(1){
 		packedDataCounter++;
 		if(packedDataCounter==1){
@@ -1354,6 +1375,7 @@ void *packROACHpacket_threadPower(void *arg){
 			fp = fopen(path_acc_cnt, "r"); 
 			fread(&acc_new, 4, 1, fp);
 			fclose(fp);
+			usleep(10000);
 			
 			}
 		fp1 = fopen(path_timeStamp, "r"); 
