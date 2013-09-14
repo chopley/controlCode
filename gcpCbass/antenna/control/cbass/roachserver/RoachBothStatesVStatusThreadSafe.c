@@ -295,6 +295,12 @@ void *test_threadPower(void *arg){
 					returnDataPtr=(char *)&intensityShiftCommand;
 					returnDataSize=sizeof(intensityShiftCommand);
 				}
+				else if(!strncmp(buf,resetBufferCommand,10)){
+					
+					cb_free(&cbassPKT)
+					printf("Reset Buffer command\n");
+
+				}
 				else {
 					printf("Garbage sent\n");
 					strncpy(Temp,buf,10);
@@ -646,6 +652,11 @@ void *test_thread(void *arg){
 					fclose(fp5);
 					returnDataPtr=(char *)&PhaseShifterCommand;
 					returnDataSize=sizeof(PhaseShifterCommand);
+				}
+				else if(!strncmp(buf,resetBufferCommand,10)){
+					//reset the circular buffer
+					printf("Reset Buffer command\n");
+					cb_free(bufferptr)
 				}
 				else {
 					printf("Garbage sent\n");
