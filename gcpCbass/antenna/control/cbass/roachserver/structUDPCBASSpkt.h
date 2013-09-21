@@ -33,6 +33,7 @@ struct UDPCBASSpkt {
   int data_ch5odd[kDataperPacket*vectorLength]; //Tl2
   int data_ch5even[kDataperPacket*vectorLength]; //Tl2
   int data_switchstatus[kDataperPacket]; //Switch Status Noise diode etc
+  int tsecond[10];
 };
 
 struct tempDataPacket{
