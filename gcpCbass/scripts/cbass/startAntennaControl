@@ -1,5 +1,5 @@
 #!/bin/tcsh
-$CBASS_DIR/bin/cbassAntennaControl simbackend=f simgpib=f simpmac=f simlna=f simdlp=t simadc=t host=localhost logd=$CBASS_DIR/runlogs logf=cbassAntennaControl
+$CBASS_DIR/bin/cbassAntennaControl simbackend=f simgpib=f simpmac=f simlna=t simdlp=t simadc=t host=localhost logd=$CBASS_DIR/runlogs logf=cbassAntennaControl
 
 
 

@@ -1032,6 +1032,8 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
 
  // COUT("prevSecStart, prevSecEnd: " << prevSecStart_ << " , " << prevSecEnd_);
  // COUT("DEBUG STUFF");
+
+#if(0)
   prevSecEnd_ = currentIndex_;
 
   //prevSecStart_ = currentIndex_ - 99;
@@ -1039,8 +1041,9 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
   if(prevSecStart_ <0){
     prevSecStart_ += RING_BUFFER_LENGTH;
   }
-//  int numSamples = prevSecEnd_ - prevSecStart_ + 1;
   int numSamples = prevSecEnd_ - prevSecStart_  ;
+#endif
+  int numSamples = prevSecEnd_ - prevSecStart_ + 1;
   
   if(numSamples<0){
     numSamples += RING_BUFFER_LENGTH;

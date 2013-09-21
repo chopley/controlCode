@@ -15,7 +15,7 @@ encoder_cals 1000000000, 1000000000, 0  # Az,el counts per turn
 # az positive limits:  soft 494.2, hard 497ish
 # el negative limits:  soft 13.4 , hard 10.9
 # el positive limits:  soft 84.5 , hard 86
-encoder_limits  -30, 450, 15, 84, 0, 0  # in degrees  
+encoder_limits  -270, 130, 15, 84, 0, 0  # in degrees  
 
 # Pointing models derived by MOI and SJCM from optical pointing data
 #  of the night of 15-may-2013.  This was only on 2 sources, and fit
@@ -24,7 +24,8 @@ encoder_limits  -30, 450, 15, 84, 0, 0  # in degrees
 #-------------------------------------------------------------
 # Common Pointing
 #-------------------------------------------------------------
-encoder_zeros  3.0884, 4.2570, 0
+#encoder_zeros  3.0884, 4.2570, 0
+encoder_zeros  4.0, -0.3, 0
 tilts  0.0795, -0.0163, -0.0290
 
 #-------------------------------------------------------------

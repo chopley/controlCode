@@ -80,7 +80,7 @@ void LnaBiasMonitor::connect()
       connected_ = true;
       //      COUT("connected to labjack");
     }  else {
-      COUT("did not find LNA labjack with proper serial number");
+      COUT("did not find LNA labjack with proper serial number BIAS");
       connected_ = false;
       return;
     }

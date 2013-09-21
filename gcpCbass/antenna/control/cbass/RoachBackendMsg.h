@@ -45,7 +45,8 @@
 #define CC_TO_SEC 128/250000000                                   
 
 
-#define DEFAULT_NUMBER_BYTES_PER_TRANSFER 15472
+#define DEFAULT_NUMBER_BYTES_PER_TRANSFER 15512
+//#define DEFAULT_NUMBER_BYTES_PER_TRANSFER 15472
 //#define DEFAULT_NUMBER_BYTES_PER_TRANSFER 15432
 
 namespace gcp {
@@ -226,6 +227,7 @@ struct UDPCBASSpkt {
   int data_ch5odd[kDataperPacket*vectorLength];
   int data_ch5even[kDataperPacket*vectorLength];
   int data_switchstatus[kDataperPacket];
+  int tsecond[10];
 };
 
 

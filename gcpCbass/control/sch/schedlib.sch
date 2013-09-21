@@ -112,7 +112,7 @@ command init_obs(String logline) {
   zeroScanOffsets
 
   # recalibrate the encoders
-  servoInitializeAntenna
+#  servoInitializeAntenna
 
 }
 

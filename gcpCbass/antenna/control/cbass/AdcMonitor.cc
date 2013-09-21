@@ -58,7 +58,7 @@ void AdcMonitor::connect()
       connected_ = true;
       //      COUT("connected to ADC labjack");
     }  else {
-      COUT("did not find ADC labjack with proper serial number");
+      COUT("did not find ADC labjack with proper serial number ADC");
       connected_ = false;
       return;
     }

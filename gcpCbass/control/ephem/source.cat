@@ -5,6 +5,8 @@ FIXED neutral   90 15 0
 FIXED trans     161.02 0.08
 FIXED scanStart -18 45
 FIXED ncpfixed  0 37:14:02
+FIXED scpfixed  -180 25:53:23.105
+FIXED colltower  27.85 10.2
 
  
 FIXED roofant0  155   10:48

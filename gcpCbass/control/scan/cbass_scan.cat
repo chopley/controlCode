@@ -32,6 +32,35 @@ CONTINUOUS az-20d-el65 $CBASS_DIR/control/scan/az_20deg_el65.scan
 CONTINUOUS az-20d-el75 $CBASS_DIR/control/scan/az_20deg_el75.scan
 
 
+# cbass survey scans of various speeds
+NORMAL  survey-4.0ds-10sdead $CBASS_DIR/control/scan/full_az_scan_4.0ds_10sdead.scan
+NORMAL  survey-4.1ds-10sdead $CBASS_DIR/control/scan/full_az_scan_4.1ds_10sdead.scan
+NORMAL  survey-4.2ds-10sdead $CBASS_DIR/control/scan/full_az_scan_4.2ds_10sdead.scan
+NORMAL  survey-4.3ds-10sdead $CBASS_DIR/control/scan/full_az_scan_4.3ds_10sdead.scan
+NORMAL  survey-4.4ds-10sdead $CBASS_DIR/control/scan/full_az_scan_4.4ds_10sdead.scan
+NORMAL  survey-4.5ds-10sdead $CBASS_DIR/control/scan/full_az_scan_4.5ds_10sdead.scan
+NORMAL survey-4.25ds-10sdead $CBASS_DIR/control/scan/full_az_scan_4.25ds_10sdead.scan
+NORMAL  survey-3.9ds-10sdead $CBASS_DIR/control/scan/full_az_scan_3.9ds_10sdead.scan
+NORMAL  survey-3.8ds-10sdead $CBASS_DIR/control/scan/full_az_scan_3.8ds_10sdead.scan
+NORMAL  survey-3.7ds-10sdead $CBASS_DIR/control/scan/full_az_scan_3.7ds_10sdead.scan
+NORMAL  survey-3.6ds-10sdead $CBASS_DIR/control/scan/full_az_scan_3.6ds_10sdead.scan
+NORMAL  survey-3.5ds-10sdead $CBASS_DIR/control/scan/full_az_scan_3.5ds_10sdead.scan
+NORMAL survey-3.75ds-10sdead $CBASS_DIR/control/scan/full_az_scan_3.75ds_10sdead.scan
+
+NORMAL  survey-4.0ds-nodead $CBASS_DIR/control/scan/full_az_scan_4.0ds_nodead.scan
+NORMAL  survey-4.1ds-nodead $CBASS_DIR/control/scan/full_az_scan_4.1ds_nodead.scan
+NORMAL  survey-4.2ds-nodead $CBASS_DIR/control/scan/full_az_scan_4.2ds_nodead.scan
+NORMAL  survey-4.3ds-nodead $CBASS_DIR/control/scan/full_az_scan_4.3ds_nodead.scan
+NORMAL  survey-4.4ds-nodead $CBASS_DIR/control/scan/full_az_scan_4.4ds_nodead.scan
+NORMAL  survey-4.5ds-nodead $CBASS_DIR/control/scan/full_az_scan_4.5ds_nodead.scan
+NORMAL survey-4.25ds-nodead $CBASS_DIR/control/scan/full_az_scan_4.25ds_nodead.scan
+NORMAL  survey-3.9ds-nodead $CBASS_DIR/control/scan/full_az_scan_3.9ds_nodead.scan
+NORMAL  survey-3.8ds-nodead $CBASS_DIR/control/scan/full_az_scan_3.8ds_nodead.scan
+NORMAL  survey-3.7ds-nodead $CBASS_DIR/control/scan/full_az_scan_3.7ds_nodead.scan
+NORMAL  survey-3.6ds-nodead $CBASS_DIR/control/scan/full_az_scan_3.6ds_nodead.scan
+NORMAL  survey-3.5ds-nodead $CBASS_DIR/control/scan/full_az_scan_3.5ds_nodead.scan
+NORMAL survey-3.75ds-nodead $CBASS_DIR/control/scan/full_az_scan_3.75ds_nodead.scan
+
 
 
 #-----------------------------
@@ -77,6 +106,16 @@ NORMAL point_10d_0.25step  $CBASS_DIR/control/scan/source_az1ds_az10d_el0.25_el1
 NORMAL raster_4x4x0.2 $CBASS_DIR/control/scan/raster_4x4x0.2_1ds.scan
 NORMAL raster_8x4x0.2 $CBASS_DIR/control/scan/raster_8x4x0.2_1ds.scan
 
+NORMAL source_raster_10d_0.2 $CBASS_DIR/control/scan/raster_10d_10d_1ds_0.2del.scan
+NORMAL source_raster_10d_0.1 $CBASS_DIR/control/scan/raster_10d_10d_1ds_0.1del.scan
+NORMAL source_raster_10d_0.05 $CBASS_DIR/control/scan/raster_10d_10d_1ds_0.05del.scan
+NORMAL source_raster_8x4x0.1 $CBASS_DIR/control/scan/raster_8d_4d_1ds_0.1del.scan
+NORMAL source_raster_8x4x0.05 $CBASS_DIR/control/scan/raster_8d_4d_1ds_0.05del.scan
+NORMAL source_raster_8x4x0.2_slow_jl $CBASS_DIR/control/scan/source_raster_8x4x0.2_slow_jl.scan
+NORMAL raster_elscan_jl $CBASS_DIR/control/scan/raster_elscan_jl.scan
+NORMAL source_raster_8x4x0.1_slow_jl $CBASS_DIR/control/scan/source_raster_8x4x0.1_slow_jl.scan
+NORMAL source_raster_5x4x0.05_1ds $CBASS_DIR/control/scan/source_raster_5x4x0.05_1ds_hcc.scan
+NORMAL source_raster_8x1x0.2_slow $CBASS_DIR/control/scan/source_raster_8x1x0.2_slow.scan
 
 #-----------------------------
 # ncp survey scan files (MAS)

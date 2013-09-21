@@ -1,4 +1,4 @@
-add_page 432 63 Status black red yellow 10 11 {13 10 12 13 10 10 10 10} {} 0 {} 0 {
+add_page 347 266 Status black red yellow 10 11 {13 10 12 13 10 10 10 10} {} 0 {} 0 {
   label 0 0 midnightblue paleturquoise center {Array frame}
   label 0 1 midnightblue paleturquoise center {Antenna frame}
   label 0 4 midnightblue paleturquoise center Azimuth
@@ -88,6 +88,10 @@ add_page 432 63 Status black red yellow 10 11 {13 10 12 13 10 10 10 10} {} 0 {} 
   label 5 11 midnightblue paleturquoise center {cold plate}
   label 5 12 midnightblue paleturquoise center ColdLoad
   label 5 13 midnightblue paleturquoise center OMT
+  label 5 14 midnightblue paleturquoise center Temperature
+  label 5 15 midnightblue paleturquoise center Humidity
+  label 5 16 midnightblue paleturquoise center WindSpeed
+  label 5 17 midnightblue paleturquoise center Pressure
   register 5 20 black green center {antenna0.receiver.gateVoltage[0]} fixed_point 2 0 {} 0 0 0.0 0.0 0 1
   register 5 21 black green center {antenna0.receiver.gateVoltage[1]} fixed_point 2 0 {} 0 0 0.0 0.0 0 1
   register 5 22 black green center {antenna0.receiver.gateVoltage[2]} fixed_point 2 0 {} 0 0 0.0 0.0 0 1
@@ -101,6 +105,10 @@ add_page 432 63 Status black red yellow 10 11 {13 10 12 13 10 10 10 10} {} 0 {} 
   register 6 11 black green center {antenna0.thermal.lsTemperatureSensors[7]} floating 4 0 {} 0 0 0.0 0.0 0 1
   register 6 12 black green center {antenna0.thermal.ccTemperatureLoad[0][0]} fixed_point 4 0 {} 1 0 0.0 0.0 0 1
   register 6 13 black green center {antenna0.thermal.lsTemperatureSensors[3]} fixed_point 3 0 {} 0 0 0.0 0.0 0 1
+  register 6 14 black green center {array.weather.airTemperature[0]} floating 15 0 {} 0 0 0.0 0.0 0 1
+  register 6 15 black green center {array.weather.relativeHumidity[0]} floating 15 0 {} 0 0 0.0 0.0 0 1
+  register 6 16 black green center {array.weather.windSpeed[0]} floating 15 0 {} 0 0 0.0 0.0 0 1
+  register 6 17 black green center {array.weather.pressure[0]} fixed_point 5 0 {} 0 0 0.0 0.0 0 1
   label 7 0 midnightblue paleturquoise center Version
   register 7 1 black green center {antenna0.roach1.version[0][0]} floating 10 0 {} 0 0 0.0 0.0 0 1
   register 7 2 black green center {antenna0.roach2.version[0][0]} floating 10 0 {} 0 0 0.0 0.0 0 1

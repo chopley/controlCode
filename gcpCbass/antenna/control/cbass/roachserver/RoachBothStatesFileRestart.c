@@ -488,7 +488,7 @@ void *command_thread(void *arg){
 							changeMode=2;
 						pthread_mutex_unlock(&lock_changeMode);
 					}
-					printf("Closing thread garbage\n");
+		//			printf("Closing thread garbage\n");
 					pthread_exit(&retThread1);
 
 				}
@@ -661,7 +661,7 @@ void *packROACHpacket_thread(void *arg){
         extern volatile int VERSION;
 	int acc_old;
         int acc_new,acc_start;
-        int acc_cntr;
+        int acc_cntr,jaccCntr;
 	int tDiff[10];
         int timeStamp;
 	extern	struct UDPCBASSpkt cbassPKT;
@@ -927,14 +927,15 @@ void *packROACHpacket_thread(void *arg){
 			cb_push_back(bufferptr,&cbassPKT); //add the last packet to the circular buffer
 		}
 	//FIRST WAIT FOR THE ROACH BEFORE SENDING ANY DATA
-		usleep(100);
 		gettimeofday(&t2,NULL);
 		
-		while(acc_new==acc_old){
+		//usleep(100);
+		jaccCntr=0;
+		while((acc_new==acc_old) && (jaccCntr<20000)){
 			fp = fopen(path_acc_cnt, "r"); 
 			fread(&acc_new, 4, 1, fp);
+			jaccCntr++;
 			fclose(fp);
-			usleep(10);
 			}
 		acc_old = acc_new;
 		
@@ -1574,6 +1575,7 @@ int encodeNetwork(struct UDPCBASSpkt *pkt){
 	pkt->int_count = htonl(pkt->int_count);
 	for(i=0;i<10;i++){
 		pkt->tstart[i]=htonl(pkt->tstart[i]);
+		pkt->tsecond[i]=htonl(pkt->tstart[i]);
 	}
  	//printf("%f %d\n",(float)pkt->data_ch0odd[300],pkt->data_ch0odd[300]);       
 	//printf("encode %04x\n",pkt->data_ch0odd[300]);
@@ -1832,22 +1834,22 @@ void initCoeffs(){
 	while(i<16){
 		printf("i=%d\n",i);
 		sprintf(path_to_registerNames[i],"/proc/%s/hw/ioreg/%s",job[1],registerNames[i]);
-		printf("%s\n",path_to_registerNames[i]);
+	//	printf("%s\n",path_to_registerNames[i]);
 		fp=fopen(filenames[i], "r");
 		fpreg=fopen(path_to_registerNames[i],"w");
 		j=0;
 		while(fgets(line, 80, fp) != NULL)
 			{ /* get a line, up to 80 chars from fr.  done if NULL */
 			 sscanf(line, "%ld", &ampcoffs[j]);
-			 printf("%d %d\n",j,ampcoffs[j]);
+	//		 printf("%d %d\n",j,ampcoffs[j]);
 			 j++;
 			}
-		printf("j=%d\n",j);
+		//printf("j=%d\n",j);
 		fclose(fp);
-		printf("j=%d\n",j);
+		//printf("j=%d\n",j);
 		fwrite(&ampcoffs[0], 32*4, 1, fpreg);
 		fclose(fpreg);
-		printf("j=%d\n",j);
+		//printf("j=%d\n",j);
 		i++;
 	}
 	
