@@ -47,16 +47,16 @@ AntennaRoach::AntennaRoach(AntennaMaster* parent, bool simRoach) :
 
   if(parent_){
     share_  = parent->getShare();
-   // roach1_ = new RoachBackend(share_, "roach1", simRoach, "pumba", 1);
-   // roach2_ = new RoachBackend(share_, "roach2", simRoach, "timon", 1);
+    roach1_ = new RoachBackend(share_, "roach1", simRoach, "pumba", 1);
+    roach2_ = new RoachBackend(share_, "roach2", simRoach, "timon", 1);
 //CJC- switch the ROACHES around to see if the dropouts correspond to hardware or GCP
-    roach1_ = new RoachBackend(share_, "roach1", simRoach, "timon", 1);
-    roach2_ = new RoachBackend(share_, "roach2", simRoach, "pumba", 1);
+   // roach1_ = new RoachBackend(share_, "roach1", simRoach, "timon", 1);
+   // roach2_ = new RoachBackend(share_, "roach2", simRoach, "pumba", 1);
   } else {
-   // roach1_ = new RoachBackend(simRoach, "pumba");
-   // roach2_ = new RoachBackend(simRoach, "timon");
-    roach1_ = new RoachBackend(simRoach, "timon");
-    roach2_ = new RoachBackend(simRoach, "pumba");
+    roach1_ = new RoachBackend(simRoach, "pumba");
+    roach2_ = new RoachBackend(simRoach, "timon");
+   // roach1_ = new RoachBackend(simRoach, "timon");
+   // roach2_ = new RoachBackend(simRoach, "pumba");
   };
 
   antennaRoach_ = this;
