@@ -291,10 +291,10 @@ start () {
 	    echo "Starting cbassControl in sa"
 	    case $2 in
 	        fg)
-		    \xterm +vb -geometry 70x30+900+0    -bg DarkOliveGreen      -T "cbassControl" -e ssh -X -Y c-bass 'cbassControl useModemPager=f logd=$CBASS_DIR/runlogs logf=cbassControl &' &
+		    \xterm +vb -geometry 70x30+900+0    -bg DarkOliveGreen      -T "cbassControl" -e ssh -X -Y cbaezar 'cbassControl useModemPager=f logd=$CBASS_DIR/runlogs logf=cbassControl &' &
 		    ;;
 		bg)
-		    ssh -X -Y c-bass 'cbassControl useModemPager=f logd=$CBASS_DIR/runlogs logf=cbassControl < /dev/null >& /dev/null &' &
+		    ssh -X -Y cbaezar 'cbassControl useModemPager=f logd=$CBASS_DIR/runlogs logf=cbassControl < /dev/null >& /dev/null &' &
 		    ;;
 	    esac
 	    ;;
@@ -306,10 +306,10 @@ start () {
 	    echo "Starting cbassMediator in sa"
 	    case $2 in
 		fg)
-		    \xterm +vb -geometry 70x30+450+0  -bg goldenrod -fg black -T "cbassMediator"   -e  ssh -X -Y c-bass 'cbassMediator simRx=t sim=f logd=$CBASS_DIR/runlogs logf=cbassMediator ctlhost=localhost wxhost=localhost &' &
+		    \xterm +vb -geometry 70x30+450+0  -bg goldenrod -fg black -T "cbassMediator"   -e  ssh -X -Y cbaezar 'cbassMediator simRx=t sim=f logd=$CBASS_DIR/runlogs logf=cbassMediator ctlhost=localhost wxhost=localhost &' &
 		    ;;
 		bg)
-		    ssh -X -Y c-bass 'cbassMediator simRx=t sim=f logd=$CBASS_DIR/runlogs logf=cbassMediator ctlhost=localhost wxhost=localhost < /dev/null >& /dev/null &' &
+		    ssh -X -Y cbaezar 'cbassMediator simRx=t sim=f logd=$CBASS_DIR/runlogs logf=cbassMediator ctlhost=localhost wxhost=localhost < /dev/null >& /dev/null &' &
 		    ;;
 	    esac
 	    ;;
@@ -392,10 +392,10 @@ start () {
     	    echo "Starting cbassAntennaControl on sa"
 	    case $2 in
 		fg)
-		    \xterm +vb -geometry 70x30+0+0      -bg MistyRose4   -T "cbassAntennaControl"        -e ssh -X -Y c-bass 'startCbassAntennaControl &' &
+		    \xterm +vb -geometry 70x30+0+0      -bg MistyRose4   -T "cbassAntennaControl"        -e ssh -X -Y cbaezar 'startCbassAntennaControl &' &
 		    ;;
 		bg)
-		    ssh -X -Y c-bass 'startCbassAntennaControl < /dev/null >& /dev/null &' &
+		    ssh -X -Y cbaezar 'startCbassAntennaControl < /dev/null >& /dev/null &' &
 		    ;;
 	    esac
 	    ;;
@@ -404,10 +404,10 @@ start () {
             echo "Starting cbassWxServer on c-bass"
             case $2 in
                 fg)
-                    \xterm +vb -geometry 70x30+450+500    -fg black -bg Plum      -T "cbassWxServer" -e ssh -X -Y c-bass 'cbassWxServer logd=$CBASS_DIR/runlogs logf=cbassWx &' &
+                    \xterm +vb -geometry 70x30+450+500    -fg black -bg Plum      -T "cbassWxServer" -e ssh -X -Y cbaezar 'cbassWxServer logd=$CBASS_DIR/runlogs logf=cbassWx &' &
                     ;;
                 bg)
-                    ssh -X -Y c-bass 'cbassWxServer  logd=$CBASS_DIR/runlogs logf=cbassWx < /dev/null >& /dev/null &' &
+                    ssh -X -Y cbaezar 'cbassWxServer  logd=$CBASS_DIR/runlogs logf=cbassWx < /dev/null >& /dev/null &' &
                     ;;
             esac
             ;;
@@ -445,10 +445,10 @@ start () {
             echo "Starting cbassGrabber on South African telescope"
             case $2 in
                 fg)
-                    \xterm +vb -geometry 70x30+900+500    -fg black -bg PowderBlue      -T "cbassGrabber" -e ssh -X -Y c-bass 'cbassGrabber logd=$CBASS_DIR/runlogs logf=cbassGrabber simulate=f ctlhost=localhost imhost=localhost &' &
+                    \xterm +vb -geometry 70x30+900+500    -fg black -bg PowderBlue      -T "cbassGrabber" -e ssh -X -Y cbaezar 'cbassGrabber logd=$CBASS_DIR/runlogs logf=cbassGrabber simulate=f ctlhost=localhost imhost=localhost &' &
                     ;;
                 bg)
-                    ssh -X -Y c-bass '$CBASS_DIR/bin/cbassGrabber simulate=f ctlhost=localhost imhost=localhost < /dev/null >& /dev/null &' &
+                    ssh -X -Y cbaezar '$CBASS_DIR/bin/cbassGrabber simulate=f ctlhost=localhost imhost=localhost < /dev/null >& /dev/null &' &
                     ;;
             esac
             ;;
@@ -505,7 +505,7 @@ stop () {
 	
 	controlsa)
 	    echo "Killing cbassControl on SA"
-	    ssh c-bass '$CBASS_DIR/scripts/common/killAll cbassControl'
+	    ssh cbaezar '$CBASS_DIR/scripts/common/killAll cbassControl'
 	    ;;
 
 
@@ -548,7 +548,7 @@ stop () {
 	
 	mediatorsa)
 	    echo "Killing cbassMediator on SA"
-	    ssh c-bass '$CBASS_DIR/scripts/common/killAll cbassMediator'
+	    ssh cbaezar '$CBASS_DIR/scripts/common/killAll cbassMediator'
 	    ;;
 
 # Stop antenna on lola
@@ -569,21 +569,21 @@ stop () {
 
 	antennasa)
 	    echo "Killing cbassAntennaControl on SA"
-	    ssh c-bass '$CBASS_DIR/scripts/common/killAll cbassAntennaControl'
+	    ssh cbaezar '$CBASS_DIR/scripts/common/killAll cbassAntennaControl'
 	    ;;
 
 # Stop wx on SA
 
 	wxsa)
 	    echo "Killing cbassWxServer on SA"
-	    ssh c-bass '$CBASS_DIR/scripts/common/killAll cbassWxServer'
+	    ssh cbaezar '$CBASS_DIR/scripts/common/killAll cbassWxServer'
 	    ;;
 
 # Stop grabber on SA
 
 	grabbersa)
 	    echo "Killing cbassGrabber on SA"
-	    ssh c-bass '$CBASS_DIR/scripts/common/killAll cbassGrabber'
+	    ssh cbaezar '$CBASS_DIR/scripts/common/killAll cbassGrabber'
 	    ;;
 
 
