@@ -657,6 +657,12 @@ void *packROACHpacket_thread(void *arg){
 	FILE *fpCh2MSBodd,*fpCh3MSBodd,*fpCh1MSBodd,*fpCh4MSBodd,*fpCh5MSBodd,*fpCh6MSBodd;				// File pointer
 	FILE *fpCh2LSBeven,*fpCh3LSBeven,*fpCh1LSBeven,*fpCh4LSBeven,*fpCh5LSBeven,*fpCh6LSBeven;				// File pointer
 	FILE *fpCh2LSBodd,*fpCh3LSBodd,*fpCh1LSBodd,*fpCh4LSBodd,*fpCh5LSBodd,*fpCh6LSBodd;				// File pointer
+	char path_enablePhaseSwitch[128];			// Path to acc_num counter data
+	char path_phaseFrequency[128];			// Path to acc_num counter data
+	char path_demodPhaseSwitch1[128];			// Path to acc_num counter data
+	char path_phaseDelay2[128];			// Path to acc_num counter data
+	char path_Demod_transL[128];			// Path to acc_num counter data
+	
 	extern char *job[5];
         extern volatile int VERSION;
 	int acc_old;
@@ -667,59 +673,114 @@ void *packROACHpacket_thread(void *arg){
 	extern	struct UDPCBASSpkt cbassPKT;
 	extern volatile int globalStatus;
 	signal(SIGINT, cleanup);
-////////////////define all the required registers////////////////////	
-	sprintf(path_acc_cnt, "/proc/%s/hw/ioreg/Subsystem1_readAccumulation", job[1]);
-	sprintf(path_acc_len, "/proc/%s/hw/ioreg/acc_len", job[1]);
-	sprintf(path_cnt_rst, "/proc/%s/hw/ioreg/cnt_rst", job[1]);
-	sprintf(path_sync_en, "/proc/%s/hw/ioreg/sync_en", job[1]);
-	sprintf(path_sync_cnt, "/proc/%s/hw/ioreg/sync_en", job[1]);
-	sprintf(path_timeStamp, "/proc/%s/hw/ioreg/Subsystem1_timeStamp", job[1]);
-	sprintf(path_channel1evenMSB, "/proc/%s/hw/ioreg/Subsystem1_ch1_msb", job[1]);
-	sprintf(path_channel2evenMSB, "/proc/%s/hw/ioreg/Subsystem1_ch3_msb", job[1]);
-	sprintf(path_channel3evenMSB, "/proc/%s/hw/ioreg/Subsystem1_ch5_msb", job[1]);
-	sprintf(path_channel4evenMSB, "/proc/%s/hw/ioreg/Subsystem1_ch7_msb", job[1]);
-	sprintf(path_channel5evenMSB, "/proc/%s/hw/ioreg/Subsystem1_ch9_msb", job[1]);
-	sprintf(path_channel6evenMSB, "/proc/%s/hw/ioreg/Subsystem1_ch11_msb", job[1]);
-	sprintf(path_channel1oddMSB, "/proc/%s/hw/ioreg/Subsystem1_ch2_msb", job[1]);
-	sprintf(path_channel2oddMSB, "/proc/%s/hw/ioreg/Subsystem1_ch4_msb", job[1]);
-	sprintf(path_channel3oddMSB, "/proc/%s/hw/ioreg/Subsystem1_ch6_msb", job[1]);
-	sprintf(path_channel4oddMSB, "/proc/%s/hw/ioreg/Subsystem1_ch8_msb", job[1]);
-	sprintf(path_channel5oddMSB, "/proc/%s/hw/ioreg/Subsystem1_ch10_msb", job[1]);
-	sprintf(path_channel6oddMSB, "/proc/%s/hw/ioreg/Subsystem1_ch12_msb", job[1]);
-	sprintf(path_channel1evenLSB, "/proc/%s/hw/ioreg/Subsystem1_ch1_lsb", job[1]);
-	sprintf(path_channel2evenLSB, "/proc/%s/hw/ioreg/Subsystem1_ch3_lsb", job[1]);
-	sprintf(path_channel3evenLSB, "/proc/%s/hw/ioreg/Subsystem1_ch5_lsb", job[1]);
-	sprintf(path_channel4evenLSB, "/proc/%s/hw/ioreg/Subsystem1_ch7_lsb", job[1]);
-	sprintf(path_channel5evenLSB, "/proc/%s/hw/ioreg/Subsystem1_ch9_lsb", job[1]);
-	sprintf(path_channel6evenLSB, "/proc/%s/hw/ioreg/Subsystem1_ch11_lsb", job[1]);
-	sprintf(path_channel1oddLSB, "/proc/%s/hw/ioreg/Subsystem1_ch2_lsb", job[1]);
-	sprintf(path_channel2oddLSB, "/proc/%s/hw/ioreg/Subsystem1_ch4_lsb", job[1]);
-	sprintf(path_channel3oddLSB, "/proc/%s/hw/ioreg/Subsystem1_ch6_lsb", job[1]);
-	sprintf(path_channel4oddLSB, "/proc/%s/hw/ioreg/Subsystem1_ch8_lsb", job[1]);
-	sprintf(path_channel5oddLSB, "/proc/%s/hw/ioreg/Subsystem1_ch10_lsb", job[1]);
-	sprintf(path_channel6oddLSB, "/proc/%s/hw/ioreg/Subsystem1_ch12_lsb", job[1]);
-	sprintf(path_amp0realcoffs, "/proc/%s/hw/ioreg/amp_EQ0_coeff_real", job[1]);
-	sprintf(path_amp1realcoffs, "/proc/%s/hw/ioreg/amp_EQ1_coeff_real", job[1]);
-	sprintf(path_amp2realcoffs, "/proc/%s/hw/ioreg/amp_EQ2_coeff_real", job[1]);
-	sprintf(path_amp3realcoffs, "/proc/%s/hw/ioreg/amp_EQ3_coeff_real", job[1]);
-	sprintf(path_amp4realcoffs, "/proc/%s/hw/ioreg/amp_EQ4_coeff_real", job[1]);
-	sprintf(path_amp5realcoffs, "/proc/%s/hw/ioreg/amp_EQ5_coeff_real", job[1]);
-	sprintf(path_amp6realcoffs, "/proc/%s/hw/ioreg/amp_EQ6_coeff_real", job[1]);
-	sprintf(path_amp7realcoffs, "/proc/%s/hw/ioreg/amp_EQ7_coeff_real", job[1]);
-	sprintf(path_acc_sync_delay, "/proc/%s/hw/ioreg/acc_sync_delay", job[1]);
-	sprintf(path_ctrl_sw, "/proc/%s/hw/ioreg/ctrl_sw", job[1]);
-	sprintf(path_noiseDiode, "/proc/%s/hw/ioreg/gpio_set4", job[1]);
-	sprintf(path_gpiob0, "/proc/%s/hw/ioreg/gpiob_set0", job[1]);
-	sprintf(path_gpiob1, "/proc/%s/hw/ioreg/gpiob_set1", job[1]);
-	sprintf(path_gpiob2, "/proc/%s/hw/ioreg/gpiob_set2", job[1]);
-	sprintf(path_gpiob3, "/proc/%s/hw/ioreg/gpiob_set3", job[1]);
-	sprintf(path_gpiob4, "/proc/%s/hw/ioreg/gpiob_set4", job[1]);
-	sprintf(path_gpiob5, "/proc/%s/hw/ioreg/gpiob_set5", job[1]);
-	sprintf(path_gpiob6, "/proc/%s/hw/ioreg/gpiob_set6", job[1]);
-	sprintf(path_gpiob7, "/proc/%s/hw/ioreg/gpiob_set7", job[1]);
-	sprintf(path_status, "/proc/%s/hw/ioreg/statusReadout", job[1]);
-	sprintf(path_gpioMode, "/proc/%s/hw/ioreg/gpioMode", job[1]);
-	sprintf(path_demodulate, "/proc/%s/hw/ioreg/demodPhaseSwitch1", job[1]);
+////////////////define all the required registers////////////////////
+
+	if(VERSION==1){
+		sprintf(path_acc_cnt, "/proc/%s/hw/ioreg/Subsystem1_readAccumulation", job[1]);
+		sprintf(path_acc_len, "/proc/%s/hw/ioreg/acc_len", job[1]);
+		sprintf(path_cnt_rst, "/proc/%s/hw/ioreg/cnt_rst", job[1]);
+		sprintf(path_sync_en, "/proc/%s/hw/ioreg/sync_en", job[1]);
+		sprintf(path_sync_cnt, "/proc/%s/hw/ioreg/sync_en", job[1]);
+		sprintf(path_timeStamp, "/proc/%s/hw/ioreg/Subsystem1_timeStamp", job[1]);
+		sprintf(path_channel1evenMSB, "/proc/%s/hw/ioreg/Subsystem1_ch1_msb", job[1]);
+		sprintf(path_channel2evenMSB, "/proc/%s/hw/ioreg/Subsystem1_ch3_msb", job[1]);
+		sprintf(path_channel3evenMSB, "/proc/%s/hw/ioreg/Subsystem1_ch5_msb", job[1]);
+		sprintf(path_channel4evenMSB, "/proc/%s/hw/ioreg/Subsystem1_ch7_msb", job[1]);
+		sprintf(path_channel5evenMSB, "/proc/%s/hw/ioreg/Subsystem1_ch9_msb", job[1]);
+		sprintf(path_channel6evenMSB, "/proc/%s/hw/ioreg/Subsystem1_ch11_msb", job[1]);
+		sprintf(path_channel1oddMSB, "/proc/%s/hw/ioreg/Subsystem1_ch2_msb", job[1]);
+		sprintf(path_channel2oddMSB, "/proc/%s/hw/ioreg/Subsystem1_ch4_msb", job[1]);
+		sprintf(path_channel3oddMSB, "/proc/%s/hw/ioreg/Subsystem1_ch6_msb", job[1]);
+		sprintf(path_channel4oddMSB, "/proc/%s/hw/ioreg/Subsystem1_ch8_msb", job[1]);
+		sprintf(path_channel5oddMSB, "/proc/%s/hw/ioreg/Subsystem1_ch10_msb", job[1]);
+		sprintf(path_channel6oddMSB, "/proc/%s/hw/ioreg/Subsystem1_ch12_msb", job[1]);
+		sprintf(path_channel1evenLSB, "/proc/%s/hw/ioreg/Subsystem1_ch1_lsb", job[1]);
+		sprintf(path_channel2evenLSB, "/proc/%s/hw/ioreg/Subsystem1_ch3_lsb", job[1]);
+		sprintf(path_channel3evenLSB, "/proc/%s/hw/ioreg/Subsystem1_ch5_lsb", job[1]);
+		sprintf(path_channel4evenLSB, "/proc/%s/hw/ioreg/Subsystem1_ch7_lsb", job[1]);
+		sprintf(path_channel5evenLSB, "/proc/%s/hw/ioreg/Subsystem1_ch9_lsb", job[1]);
+		sprintf(path_channel6evenLSB, "/proc/%s/hw/ioreg/Subsystem1_ch11_lsb", job[1]);
+		sprintf(path_channel1oddLSB, "/proc/%s/hw/ioreg/Subsystem1_ch2_lsb", job[1]);
+		sprintf(path_channel2oddLSB, "/proc/%s/hw/ioreg/Subsystem1_ch4_lsb", job[1]);
+		sprintf(path_channel3oddLSB, "/proc/%s/hw/ioreg/Subsystem1_ch6_lsb", job[1]);
+		sprintf(path_channel4oddLSB, "/proc/%s/hw/ioreg/Subsystem1_ch8_lsb", job[1]);
+		sprintf(path_channel5oddLSB, "/proc/%s/hw/ioreg/Subsystem1_ch10_lsb", job[1]);
+		sprintf(path_channel6oddLSB, "/proc/%s/hw/ioreg/Subsystem1_ch12_lsb", job[1]);
+		sprintf(path_amp0realcoffs, "/proc/%s/hw/ioreg/amp_EQ0_coeff_real", job[1]);
+		sprintf(path_amp1realcoffs, "/proc/%s/hw/ioreg/amp_EQ1_coeff_real", job[1]);
+		sprintf(path_amp2realcoffs, "/proc/%s/hw/ioreg/amp_EQ2_coeff_real", job[1]);
+		sprintf(path_amp3realcoffs, "/proc/%s/hw/ioreg/amp_EQ3_coeff_real", job[1]);
+		sprintf(path_amp4realcoffs, "/proc/%s/hw/ioreg/amp_EQ4_coeff_real", job[1]);
+		sprintf(path_amp5realcoffs, "/proc/%s/hw/ioreg/amp_EQ5_coeff_real", job[1]);
+		sprintf(path_amp6realcoffs, "/proc/%s/hw/ioreg/amp_EQ6_coeff_real", job[1]);
+		sprintf(path_amp7realcoffs, "/proc/%s/hw/ioreg/amp_EQ7_coeff_real", job[1]);
+		sprintf(path_acc_sync_delay, "/proc/%s/hw/ioreg/acc_sync_delay", job[1]);
+		sprintf(path_ctrl_sw, "/proc/%s/hw/ioreg/ctrl_sw", job[1]);
+		sprintf(path_noiseDiode, "/proc/%s/hw/ioreg/gpio_set4", job[1]);
+		sprintf(path_gpiob0, "/proc/%s/hw/ioreg/gpiob_set0", job[1]);
+		sprintf(path_gpiob1, "/proc/%s/hw/ioreg/gpiob_set1", job[1]);
+		sprintf(path_gpiob2, "/proc/%s/hw/ioreg/gpiob_set2", job[1]);
+		sprintf(path_gpiob3, "/proc/%s/hw/ioreg/gpiob_set3", job[1]);
+		sprintf(path_gpiob4, "/proc/%s/hw/ioreg/gpiob_set4", job[1]);
+		sprintf(path_gpiob5, "/proc/%s/hw/ioreg/gpiob_set5", job[1]);
+		sprintf(path_gpiob6, "/proc/%s/hw/ioreg/gpiob_set6", job[1]);
+		sprintf(path_gpiob7, "/proc/%s/hw/ioreg/gpiob_set7", job[1]);
+		sprintf(path_status, "/proc/%s/hw/ioreg/statusReadout", job[1]);
+		sprintf(path_gpioMode, "/proc/%s/hw/ioreg/gpioMode", job[1]);
+		sprintf(path_demodulate, "/proc/%s/hw/ioreg/demodPhaseSwitch1", job[1]);
+	}
+	else if(VERSION==10000){
+		sprintf(path_acc_cnt, "/proc/%s/hw/ioreg/Subsystem1_readAccumulation", job[1]);
+		sprintf(path_acc_len, "/proc/%s/hw/ioreg/acc_len", job[1]);
+		sprintf(path_cnt_rst, "/proc/%s/hw/ioreg/cnt_rst", job[1]);
+		sprintf(path_sync_en, "/proc/%s/hw/ioreg/sync_en", job[1]);
+		sprintf(path_sync_cnt, "/proc/%s/hw/ioreg/sync_en", job[1]);
+		sprintf(path_timeStamp, "/proc/%s/hw/ioreg/Subsystem1_timeStamp", job[1]);
+	///////////////////////////////////////
+		sprintf(path_channel1evenMSB, "/proc/%s/hw/ioreg/Subsystem1_ch1_msb", job[1]);
+		sprintf(path_channel2evenMSB, "/proc/%s/hw/ioreg/Subsystem1_ch3_msb", job[1]);
+		sprintf(path_channel3evenMSB, "/proc/%s/hw/ioreg/Subsystem1_ch5_msb", job[1]);
+		sprintf(path_channel4evenMSB, "/proc/%s/hw/ioreg/Subsystem1_ch7_msb", job[1]);
+		sprintf(path_channel5evenMSB, "/proc/%s/hw/ioreg/Subsystem1_ch9_msb", job[1]);
+		sprintf(path_channel6evenMSB, "/proc/%s/hw/ioreg/Subsystem1_ch11_msb", job[1]);
+		sprintf(path_channel1oddMSB, "/proc/%s/hw/ioreg/Subsystem1_ch2_msb", job[1]);
+		sprintf(path_channel2oddMSB, "/proc/%s/hw/ioreg/Subsystem1_ch4_msb", job[1]);
+		sprintf(path_channel3oddMSB, "/proc/%s/hw/ioreg/Subsystem1_ch6_msb", job[1]);
+		sprintf(path_channel4oddMSB, "/proc/%s/hw/ioreg/Subsystem1_ch8_msb", job[1]);
+		sprintf(path_channel5oddMSB, "/proc/%s/hw/ioreg/Subsystem1_ch10_msb", job[1]);
+		sprintf(path_channel6oddMSB, "/proc/%s/hw/ioreg/Subsystem1_ch12_msb", job[1]);
+		//////////////////////////////
+		sprintf(path_channel1evenLSB, "/proc/%s/hw/ioreg/Subsystem1_ch1_lsb", job[1]);
+		sprintf(path_channel2evenLSB, "/proc/%s/hw/ioreg/Subsystem1_ch3_lsb", job[1]);
+		sprintf(path_channel3evenLSB, "/proc/%s/hw/ioreg/Subsystem1_ch5_lsb", job[1]);
+		sprintf(path_channel4evenLSB, "/proc/%s/hw/ioreg/Subsystem1_ch7_lsb", job[1]);
+		sprintf(path_channel5evenLSB, "/proc/%s/hw/ioreg/Subsystem1_ch9_lsb", job[1]);
+		sprintf(path_channel6evenLSB, "/proc/%s/hw/ioreg/Subsystem1_ch11_lsb", job[1]);
+		sprintf(path_channel1oddLSB, "/proc/%s/hw/ioreg/Subsystem1_ch2_lsb", job[1]);
+		sprintf(path_channel2oddLSB, "/proc/%s/hw/ioreg/Subsystem1_ch4_lsb", job[1]);
+		sprintf(path_channel3oddLSB, "/proc/%s/hw/ioreg/Subsystem1_ch6_lsb", job[1]);
+		sprintf(path_channel4oddLSB, "/proc/%s/hw/ioreg/Subsystem1_ch8_lsb", job[1]);
+		sprintf(path_channel5oddLSB, "/proc/%s/hw/ioreg/Subsystem1_ch10_lsb", job[1]);
+		sprintf(path_channel6oddLSB, "/proc/%s/hw/ioreg/Subsystem1_ch12_lsb", job[1]);
+	/////////////////////////////////
+		sprintf(path_amp0realcoffs, "/proc/%s/hw/ioreg/amp_EQ0_coeff_real", job[1]);
+		sprintf(path_amp1realcoffs, "/proc/%s/hw/ioreg/amp_EQ1_coeff_real", job[1]);
+		sprintf(path_amp2realcoffs, "/proc/%s/hw/ioreg/amp_EQ2_coeff_real", job[1]);
+		sprintf(path_amp3realcoffs, "/proc/%s/hw/ioreg/amp_EQ3_coeff_real", job[1]);
+		sprintf(path_amp4realcoffs, "/proc/%s/hw/ioreg/amp_EQ4_coeff_real", job[1]);
+		sprintf(path_amp5realcoffs, "/proc/%s/hw/ioreg/amp_EQ5_coeff_real", job[1]);
+		sprintf(path_amp6realcoffs, "/proc/%s/hw/ioreg/amp_EQ6_coeff_real", job[1]);
+		sprintf(path_amp7realcoffs, "/proc/%s/hw/ioreg/amp_EQ7_coeff_real", job[1]);
+		sprintf(path_acc_sync_delay, "/proc/%s/hw/ioreg/acc_sync_delay", job[1]);
+		sprintf(path_ctrl_sw, "/proc/%s/hw/ioreg/ctrl_sw", job[1]);
+		sprintf(path_enablePhaseSwitch, "/proc/%s/hw/ioreg/enablePhaseSwitch", job[1]);
+		sprintf(path_phaseFrequency, "/proc/%s/hw/ioreg/phaseFrequency", job[1]);
+		sprintf(path_demodPhaseSwitch1, "/proc/%s/hw/ioreg/demodPhaseSwitch1", job[1]);
+		sprintf(path_phaseDelay2, "/proc/%s/hw/ioreg/phaseDelay2", job[1]);
+		sprintf(path_Demod_transL, "/proc/%s/hw/ioreg/Demod_transL", job[1]);
+		sprintf(path_status, "/proc/%s/hw/ioreg/statusReadout", job[1]);
+		sprintf(path_demodulate, "/proc/%s/hw/ioreg/demodPhaseSwitch1", job[1]);
+	}
 /////////////////////////////////////////////////////////////////////////////////////////
 	
 
@@ -737,11 +798,13 @@ void *packROACHpacket_thread(void *arg){
 	writeVal=0;
 	fwrite(&writeVal, 4, 1, fp);
 	fclose(fp);
-	
-	fp = fopen(path_gpioMode, "w"); 
-	writeVal=0;
-	fwrite(&writeVal, 4, 1, fp);
-	fclose(fp);
+
+	if(VERSION==1){	
+		fp = fopen(path_gpioMode, "w"); 
+		writeVal=0;
+		fwrite(&writeVal, 4, 1, fp);
+		fclose(fp);
+	}
 
 	fp = fopen(path_acc_sync_delay, "w"); 
 	writeVal=4;
@@ -931,7 +994,7 @@ void *packROACHpacket_thread(void *arg){
 		
 		//usleep(100);
 		jaccCntr=0;
-		while((acc_new==acc_old) && (jaccCntr<20000)){
+		while((acc_new==acc_old) && (jaccCntr<20000000)){
 			fp = fopen(path_acc_cnt, "r"); 
 			fread(&acc_new, 4, 1, fp);
 			jaccCntr++;
@@ -1352,10 +1415,17 @@ void *packROACHpacket_threadPower(void *arg){
 		packedDataCounter++;
 		if(packedDataCounter==1){
 		}	
-		if(packedDataCounter==10){
+		if(packedDataCounter>=10){
 			packedDataCounter=0;
+			cbassPKT.version=1;
+			cbassPKT.dataCount=10;
+			cbassPKT.version=VERSION; //version numbers of the Polarisation begin at 0
 			cbassPKT.tend=t1.tv_usec;
 			cbassPKT.int_count=acc_new;
+			
+		//	packedDataCounter=0;
+		//	cbassPKT.tend=t1.tv_usec;
+		//	cbassPKT.int_count=acc_new;
 			//printf("%ld\n",acc_new);
 			encodeNetwork(&cbassPKT);
 			cb_push_back(bufferptr,&cbassPKT); //add the last packet to the circular buffer
@@ -1375,15 +1445,13 @@ void *packROACHpacket_threadPower(void *arg){
 		while(acc_new==acc_old){
 			fp = fopen(path_acc_cnt, "r"); 
 			fread(&acc_new, 4, 1, fp);
-			fclose(fp);
-			usleep(10000);
-			
+			fclose(fp);			
 			}
 		fp1 = fopen(path_timeStamp, "r"); 
 		fread(&timeStamp, 4, 1, fp1);
 		fclose(fp1);
 		//printf("%d %d %d\n",acc_new,acc_old,timeStamp);
-		//printf("accumulation %d\n",acc_new);
+		//print`b("accumulation %d\n",acc_new);
 		
 	//stephen ordered the readout differently to mine: his is LL Q U RR TL1 TL2
 		//Mine is RR LL Q U Tl2 Tl2
@@ -1991,7 +2059,7 @@ int main(int argc, char *argv[])
 		packROACHpacket_threadPower_id=packROACHpacket_thread_id;//initialize this temporarily
 	}
 	else if(VERSION==10000){
-		pthread_create(&packROACHpacket_threadPower_id,NULL,packROACHpacket_threadPower,NULL);
+		pthread_create(&packROACHpacket_threadPower_id,NULL,packROACHpacket_thread,NULL);
 		packROACHpacket_thread_id=packROACHpacket_threadPower_id;//initialize this temporarily
 	}
         printf("Here started thread\n");
