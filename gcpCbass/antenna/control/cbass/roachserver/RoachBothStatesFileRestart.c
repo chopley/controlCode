@@ -794,11 +794,6 @@ void *packROACHpacket_thread(void *arg){
 	bufferptr=&buffer;
 	cb_init(bufferptr,50,sizeof(struct UDPCBASSpkt)); //allocate space for ten data packets for the ring buffer
 
-	fp = fopen(path_demodulate, "w"); 
-	writeVal=0;
-	fwrite(&writeVal, 4, 1, fp);
-	fclose(fp);
-
 	if(VERSION==1){	
 		fp = fopen(path_gpioMode, "w"); 
 		writeVal=0;
@@ -806,6 +801,10 @@ void *packROACHpacket_thread(void *arg){
 		fclose(fp);
 	}
 
+	fp = fopen(path_demodulate, "w"); 
+	writeVal=0;
+	fwrite(&writeVal, 4, 1, fp);
+	fclose(fp);
 	fp = fopen(path_acc_sync_delay, "w"); 
 	writeVal=4;
 	fwrite(&writeVal, 4, 1, fp);
@@ -815,8 +814,6 @@ void *packROACHpacket_thread(void *arg){
 	writeVal=78125-2; //this corresponds to 10ms integrations
 	fwrite(&writeVal, 4, 1, fp);
 	fclose(fp);
-	
- 
 	fp = fopen(path_cnt_rst, "w"); 
 	writeVal=1;
 	fwrite(&writeVal, 4, 1, fp);
@@ -832,6 +829,64 @@ void *packROACHpacket_thread(void *arg){
 	fwrite(&writeVal, 4, 1, fp);
 	fclose(fp);
 	printf("herexxxx %d",sizeof(cbassPKT));
+
+	if(VERSION==10000){	
+		fp = fopen(path_demodulate, "w"); 
+		writeVal=0;
+		fwrite(&writeVal, 4, 1, fp);
+		fclose(fp);
+		
+
+		fp = fopen(path_acc_sync_delay, "w"); 
+		writeVal=10;
+		fwrite(&writeVal, 4, 1, fp);
+		fclose(fp);
+		//initialise registers on the ROACH//////	
+		fp = fopen(path_acc_len, "w"); 
+		writeVal=78125-2;
+		fwrite(&writeVal, 4, 1, fp);
+		fclose(fp);
+		
+		fp = fopen(path_enablePhaseSwitch, "w"); 
+		writeVal=1;
+		fwrite(&writeVal, 4, 1, fp);
+		fclose(fp);
+		
+		fp = fopen(path_demodPhaseSwitch1, "w"); 
+		writeVal=0;
+		fwrite(&writeVal, 4, 1, fp);
+		fclose(fp);
+		
+		fp = fopen(path_phaseFrequency, "w"); 
+		writeVal=600;
+		fwrite(&writeVal, 4, 1, fp);
+		fclose(fp);
+
+		fp = fopen(path_phaseDelay2, "w"); 
+		writeVal=30;
+		fwrite(&writeVal, 4, 1, fp);
+		fclose(fp);
+		
+		fp = fopen(path_Demod_transL, "w"); 
+		writeVal=7;
+		fwrite(&writeVal, 4, 1, fp);
+		fclose(fp);
+	 
+		fp = fopen(path_cnt_rst, "w"); 
+	//	writeVal=0;
+	//	fwrite(&writeVal, 4, 1, fp);
+	//	writeVal=1;
+	//	fwrite(&writeVal, 4, 1, fp);
+		fclose(fp);
+		fp = fopen(path_sync_en, "w"); 
+		writeVal=1;
+		fwrite(&writeVal, 4, 1, fp);
+		fclose(fp);
+		fp = fopen(path_ctrl_sw, "w"); 
+		writeVal=43690;
+		fwrite(&writeVal, 4, 1, fp);
+		fclose(fp);
+	}
 	cbassPKT.version=1;
 	cbassPKT.dataCount=10;
 	cbassPKT.version=VERSION; //version numbers of the Polarisation begin at 0
@@ -1102,6 +1157,7 @@ void *packROACHpacket_thread(void *arg){
 		MSBshift=gainCorrectionCalc(&tempPack);
 		gainCorrection(&tempPack,8);
 		///////////////////////////
+		if(VERSION==1){
 		memcpy(&cbassPKT.data_ch0even[packedDataCounter*vectorLength],&tempPack.data_ch0evenMSB[0],sizeof(int)*32); //LL
 		memcpy(&cbassPKT.data_ch1even[packedDataCounter*vectorLength],&tempPack.data_ch1evenMSB[0],sizeof(int)*32); //Q
 		memcpy(&cbassPKT.data_ch2even[packedDataCounter*vectorLength],&tempPack.data_ch2evenMSB[0],sizeof(int)*32); //U
@@ -1114,6 +1170,22 @@ void *packROACHpacket_thread(void *arg){
 		memcpy(&cbassPKT.data_ch3odd[packedDataCounter*vectorLength],&tempPack.data_ch3oddMSB[0],sizeof(int)*32);
 		memcpy(&cbassPKT.data_ch4odd[packedDataCounter*vectorLength],&tempPack.data_ch4oddMSB[0],sizeof(int)*32);
 		memcpy(&cbassPKT.data_ch5odd[packedDataCounter*vectorLength],&tempPack.data_ch5oddMSB[0],sizeof(int)*32);
+		}
+	
+		else if(VERSION==10000){
+		memcpy(&cbassPKT.data_ch0even[packedDataCounter*vectorLength],&tempPack.data_ch0evenMSB[0],sizeof(int)*32); //channel1 maps to LL
+		memcpy(&cbassPKT.data_ch3even[packedDataCounter*vectorLength],&tempPack.data_ch1evenMSB[0],sizeof(int)*32); //channel2 maps to RR
+		memcpy(&cbassPKT.data_ch4even[packedDataCounter*vectorLength],&tempPack.data_ch2evenMSB[0],sizeof(int)*32); //channel 3 maps to Tl1
+		memcpy(&cbassPKT.data_ch5even[packedDataCounter*vectorLength],&tempPack.data_ch3evenMSB[0],sizeof(int)*32); //channel 4 maps to Tl2
+		memcpy(&cbassPKT.data_ch1even[packedDataCounter*vectorLength],&tempPack.data_ch4evenMSB[0],sizeof(int)*32);
+		memcpy(&cbassPKT.data_ch2even[packedDataCounter*vectorLength],&tempPack.data_ch5evenMSB[0],sizeof(int)*32);
+		memcpy(&cbassPKT.data_ch0odd[packedDataCounter*vectorLength],&tempPack.data_ch0oddMSB[0],sizeof(int)*32);
+		memcpy(&cbassPKT.data_ch3odd[packedDataCounter*vectorLength],&tempPack.data_ch1oddMSB[0],sizeof(int)*32);
+		memcpy(&cbassPKT.data_ch4odd[packedDataCounter*vectorLength],&tempPack.data_ch2oddMSB[0],sizeof(int)*32);
+		memcpy(&cbassPKT.data_ch5odd[packedDataCounter*vectorLength],&tempPack.data_ch3oddMSB[0],sizeof(int)*32);
+		memcpy(&cbassPKT.data_ch1odd[packedDataCounter*vectorLength],&tempPack.data_ch4oddMSB[0],sizeof(int)*32);
+		memcpy(&cbassPKT.data_ch2odd[packedDataCounter*vectorLength],&tempPack.data_ch5oddMSB[0],sizeof(int)*32);
+		}
 //ZERO THE DATA PACKET IF NECESSARY
 	 for(i=0;i<64;i++){
 			tempPack.data_ch0oddMSB[i]=0;

@@ -1,6 +1,6 @@
 (Interval time,Interval noiseTime)
 
-import ~cbassuser/cbassSaControl/cbass/gcpCbass/control/sch/schedlibSouth.sch
+import ~cbassuser/cbass/gcpCbass/control/sch/schedlibSouth.sch
 init_obs("beginning schedules skyStareSouth")
 setCryoSkyTemp 1,12.0
 zeroScanOffsets
