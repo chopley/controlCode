@@ -1,10 +1,10 @@
 (Interval time, Source source_name)
 
 # import the schedlib 
-import ~cbassuser/cbassSaControl/cbass/gcpCbass/control/sch/schedlibSouth.sch
+import ~cbassuser/cbass/gcpCbass/control/sch/schedlibSouth.sch
 
 #get the scan catalogue
-scan_catalog ~cbassuser/cbassSaControl/cbass/gcpCbass/control/scan/cbass_scan.cat
+scan_catalog ~cbassuser/cbass/gcpCbass/control/scan/cbass_scan.cat
 
 # initialize
 init_obs("beginning schedules source_raster_8x4x0.05")

@@ -16,7 +16,7 @@ def updateRoachReadout(nSamples,sleepTime,Roach1,Roach2):
     r1accum=roach1Pol
     r2accum=roach2Pol
     ###next accumulate for the appropriate number of integrations
-    for k in range(1,nSamples):
+    for k in range(0,nSamples):
        # print i
         time.sleep(sleepTime)
         r1=Roach1.updatePolarisation()
@@ -50,6 +50,8 @@ ND.instantiateRoach('pumba','rx_10dec_stat_2013_Jan_11_1059.bof',7147,4,nIntegra
 [Coffs1endR1,Coffs2endR1,Coffs3endR1,Coffs4endR1] = Roach1.readCoefficientsFromDisk('pumba')
 [Coffs1endR2,Coffs2endR2,Coffs3endR2,Coffs4endR2] = Roach2.readCoefficientsFromDisk('timon')
 
+Roach1.writeCoefficients(Coffs1endR1,Coffs2endR1,Coffs3endR1,Coffs4endR1)
+Roach2.writeCoefficients(Coffs1endR2,Coffs2endR2,Coffs3endR2,Coffs4endR2)
 
 print 'Roach1 ',Roach1.fpga.is_connected()
 print 'Roach2 ',Roach2.fpga.is_connected()
@@ -113,22 +115,22 @@ pylab.title(' Rload Pumba')
 pylab.subplot(6,1,3)
 pylab.plot(10*numpy.log10(roach1Polon[2]))
 pylab.plot(10*numpy.log10(roach1Poloff[2]))
-pylab.ylim([ylimSmall,ylimBig])
-#pylab.title(' LL Pumba')
+#pylab.ylim([ylimSmall,ylimBig])
+pylab.title(' LL Pumba')
 pylab.subplot(6,1,4)
 pylab.plot(10*numpy.log10(roach1Polon[3]))
 pylab.plot(10*numpy.log10(roach1Poloff[3]))
-pylab.ylim([ylimSmall,ylimBig])
-#pylab.title(' Lload Pumba')
+#pylab.ylim([ylimSmall,ylimBig])
+pylab.title(' Lload Pumba')
 pylab.subplot(6,1,5)
 pylab.plot(roach1Polon[4])
 pylab.plot(roach1Poloff[4])
-pylab.ylim([ypollimSmall,ypollimBig])
-#pylab.title(' Q Pumba')
+#pylab.ylim([ypollimSmall,ypollimBig])
+pylab.title(' Q Pumba')
 pylab.subplot(6,1,6)
 pylab.plot(roach1Polon[5])
 pylab.plot(roach1Poloff[5])
-pylab.ylim([ypollimSmall,ypollimBig])
+#pylab.ylim([ypollimSmall,ypollimBig])
 pylab.title(' U Pumba')
 pylab.show()
 
@@ -169,6 +171,8 @@ pylab.plot(roach2Polon[5])
 pylab.plot(roach2Poloff[5])
 #pylab.ylim([ypollimSmall,ypollimBig])
 pylab.title(' U Timon')
+
+pylab.figure()
 
 pylab.subplot(6,1,1)
 pylab.plot(roach2Polon[0]-roach2Poloff[0])
@@ -179,236 +183,6 @@ pylab.plot(roach2Polon[1]-roach2Poloff[1])
 pylab.show()
 
 
-##rotate the vectors using the roach coefficients
-j=0
-i=0;
-totalAngle=0
-dRef1RR=numpy.zeros((64,256))
-dRef1LL=numpy.zeros((64,256))
-dRef2RR=numpy.zeros((64,256))
-dRef2LL=numpy.zeros((64,256))
-angle=numpy.zeros(256)
-window_size = 3
-window= numpy.ones(int(window_size))/float(window_size) # moving average window
-[Coffs1startR1,Coffs2startR1,Coffs3startR1,Coffs4startR1] = Roach1.readCoefficients()
-[Coffs1startR2,Coffs2startR2,Coffs3startR2,Coffs4startR2] = Roach2.readCoefficients()
-totalAngle=0
-angleSize=0.1
-i=0
-while totalAngle<6.3:
-    j=angleSize
-    angle[i]=totalAngle
-    #print j
-    #rotate the vectors
-    Coffs2R1=Coffs2startR1*numpy.exp(1j*totalAngle)
-    Coffs4R1=Coffs4startR1*numpy.exp(1j*totalAngle)
-    Coffs2R2=Coffs2startR2*numpy.exp(1j*totalAngle)
-    Coffs4R2=Coffs4startR2*numpy.exp(1j*totalAngle)
-    Roach1.writeCoefficients(Coffs1startR1,Coffs2R1,Coffs3startR1,Coffs4R1)
-    Roach2.writeCoefficients(Coffs1startR2,Coffs2R2,Coffs3startR2,Coffs4R2)
-    time.sleep(sleepTime)
-    ND.diodeOn()
-    time.sleep(sleepTime)
-    [roach1Polon,roach2Polon]=updateRoachReadout(nSamples,sleepTime,Roach1,Roach2)
-    ND.diodeOff()
-    time.sleep(sleepTime)
-    [roach1Poloff,roach2Poloff]=updateRoachReadout(nSamples,sleepTime,Roach1,Roach2)
-    dRef1RR[:,i]=(roach1Polon[0]-roach1Poloff[0])
-    dRef1LL[:,i]=(roach1Polon[2]-roach1Poloff[2])
-    dRef2RR[:,i]=(roach2Polon[0]-roach2Poloff[0])
-    dRef2LL[:,i]=(roach2Polon[2]-roach2Poloff[2])
-    i=i+1
-    totalAngle=totalAngle+angleSize
-    #print i
-    print totalAngle    
-    
-    
-    
-  
-
-
-pylab.figure()
-pylab.subplot(2,1,1)
-pylab.plot(dRef1RR)
-pylab.title('dRefRR Pumba')
-pylab.subplot(2,1,2)
-pylab.plot(dRef1LL)
-pylab.title('dRefLL Pumba')
-
-pylab.figure()
-pylab.subplot(2,1,1)
-pylab.plot(dRef2RR)
-pylab.title('dRefRR Timon')
-pylab.subplot(2,1,2)
-pylab.plot(dRef2LL)
-pylab.title('dRefLL Timon')
-pylab.ylim([-2e11,8e11])
-
-pylab.show()
-
-i=0
-location1LL=numpy.zeros(64)
-location1RR=numpy.zeros(64)
-thetaNew1LL=numpy.zeros(64)
-thetaNew1RR=numpy.zeros(64)
-
-location2LL=numpy.zeros(64)
-location2RR=numpy.zeros(64)
-thetaNew2LL=numpy.zeros(64)
-thetaNew2RR=numpy.zeros(64)
-for i in range(64):
-    a=numpy.abs((dRef1RR[i,:]))
-    loc=a.argmax()
-    location1RR[i]=loc
-    thetaNew1RR[i]=angle[location1RR[i]]
-    a=numpy.abs((dRef1LL[i,:]))
-    loc=a.argmax()
-    location1LL[i]=loc
-    thetaNew1LL[i]=angle[location1LL[i]]
-    a=numpy.abs((dRef2RR[i,:]))
-    loc=a.argmax()
-    location2RR[i]=loc
-    thetaNew2RR[i]=angle[location2RR[i]]
-    a=numpy.abs((dRef2LL[i,:]))
-    loc=a.argmax()
-    location2LL[i]=loc
-    thetaNew2LL[i]=angle[location2LL[i]]
-  
-  
-
-
-Coffs2R1=Coffs2startR1*numpy.exp(1j*thetaNew1RR)
-Coffs4R1=Coffs4startR1*numpy.exp(1j*thetaNew1LL)
-Coffs2R2=Coffs2startR2*numpy.exp(1j*thetaNew2RR)
-Coffs4R2=Coffs4startR2*numpy.exp(1j*thetaNew2LL)
-
-
-Roach1.writeCoefficients(Coffs1startR1,Coffs2R1,Coffs3startR1,Coffs4R1)
-Roach2.writeCoefficients(Coffs1startR2,Coffs2R2,Coffs3startR2,Coffs4R2)
-
-
-[Coffs1R1,Coffs2R1,Coffs3R1,Coffs4R1] = Roach1.readCoefficients()
-Coffs1R1[0:7]=0
-Coffs2R1[0:7]=0
-Coffs3R1[0:7]=0
-Coffs4R1[0:7]=0
-Coffs1R1[61:64]=0
-Coffs2R1[61:64]=0
-Coffs3R1[61:64]=0
-Coffs4R1[61:64]=0
-Roach1.writeCoefficients(Coffs1R1,Coffs2R1,Coffs3R1,Coffs4R1)
-
-[Coffs1R2,Coffs2R2,Coffs3R2,Coffs4R2] = Roach2.readCoefficients()
-Coffs1R2[0:3]=0
-Coffs2R2[0:3]=0
-Coffs3R2[0:3]=0
-Coffs4R2[0:3]=0
-Coffs1R2[61:64]=0
-Coffs2R2[61:64]=0
-Coffs3R2[61:64]=0
-Coffs4R2[61:64]=0
-Roach2.writeCoefficients(Coffs1R2,Coffs2R2,Coffs3R2,Coffs4R2)
-
-
-#[Coffs1timon,Coffs2timon,Coffs3timon,Coffstimon] = Timon.readCoefficients()
-#Coffs2timon=Coffs2timon*numpy.exp(1j*thetaRtimon)
-#Coffs4timon=Coffs4timon*numpy.exp(1j*thetaLtimon)
-#Timon.writeCoefficients(Coffs1timon,Coffs2timon,Coffs3timon,Coffs4timon)
-
-
-ND.diodeOn()
-
-#rotate the channels by the following vector
-#umba.rotateByVector(theta,theta,theta,theta)
-
-time.sleep(sleepTime)
-roach1Polon=Roach1.updatePolarisation()
-roach2Polon=Roach2.updatePolarisation()
-ND.diodeOff()
-time.sleep(sleepTime)
-
-roach1Poloff = Roach1.updatePolarisation()
-roach2Poloff = Roach2.updatePolarisation()
-
-ylimSmall=0.45*desiredResponse
-ylimBig=0.6*desiredResponse
-ypollimSmall = -1e12
-ypollimBig = +1e12
-pylab.figure()
-pylab.subplots_adjust(hspace=1)
-pylab.subplot(6,1,1)
-pylab.plot(roach1Polon[0])
-pylab.plot(roach1Poloff[0])
-pylab.ylim([ylimSmall,ylimBig])
-pylab.title(' RR Pumba')
-pylab.subplot(6,1,2)
-pylab.plot(roach1Polon[1])
-pylab.plot(roach1Poloff[1])
-pylab.ylim([ylimSmall,ylimBig])
-pylab.title(' Rload Pumba')
-pylab.subplot(6,1,3)
-pylab.plot(roach1Polon[2])
-pylab.plot(roach1Poloff[2])
-pylab.ylim([ylimSmall,ylimBig])
-pylab.title(' LL Pumba')
-pylab.subplot(6,1,4)
-pylab.plot(roach1Polon[3])
-pylab.plot(roach1Poloff[3])
-pylab.ylim([ylimSmall,ylimBig])
-pylab.title(' Lload Pumba')
-pylab.subplot(6,1,5)
-pylab.plot(roach1Polon[4])
-pylab.plot(roach1Poloff[4])
-pylab.ylim([ypollimSmall,ypollimBig])
-pylab.title(' Q Pumba')
-pylab.subplot(6,1,6)
-pylab.plot(roach1Polon[5])
-pylab.plot(roach1Poloff[5])
-pylab.ylim([ypollimSmall,ypollimBig])
-pylab.title(' U Pumba')
-pylab.savefig('pumba'+'/Polarisation2.png')
-pylab.show()
-
-
-ylimSmall=0.45*desiredResponse
-ylimBig=0.6*desiredResponse
-ypollimSmall = -1e12
-ypollimBig = +1e12
-pylab.figure()
-pylab.subplots_adjust(hspace=1)
-pylab.subplot(6,1,1)
-pylab.plot(roach2Polon[0])
-pylab.plot(roach2Poloff[0])
-#pylab.ylim([ylimSmall,ylimBig])
-pylab.title(' RR Timon')
-pylab.subplot(6,1,2)
-pylab.plot(roach2Polon[1])
-pylab.plot(roach2Poloff[1])
-#pylab.ylim([ylimSmall,ylimBig])
-pylab.title(' Rload Timon')
-pylab.subplot(6,1,3)
-pylab.plot(roach2Polon[2])
-pylab.plot(roach2Poloff[2])
-#pylab.ylim([ylimSmall,ylimBig])
-pylab.title(' LL Timon')
-pylab.subplot(6,1,4)
-pylab.plot(roach2Polon[3])
-pylab.plot(roach2Poloff[3])
-#pylab.ylim([ylimSmall,ylimBig])
-pylab.title(' Lload Timon')
-pylab.subplot(6,1,5)
-pylab.plot(roach2Polon[4])
-pylab.plot(roach2Poloff[4])
-#pylab.ylim([ypollimSmall,ypollimBig])
-pylab.title(' Q Timon')
-pylab.subplot(6,1,6)
-pylab.plot(roach2Polon[5])
-pylab.plot(roach2Poloff[5])
-pylab.ylim([ypollimSmall,ypollimBig])
-pylab.title(' U Timon')
-
-pylab.savefig('timon'+'/Polarisation2.png')
-pylab.show()
 
 ##rotate the vectors using the roach coefficients to calculate Q and U rotation
 j=0
@@ -425,6 +199,10 @@ window= numpy.ones(int(window_size))/float(window_size) # moving average window
 [Coffs1startR2,Coffs2startR2,Coffs3startR2,Coffs4startR2] = Roach2.readCoefficients()
 totalAngle=0
 angleSize=0.1
+Coffs4R1=Coffs4startR1
+Coffs4R2=Coffs4startR2
+Coffs2R1=Coffs2startR1
+Coffs2R2=Coffs2startR2
 i=0
 while totalAngle<6.3:
     j=angleSize
@@ -440,12 +218,10 @@ while totalAngle<6.3:
     time.sleep(sleepTime)
     ND.diodeOn()
     time.sleep(sleepTime)
-    roach1Polon=Roach1.updatePolarisation()
-    roach2Polon=Roach2.updatePolarisation()
+    [roach1Polon,roach2Polon]=updateRoachReadout(nSamples,sleepTime,Roach1,Roach2)
     ND.diodeOff()
     time.sleep(sleepTime)
-    roach1Poloff = Roach1.updatePolarisation()
-    roach2Poloff = Roach2.updatePolarisation()
+    [roach1Poloff,roach2Poloff]=updateRoachReadout(nSamples,sleepTime,Roach1,Roach2)
     dRefQ1[:,i]=(roach1Polon[4]-roach1Poloff[4])
     dRefU1[:,i]=(roach1Polon[5]-roach1Poloff[5])
     dRefQ2[:,i]=(roach2Polon[4]-roach2Poloff[4])
