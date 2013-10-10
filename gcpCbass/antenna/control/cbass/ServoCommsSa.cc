@@ -86,6 +86,7 @@ ServoCommsSa::ServoCommsSa(SpecificShare* share, string name, bool sim) :
   azWrap_              = findReg("az_no_wrap");
 
 
+  antennaHalted_	  = 0;
   initializationPartOne_  = 0;
   initializationComplete_ = 0;
   alarmStatus_            = 0;
@@ -536,6 +537,7 @@ void ServoCommsSa::haltAntenna()
   ServoCommandSa command;
   // query the current location 
   command = issueCommand(ServoCommandSa::GET_AZEL);
+    COUT("Halting Antenna");
   
   // re-issue same location 
   std::vector<float> values(2);
@@ -556,6 +558,7 @@ void ServoCommsSa::hardStopAntenna()
   values[0] = 0;
 
   issueCommand(ServoCommandSa::SERVO_ENGAGE, values);
+  antennaHalted_=1; //set boolean value to record that antenna is halted
 };
 
 
@@ -601,6 +604,7 @@ void ServoCommsSa::initializeAntenna()
     ReportMessage("Drive Lid is Open.  Disengaging the telescope");
     vals[0] = 0;
     issueCommand(ServoCommandSa::SERVO_ENGAGE, vals);
+    antennaHalted_=1; //set boolean value to record that antenna is halted
     
     return;
   }
@@ -653,6 +657,14 @@ void ServoCommsSa::queryStatus()
 {
   ServoCommandSa command;
 
+  bool isLid = false;
+  bool isThermal = false;
+  bool isBrake = false;
+  bool isCircuitBreaker = false;
+  bool isTripped = false;
+  std::vector<float> values(1);
+  values[0] = 0;
+
   // Azimuth, Elevation 
   command = issueCommand(ServoCommandSa::GET_AZEL);
   if(share_) {
@@ -671,6 +683,24 @@ void ServoCommsSa::queryStatus()
   // Set whether the alarm is on
   alarmStatus_ = (bool) command.responseValue_[19];
 
+  if(antennaHalted_){
+	  ReportMessage("Antenna Halted-- need to reengage servo");
+	  CTOUT("Antenna Halted-- need to reengage servo");
+	isCircuitBreaker=isCircuitBreakerTripped();
+	isThermal=isThermalTripped();
+	isLid=isLidOpen();
+	isBrake=isBrakeOn();
+	isTripped=isCircuitBreaker||isThermal||isLid||isBrake;
+		if(!isTripped){
+		  values[0] = 1;
+		  ReportMessage("Antenna OK- Restarting servo");
+		  CTOUT("Antenna OK- Restarting servo");
+			//rengage the servo drives
+		  issueCommand(ServoCommandSa::SERVO_ENGAGE, values);
+		  antennaHalted_=0; //antenna is no longer halted
+		}
+	}
+
   if(share_) {
     // write the appropriate responses to the register map
     recordStatusResponse(command);
@@ -687,6 +717,13 @@ void ServoCommsSa::queryStatus()
 void ServoCommsSa::queryStatus(gcp::util::TimeVal& currTime)
 {
   ServoCommandSa command;
+  bool isLid = false;
+  bool isThermal = false;
+  bool isBrake = false;
+  bool isCircuitBreaker = false;
+  bool isTripped = false;
+  std::vector<float> values(1);
+  values[0] = 0;
 
   // Azimuth, Elevation 
   command = issueCommand(ServoCommandSa::GET_AZEL);
@@ -704,6 +741,24 @@ void ServoCommsSa::queryStatus(gcp::util::TimeVal& currTime)
 
   // Set whether the alarm is on
   alarmStatus_ = (bool) command.responseValue_[19];
+
+  if(antennaHalted_){
+	  ReportMessage("Antenna Halted-- need to reengage servo");
+	  CTOUT("Antenna Halted-- need to reengage servo");
+	isCircuitBreaker=isCircuitBreakerTripped();
+	isThermal=isThermalTripped();
+	isLid=isLidOpen();
+	isBrake=isBrakeOn();
+	isTripped=isCircuitBreaker||isThermal||isLid||isBrake;
+		if(!isTripped){
+		  values[0] = 1;
+		  ReportMessage("Antenna OK- Restarting servo");
+		  CTOUT("Antenna OK- Restarting servo");
+		//rengage the servo drives
+		  issueCommand(ServoCommandSa::SERVO_ENGAGE, values);
+		  antennaHalted_=0; //antenna is no longer halted
+		}
+	}
 
   if(share_) {
     // write the appropriate responses to the register map
@@ -1119,6 +1174,7 @@ void ServoCommsSa::finishInitialization()
   // Lastly we engage the drives
   vals[0] = 1;
   issueCommand(ServoCommandSa::SERVO_ENGAGE, vals);
+  antennaHalted_=0; //set boolean value to record that antenna is engaged
 
 
   initializationComplete_ = 1;
