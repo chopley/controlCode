@@ -226,6 +226,10 @@ namespace gcp {
 	bool alarmStatus_;
 
 	/**
+	 * 0 if antenna servo is engaged, 1 if antenn servo is disengaged
+	 */
+	bool antennaHalted_;
+	/**
 	 * Service our message queue.
 	 */
 	void serviceMsgQ();
