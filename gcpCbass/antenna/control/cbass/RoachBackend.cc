@@ -64,6 +64,7 @@ RoachBackend::RoachBackend(SpecificShare* share, std::string name, bool sim, cha
   roachVersion_   = 0;
   roachCount_     = 0;
   roachIntLength_ = 0;
+  roachBufferBacklog_ =0; 
   roachMode_      = 0;
   roachSwitchStatus_      = 0;
   roachLL_        = 0;
@@ -85,12 +86,14 @@ RoachBackend::RoachBackend(SpecificShare* share, std::string name, bool sim, cha
   roachUtime_     = 0;  
   roachTL1time_   = 0;
   roachTL2time_   = 0;
+  roachSeconds_   = 0;
   
   roachUtc_       = findReg("utc");
   roachVersion_   = findReg("version");
   roachCount_     = findReg("intCount");
   roachIntLength_ = findReg("intLength");
   roachMode_      = findReg("mode");
+  roachBufferBacklog_ = findReg("buffBacklog"); 
   roachSwitchStatus_      = findReg("switchstatus");
   roachLL_        = findReg("LL");
   roachRR_        = findReg("RR");
@@ -111,6 +114,7 @@ RoachBackend::RoachBackend(SpecificShare* share, std::string name, bool sim, cha
   roachUtime_     = findReg("Utime");    
   roachTL1time_   = findReg("load1time");
   roachTL2time_   = findReg("load2time");
+  roachSeconds_   = findReg("roachSeconds");
 
 
 
@@ -707,6 +711,7 @@ void RoachBackend::getData()
     return;
   };
 
+     // COUT("GetData");
   command_.packReadDataMsg();
   
   //  COUT("size of messageToSend: " << command_.cmdSize_);
@@ -750,9 +755,12 @@ void RoachBackend::getData()
     intLength_[currentIndex_]  = command_.intLength_;
     mode_[currentIndex_]       = command_.mode_;
     res2_[currentIndex_]       = command_.res2_;
-
+    bufferBacklog_[currentIndex_] = command_.bufferBacklog_; 
+    seconds_[currentIndex_] = command_.seconds_[i]; 
     int thisTime = command_.tstart_[i];
-    //    COUT("this time, index: " << thisTime << ", " << currentIndex_);
+  //  COUT("seconds_" << seconds_[currentIndex_]);
+  //  COUT("bufferBacklog_" << bufferBacklog_[currentIndex_]);
+  //      COUT("this time, index: " << thisTime << ", " << currentIndex_);
 
 #if(0)  // 3d remnant
     for(j=0;j<NUM_CHANNELS_PER_BAND;j++){
@@ -825,6 +833,7 @@ void RoachBackend::writeData3D(gcp::util::TimeVal& currTime)
     return;
   }
 
+     // COUT("WRITE DATA 3d");
 #if 1
   if(numSamples > 100) {
     ReportError("Backend sent numSamples = " << numSamples);
@@ -851,6 +860,8 @@ void RoachBackend::writeData3D(gcp::util::TimeVal& currTime)
 
   static std::vector<RegDate::Data> receiverUtc(RECEIVER_SAMPLES_PER_FRAME);
   static std::vector<float> switchFloatVector(RECEIVER_SAMPLES_PER_FRAME);
+  static std::vector<float> seconds(RECEIVER_SAMPLES_PER_FRAME);
+  static std::vector<float> buffBacklog(RECEIVER_SAMPLES_PER_FRAME);
   float meanVersion = 0;
   float meanIntCount = 0;
   float meanIntLength = 0;
@@ -858,6 +869,8 @@ void RoachBackend::writeData3D(gcp::util::TimeVal& currTime)
 
   for(i=0;i<RECEIVER_SAMPLES_PER_FRAME;i++){
 		switchFloatVector[i]=switchstatus_[i];
+		seconds[i]=float(seconds_[i]-1300000000);
+		buffBacklog[i]=bufferBacklog_[i];
 //		    COUT(" switchStat22: "  << switchstatus_[i]);
 	//	COUT("switch i = "<<test[i]);
 	}	
@@ -904,6 +917,8 @@ void RoachBackend::writeData3D(gcp::util::TimeVal& currTime)
   share_->writeReg(roachUtc_, &receiverUtc[0]);
   //COUT("writeReg "<<test[10]);
   share_->writeReg(roachSwitchStatus_, &switchFloatVector[0]);
+  share_->writeReg(roachBufferBacklog_, &buffBacklog[0]);
+  share_->writeReg(roachSeconds_, &seconds[0]);
   share_->writeReg(roachVersion_, meanVersion);
   share_->writeReg(roachCount_, meanIntCount);
   share_->writeReg(roachIntLength_, meanIntLength);
@@ -1033,6 +1048,7 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
  // COUT("prevSecStart, prevSecEnd: " << prevSecStart_ << " , " << prevSecEnd_);
  // COUT("DEBUG STUFF");
 
+    //  COUT("WRITE DATA ");
 #if(0)
   prevSecEnd_ = currentIndex_;
 
@@ -1130,7 +1146,10 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
 
   static std::vector<RegDate::Data> receiverUtc(RECEIVER_SAMPLES_PER_FRAME);
   static std::vector<float> switchFloatVector(RECEIVER_SAMPLES_PER_FRAME);
+  static std::vector<float> seconds(RECEIVER_SAMPLES_PER_FRAME);
+  static std::vector<float> buffBacklog(RECEIVER_SAMPLES_PER_FRAME);
 
+  int temp;
   float meanVersion = 0;
   float meanIntCount = 0;
   float meanIntLength = 0;
@@ -1140,6 +1159,18 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
   for(i=0;i<(numSamples);i++){
 		switchFloatVector[i]=0;
 		switchFloatVector[i]=switchstatus_[index];
+		seconds[i]=0;
+		//seconds[i]=float(seconds_[i]-13000000);
+		//temp=seconds_[i]-(int)1381491125;
+		temp=seconds_[i];
+//		COUT("seconds"<<seconds_[i]);	
+		COUT("seconds"<<i << temp);	
+		seconds[i]=(float)temp;
+	//	COUT("seconds"<<seconds[i]);	
+		buffBacklog[i]=0;	
+		buffBacklog[i]=bufferBacklog_[i];
+	//	COUT("Seconds"<<seconds_[i]);
+	//	COUT("Seconds"<<seconds[i]);
 //
 #if(0) 
   COUT("Numsamples" << numSamples <<"Current_Index_" << index << " LL_: "  << LL_[index][32] << "switchStat " << switchstatus_[index] << "tstart_ " << tstart_[index]);
@@ -1195,6 +1226,8 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
   share_->writeReg(roachIntLength_, meanIntLength);
   share_->writeReg(roachMode_, meanMode);
   share_->writeReg(roachChan_, &channel[0]);
+  share_->writeReg(roachSeconds_, &seconds[0]);
+  share_->writeReg(roachBufferBacklog_, &buffBacklog[0]);
   
   // next the  averages:
   // first the frequency
@@ -1348,10 +1381,12 @@ void RoachBackend::Assign3DRingMemory()
   // Set up sizes.
   version_.resize(RING_BUFFER_LENGTH);
   packetSize_.resize(RING_BUFFER_LENGTH);
+  bufferBacklog_.resize(RING_BUFFER_LENGTH);
   numFrames_.resize(RING_BUFFER_LENGTH);
   intCount_.resize(RING_BUFFER_LENGTH);
   tstart_.resize(RING_BUFFER_LENGTH);
   switchstatus_.resize(RING_BUFFER_LENGTH);
+  seconds_.resize(RING_BUFFER_LENGTH);
   tstop_.resize(RING_BUFFER_LENGTH);
   intLength_.resize(RING_BUFFER_LENGTH);
   mode_.resize(RING_BUFFER_LENGTH);
@@ -1414,11 +1449,13 @@ void RoachBackend::Assign2DRingMemory()
 
   // Set up sizes.
   version_.resize(RING_BUFFER_LENGTH);
+  bufferBacklog_.resize(RING_BUFFER_LENGTH);
   packetSize_.resize(RING_BUFFER_LENGTH);
   numFrames_.resize(RING_BUFFER_LENGTH);
   intCount_.resize(RING_BUFFER_LENGTH);
   tstart_.resize(RING_BUFFER_LENGTH);
   switchstatus_.resize(RING_BUFFER_LENGTH);
+  seconds_.resize(RING_BUFFER_LENGTH);
   tstop_.resize(RING_BUFFER_LENGTH);
   intLength_.resize(RING_BUFFER_LENGTH);
   mode_.resize(RING_BUFFER_LENGTH);

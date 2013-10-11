@@ -190,12 +190,14 @@ namespace gcp {
 	std::vector<int> packetSize_;// numbers of bytes in the transfer                                       
         std::vector<int> numFrames_; // number of frames being transfer                                        
 	std::vector<int> intCount_;  // number of accumulation on fpga                                         
+	std::vector<int> bufferBacklog_;  // buffer backlog on the Roach                                         
         std::vector<int> tstart_;    // start time of integration                                              
         std::vector<int> switchstatus_;    // switching status Noise Diode etc                                              
         std::vector<int> tstop_;     // stop time of integration                                               
         std::vector<int> intLength_; // integration length in clock cycles                                     
         std::vector<int> mode_;      // backend mode (polarization or power);                                  
 	std::vector<int> res2_;      // reserved 4 bytes                                                       
+	std::vector<int> seconds_;      // seconds from the roach                                                       
 
 #if(0) // 3D stuff
 	std::vector<std::vector< std::vector<float> > > LL_;
@@ -225,6 +227,7 @@ namespace gcp {
         RegMapBlock* roachVersion_;   
         RegMapBlock* roachCount_;     
         RegMapBlock* roachIntLength_; 
+        RegMapBlock* roachBufferBacklog_; 
         RegMapBlock* roachMode_;      
 	RegMapBlock* roachSwitchStatus_;        
 	RegMapBlock* roachLL_;        
@@ -246,6 +249,7 @@ namespace gcp {
 	RegMapBlock* roachUtime_;  
  	RegMapBlock* roachTL1time_;
 	RegMapBlock* roachTL2time_;
+	RegMapBlock* roachSeconds_;
 
 
       }; // End class RoachBackend

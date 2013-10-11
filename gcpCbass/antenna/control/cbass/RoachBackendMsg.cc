@@ -52,6 +52,7 @@ int RoachBackendMsg::packetizeNetworkMsg()
   headIndex = 1;
   lptr = 0;
 
+     // COUT("HEERRRE ");
   // by the wonders of memory allocation, we should be ok.
   version_    = ntohl(packet_.version);
   packetSize_ = ntohl(packet_.data_size);  // size of packet in bytes
@@ -61,13 +62,19 @@ int RoachBackendMsg::packetizeNetworkMsg()
   intLength_  = ntohl(packet_.int_len)*CC_TO_SEC;
   mode_       = ntohl(packet_.reserved1);
   res2_       = ntohl(packet_.reserved2);
+  bufferBacklog_       = ntohl(packet_.buffBacklog);
 
+  //  COUT("DATA"<< ntohl(packet_.buffBacklog));
+  for(i=0;i<NUM_ROACH_INTEGRATION_PER_TRANSFER;i++){
+    seconds_[i] = ntohl(packet_.tsecond[i]);
+   // COUT("DATA"<<i<< seconds_[i]);
+  }
   for(i=0;i<NUM_ROACH_INTEGRATION_PER_TRANSFER;i++){
     tstart_[i] = ntohl(packet_.tstart[i]);
   }
   
   for(i=0;i<NUM_ROACH_INTEGRATION_PER_TRANSFER; i++){
-      //COUT("Status "<<STATUS_[i]);
+     // COUT("HERE ");
       switchstatus_[i] = ntohl(packet_.data_switchstatus[i]);
     };
 
@@ -208,7 +215,7 @@ void RoachBackendMsg::Assign3DVectorMemory()
 #if(0)  
   tstart_.resize(NUM_ROACH_INTEGRATION_PER_TRANSFER);
   switchstatus_.resize(NUM_ROACH_INTEGRATION_PER_TRANSFER);
-
+  seconds_.resize(NUM_ROACH_INTEGRATION_PER_TRANSFER);
   // Set up sizes.
   LL_.resize(NUM_ROACH_INTEGRATION_PER_TRANSFER);
   for (int i = 0; i < NUM_ROACH_INTEGRATION_PER_TRANSFER; ++i) {
@@ -264,6 +271,7 @@ void RoachBackendMsg::Assign2DVectorMemory()
   
   tstart_.resize(NUM_ROACH_INTEGRATION_PER_TRANSFER);
   switchstatus_.resize(NUM_ROACH_INTEGRATION_PER_TRANSFER);
+  seconds_.resize(NUM_ROACH_INTEGRATION_PER_TRANSFER);
 
   // Set up sizes.
   LL_.resize(NUM_ROACH_INTEGRATION_PER_TRANSFER);
