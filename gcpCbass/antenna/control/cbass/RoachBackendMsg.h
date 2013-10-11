@@ -25,7 +25,7 @@
 #include "gcp/util/common/Debug.h"
 #include "gcp/util/specific/Directives.h"
 
-									\
+
 // The hard limit -- pmac can't process more than this in a single
 // message
 
@@ -45,7 +45,7 @@
 #define CC_TO_SEC 128/250000000                                   
 
 
-#define DEFAULT_NUMBER_BYTES_PER_TRANSFER 15512
+#define DEFAULT_NUMBER_BYTES_PER_TRANSFER 15516
 //#define DEFAULT_NUMBER_BYTES_PER_TRANSFER 15472
 //#define DEFAULT_NUMBER_BYTES_PER_TRANSFER 15432
 
@@ -159,7 +159,9 @@ namespace gcp {
 	int packetSize_;// numbers of bytes in the transfer
 	int numFrames_; // number of frames being transfer
 	int intCount_;  // number of accumulation on fpga
+	int bufferBacklog_;     // stop time of integration
 	std::vector<int> tstart_;    // start time of integration
+	std::vector<int> seconds_;    // start time of integration
 	std::vector<int> switchstatus_;
 	int tstop_;     // stop time of integration
 	int intLength_; // integration length in clock cycles
@@ -208,6 +210,7 @@ struct UDPCBASSpkt {
   int version; // 4 byte
   int data_size; // 4 byte
   int dataCount; //4 byte
+  int buffBacklog; //4 byte
   int int_count; // 4 byte
   int tstart[10]; // 4 byte
   int tend; // 4 byte

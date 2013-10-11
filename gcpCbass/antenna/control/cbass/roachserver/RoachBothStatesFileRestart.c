@@ -89,7 +89,13 @@ void cb_init(circular_buffer *cb, size_t capacity, size_t sz){
 
 void cb_free(circular_buffer *cb)
 {
-    free(cb->buffer);
+   // free(cb->buffer);
+	cb->count=0;
+	    cb->head = cb->buffer;
+	    //printf("head ptr init %d \n",cb->head);
+	    cb->head10=(char*)cb->buffer_end-10*cb->sz;//the pointer to the data stored from 10 packets ago
+	    cb->tail = cb->buffer;
+
     // clear out other fields too, just to be safe
 }
 
@@ -124,7 +130,7 @@ int cb_pop_front(circular_buffer *cb, void *item)
 {//function to get data back off the ring buffer stack
 	int returnValue;
     if(cb->count <= 0){
-	returnValue=1;
+	returnValue=-1;
     }
         // handle error
    // memcpy(item, cb->tail, cb->sz); //memcpy from the pointer cb->tail to pointer item
@@ -139,6 +145,7 @@ int cb_pop_front(circular_buffer *cb, void *item)
 		}
     cb->count--;//decrement the count of the number of objects in the ring buffer
 	}
+	returnValue=cb->count;
 	return returnValue;
 }
 
@@ -371,13 +378,16 @@ void *command_thread(void *arg){
 			//		printf("getDataCommand %s %d\n",buf,n);
 				//	usleep(100);
 					funcReturn=cb_pop_front(bufferptr, &controlSystemtcp);//get the packet from 10 integrations ago to send to the control system	      
-					if(funcReturn!=0){
+					while(funcReturn!=0){
+					funcReturn=cb_pop_front(bufferptr, &controlSystemtcp);//keep popping the data until you're at the most recent
+					}
+					if(funcReturn<0){
 						bufferReads++;
 						if(bufferReads>10){
 							printf("No data in ring buffer Loop\n");
 						}
 					}
-					else if(funcReturn==0){
+					else if(funcReturn>=0){
 						bufferReads=0;
 					}
 					returnDataPtr=(char *)&controlSystemtcp;
@@ -466,6 +476,15 @@ void *command_thread(void *arg){
 					fclose(fp5);
 					returnDataPtr=(char *)&PhaseShifterCommand;
 					returnDataSize=sizeof(PhaseShifterCommand);
+				}
+				else if(!strncmp(buf,resetBufferCommand,10)){
+					//reset the circular buffer
+					printf("Reset Buffer command\n");
+					funcReturn=cb_pop_front(bufferptr, &controlSystemtcp);//get the packet from 10 integrations ago to send to the control system	      
+					while(funcReturn!=0){
+						funcReturn=cb_pop_front(bufferptr, &controlSystemtcp);//keep popping the data until you're at the most recent
+					}
+				//	cb_free(bufferptr);
 				}
 				else {
 					printf("Garbage sent\n");
@@ -792,7 +811,7 @@ void *packROACHpacket_thread(void *arg){
 	int packedDataCounter;//counter to keep track of the number of integrations
 	int readStat[20];
 	bufferptr=&buffer;
-	cb_init(bufferptr,50,sizeof(struct UDPCBASSpkt)); //allocate space for ten data packets for the ring buffer
+	cb_init(bufferptr,2,sizeof(struct UDPCBASSpkt)); //allocate space for ten data packets for the ring buffer
 
 	if(VERSION==1){	
 		fp = fopen(path_gpioMode, "w"); 
@@ -1036,6 +1055,8 @@ void *packROACHpacket_thread(void *arg){
 			cbassPKT.version=VERSION; //version numbers of the Polarisation begin at 0
 			cbassPKT.tend=t1.tv_usec;
 			cbassPKT.int_count=acc_new;
+			cbassPKT.buffBacklog=bufferptr->count;
+		//	cbassPKT.buffBacklog=25;
 #if(0)
 			for(i=0;i<=9;i++){
 				printf("stat %d %d %d %d\n",i,cbassPKT.tstart[i],cbassPKT.data_switchstatus[i],cbassPKT.data_ch0even[i*vectorLength+10]);
@@ -1072,7 +1093,8 @@ void *packROACHpacket_thread(void *arg){
 		/*statusBit=0;
 		statusBit=globalStatus;*/
 		cbassPKT.tstart[packedDataCounter]=timeStamp;//packet timestamp
-		cbassPKT.tsecond[packedDataCounter]=t2.tv_sec;//packet timestamp in ROACH second time
+		cbassPKT.tsecond[packedDataCounter]=t2.tv_sec-1381491125;//packet timestamp in ROACH second time
+		//cbassPKT.tsecond[packedDataCounter]=packedDataCounter;//packet timestamp in ROACH second time
 		memcpy(&cbassPKT.data_switchstatus[packedDataCounter],&statusBit,sizeof(int));
 //		cbassPKT.data_switchstatus[packedDataCounter]=statusBit; //status register
 				
@@ -1713,9 +1735,10 @@ int encodeNetwork(struct UDPCBASSpkt *pkt){
 	pkt->data_size = htonl(pkt->data_size);
 	pkt->dataCount = htonl(pkt->dataCount);
 	pkt->int_count = htonl(pkt->int_count);
+	pkt->buffBacklog = htonl(pkt->buffBacklog);
 	for(i=0;i<10;i++){
 		pkt->tstart[i]=htonl(pkt->tstart[i]);
-		pkt->tsecond[i]=htonl(pkt->tstart[i]);
+		pkt->tsecond[i]=htonl(pkt->tsecond[i]);
 	}
  	//printf("%f %d\n",(float)pkt->data_ch0odd[300],pkt->data_ch0odd[300]);       
 	//printf("encode %04x\n",pkt->data_ch0odd[300]);

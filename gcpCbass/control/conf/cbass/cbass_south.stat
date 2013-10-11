@@ -1,4 +1,4 @@
-add_page 347 266 Status black red yellow 10 11 {13 10 12 13 10 10 10 10} {} 0 {} 0 {
+add_page 156 89 Status black red yellow 10 11 {13 10 12 13 10 10 10 10 10 10} {} 0 {} 0 {
   label 0 0 midnightblue paleturquoise center {Array frame}
   label 0 1 midnightblue paleturquoise center {Antenna frame}
   label 0 4 midnightblue paleturquoise center Azimuth
@@ -112,4 +112,10 @@ add_page 347 266 Status black red yellow 10 11 {13 10 12 13 10 10 10 10} {} 0 {}
   label 7 0 midnightblue paleturquoise center Version
   register 7 1 black green center {antenna0.roach1.version[0][0]} floating 10 0 {} 0 0 0.0 0.0 0 1
   register 7 2 black green center {antenna0.roach2.version[0][0]} floating 10 0 {} 0 0 0.0 0.0 0 1
+  label 8 0 midnightblue paleturquoise center Backlog
+  register 8 1 black green center {antenna0.roach1.buffBacklog[0][0]} floating 15 0 {} 0 0 0.0 0.0 0 1
+  register 8 2 black green center {antenna0.roach2.buffBacklog[0][0]} floating 15 0 {} 0 0 0.0 0.0 0 1
+  label 9 0 midnightblue paleturquoise center Seconds
+  register 9 1 black green center {antenna0.roach1.roachSeconds[0][99]} floating 15 0 {} 0 0 0.0 0.0 0 1
+  register 9 2 black green center {antenna0.roach2.roachSeconds[0][99]} floating 15 0 {} 0 0 0.0 0.0 0 1
 }

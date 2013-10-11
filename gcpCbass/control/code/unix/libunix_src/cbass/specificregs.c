@@ -534,6 +534,9 @@ static RegBlockTemp cbassRoach1[] = {
 
   RegBlockTemp("int length", 
 	       "intLength", "", REG_FLOAT, 0, 1, 1), 
+  
+  RegBlockTemp("Buffer Backlog", 
+	       "buffBacklog", "", REG_FLOAT, 0, 1, 1), 
 
   RegBlockTemp("mode", 
 	       "mode", "", REG_FLOAT, 0, 1, 1), 
@@ -597,6 +600,9 @@ static RegBlockTemp cbassRoach1[] = {
 
   RegBlockTemp("Freq Average Load 2 data",
 	       "load2freq", "", REG_FAST|REG_FLOAT, 0, 1, RECEIVER_SAMPLES_PER_FRAME),
+  
+  RegBlockTemp("Roach Seconds",
+	       "roachSeconds", "", REG_FAST|REG_FLOAT, 0, 1, RECEIVER_SAMPLES_PER_FRAME),
 
 };
 
@@ -617,6 +623,9 @@ static RegBlockTemp cbassRoach2[] = {
   RegBlockTemp("int length", 
 	       "intLength", "", REG_FLOAT, 0, 1, 1), 
 
+  RegBlockTemp("Buffer Backlog", 
+	       "buffBacklog", "", REG_FLOAT, 0, 1, 1), 
+ 
   RegBlockTemp("mode", 
 	       "mode", "", REG_FLOAT, 0, 1, 1), 
 
@@ -681,6 +690,8 @@ static RegBlockTemp cbassRoach2[] = {
   RegBlockTemp("Freq Average Load 2 data",
 	       "load2freq", "", REG_FAST|REG_FLOAT, 0, 1, RECEIVER_SAMPLES_PER_FRAME),
 
+  RegBlockTemp("Roach Seconds",
+	       "roachSeconds", "", REG_FAST|REG_FLOAT, 0, 1, RECEIVER_SAMPLES_PER_FRAME),
 };
 
 //-----------------------------------------------------------------------

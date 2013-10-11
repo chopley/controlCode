@@ -14,6 +14,7 @@ struct UDPCBASSpkt {
   int version; // 4 byte
   int data_size; // 4  //Size of the structure in bytes
   int dataCount; //4 byte the number of frames in a packet i.e 10
+  int buffBacklog; //4 byte
   int int_count; // 4 byte //the integration counts
   int tstart[10]; // 40 byte
   int tend; // 4 byte
