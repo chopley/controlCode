@@ -760,7 +760,7 @@ void RoachBackend::getData()
     int thisTime = command_.tstart_[i];
   //  COUT("seconds_" << seconds_[currentIndex_]);
   //  COUT("bufferBacklog_" << bufferBacklog_[currentIndex_]);
-  //      COUT("this time, index: " << thisTime << ", " << currentIndex_);
+     //   COUT("this time, index: " << thisTime << ", " << currentIndex_);
 
 #if(0)  // 3d remnant
     for(j=0;j<NUM_CHANNELS_PER_BAND;j++){
@@ -871,7 +871,8 @@ void RoachBackend::writeData3D(gcp::util::TimeVal& currTime)
 		switchFloatVector[i]=switchstatus_[i];
 		seconds[i]=float(seconds_[i]-1300000000);
 		buffBacklog[i]=bufferBacklog_[i];
-//		    COUT(" switchStat22: "  << switchstatus_[i]);
+		   // COUT(" switchStat22: "  << switchstatus_[i]);
+		COUT(" secondsReadin: "  << seconds[i]);
 	//	COUT("switch i = "<<test[i]);
 	}	
   // we're writing data from the previous second 
@@ -1119,9 +1120,11 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
   static float TL1freqAvg[RECEIVER_SAMPLES_PER_FRAME];
   static float TL2freqAvg[RECEIVER_SAMPLES_PER_FRAME];
 
+  static float seconds[RECEIVER_SAMPLES_PER_FRAME];
   // frequency register
   static float channel[CHANNELS_PER_ROACH];
   
+  static float buffBacklog[RECEIVER_SAMPLES_PER_FRAME];
 
   // zero our average containers
   for (i=0;i<CHANNELS_PER_ROACH;i++){
@@ -1146,8 +1149,6 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
 
   static std::vector<RegDate::Data> receiverUtc(RECEIVER_SAMPLES_PER_FRAME);
   static std::vector<float> switchFloatVector(RECEIVER_SAMPLES_PER_FRAME);
-  static std::vector<float> seconds(RECEIVER_SAMPLES_PER_FRAME);
-  static std::vector<float> buffBacklog(RECEIVER_SAMPLES_PER_FRAME);
 
   int temp;
   float meanVersion = 0;
@@ -1162,9 +1163,9 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
 		seconds[i]=0;
 		//seconds[i]=float(seconds_[i]-13000000);
 		//temp=seconds_[i]-(int)1381491125;
-		temp=seconds_[i];
-//		COUT("seconds"<<seconds_[i]);	
-		COUT("seconds"<<i << temp);	
+		temp=seconds_[index];
+	//	COUT("secondswritedate"<<i <<"--" <<seconds_[index]<<index);
+	//	COUT("seconds__"<<i <<"--" << temp);	
 		seconds[i]=(float)temp;
 	//	COUT("seconds"<<seconds[i]);	
 		buffBacklog[i]=0;	
