@@ -67,10 +67,11 @@ int RoachBackendMsg::packetizeNetworkMsg()
   //  COUT("DATA"<< ntohl(packet_.buffBacklog));
   for(i=0;i<NUM_ROACH_INTEGRATION_PER_TRANSFER;i++){
     seconds_[i] = ntohl(packet_.tsecond[i]);
-   // COUT("DATA"<<i<< seconds_[i]);
+//    COUT("DATA"<<i << "---"  << seconds_[i]);
   }
   for(i=0;i<NUM_ROACH_INTEGRATION_PER_TRANSFER;i++){
     tstart_[i] = ntohl(packet_.tstart[i]);
+  //  COUT("starts" <<i << "---"  << tstart_[i]);
   }
   
   for(i=0;i<NUM_ROACH_INTEGRATION_PER_TRANSFER; i++){
