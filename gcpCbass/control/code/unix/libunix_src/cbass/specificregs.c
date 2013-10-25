@@ -298,6 +298,7 @@ static RegBlockTemp cbassServoOvro[] = {
   RegBlockTemp("",
 	       "fast_el_err",             "", REG_FAST|REG_FLOAT, 0, 1, SERVO_POSITION_SAMPLES_PER_FRAME),
 
+
   RegBlockTemp("",
 	       "servo_error_count",       "", REG_INT, 0, 1), 
 
@@ -435,6 +436,11 @@ static RegBlockTemp cbassServo[] = {
   RegBlockTemp("",
 	       "slow_el_pos",             "", REG_FLOAT, 0, 1), 
 
+  RegBlockTemp("NTP second on the servo",
+	       "ntpSecond",             "", REG_FAST|REG_FLOAT, 0, 1, SERVO_POSITION_SAMPLES_PER_FRAME),
+
+  RegBlockTemp("NTP usecond on the servo",
+	       "ntpUSecond",             "", REG_FAST|REG_FLOAT, 0, 1, SERVO_POSITION_SAMPLES_PER_FRAME),
 
   // All Entries from the Status Register
   // These should be booleans, but i can't have an array of booleans apparently.
@@ -536,7 +542,7 @@ static RegBlockTemp cbassRoach1[] = {
 	       "intLength", "", REG_FLOAT, 0, 1, 1), 
   
   RegBlockTemp("Buffer Backlog", 
-	       "buffBacklog", "", REG_FLOAT, 0, 1, 1), 
+	       "buffBacklog", "", REG_FAST|REG_FLOAT, 0, 1, RECEIVER_SAMPLES_PER_FRAME),  
 
   RegBlockTemp("mode", 
 	       "mode", "", REG_FLOAT, 0, 1, 1), 
@@ -601,9 +607,14 @@ static RegBlockTemp cbassRoach1[] = {
   RegBlockTemp("Freq Average Load 2 data",
 	       "load2freq", "", REG_FAST|REG_FLOAT, 0, 1, RECEIVER_SAMPLES_PER_FRAME),
   
-  RegBlockTemp("Roach Seconds",
-	       "roachSeconds", "", REG_FAST|REG_FLOAT, 0, 1, RECEIVER_SAMPLES_PER_FRAME),
+  RegBlockTemp("Roach NTP Seconds",
+	       "ntpSeconds", "", REG_FAST|REG_FLOAT, 0, 1, RECEIVER_SAMPLES_PER_FRAME),
+  
+  RegBlockTemp("Roach NTP uSeconds",
+	       "ntpUSeconds", "", REG_FAST|REG_FLOAT, 0, 1, RECEIVER_SAMPLES_PER_FRAME),
 
+  RegBlockTemp("Roach FPGA Clock",
+	       "fpgaClockStamp", "", REG_FAST|REG_FLOAT, 0, 1, RECEIVER_SAMPLES_PER_FRAME),
 };
 
 /**.......................................................................
@@ -624,7 +635,7 @@ static RegBlockTemp cbassRoach2[] = {
 	       "intLength", "", REG_FLOAT, 0, 1, 1), 
 
   RegBlockTemp("Buffer Backlog", 
-	       "buffBacklog", "", REG_FLOAT, 0, 1, 1), 
+	       "buffBacklog", "", REG_FAST|REG_FLOAT, 0, 1, RECEIVER_SAMPLES_PER_FRAME),  
  
   RegBlockTemp("mode", 
 	       "mode", "", REG_FLOAT, 0, 1, 1), 
@@ -689,9 +700,15 @@ static RegBlockTemp cbassRoach2[] = {
 
   RegBlockTemp("Freq Average Load 2 data",
 	       "load2freq", "", REG_FAST|REG_FLOAT, 0, 1, RECEIVER_SAMPLES_PER_FRAME),
+  
+  RegBlockTemp("Roach NTP Seconds",
+	       "ntpSeconds", "", REG_FAST|REG_FLOAT, 0, 1, RECEIVER_SAMPLES_PER_FRAME),
+  
+  RegBlockTemp("Roach NTP uSeconds",
+	       "ntpUSeconds", "", REG_FAST|REG_FLOAT, 0, 1, RECEIVER_SAMPLES_PER_FRAME),
 
-  RegBlockTemp("Roach Seconds",
-	       "roachSeconds", "", REG_FAST|REG_FLOAT, 0, 1, RECEIVER_SAMPLES_PER_FRAME),
+  RegBlockTemp("Roach FPGA Clock",
+	       "fpgaClockStamp", "", REG_FAST|REG_FLOAT, 0, 1, RECEIVER_SAMPLES_PER_FRAME),
 };
 
 //-----------------------------------------------------------------------
