@@ -68,6 +68,8 @@ ServoCommsSa::ServoCommsSa(SpecificShare* share, string name, bool sim) :
   servoBrakes_  	 = 0;
   driveLids_ 	         = 0;
   azWrap_                = 0;
+  servoSeconds_                = 0;
+  servouSeconds_                = 0;
 
   utc_         =   findReg("utc");
   azPositions_ =   findReg("fast_az_pos");
@@ -84,6 +86,8 @@ ServoCommsSa::ServoCommsSa(SpecificShare* share, string name, bool sim) :
   servoBrakes_         = findReg("mechanical_brakes");
   driveLids_           = findReg("drive_lids");
   azWrap_              = findReg("az_no_wrap");
+  servoSeconds_              = findReg("ntpSecond");
+  servouSeconds_              = findReg("ntpUSecond");
 
 
   antennaHalted_	  = 0;
@@ -789,12 +793,17 @@ void ServoCommsSa::queryAntPositions()
     static float elPos[SERVO_POSITION_SAMPLES_PER_FRAME];
     static float azErr[SERVO_POSITION_SAMPLES_PER_FRAME];
     static float elErr[SERVO_POSITION_SAMPLES_PER_FRAME];
+    static float timeuSec[SERVO_POSITION_SAMPLES_PER_FRAME];
+    static float timeSec[SERVO_POSITION_SAMPLES_PER_FRAME];
     
     for (unsigned i=0; i < 5; i++){
       azPos[i] = command.responseValue_[i];
       elPos[i] = command.responseValue_[i + 5];
       azErr[i] = command.responseValue_[i + 10]*1000; // in mdeg
       elErr[i] = command.responseValue_[i + 15]*1000; // in mdeg
+      timeuSec[i] = command.responseValue_[i+20];
+      timeSec[i] = command.responseValue_[i+25];
+	//COUT("time "<<timeSec[i]);
     };
 
     // Write them to shared memory
@@ -804,6 +813,8 @@ void ServoCommsSa::queryAntPositions()
       share_->writeReg(elPositions_, elPos);
       share_->writeReg(azErrors_,    azErr);
       share_->writeReg(elErrors_,    elErr);
+      share_->writeReg(servoSeconds_,    timeSec);
+      share_->writeReg(servouSeconds_,    timeuSec);
     }
 
     // Write them out as debug:
@@ -832,12 +843,18 @@ void ServoCommsSa::queryAntPositions(gcp::util::TimeVal& currTime)
     static float elPos[SERVO_POSITION_SAMPLES_PER_FRAME];
     static float azErr[SERVO_POSITION_SAMPLES_PER_FRAME];
     static float elErr[SERVO_POSITION_SAMPLES_PER_FRAME];
-    
+    static float timeuSec[SERVO_POSITION_SAMPLES_PER_FRAME];
+    static float timeSec[SERVO_POSITION_SAMPLES_PER_FRAME];
+	    
     for (unsigned i=0; i < 5; i++){
       azPos[i] = command.responseValue_[i];
       elPos[i] = command.responseValue_[i + 5];
       azErr[i] = command.responseValue_[i + 10]*1000;  // in mdeg
       elErr[i] = command.responseValue_[i + 15]*1000;  // in mdeg
+      timeuSec[i] = command.responseValue_[i+20];
+      timeSec[i] = command.responseValue_[i+25];
+	//COUT("time "<<timeSec[i]);
+//	COUT("time "<<timeuSec[i]);
     };
     
     // Write them to shared memory
@@ -847,6 +864,8 @@ void ServoCommsSa::queryAntPositions(gcp::util::TimeVal& currTime)
       share_->writeReg(elPositions_, elPos);
       share_->writeReg(azErrors_,    azErr);
       share_->writeReg(elErrors_,    elErr);
+      share_->writeReg(servoSeconds_,    timeSec);
+      share_->writeReg(servouSeconds_,    timeuSec);
       
       // Fill the UTC register with appropriate time values
       

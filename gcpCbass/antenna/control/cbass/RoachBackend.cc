@@ -86,8 +86,10 @@ RoachBackend::RoachBackend(SpecificShare* share, std::string name, bool sim, cha
   roachUtime_     = 0;  
   roachTL1time_   = 0;
   roachTL2time_   = 0;
-  roachSeconds_   = 0;
-  
+  roachNTPSeconds_   = 0;
+  roachNTPuSeconds_=0;
+  roachFPGAClockStamp_=0; 
+ 
   roachUtc_       = findReg("utc");
   roachVersion_   = findReg("version");
   roachCount_     = findReg("intCount");
@@ -114,7 +116,9 @@ RoachBackend::RoachBackend(SpecificShare* share, std::string name, bool sim, cha
   roachUtime_     = findReg("Utime");    
   roachTL1time_   = findReg("load1time");
   roachTL2time_   = findReg("load2time");
-  roachSeconds_   = findReg("roachSeconds");
+  roachNTPSeconds_   = findReg("ntpSeconds");
+  roachNTPuSeconds_   = findReg("ntpUSeconds");
+  roachFPGAClockStamp_   = findReg("fpgaClockStamp");
 
 
 
@@ -730,6 +734,8 @@ void RoachBackend::getData()
     
   // and next we put it into our ring buffer
   int numFrames = command_.numFrames_;
+  double temp2;
+  
   //  COUT("in RoachBackend::getData");
    // CTOUT("(NumFrames, version, intCount) : (" << numFrames << " , " << command_.version_ << " , " << command_.intCount_ << ")");
 
@@ -739,6 +745,7 @@ void RoachBackend::getData()
     missedCommCounter_++;
     return;
   }
+  int test2;
 
   for (i=0;i<numFrames;i++) {
 
@@ -746,17 +753,18 @@ void RoachBackend::getData()
     version_[currentIndex_]    = command_.version_;
     packetSize_[currentIndex_] = command_.packetSize_;
     numFrames_[currentIndex_]  = command_.numFrames_;
-    intCount_[currentIndex_]   = command_.intCount_;
+    intCount_[currentIndex_]   = command_.intCount_; 
     tstart_[currentIndex_]     = command_.tstart_[i];
     switchstatus_[currentIndex_]     = command_.switchstatus_[i];
-    //COUT(" currentIndex: "  << currentIndex_);
-    //COUT(" switchStat: "  << switchstatus_[currentIndex_])
+//    COUT(" tstartx: "  << tstart_[currentIndex_] <<"  " << temp2);
+//    COUT(" temp2: "  << test2 <<"  "<<tstart_[currentIndex])
     tstop_[currentIndex_]      = command_.tstop_;
     intLength_[currentIndex_]  = command_.intLength_;
     mode_[currentIndex_]       = command_.mode_;
     res2_[currentIndex_]       = command_.res2_;
-    bufferBacklog_[currentIndex_] = command_.bufferBacklog_; 
+    bufferBacklog_[currentIndex_] = command_.bufferBacklog_[i]; 
     seconds_[currentIndex_] = command_.seconds_[i]; 
+    useconds_[currentIndex_] = command_.useconds_[i]; 
     int thisTime = command_.tstart_[i];
   //  COUT("seconds_" << seconds_[currentIndex_]);
   //  COUT("bufferBacklog_" << bufferBacklog_[currentIndex_]);
@@ -787,11 +795,13 @@ void RoachBackend::getData()
 #endif
     // check that we're on to a new second                                              
     if(thisTime < prevTime_) {
+      COUT("thisTime, prevTime " << thisTime << "  ," << prevTime_);
       prevSecEnd_   = currentIndex_ - 1;
       if(prevSecEnd_ < 0)
 	prevSecEnd_ = (RING_BUFFER_LENGTH-1);  // it's an index, starting from zero.     
       prevSecStart_ = thisSecStart_;
       thisSecStart_ = currentIndex_;
+      COUT("IN ROACHBACKEND getData, start end:  " <<prevSecStart_ << ", " << prevSecEnd_);
     };
     // set the previous time
     prevTime_ = thisTime;
@@ -802,7 +812,7 @@ void RoachBackend::getData()
       currentIndex_ = 0;
     };
   };
-  //  COUT("IN GETDATA, CURRENT INDEX: " << currentIndex_);
+  COUT("IN GETDATA, CURRENT INDEX: " << currentIndex_);
 
   return;
 }
@@ -861,6 +871,7 @@ void RoachBackend::writeData3D(gcp::util::TimeVal& currTime)
   static std::vector<RegDate::Data> receiverUtc(RECEIVER_SAMPLES_PER_FRAME);
   static std::vector<float> switchFloatVector(RECEIVER_SAMPLES_PER_FRAME);
   static std::vector<float> seconds(RECEIVER_SAMPLES_PER_FRAME);
+  static std::vector<float> useconds(RECEIVER_SAMPLES_PER_FRAME);
   static std::vector<float> buffBacklog(RECEIVER_SAMPLES_PER_FRAME);
   float meanVersion = 0;
   float meanIntCount = 0;
@@ -919,7 +930,8 @@ void RoachBackend::writeData3D(gcp::util::TimeVal& currTime)
   //COUT("writeReg "<<test[10]);
   share_->writeReg(roachSwitchStatus_, &switchFloatVector[0]);
   share_->writeReg(roachBufferBacklog_, &buffBacklog[0]);
-  share_->writeReg(roachSeconds_, &seconds[0]);
+  share_->writeReg(roachNTPSeconds_, &seconds[0]);
+  share_->writeReg(roachNTPuSeconds_, &useconds[0]);
   share_->writeReg(roachVersion_, meanVersion);
   share_->writeReg(roachCount_, meanIntCount);
   share_->writeReg(roachIntLength_, meanIntLength);
@@ -1044,31 +1056,17 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
   gcp::util::TimeVal start, stop, diff;
   start.setToCurrentTime();
   
-  //  COUT("prevSecStart, prevSecEnd: " << prevSecStart_ << " , " << prevSecEnd_);
+  COUT("IN ROACHBACKEND writeData, start end:  " <<prevSecStart_ << ", " << prevSecEnd_);
 
  // COUT("prevSecStart, prevSecEnd: " << prevSecStart_ << " , " << prevSecEnd_);
  // COUT("DEBUG STUFF");
 
     //  COUT("WRITE DATA ");
-#if(0)
-  prevSecEnd_ = currentIndex_;
-
-  //prevSecStart_ = currentIndex_ - 99;
-  prevSecStart_ = currentIndex_ - 100;
-  if(prevSecStart_ <0){
-    prevSecStart_ += RING_BUFFER_LENGTH;
-  }
-  int numSamples = prevSecEnd_ - prevSecStart_  ;
-#endif
   int numSamples = prevSecEnd_ - prevSecStart_ + 1;
   
   if(numSamples<0){
     numSamples += RING_BUFFER_LENGTH;
   };
-#if(0)
-  COUT("numSamples: " << numSamples << " , " << prevSecEnd_);
-#endif
-
   if(!share_){
     // nothing to do if no share object 
     return;
@@ -1121,6 +1119,8 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
   static float TL2freqAvg[RECEIVER_SAMPLES_PER_FRAME];
 
   static float seconds[RECEIVER_SAMPLES_PER_FRAME];
+  static float useconds[RECEIVER_SAMPLES_PER_FRAME];
+  static float fpgaClockStamp[RECEIVER_SAMPLES_PER_FRAME];
   // frequency register
   static float channel[CHANNELS_PER_ROACH];
   
@@ -1155,23 +1155,18 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
   float meanIntCount = 0;
   float meanIntLength = 0;
   float meanMode = 0;
+  float secondPart = 0;
 
   index=prevSecStart_;
   for(i=0;i<(numSamples);i++){
 		switchFloatVector[i]=0;
 		switchFloatVector[i]=switchstatus_[index];
-		seconds[i]=0;
-		//seconds[i]=float(seconds_[i]-13000000);
-		//temp=seconds_[i]-(int)1381491125;
-		temp=seconds_[index];
-	//	COUT("secondswritedate"<<i <<"--" <<seconds_[index]<<index);
-	//	COUT("seconds__"<<i <<"--" << temp);	
-		seconds[i]=(float)temp;
-	//	COUT("seconds"<<seconds[i]);	
+		seconds[i]     = seconds_[index];
+		fpgaClockStamp[i]  = tstart_[index];
+		useconds[i] = useconds_[index];
 		buffBacklog[i]=0;	
-		buffBacklog[i]=bufferBacklog_[i];
-	//	COUT("Seconds"<<seconds_[i]);
-	//	COUT("Seconds"<<seconds[i]);
+		buffBacklog[i]=bufferBacklog_[index];
+
 //
 #if(0) 
   COUT("Numsamples" << numSamples <<"Current_Index_" << index << " LL_: "  << LL_[index][32] << "switchStat " << switchstatus_[index] << "tstart_ " << tstart_[index]);
@@ -1188,8 +1183,9 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
 
   offsetTime.setSeconds(1);
   currTime -= offsetTime;
-  offsetTime.setSeconds(0.3);
-  currTime -= offsetTime;
+  // next two lines not needed:  we are using 0 in teh second spot.
+  //  offsetTime.setSeconds(0.3);
+  //  currTime -= offsetTime;
   
   // FIRST LET'S DO THE SINGLE VALUE AVERAGES
   index = prevSecStart_;
@@ -1197,9 +1193,12 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
   for (i=0;i<numSamples;i++){
     dataTime = currTime;
     
-    //    dataTime.incrementSeconds(tstart_[index);
+    
+    secondPart = fpgaClockStamp[index]/250000000;
+    secondPart -= 0.005;
+    // dataTime.incrementSeconds( [tstart_[index]);
     //    dataTime.incrementSeconds(i*intLength_[index]); // if we do intlength, we have to do intlength/4*128/250000000
-    dataTime.incrementSeconds(i*0.01);
+    dataTime.incrementSeconds(secondPart);
     receiverUtc[i] = dataTime;
     //switchStatus[i] = switchstatus_[i];
     
@@ -1227,9 +1226,10 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
   share_->writeReg(roachIntLength_, meanIntLength);
   share_->writeReg(roachMode_, meanMode);
   share_->writeReg(roachChan_, &channel[0]);
-  share_->writeReg(roachSeconds_, &seconds[0]);
+  share_->writeReg(roachNTPSeconds_, &seconds[0]);
   share_->writeReg(roachBufferBacklog_, &buffBacklog[0]);
-  
+  share_->writeReg(roachNTPuSeconds_, &useconds[0]);
+  share_->writeReg(roachFPGAClockStamp_, &fpgaClockStamp[0]);
   // next the  averages:
   // first the frequency
   index = prevSecStart_;
@@ -1457,6 +1457,7 @@ void RoachBackend::Assign2DRingMemory()
   tstart_.resize(RING_BUFFER_LENGTH);
   switchstatus_.resize(RING_BUFFER_LENGTH);
   seconds_.resize(RING_BUFFER_LENGTH);
+  useconds_.resize(RING_BUFFER_LENGTH);
   tstop_.resize(RING_BUFFER_LENGTH);
   intLength_.resize(RING_BUFFER_LENGTH);
   mode_.resize(RING_BUFFER_LENGTH);

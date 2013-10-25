@@ -179,6 +179,8 @@ namespace gcp {
 	RegMapBlock* servoBrakes_; 	    
 	RegMapBlock* driveLids_;	    
 	RegMapBlock* azWrap_;               
+	RegMapBlock* servoSeconds_;               
+	RegMapBlock* servouSeconds_;               
 
 	/**
 	 * The set of file descriptors to be watched for readability.

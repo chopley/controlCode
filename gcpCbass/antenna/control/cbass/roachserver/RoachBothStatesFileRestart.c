@@ -1055,7 +1055,6 @@ void *packROACHpacket_thread(void *arg){
 			cbassPKT.version=VERSION; //version numbers of the Polarisation begin at 0
 			cbassPKT.tend=t1.tv_usec;
 			cbassPKT.int_count=acc_new;
-			cbassPKT.buffBacklog=bufferptr->count;
 		//	cbassPKT.buffBacklog=25;
 #if(0)
 			for(i=0;i<=9;i++){
@@ -1092,8 +1091,11 @@ void *packROACHpacket_thread(void *arg){
 
 		/*statusBit=0;
 		statusBit=globalStatus;*/
+		cbassPKT.buffBacklog[packedDataCounter]=bufferptr->count;
 		cbassPKT.tstart[packedDataCounter]=timeStamp;//packet timestamp
 		cbassPKT.tsecond[packedDataCounter]=t2.tv_sec-1381491125;//packet timestamp in ROACH second time
+	//	cbassPKT.tsecond[packedDataCounter]=t2.tv_sec;//packet timestamp in ROACH second time
+		cbassPKT.tusecond[packedDataCounter]=t2.tv_usec;//packet timestamp in ROACH second time
 		//cbassPKT.tsecond[packedDataCounter]=packedDataCounter;//packet timestamp in ROACH second time
 		memcpy(&cbassPKT.data_switchstatus[packedDataCounter],&statusBit,sizeof(int));
 //		cbassPKT.data_switchstatus[packedDataCounter]=statusBit; //status register
@@ -1735,8 +1737,8 @@ int encodeNetwork(struct UDPCBASSpkt *pkt){
 	pkt->data_size = htonl(pkt->data_size);
 	pkt->dataCount = htonl(pkt->dataCount);
 	pkt->int_count = htonl(pkt->int_count);
-	pkt->buffBacklog = htonl(pkt->buffBacklog);
 	for(i=0;i<10;i++){
+		pkt->buffBacklog[i] = htonl(pkt->buffBacklog[i]);
 		pkt->tstart[i]=htonl(pkt->tstart[i]);
 		pkt->tsecond[i]=htonl(pkt->tsecond[i]);
 	}

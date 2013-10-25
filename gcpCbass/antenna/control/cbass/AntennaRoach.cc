@@ -15,7 +15,7 @@
 
 #include "gcp/control/code/unix/libunix_src/specific/rtcnetcoms.h"
 
-#define HAVE_ROACH2 true
+#define HAVE_ROACH2 false
 
 #define BACKEND_MISSED_COMM_LIMIT 10
 
@@ -221,6 +221,7 @@ void AntennaRoach::processMsg(AntennaRoachMsg* msg)
       CTOUT("AntennaRoach:: roach1 not connected, not writing data");
     }
 #if(HAVE_ROACH2)
+    currTime.setTime(msg->currTime_);
     if(roach2_->roachIsConnected()){
       roach2_->writeData(currTime);
     } else {

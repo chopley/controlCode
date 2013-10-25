@@ -45,7 +45,7 @@
 #define CC_TO_SEC 128/250000000                                   
 
 
-#define DEFAULT_NUMBER_BYTES_PER_TRANSFER 15516
+#define DEFAULT_NUMBER_BYTES_PER_TRANSFER 15632
 //#define DEFAULT_NUMBER_BYTES_PER_TRANSFER 15472
 //#define DEFAULT_NUMBER_BYTES_PER_TRANSFER 15432
 
@@ -159,9 +159,10 @@ namespace gcp {
 	int packetSize_;// numbers of bytes in the transfer
 	int numFrames_; // number of frames being transfer
 	int intCount_;  // number of accumulation on fpga
-	int bufferBacklog_;     // stop time of integration
+	std::vector<int> bufferBacklog_;    // backlog
 	std::vector<int> tstart_;    // start time of integration
-	std::vector<int> seconds_;    // start time of integration
+	std::vector<int> seconds_;    // roach NTP second
+	std::vector<int> useconds_;    // roach NTP usecond
 	std::vector<int> switchstatus_;
 	int tstop_;     // stop time of integration
 	int intLength_; // integration length in clock cycles
@@ -210,7 +211,7 @@ struct UDPCBASSpkt {
   int version; // 4 byte
   int data_size; // 4 byte
   int dataCount; //4 byte
-  int buffBacklog; //4 byte
+  int buffBacklog[10]; //40 byte
   int int_count; // 4 byte
   int tstart[10]; // 4 byte
   int tend; // 4 byte
@@ -230,7 +231,9 @@ struct UDPCBASSpkt {
   int data_ch5odd[kDataperPacket*vectorLength];
   int data_ch5even[kDataperPacket*vectorLength];
   int data_switchstatus[kDataperPacket];
+  int secondIntegration[kDataperPacket]; //4*10=40
   int tsecond[10];
+  int tusecond[10];
 };
 
 

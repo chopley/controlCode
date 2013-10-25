@@ -198,6 +198,7 @@ namespace gcp {
         std::vector<int> mode_;      // backend mode (polarization or power);                                  
 	std::vector<int> res2_;      // reserved 4 bytes                                                       
 	std::vector<int> seconds_;      // seconds from the roach                                                       
+	std::vector<int> useconds_;      // useconds from the roach                                                       
 
 #if(0) // 3D stuff
 	std::vector<std::vector< std::vector<float> > > LL_;
@@ -249,7 +250,9 @@ namespace gcp {
 	RegMapBlock* roachUtime_;  
  	RegMapBlock* roachTL1time_;
 	RegMapBlock* roachTL2time_;
-	RegMapBlock* roachSeconds_;
+	RegMapBlock* roachNTPSeconds_;
+	RegMapBlock* roachNTPuSeconds_;       
+	RegMapBlock* roachFPGAClockStamp_;       
 
 
       }; // End class RoachBackend
