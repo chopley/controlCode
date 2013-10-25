@@ -1,5 +1,5 @@
 (Interval time,Double startTemp,Double dTemp,Double endTemp)
-import ~cbassuser/cbassSaControl/cbass/gcpCbass/control/sch/schedlibSouth.sch
+import ~cbassuser/cbass/gcpCbass/control/sch/schedlibSouth.sch
 ## time is for the time at each temp
 ##startTemp is the beginning temp
 ##end Temp is the end Temp
