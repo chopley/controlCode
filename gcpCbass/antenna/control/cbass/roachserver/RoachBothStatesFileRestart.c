@@ -2070,6 +2070,14 @@ int main(int argc, char *argv[])
 			}
 	fclose(fp);
 	VERSION=readVersion;
+	//check that the text file has some value in it- maybe it got mangled?
+	if(VERSION!=1){
+		if(VERSION!=10000){
+			 printf("version.txt was mangled. Resetting it to 1 so the roach will start in polarization mode\n");
+			system("echo 1 > version.txt");
+			VERSION=1;
+		}
+	}
 	//look for the appropriate PID
 	if(VERSION==1){
 		system("pidof -s rx_10dec_stat_2013_Jan_11_1059.bof > pid.txt");
@@ -2077,6 +2085,10 @@ int main(int argc, char *argv[])
 	else if(VERSION==10000){
 		system("pidof -s rx_10dec_stat_pow_2013_Jan_11_1408.bof > pid.txt");
 	}
+	else{
+			 printf("check text file version.txt-It needs values of either 1 or 10000 for polarization or powermode respectively\n");
+	}
+	
 	//get the PID of the programm from the text file
 	fp=fopen("pid.txt", "r");
 	j=0;
@@ -2171,6 +2183,7 @@ int main(int argc, char *argv[])
 			if(changeModeTemp==1){
 					VERSION=1;
 					system("echo 1 > version.txt");
+					system("echo 1 > version.txt");
 					printf("Changing to Polarisation");
 					sprintf(commandStr,"kill -kill %s",pidStr);
 					printf("%s",commandStr);
@@ -2180,6 +2193,7 @@ int main(int argc, char *argv[])
 			}
 			else if(changeModeTemp==2){
 					VERSION=10000;
+					system("echo 10000 > version.txt");
 					system("echo 10000 > version.txt");
 					printf("Changing to Power");
 					sprintf(commandStr,"kill -kill %s",pidStr);
