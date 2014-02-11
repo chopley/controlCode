@@ -181,6 +181,10 @@ namespace gcp {
 	RegMapBlock* azWrap_;               
 	RegMapBlock* servoSeconds_;               
 	RegMapBlock* servouSeconds_;               
+	RegMapBlock* az_tacho1_;               
+	RegMapBlock* az_tacho2_;               
+	RegMapBlock* el_tacho1_;               
+	RegMapBlock* el_tacho2_;               
 
 	/**
 	 * The set of file descriptors to be watched for readability.
@@ -262,7 +266,7 @@ namespace gcp {
 	/**
 	 * Block, waiting for input from the servo.
 	 */
-	void waitForResponse();
+	int waitForResponse();
 
 	/**
 	 * Record status response to the register map.

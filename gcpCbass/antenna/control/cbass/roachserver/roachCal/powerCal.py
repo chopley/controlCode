@@ -30,8 +30,8 @@ ND.instantiateRoach('pumba','cbassrx_2may_pow_2012_May_02_1555.bof',7147,10,nInt
 
 
 #initialise the class coefficients and those stored on the roach
-ND.initialiseCoefficients(2000)
-Roach1.initialiseCoefficients(2000)
+ND.initialiseCoefficients(100)
+Roach1.initialiseCoefficients(100)
 Roach2.initialiseCoefficients(100)
 
 
@@ -70,10 +70,20 @@ Roach2.fpga.write_int('Demod4_transL',10)
 
 for i in range(1):
     ND.diodeOn()
-    time.sleep(0.5)
+    time.sleep(2.5)
     fpga1Poweron = Roach1.updatePower()
     fpga2Poweron = Roach2.updatePower()
-    
+
+    print "fpga1, chan 0 ON (/1e9):", numpy.median(fpga1Poweron[0])/1e9
+    print "fpga1, chan 1 ON (/1e9):", numpy.median(fpga1Poweron[1])/1e9
+    print "fpga1, chan 2 ON (/1e9):", numpy.median(fpga1Poweron[2])/1e9
+    print "fpga1, chan 3 ON (/1e9):", numpy.median(fpga1Poweron[3])/1e9
+
+    print "fpga2, chan 0 ON (/1e9):", numpy.median(fpga2Poweron[0])/1e9
+    print "fpga2, chan 1 ON (/1e9):", numpy.median(fpga2Poweron[1])/1e9
+    print "fpga2, chan 2 ON (/1e9):", numpy.median(fpga2Poweron[2])/1e9
+    print "fpga2, chan 3 ON (/1e9):", numpy.median(fpga2Poweron[3])/1e9
+
     #Pumba.instantiateRoach('pumba','cbassrx_2mar_pow_2012_Mar_02_1638.bof',7147,10,781250)
     #Timon.instantiateRoach('timon','cbassrx_2mar_pow_2012_Mar_02_1638.bof',7147,10,781250)
     
@@ -81,12 +91,23 @@ for i in range(1):
     time.sleep(sleepTime)
     fpga1Poweroff = Roach1.updatePower()
     fpga2Poweroff = Roach2.updatePower()
+    print "fpga1, chan 0 OFF (/1e9):", numpy.median(fpga1Poweroff[0])/1e9
+    print "fpga1, chan 1 OFF (/1e9):", numpy.median(fpga1Poweroff[1])/1e9
+    print "fpga1, chan 2 OFF (/1e9):", numpy.median(fpga1Poweroff[2])/1e9
+    print "fpga1, chan 3 OFF (/1e9):", numpy.median(fpga1Poweroff[3])/1e9
     
-    
-    
+    print "fpga2, chan 0 OFF (/1e9):", numpy.median(fpga2Poweroff[0])/1e9
+    print "fpga2, chan 1 OFF (/1e9):", numpy.median(fpga2Poweroff[1])/1e9
+    print "fpga2, chan 2 OFF (/1e9):", numpy.median(fpga2Poweroff[2])/1e9
+    print "fpga2, chan 3 OFF (/1e9):", numpy.median(fpga2Poweroff[3])/1e9
+
     
     #First do pumba# here we calculate the coefficiensts needed to flatten the noise diode off
     #power spectrum
+
+    #print fpga1Poweroff
+    #print fpga2Poweroff
+
     Channel1CoffsR1=desiredResponse/fpga1Poweroff[0]
     Channel2CoffsR1=desiredResponse/fpga1Poweroff[1]
     Channel3CoffsR1=desiredResponse/fpga1Poweroff[2]

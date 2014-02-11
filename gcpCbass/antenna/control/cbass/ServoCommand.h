@@ -16,9 +16,9 @@
 // The hard limit -- pmac can't process more than this in a single
 // message
 
-#define SERVO_DATA_MAX_LEN 1400
+#define SERVO_DATA_MAX_LEN 1600
 #define MILLI_SECOND_SAMPLE_RATE 200
-#define MAX_RESPONSE_SAMPLES 1000/MILLI_SECOND_SAMPLE_RATE*4
+#define MAX_RESPONSE_SAMPLES 1000/MILLI_SECOND_SAMPLE_RATE*4+2
 
 namespace gcp {
   namespace antenna {

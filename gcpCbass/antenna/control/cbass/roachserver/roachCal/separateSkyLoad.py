@@ -39,7 +39,7 @@ ND=cbass.roach()
 nIntegrations=781250 #number roach integrations in a sample- 78125 ~10ms integrations
 sleepTime=(nIntegrations/78125)*0.03
 desiredResponse = 1e13
-nSamples=10; ##number of samples-i.e.  I accumulate nSamples of nIntegrations
+nSamples=2; ##number of samples-i.e.  I accumulate nSamples of nIntegrations
 pylab.ion()
 
 Roach1.instantiateRoach('pumba','rx_10dec_stat_2013_Jan_11_1059.bof',7147,4,nIntegrations)

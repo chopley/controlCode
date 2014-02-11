@@ -7,7 +7,8 @@ using namespace gcp::util;
 using namespace gcp::antenna::control;
 
 #define TEMP_TOLERANCE 1.5
-#define ADC_LABJACK_SERIAL_NUMBER 320050869
+//#define ADC_LABJACK_SERIAL_NUMBER 320050869 //this was the old one changed by CJC on 14/12/2013
+#define ADC_LABJACK_SERIAL_NUMBER 320050844 
 
 /**.......................................................................
  * Constructors

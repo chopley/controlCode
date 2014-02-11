@@ -7,7 +7,8 @@ using namespace gcp::util;
 using namespace gcp::antenna::control;
 
 #define TEMP_TOLERANCE 1.5
-#define LNA_LABJACK_SERIAL_NUMBER 320050844
+//#define LNA_LABJACK_SERIAL_NUMBER 320050844 //this is the original one.Changed by CJC on 14/12/2013
+#define LNA_LABJACK_SERIAL_NUMBER 320050869
 
 /**.......................................................................
  * Constructors

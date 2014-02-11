@@ -70,6 +70,10 @@ ServoCommsSa::ServoCommsSa(SpecificShare* share, string name, bool sim) :
   azWrap_                = 0;
   servoSeconds_                = 0;
   servouSeconds_                = 0;
+  az_tacho1_                = 0;
+  az_tacho2_                = 0;
+  el_tacho1_                = 0;
+  el_tacho2_                = 0;
 
   utc_         =   findReg("utc");
   azPositions_ =   findReg("fast_az_pos");
@@ -88,6 +92,10 @@ ServoCommsSa::ServoCommsSa(SpecificShare* share, string name, bool sim) :
   azWrap_              = findReg("az_no_wrap");
   servoSeconds_              = findReg("ntpSecond");
   servouSeconds_              = findReg("ntpUSecond");
+  az_tacho1_              = findReg("az_tacho1");
+  az_tacho2_              = findReg("az_tacho2");
+  el_tacho1_              = findReg("el_tacho1");
+  el_tacho2_              = findReg("el_tacho2");
 
 
   antennaHalted_	  = 0;
@@ -138,6 +146,8 @@ void ServoCommsSa::sendCommand(ServoCommandSa& command)
   
   if(status != command.cmdSize_) {
     ThrowSysError("In writeString()");
+    COUT("Disconnecting the servo drive");
+      disconnect();		
   }
 }
 
@@ -197,7 +207,7 @@ ServoCommandSa ServoCommsSa::issueCommand(ServoCommandSa::Request req, std::vect
     try {
       sendCommand(command);
       readStatus = readResponse(command);
-      //      COUT("RESPONSE Received:  " << command.responseReceived_);
+      COUT("RESPONSE Received:  " << readStatus);
     } catch(...) {
       // there was en error in waitForResponse
       readStatus = 2;
@@ -209,6 +219,7 @@ ServoCommandSa ServoCommsSa::issueCommand(ServoCommandSa::Request req, std::vect
       command.interpretResponse();
       if(command.responseValid_==1){
 	tryRead = 0;
+	numTimeOut=0;
 	COUT("RESPONSE IS VALID:  " << command.responseReceived_);
       } else {
 	numTimeOut++;
@@ -230,6 +241,8 @@ ServoCommandSa ServoCommsSa::issueCommand(ServoCommandSa::Request req, std::vect
     if(numTimeOut>5){
       COUT("timed out more than five times");
       ThrowError(" Port timeout on response CJC");
+      numTimeOut=0;
+      disconnect();		
     };
   };
 
@@ -249,6 +262,7 @@ void ServoCommsSa::disconnect()
 
   // Note:  I am not reconfiguring the device back to its original state.
 
+      COUT("Disconnecting fd_ in the servo " << fd_);
   if(fd_ >= 0) {
 
     if(close(fd_) < 0) {
@@ -260,6 +274,7 @@ void ServoCommsSa::disconnect()
 
   fd_        = -1;
   connected_ = false;
+      COUT("Disconnected fd_ in the servo " << fd_);
 
 }
 
@@ -269,6 +284,8 @@ void ServoCommsSa::disconnect()
  */
 bool ServoCommsSa::connect()
 {
+
+  COUT("Trying to connect to the Servo Drive controller");
   //CJC 18/6/2010
   int sockfd, portno, n;
   struct sockaddr_in serv_addr;
@@ -350,7 +367,7 @@ bool ServoCommsSa::connect()
 /**.......................................................................
  * Wait for a response from the servo
  */
-void ServoCommsSa::waitForResponse()
+int ServoCommsSa::waitForResponse()
 {
   TimeVal timeout(0, SERVO_TIMEOUT_USEC, 0);
   // Do nothing if we are not connected to the servo.
@@ -374,6 +391,7 @@ void ServoCommsSa::waitForResponse()
   } else if(fdSet_.isSetInException(fd_)) {
     ThrowError("Exception occurred on file descriptor");
   }
+  return nready;
 }
 
 /**.......................................................................
@@ -425,6 +443,7 @@ int ServoCommsSa::readTCPPort(ServoCommandSa& command)
   int i,nbyte,waserr=0,nread=0;
   unsigned char line[SERVO_DATA_MAX_LEN], *lptr=NULL;
   int ioctl_state=0;
+  int waitResponseRet;
   bool stopLoop = 0;
   TimeVal start, stop, diff;
 
@@ -440,8 +459,9 @@ int ServoCommsSa::readTCPPort(ServoCommandSa& command)
   
   do {
 
-    waitForResponse();
+    waitResponseRet=waitForResponse();
 
+	COUT("waitResponseRet = "<<waitResponseRet);
     ioctl_state=ioctl(fd_, FIONREAD, &nbyte);
     
     for(i=0;i < nbyte;i++) {
@@ -795,6 +815,10 @@ void ServoCommsSa::queryAntPositions()
     static float elErr[SERVO_POSITION_SAMPLES_PER_FRAME];
     static float timeuSec[SERVO_POSITION_SAMPLES_PER_FRAME];
     static float timeSec[SERVO_POSITION_SAMPLES_PER_FRAME];
+    static float aztacho1[SERVO_POSITION_SAMPLES_PER_FRAME];
+    static float aztacho2[SERVO_POSITION_SAMPLES_PER_FRAME];
+    static float alttacho1[SERVO_POSITION_SAMPLES_PER_FRAME];
+    static float alttacho2[SERVO_POSITION_SAMPLES_PER_FRAME];
     
     for (unsigned i=0; i < 5; i++){
       azPos[i] = command.responseValue_[i];
@@ -803,6 +827,10 @@ void ServoCommsSa::queryAntPositions()
       elErr[i] = command.responseValue_[i + 15]*1000; // in mdeg
       timeuSec[i] = command.responseValue_[i+20];
       timeSec[i] = command.responseValue_[i+25];
+      aztacho1[i] = (float)command.responseValue_[i+30];
+      aztacho2[i] = (float)command.responseValue_[i+35];
+      alttacho1[i] = (float)command.responseValue_[i+40];
+      alttacho2[i] = (float)command.responseValue_[i+45];
 	//COUT("time "<<timeSec[i]);
     };
 
@@ -815,6 +843,10 @@ void ServoCommsSa::queryAntPositions()
       share_->writeReg(elErrors_,    elErr);
       share_->writeReg(servoSeconds_,    timeSec);
       share_->writeReg(servouSeconds_,    timeuSec);
+      share_->writeReg(az_tacho1_,    aztacho1);
+      share_->writeReg(az_tacho2_,    aztacho2);
+      share_->writeReg(el_tacho1_,    alttacho1);
+      share_->writeReg(el_tacho2_,    alttacho1);
     }
 
     // Write them out as debug:
@@ -845,6 +877,10 @@ void ServoCommsSa::queryAntPositions(gcp::util::TimeVal& currTime)
     static float elErr[SERVO_POSITION_SAMPLES_PER_FRAME];
     static float timeuSec[SERVO_POSITION_SAMPLES_PER_FRAME];
     static float timeSec[SERVO_POSITION_SAMPLES_PER_FRAME];
+    static float aztacho1[SERVO_POSITION_SAMPLES_PER_FRAME];
+    static float aztacho2[SERVO_POSITION_SAMPLES_PER_FRAME];
+    static float alttacho1[SERVO_POSITION_SAMPLES_PER_FRAME];
+    static float alttacho2[SERVO_POSITION_SAMPLES_PER_FRAME];
 	    
     for (unsigned i=0; i < 5; i++){
       azPos[i] = command.responseValue_[i];
@@ -853,8 +889,10 @@ void ServoCommsSa::queryAntPositions(gcp::util::TimeVal& currTime)
       elErr[i] = command.responseValue_[i + 15]*1000;  // in mdeg
       timeuSec[i] = command.responseValue_[i+20];
       timeSec[i] = command.responseValue_[i+25];
-	//COUT("time "<<timeSec[i]);
-//	COUT("time "<<timeuSec[i]);
+      aztacho1[i] = (float)command.responseValue_[i+30];
+      aztacho2[i] = (float)command.responseValue_[i+35];
+      alttacho1[i] = (float)command.responseValue_[i+40];
+      alttacho2[i] = (float)command.responseValue_[i+45];
     };
     
     // Write them to shared memory
@@ -866,6 +904,10 @@ void ServoCommsSa::queryAntPositions(gcp::util::TimeVal& currTime)
       share_->writeReg(elErrors_,    elErr);
       share_->writeReg(servoSeconds_,    timeSec);
       share_->writeReg(servouSeconds_,    timeuSec);
+      share_->writeReg(az_tacho1_,    aztacho1);
+      share_->writeReg(az_tacho2_,    aztacho2);
+      share_->writeReg(el_tacho1_,    alttacho1);
+      share_->writeReg(el_tacho2_,    alttacho1);
       
       // Fill the UTC register with appropriate time values
       
@@ -1126,13 +1168,13 @@ void ServoCommsSa::finishInitialization()
   for (unsigned i=0;i<7;i++){
     vals[i] = pars[i];
   };
-    	vals[0] = 8000.;
-    	vals[1] = 4.;
-	vals[2] = 5.;
-	vals[3] = 1.;
-	vals[4] = 0.005;
-	vals[5] = 1.0;
-	vals[6] = 0.7;
+    	vals[0] = 8000.; //Position P
+    	vals[1] = 4.;   //Position I
+	vals[2] = 5.;  //Position D
+	vals[3] = 1.;  //Kf
+	vals[4] = 0.005; //Vf
+	vals[5] = 1.0; //P_2
+	vals[6] = 0.7; //i_2
 
   issueCommand(ServoCommandSa::LOAD_LOOP_PARAMS_A, vals);
   wait(100000000);
@@ -1143,7 +1185,7 @@ void ServoCommsSa::finishInitialization()
 	vals[3] = 1.;
 	vals[4] = 0.3;
 	vals[5] = 1.;
-	vals[6] = 0.7;
+	vals[6] = 0.0;
   issueCommand(ServoCommandSa::LOAD_LOOP_PARAMS_B, vals);
   wait(100000000);
 

@@ -472,9 +472,18 @@ int RoachBackend::readTCPPort(RoachBackendMsg& command)
 	stopLoop=1;
 	return -1;
       }
+    try{
       bytesThisTransfer = recv(fd_, lptr, bytesWaiting, 0);
+    } catch (...) {
+      ThrowError("RoachBackend:: Fail in call to recv-catch statement");
+      CTOUT("RoachBackend:: Fail in call to recv-catch statement");
+      stopLoop = 1;
+      return -1;
+    }
       if(bytesWaiting != bytesThisTransfer){
 	ThrowError("RoachBackend:: Fail in call to recv");
+	stopLoop = 1;
+        return -1;
       }
       //      CTOUT("bytesthis transf, tot bytes: " << bytesThisTransfer << " , " << bytesReceived);
       lptr += bytesThisTransfer;
@@ -801,7 +810,7 @@ void RoachBackend::getData()
 	prevSecEnd_ = (RING_BUFFER_LENGTH-1);  // it's an index, starting from zero.     
       prevSecStart_ = thisSecStart_;
       thisSecStart_ = currentIndex_;
-      COUT("IN ROACHBACKEND getData, start end:  " <<prevSecStart_ << ", " << prevSecEnd_);
+      //      COUT("IN ROACHBACKEND getData, start end:  " <<prevSecStart_ << ", " << prevSecEnd_);
     };
     // set the previous time
     prevTime_ = thisTime;
@@ -812,7 +821,7 @@ void RoachBackend::getData()
       currentIndex_ = 0;
     };
   };
-  COUT("IN GETDATA, CURRENT INDEX: " << currentIndex_);
+  //COUT("IN GETDATA, CURRENT INDEX: " << currentIndex_);
 
   return;
 }
@@ -1056,7 +1065,7 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
   gcp::util::TimeVal start, stop, diff;
   start.setToCurrentTime();
   
-  COUT("IN ROACHBACKEND writeData, start end:  " <<prevSecStart_ << ", " << prevSecEnd_);
+  //  COUT("IN ROACHBACKEND writeData, start end:  " <<prevSecStart_ << ", " << prevSecEnd_);
 
  // COUT("prevSecStart, prevSecEnd: " << prevSecStart_ << " , " << prevSecEnd_);
  // COUT("DEBUG STUFF");
@@ -1194,7 +1203,7 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
     dataTime = currTime;
     
     
-    secondPart = fpgaClockStamp[index]/250000000;
+    secondPart = fpgaClockStamp[i]/250000000.;
     secondPart -= 0.005;
     // dataTime.incrementSeconds( [tstart_[index]);
     //    dataTime.incrementSeconds(i*intLength_[index]); // if we do intlength, we have to do intlength/4*128/250000000

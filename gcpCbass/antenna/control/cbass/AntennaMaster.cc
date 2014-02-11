@@ -1231,7 +1231,7 @@ void AntennaMaster::installTimers()
 		      ANTENNA_SERVO_CMD_SEC, 0,
 		      &sendDriveTickMsg);
   sendAddHandlerMsg("tick", &sendDlpTempRequestMsg, true);
-  sendAddHandlerMsg("tick", &sendReadAdcMsg, true);
+  //sendAddHandlerMsg("read", &sendReadAdcMsg, true);
   sendEnableTimerMsg("tick", true);
 
   //------------------------------------------------------------
@@ -1266,6 +1266,7 @@ void AntennaMaster::installTimers()
 		      //		      ANTENNA_GPIB_SEC, 0
 		      &sendReadoutGpibMsg);
                      
+//  sendAddHandlerMsg("gpib", &sendReadAdcMsg, true);
   sendEnableTimerMsg("gpib", true);
 
   //------------------------------------------------------------
@@ -1318,19 +1319,18 @@ void AntennaMaster::installTimers()
 
   sendInstallTimerMsg("lnaRead", ANTENNA_LNA_READ_SIGNAL,
 		      0, ANTENNA_LNA_READ_DELAY_NSEC,
-		      0, ANTENNA_LNA_READ_NSEC,
+		      ANTENNA_LNA_READ_SEC, ANTENNA_LNA_READ_NSEC,
 		      &sendReadLnaMsg);
                      
   sendEnableTimerMsg("lnaRead", true);
 
   //------------------------------------------------------------
-  // Install a timer to generate the 1-second tick which will drive
-  // the tracking loop
+  // Install a timer to generate the 10-second adc tick
 
-#if(0)
+#if(1)
   sendInstallTimerMsg("adcRead", ANTENNA_ADC_READ_SIGNAL,
 		      0, ANTENNA_ADC_READ_DELAY_NSEC,
-		      ANTENNA_ADC_READ_NSEC, 0,
+		      ANTENNA_ADC_READ_SEC, ANTENNA_LNA_READ_NSEC,
 		      &sendReadAdcMsg);
   sendEnableTimerMsg("adcRead", true);
 #endif

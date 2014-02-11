@@ -43,6 +43,7 @@
 #define ANTENNA_LNA_READ_SIGNAL   SIGRTMIN+8
 #define ANTENNA_ROACH_SIGNAL      SIGRTMIN+9
 #define ANTENNA_ROACH_READ_SIGNAL SIGRTMIN+10
+#define ANTENNA_ADC_READ_SIGNAL SIGRTMIN+11
 
 //------------------------------------------------------------
 // This timer will cause parent tasks to send a heartbeat request to
@@ -142,11 +143,15 @@
 // write the LNA data every second at the 150ms mark
 //------------------------------------------------------------
 
-#define ANTENNA_LNA_READ_SEC                0
+#define ANTENNA_LNA_READ_SEC                1
 #define ANTENNA_LNA_READ_NSEC      1000000000
 #define ANTENNA_LNA_READ_DELAY_NSEC  150000000 // start timer 150 ms after the
 				             // absolute second boundary
 
+#define ANTENNA_ADC_READ_SEC                10
+#define ANTENNA_ADC_READ_NSEC      5000000000
+#define ANTENNA_ADC_READ_DELAY_NSEC  550000000 // start timer 150 ms after the
+				             // absolute second boundary
 
 #define ANTENNAMASTER_TASK_FWD_FN(fn) void (fn)(AntennaMasterMsg* msg)
 

@@ -15,7 +15,7 @@
 
 #include "gcp/control/code/unix/libunix_src/specific/rtcnetcoms.h"
 
-#define HAVE_ROACH2 false
+#define HAVE_ROACH2 true
 
 #define BACKEND_MISSED_COMM_LIMIT 10
 

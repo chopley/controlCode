@@ -43,6 +43,7 @@ volatile int VERSION=1;
 pthread_mutex_t lock_testThread;
 pthread_mutex_t lock_packRoach;
 pthread_mutex_t lock_changeMode;
+pthread_mutex_t lock_buffer;
 typedef struct circular_buffer
 {
     void *buffer;     // data buffer
@@ -72,85 +73,94 @@ void sigint_handler(int dummy) {
 
 void cb_init(circular_buffer *cb, size_t capacity, size_t sz){
     //initiliase the circular buffer
-    cb->buffer = malloc(capacity * sz);
-    //printf("adding item %d \n",cb->buffer);
-    //if(cb->buffer == NULL)
-        // handle error
-    cb->buffer_end = (char *)(cb->buffer + capacity * sz-1);
-    cb->capacity = capacity;
-    cb->count = 0;
-    cb->sz = sz;
-    cb->head = cb->buffer;
-    //printf("head ptr init %d \n",cb->head);
-    cb->head10=(char*)cb->buffer_end-10*cb->sz;//the pointer to the data stored from 10 packets ago
-    cb->tail = cb->buffer;
+    pthread_mutex_lock(&lock_buffer);
+	    cb->buffer = malloc(capacity * sz);
+	    //printf("adding item %d \n",cb->buffer);
+	    //if(cb->buffer == NULL)
+		// handle error
+	    cb->buffer_end = (char *)(cb->buffer + capacity * sz-1);
+	    cb->capacity = capacity;
+	    cb->count = 0;
+	    cb->sz = sz;
+	    cb->head = cb->buffer;
+	    //printf("head ptr init %d \n",cb->head);
+	    cb->head10=(char*)cb->buffer_end-10*cb->sz;//the pointer to the data stored from 10 packets ago
+	    cb->tail = cb->buffer;
+	pthread_mutex_unlock(&lock_buffer);
     //printf("tail ptr init %d \n",cb->tail);
 }
 
 void cb_free(circular_buffer *cb)
 {
+	pthread_mutex_lock(&lock_buffer);
    // free(cb->buffer);
 	cb->count=0;
 	    cb->head = cb->buffer;
 	    //printf("head ptr init %d \n",cb->head);
 	    cb->head10=(char*)cb->buffer_end-10*cb->sz;//the pointer to the data stored from 10 packets ago
 	    cb->tail = cb->buffer;
+	pthread_mutex_unlock(&lock_buffer);
 
     // clear out other fields too, just to be safe
 }
 
 void cb_push_back(circular_buffer *cb, const void *item)
 {//function to put data onto the ring buffer
-    if(cb->head10 == cb->buffer_end){
-        cb->head10 = cb->buffer;
-    	//printf("resetting the head10pointer\n");
-	}
-    if(cb->head >= cb->buffer_end){
-    	//printf("resetting the headpointer %d %d\n",cb->head,cb->buffer_end);
-        cb->head = cb->buffer;
-	}
-    if(cb->count >= cb->capacity)
-    {	printf("Ring buffer full without any reads\n");
-    	cb->head=cb->buffer;
-	cb->tail=cb->buffer;
-    	cb->head10=(char*)cb->buffer_end-10*cb->sz;//the pointer to the data stored from 10 packets ago
-    	cb->count=0; //
-    	printf("Reset Ring buffer:Discarding data\n");
-    }
-        // handle error
-    memcpy(cb->head, item, cb->sz);
-    cb->head = (char*)cb->head + cb->sz;
-    cb->head10=(char*)cb->head10+cb->sz;//increment the head pointer
-    //printf("adding item %d %d\n",cb->sz,cb->head);
-	
-    cb->count++; //increment the count of how many objects have been stored
+	pthread_mutex_lock(&lock_buffer);
+	    if(cb->head10 == cb->buffer_end){
+		cb->head10 = cb->buffer;
+		//printf("resetting the head10pointer\n");
+		}
+	    if(cb->head >= cb->buffer_end){
+		//printf("resetting the headpointer %d %d\n",cb->head,cb->buffer_end);
+		cb->head = cb->buffer;
+		}
+	    if(cb->count >= cb->capacity)
+	    {	printf("Ring buffer full without any reads\n");
+		cb->head=cb->buffer;
+		cb->tail=cb->buffer;
+		cb->head10=(char*)cb->buffer_end-10*cb->sz;//the pointer to the data stored from 10 packets ago
+		cb->count=0; //
+		printf("Reset Ring buffer:Discarding data\n");
+	    }
+		// handle error
+	    memcpy(cb->head, item, cb->sz);
+	    cb->head = (char*)cb->head + cb->sz;
+	    cb->head10=(char*)cb->head10+cb->sz;//increment the head pointer
+	    //printf("adding item %d %d\n",cb->sz,cb->head);
+		
+	    cb->count++; //increment the count of how many objects have been stored
+	pthread_mutex_unlock(&lock_buffer);
 }
 
 int cb_pop_front(circular_buffer *cb, void *item)
 {//function to get data back off the ring buffer stack
-	int returnValue;
-    if(cb->count <= 0){
-	returnValue=-1;
-    }
-        // handle error
-   // memcpy(item, cb->tail, cb->sz); //memcpy from the pointer cb->tail to pointer item
-    if((cb->count>0)){
-	returnValue=0;
-    	memcpy(item, cb->tail, cb->sz); //memcpy from the pointer cb->head10 to pointer item-this gets the data from 10 packets ago to send to the control system
-    	cb->tail = (char*)cb->tail + cb->sz;//try to increment the tail pointer
-    //	printf("removing item %d %d\n",cb->sz,cb->tail);
-    	if(cb->tail >= cb->buffer_end){ //if the tail pointer is to the end of the buffer thenwe need to set it to the beginning of the buffer
-        	cb->tail = cb->buffer;
-	//	printf("At cb->tail end%d",cb->sz);
+	pthread_mutex_lock(&lock_buffer);
+		int returnValue;
+	    if(cb->count <= 0){
+		returnValue=-1;
+	    }
+		// handle error
+	   // memcpy(item, cb->tail, cb->sz); //memcpy from the pointer cb->tail to pointer item
+	    if((cb->count>0)){
+		returnValue=0;
+		memcpy(item, cb->tail, cb->sz); //memcpy from the pointer cb->head10 to pointer item-this gets the data from 10 packets ago to send to the control system
+		cb->tail = (char*)cb->tail + cb->sz;//try to increment the tail pointer
+	    //	printf("removing item %d %d\n",cb->sz,cb->tail);
+		if(cb->tail >= cb->buffer_end){ //if the tail pointer is to the end of the buffer thenwe need to set it to the beginning of the buffer
+			cb->tail = cb->buffer;
+		//	printf("At cb->tail end%d",cb->sz);
+			}
+	    cb->count--;//decrement the count of the number of objects in the ring buffer
 		}
-    cb->count--;//decrement the count of the number of objects in the ring buffer
-	}
-	returnValue=cb->count;
+		returnValue=cb->count;
+	pthread_mutex_unlock(&lock_buffer);
 	return returnValue;
 }
 
 void cb_pop_front10(circular_buffer *cb, void *item)
 {//function to get data back off the ring buffer stack
+	pthread_mutex_lock(&lock_buffer);
     if(cb->count == 0){
 	printf("No data in ring buffer pop10\n");
     }
@@ -166,6 +176,7 @@ void cb_pop_front10(circular_buffer *cb, void *item)
     	cb->count--;//decrement the count of the number of objects in the ring buffer
 	}
     //printf("end in cb_pop front\n");
+	pthread_mutex_unlock(&lock_buffer);
 }
 
 
@@ -211,6 +222,8 @@ void *command_thread(void *arg){
 	extern pthread_mutex_t lock_testThread;
 	extern pthread_mutex_t lock_packRoach;
 	extern pthread_mutex_t lock_changeMode;
+	int previousIntegration=0;
+	int errorCounter=0;
 
 
 	sprintf(path_noise_diode, "/proc/%s/hw/ioreg/gpio_set4", job[1]);
@@ -377,12 +390,46 @@ void *command_thread(void *arg){
 				if(!strncmp(buf,getDataCommand,10)){
 			//		printf("getDataCommand %s %d\n",buf,n);
 				//	usleep(100);
-					funcReturn=cb_pop_front(bufferptr, &controlSystemtcp);//get the packet from 10 integrations ago to send to the control system	      
-					while(funcReturn!=0){
-					funcReturn=cb_pop_front(bufferptr, &controlSystemtcp);//keep popping the data until you're at the most recent
+					funcReturn=cb_pop_front(bufferptr, &controlSystemtcp);//get the packet from 10 integrations ago to send to the control system	     
+					//lets check that the integrations are counting up as they should They should go up in increments of 10
+					if(controlSystemtcp.int_count>5000){
+						if(controlSystemtcp.int_count==(previousIntegration+controlSystemtcp.dataCount)){
+							errorCounter=0;
+						//rintf("errorCoutner %d\n",errorCounter);
+						//rintf("integration count %d\n",controlSystemtcp.int_count);
+						}
+						//if there's an issue increment an error counter
+						else if(controlSystemtcp.int_count!=previousIntegration+controlSystemtcp.dataCount){
+							printf("ERROR!!!integration count %d\n",controlSystemtcp.int_count);
+							printf("ERROR!!!errorCoutner %d\n",errorCounter);
+							errorCounter++;
+						}
+						//if the error counter has been problematic for a while restart the process
+						if(errorCounter>=10){
+								errorCounter=0;
+								shutdown(childfd,SHUT_RDWR);
+								shutdown(sock,SHUT_RDWR);
+								if(VERSION==1){
+									pthread_mutex_lock(&lock_changeMode);
+										changeMode=1;
+									pthread_mutex_unlock(&lock_changeMode);
+								}
+								else if(VERSION==10000){
+									pthread_mutex_lock(&lock_changeMode);
+										changeMode=2;
+									pthread_mutex_unlock(&lock_changeMode);
+								}
+					//			printf("Closing thread garbage\n");
+								pthread_exit(&retThread1);
+						}
 					}
+					previousIntegration=controlSystemtcp.int_count;
+			//		while(funcReturn!=0){
+			//			funcReturn=cb_pop_front(bufferptr, &controlSystemtcp);//keep popping the data until you're at the most recent
+			//		}
 					if(funcReturn<0){
 						bufferReads++;
+						funcReturn=cb_pop_front(bufferptr, &controlSystemtcp);//get the packet from 10 integrations ago to send to the control system	     
 						if(bufferReads>10){
 							printf("No data in ring buffer Loop\n");
 						}
@@ -2121,7 +2168,7 @@ int main(int argc, char *argv[])
 	else if(VERSION==10000){
 		system(powerProg);
 	}
-	sleep(2);
+	sleep(1);
 ////////////////////////////////////////////
 	if(VERSION==1){
 		system("pidof -s rx_10dec_stat_2013_Jan_11_1059.bof > pid.txt");
@@ -2162,6 +2209,11 @@ int main(int argc, char *argv[])
 		printf("\n mutex init changeMode failed\n");
 		return 1;
 	    }
+	if (pthread_mutex_init(&lock_buffer, NULL) != 0)
+	    {
+		printf("\n mutex init buffer failed\n");
+		return 1;
+	    }
 	pthread_create(&commandThread_id,NULL,command_thread,NULL);
 	if(VERSION==1){
 		pthread_create(&packROACHpacket_thread_id,NULL,packROACHpacket_thread,NULL);
@@ -2174,7 +2226,7 @@ int main(int argc, char *argv[])
         printf("Here started thread\n");
 
         while(1){
-	sleep(2);
+	sleep(1);
 	pthread_mutex_lock(&lock_changeMode);
 		changeModeTemp=changeMode;
 	pthread_mutex_unlock(&lock_changeMode);
