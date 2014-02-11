@@ -20,6 +20,7 @@ NORMAL az-0.5ds-20d-full-single-scan   $CBASS_DIR/control/scan/az_20d_0.5ds_scan
 NORMAL az-0.5ds-10d-full-single-scan   $CBASS_DIR/control/scan/az_20d_0.5ds_scan.scan
 NORMAL az-1ds-10d-full-single-scan   $CBASS_DIR/control/scan/az_10d_1ds_scan.scan
 NORMAL az_10d_0.5ds_PosNeg $CBASS_DIR/control/scan/az_10d_0.5ds_PosNeg.scan
+NORMAL az-0.5ds-360d-full-single $CBASS_DIR/control/scan/az_360d_0.5ds_scan.scan
 
 
 CONTINUOUS az-4ds-360d-n-scan $CBASS_DIR/control/scan/full_az_repeat_scan.scan
@@ -106,16 +107,24 @@ NORMAL point_10d_0.25step  $CBASS_DIR/control/scan/source_az1ds_az10d_el0.25_el1
 NORMAL raster_4x4x0.2 $CBASS_DIR/control/scan/raster_4x4x0.2_1ds.scan
 NORMAL raster_8x4x0.2 $CBASS_DIR/control/scan/raster_8x4x0.2_1ds.scan
 
+NORMAL test $CBASS_DIR/control/scan/source_raster_8x4x0.05slac.scan
+NORMAL source_raster_2degpers $CBASS_DIR/control/scan/source_raster_2degpers.scan
+NORMAL source_raster_3degpers $CBASS_DIR/control/scan/source_raster_3degpers.scan
+NORMAL source_raster_4degpers $CBASS_DIR/control/scan/source_raster_4degpers.scan
+NORMAL source_raster_4dps $CBASS_DIR/control/scan/source_raster_4dps.scan
+
 NORMAL source_raster_10d_0.2 $CBASS_DIR/control/scan/raster_10d_10d_1ds_0.2del.scan
 NORMAL source_raster_10d_0.1 $CBASS_DIR/control/scan/raster_10d_10d_1ds_0.1del.scan
 NORMAL source_raster_10d_0.05 $CBASS_DIR/control/scan/raster_10d_10d_1ds_0.05del.scan
 NORMAL source_raster_8x4x0.1 $CBASS_DIR/control/scan/raster_8d_4d_1ds_0.1del.scan
 NORMAL source_raster_8x4x0.05 $CBASS_DIR/control/scan/raster_8d_4d_1ds_0.05del.scan
+NORMAL source_raster_8x4x0.05South $CBASS_DIR/control/scan/raster_8d_4d_1ds_0.05South.scan
 NORMAL source_raster_8x4x0.2_slow_jl $CBASS_DIR/control/scan/source_raster_8x4x0.2_slow_jl.scan
 NORMAL raster_elscan_jl $CBASS_DIR/control/scan/raster_elscan_jl.scan
 NORMAL source_raster_8x4x0.1_slow_jl $CBASS_DIR/control/scan/source_raster_8x4x0.1_slow_jl.scan
 NORMAL source_raster_5x4x0.05_1ds $CBASS_DIR/control/scan/source_raster_5x4x0.05_1ds_hcc.scan
 NORMAL source_raster_8x1x0.2_slow $CBASS_DIR/control/scan/source_raster_8x1x0.2_slow.scan
+
 
 #-----------------------------
 # ncp survey scan files (MAS)

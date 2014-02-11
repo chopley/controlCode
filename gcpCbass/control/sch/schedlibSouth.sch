@@ -88,6 +88,7 @@
 #   05-MAY-2010:  MAS added Feature bit f16 for NCP survey.
 #   18-NOV-2010:  OGK added the restore_nominal_biases function.
 #   02-MAR-2011:  OGK moved restore_nominal_biases function to biasCombinations.sch
+# 	21-JAN-2013:  MP add 'until ($acquired(source) | $elapsed > 3m)' in various places as $acquired doesn't seem to be working poperly
 #------------------------------------------------------
 #######################################################
 
@@ -155,10 +156,13 @@ command do_point_cross(Source src)
   sky_offset x=0, y=0
 
   # track the source
+  log "do_point_cross: starting to track source: ", $date
   track $src
-  until $acquired(source)
+#  until $acquired(source)
+  until ($acquired(source) | $elapsed > 3m)
   mark add, f6
 
+  log "do_point_cross: starting to do a pointing offset (y): ", $date
   do PointingOffset yoff= -0.75,0.751,0.125 {
 	sky_offset y=$yoff
 	until $acquired(source)
@@ -166,8 +170,10 @@ command do_point_cross(Source src)
 	until $elapsed > 10s
 	mark remove, f0
   }
+  log "do_point_cross: zeroing offset (y): ", $date
   sky_offset y=0
 
+  log "do_point_cross: starting to do a pointing offset (x): ", $date
   do PointingOffset xoff= -0.75,0.751,0.125 {
 	sky_offset x=$xoff
 	until $acquired(source)
@@ -175,6 +181,7 @@ command do_point_cross(Source src)
 	until $elapsed > 10s
 	mark remove, f0
   }
+  log "do_point_cross: zeroing offset (x): ", $date
   mark remove, f6
   sky_offset x=0
 
@@ -193,7 +200,8 @@ command do_five_point_cross(Source src)
 
   # track the source
   track $src
-  until $acquired(source)
+#  until $acquired(source)
+  until ($acquired(source) | $elapsed > 3m)
   mark add, f6
 
   do PointingOffset eloff= -0.5,0.51,0.5 {
@@ -231,7 +239,8 @@ command do_nine_point_cross(Source src)
 
   # track the source
   track $src
-  until $acquired(source)
+#  until $acquired(source)
+  until ($acquired(source) | $elapsed > 3m)
   mark add, f6
 
   do PointingOffset yoff= -0.5,0.51,0.25 {
@@ -265,27 +274,35 @@ command do_point_scan(Source src)
   # tag the log file and mark the "pointing_scan" bit
   log "Starting command do_point_scan: ", $date
 
+  log "do_point_scan: track source: ", $date
   offset az=0, el=0
   track $src
-  until $acquired(source)
+#  until $acquired(source)
+  until ($acquired(source) | $elapsed > 1m)
 
+  log "do_point_scan: mark add: ", $date
   # add the bit indicating we have good data:
   mark add, f0+f7
   until $acquired(mark)
   
   # do the scan 
 
+  log "do_point_scan: scan source: ", $date
   scan point_cross_10daz_10del_0.5ds
 
   # wait for scan to end then remove the mark
   until ( $acquired(scan) | $elapsed>110s )
 	
+  log "do_point_scan: mark remove: ", $date
   mark remove, f0+f7
   until $acquired(mark)
 
+  log "do_point_scan: zero offsets: ", $date
   zeroScanOffsets
+  log "do_point_scan: track source: ", $date
   track $src
-  until $acquired(source)
+#  until $acquired(source)
+  until ($acquired(source) | $elapsed > 1m)
 
   log "Exiting command do_point_scan: ", $date
 }
@@ -297,7 +314,8 @@ command do_point_scan_large(Source src)
 
   offset az=0, el=0
   track $src
-  until $acquired(source)
+#  until $acquired(source)
+  until ($acquired(source) | $elapsed > 3m)
 
   # add the bit indicating we have good data:
   mark add, f0+f7
@@ -332,7 +350,8 @@ command do_point_scan_gen(Source src, Scan scanName)
 
   offset az=0, el=0
   track $src
-  until $acquired(source)
+#  until $acquired(source)
+  until ($acquired(source) | $elapsed > 3m)
 
   # add the bit indicating we have good data:
   mark add, f0
@@ -369,7 +388,8 @@ command do_point_raster(Source src, PointingOffset maxOff, Sexagesimal del, Scan
 
   offset az=0, el=0
   track $src
-  until $acquired(source)
+#  until $acquired(source)
+  until ($acquired(source) | $elapsed > 3m)
   mark add, f7
 
   # add the bit indicating we have good data:

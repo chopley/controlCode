@@ -441,6 +441,18 @@ static RegBlockTemp cbassServo[] = {
 
   RegBlockTemp("NTP usecond on the servo",
 	       "ntpUSecond",             "", REG_FAST|REG_FLOAT, 0, 1, SERVO_POSITION_SAMPLES_PER_FRAME),
+  
+  RegBlockTemp("Fast Az Tacho1",
+	       "az_tacho1",             "", REG_FAST|REG_FLOAT, 0, 1, SERVO_POSITION_SAMPLES_PER_FRAME),
+  
+  RegBlockTemp("Fast Az Tacho2",
+	       "az_tacho2",             "", REG_FAST|REG_FLOAT, 0, 1, SERVO_POSITION_SAMPLES_PER_FRAME),
+  
+  RegBlockTemp("Fast El Tacho1",
+	       "el_tacho1",             "", REG_FAST|REG_FLOAT, 0, 1, SERVO_POSITION_SAMPLES_PER_FRAME),
+  
+  RegBlockTemp("Fast El Tacho2",
+	       "el_tacho2",             "", REG_FAST|REG_FLOAT, 0, 1, SERVO_POSITION_SAMPLES_PER_FRAME),
 
   // All Entries from the Status Register
   // These should be booleans, but i can't have an array of booleans apparently.

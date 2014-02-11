@@ -7,6 +7,8 @@ FIXED scanStart -18 45
 FIXED ncpfixed  0 37:14:02
 FIXED scpfixed  -180 25:53:23.105
 FIXED colltower  27.85 10.2
+  
+FIXED SES5 315 50
 
  
 FIXED roofant0  155   10:48
@@ -2660,13 +2662,18 @@ J2000 TauA        05:34:31.97     22:00:52.1
 J2000 CasA        23:23:26.92     58:49:07.5
 J2000 CygA 	  19:59:28.34     40:44:02.1
 
+# offset locations for calibration.  obtained from skyview and ds9
+J2000 TauAoff     05:05:00    +21:28:00     # Bonn value 3729 vs 23105.1
+J2000 CasAoff     23:37:13.8  +54:25:41     # bonn value 4000 vs 20236.1
+J2000 CygAoff 	  19:17:12.5  +40:19:11.5   # bonn value 3700 vs 35037.9
+
 # bright at 5GHz
 J2000 VirgoA	  12:30:49.42	 12:23:28.0
 J2000 DR21	  20:37:00.0	 42.2
 J2000 W3	  2:27:00.0	 61.9
 
 # should be offset by 0.05 deg on sky in RA, and 0.03 in Dec  
-J2000 CasAoff        23:23:47.9     58:50:43
+# J2000 CasAoff        23:23:47.9     58:50:43
 
 J2000 NCP   	  00:00:00  90:00:00 
 J2000 NCP20       12:00:00  70:00:00 
@@ -2814,3 +2821,26 @@ J2000 sptcl 6:00:00 -15:00
 
 #Unpolarized source suggested by Clive
 J2000 M42 05:35:16.5 -05:23:23
+
+
+#Some HII regions from ApJ 147 471 (1967)
+J2000 NGC6357 17:25:27 -34:17:22
+J2000 M17 18:20:26.12 -16:10:43
+J2000 W51 19:23:19.5 14:26:9.9
+J2000 SgrA 17:45:37.2 -28:56:10
+
+
+# PMN sources above 50Jy
+J2000 PMNJ0859 08:59:05.30	-47:30:09.0
+J2000 PMNJ1115 11:15:05.40	-61:15:40.0
+alias PMNJ1820 M17
+J2000 PMNJ1024 10:24:16.00	-57:46:28.0
+#J2000 PMNJ1111 11:11:55.30    -61:18:52.0 - too close to PMNJ1115
+J2000 PMNJ1622 16:22:12.00	-50:05:51.0
+J2000 PMNJ1325 13:25:43.00	-42:57:59.0
+#J2000 PMNJ1325 13:25:18.20	-43:02:24.0 - too close to one above
+
+
+J2000 NGC1316		03:22:41.7 -37:12:30
+J2000 Tarantula	05:38:38 	-69:05.7
+J2000 PMNJ1924		19:24:51.0 	-29:14:30
