@@ -89,6 +89,7 @@ RoachBackend::RoachBackend(SpecificShare* share, std::string name, bool sim, cha
   roachNTPSeconds_   = 0;
   roachNTPuSeconds_=0;
   roachFPGAClockStamp_=0; 
+  roachCoffs_=0;       
  
   roachUtc_       = findReg("utc");
   roachVersion_   = findReg("version");
@@ -119,6 +120,7 @@ RoachBackend::RoachBackend(SpecificShare* share, std::string name, bool sim, cha
   roachNTPSeconds_   = findReg("ntpSeconds");
   roachNTPuSeconds_   = findReg("ntpUSeconds");
   roachFPGAClockStamp_   = findReg("fpgaClockStamp");
+  roachCoffs_=findReg("roachCof");       
 
 
 
@@ -470,7 +472,7 @@ int RoachBackend::readTCPPort(RoachBackendMsg& command)
 	ReportSimpleError("Roach sending back too many bytes -- disconnecting");
 	ThrowError("RoachBackend::Roach sending back too many bytes -- disconnecting");
 	stopLoop=1;
-	return -1;
+	return 0; //return a 0 for this one- this will then count up for a bit before disconnecting
       }
     try{
       bytesThisTransfer = recv(fd_, lptr, bytesWaiting, 0);
@@ -799,6 +801,9 @@ void RoachBackend::getData()
       TL1_[currentIndex_][j] = command_.TL1_[i][j];
       TL2_[currentIndex_][j] = command_.TL2_[i][j];
     };
+	for(j=0;j<128;j++){
+	Coeffs_[j]= command_.Coeffs_[j];
+	}
 #if(0) 
     COUT(" LL_: "  << LL_[currentIndex_][32] << "switchStat " << switchstatus_[currentIndex_] << "tstart_ " << tstart_[currentIndex_]);
 #endif
@@ -1134,6 +1139,7 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
   static float channel[CHANNELS_PER_ROACH];
   
   static float buffBacklog[RECEIVER_SAMPLES_PER_FRAME];
+  static float Coeffs[CHANNELS_PER_ROACH*2];
 
   // zero our average containers
   for (i=0;i<CHANNELS_PER_ROACH;i++){
@@ -1143,6 +1149,7 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
     UtimeAvg[i]   = 0;
     TL1timeAvg[i] = 0;
     TL2timeAvg[i] = 0;
+    Coeffs[i]=0;
     // set the channel
     channel[i] = i;
 
@@ -1268,6 +1275,7 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
       UtimeAvg[i]   += (U_[index][i]/RECEIVER_SAMPLES_PER_FRAME);
       TL1timeAvg[i] += (TL1_[index][i]/RECEIVER_SAMPLES_PER_FRAME);
       TL2timeAvg[i] += (TL2_[index][i]/RECEIVER_SAMPLES_PER_FRAME);
+      Coeffs[i] = (float)Coeffs_[i]; 
       index++;
       if(index >= RING_BUFFER_LENGTH){
 	index = 0;
@@ -1288,6 +1296,7 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
   share_->writeReg(roachUtime_,   &UtimeAvg[0]);
   share_->writeReg(roachTL1time_, &TL1timeAvg[0]);
   share_->writeReg(roachTL2time_, &TL2timeAvg[0]);
+  share_->writeReg(roachCoffs_, &Coeffs[0]);
 
 
   // next we write the data
@@ -1401,6 +1410,7 @@ void RoachBackend::Assign3DRingMemory()
   intLength_.resize(RING_BUFFER_LENGTH);
   mode_.resize(RING_BUFFER_LENGTH);
   res2_.resize(RING_BUFFER_LENGTH);
+  Coeffs_.resize(64*2);
 
 #if(0)
   LL_.resize(RING_BUFFER_LENGTH);
@@ -1472,6 +1482,7 @@ void RoachBackend::Assign2DRingMemory()
   mode_.resize(RING_BUFFER_LENGTH);
   res2_.resize(RING_BUFFER_LENGTH);
 
+  Coeffs_.resize(64*2);
 
   LL_.resize(RING_BUFFER_LENGTH);
   for (int i = 0; i < RING_BUFFER_LENGTH; ++i) {
