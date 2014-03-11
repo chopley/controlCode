@@ -40,6 +40,7 @@ volatile int changeMode=0;
 volatile int closeThread1=0;
 volatile int closeThread2=0;
 volatile int VERSION=1;
+volatile long Coffs[32*16];
 pthread_mutex_t lock_testThread;
 pthread_mutex_t lock_packRoach;
 pthread_mutex_t lock_changeMode;
@@ -1102,6 +1103,9 @@ void *packROACHpacket_thread(void *arg){
 			cbassPKT.version=VERSION; //version numbers of the Polarisation begin at 0
 			cbassPKT.tend=t1.tv_usec;
 			cbassPKT.int_count=acc_new;
+			for(i=0;i<=32*16-1;i++){
+				cbassPKT.coeffs[i]=Coffs[i];
+			}
 		//	cbassPKT.buffBacklog=25;
 #if(0)
 			for(i=0;i<=9;i++){
@@ -1789,6 +1793,9 @@ int encodeNetwork(struct UDPCBASSpkt *pkt){
 		pkt->tstart[i]=htonl(pkt->tstart[i]);
 		pkt->tsecond[i]=htonl(pkt->tsecond[i]);
 	}
+	for(i=0;i<=32*16-1;i++){
+		pkt->coeffs[i]=htonl(pkt->coeffs[i]);
+	}
  	//printf("%f %d\n",(float)pkt->data_ch0odd[300],pkt->data_ch0odd[300]);       
 	//printf("encode %04x\n",pkt->data_ch0odd[300]);
 	for(i=0;i<=kDataperPacket*vectorLength;i++){
@@ -2021,6 +2028,48 @@ int gainCorrectionPower(struct tempDataPacket *pack,int MSBshift){
 		
 }
 
+void readCoeffs(){
+
+	int readStat[20];
+	extern volatile long Coffs[32*16];
+	int k;
+	FILE *fp,*fpreg;
+	extern char *job[5];
+	char line[80];
+	char filenames[16][32]={"amp0real.txt","amp1real.txt","amp2real.txt","amp3real.txt","amp4real.txt","amp5real.txt","amp6real.txt","amp7real.txt","amp0imag.txt","amp1imag.txt","amp2imag.txt","amp3imag.txt","amp4imag.txt","amp5imag.txt","amp6imag.txt","amp7imag.txt"};
+	char registerNames[16][50]={"amp_EQ0_coeff_real","amp_EQ1_coeff_real","amp_EQ2_coeff_real","amp_EQ3_coeff_real","amp_EQ4_coeff_real","amp_EQ5_coeff_real","amp_EQ6_coeff_real","amp_EQ7_coeff_real","amp_EQ0_coeff_imag","amp_EQ1_coeff_imag","amp_EQ2_coeff_imag","amp_EQ3_coeff_imag","amp_EQ4_coeff_imag","amp_EQ5_coeff_imag","amp_EQ6_coeff_imag","amp_EQ7_coeff_imag"};
+	char path_to_registerNames[16][50];
+	char path_timeStamp[128];			// Path to acc_num counter data
+	char path_acc_cnt[128];			// Path to acc_num counter data
+	//sprintf(path_amp0realcoffs, "/proc/%s/hw/ioreg/amp_EQ0_coeff_real", job[1]);
+	long ampcoffs[35];
+        int acc_new,acc_old,acc_cntr,timeStamp;
+	printf("%s\n",&filenames[0]);	
+
+	unsigned int i=0;
+	unsigned int j=0;
+	i=0;
+	sprintf(path_timeStamp, "/proc/%s/hw/ioreg/Subsystem1_timeStamp", job[1]);
+	sprintf(path_acc_cnt, "/proc/%s/hw/ioreg/Subsystem1_readAccumulation", job[1]);
+	
+	while(i<16){
+		printf("i=%d\n",i);
+		sprintf(path_to_registerNames[i],"/proc/%s/hw/ioreg/%s",job[1],registerNames[i]);
+	//	printf("%s\n",path_to_registerNames[i]);
+		fpreg=fopen(path_to_registerNames[i],"r");
+		j=0;
+		readStat[0]=fread(&ampcoffs[0],sizeof(int),32,fpreg);
+		for(k=0;k<32;k++){
+			Coffs[32*i+k]=ampcoffs[k];
+			printf("Coffs %ld \n",Coffs[32*i+k]);
+		}
+		
+		fclose(fpreg);
+		i++;
+	}
+
+}
+
 void initCoeffs(){
 //this functtion reads in the coefficients stored as text files on the Power PC. These are used to correct the gain/phase of the 4 RF data streams used in the C-BASS survey
 	FILE *fp,*fpreg;
@@ -2059,6 +2108,7 @@ void initCoeffs(){
 		//printf("j=%d\n",j);
 		fclose(fp);
 		//printf("j=%d\n",j);
+		//copy the coefficients to a register
 		fwrite(&ampcoffs[0], 32*4, 1, fpreg);
 		fclose(fpreg);
 		//printf("j=%d\n",j);
@@ -2214,6 +2264,7 @@ int main(int argc, char *argv[])
 		printf("\n mutex init buffer failed\n");
 		return 1;
 	    }
+	readCoeffs();
 	pthread_create(&commandThread_id,NULL,command_thread,NULL);
 	if(VERSION==1){
 		pthread_create(&packROACHpacket_thread_id,NULL,packROACHpacket_thread,NULL);
