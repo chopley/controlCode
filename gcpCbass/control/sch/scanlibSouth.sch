@@ -19,8 +19,8 @@ command observeScanList1()
 
   # Return to az=0.  This doesn't affect the elevation offset.
   zeroScanOffsets
-  track scpfixed
-  until $acquired(source)|$elapsed>60s	
+  slew az=-250
+  until $acquired(source)|$elapsed>60s
 
   # Use the noise source.
   noise_on_general 5s,8s
@@ -34,8 +34,8 @@ command observeScanList1()
 
     zeroScanOffsets
     zeroScanOffsets
-    track scpfixed
-    until $acquired(source)|$elapsed>60s
+  slew az=-250
+  until $acquired(source)|$elapsed>60s
 
     Boolean start = true
     do Count i=1,5,1{
@@ -52,7 +52,7 @@ command observeScanList1()
 	  mark add, f0
           scan $scanlist.name_nodead
        }
-       until $acquired(scan)
+       until $acquired(scan)|$elapsed>4m
        mark remove, f0
     }
   }
@@ -79,8 +79,9 @@ command observeScanList2()
   
   # Return to az=0.  This doesn't affect the elevation offset.
   zeroScanOffsets
-  track scpfixed
+  slew az=-250
   until $acquired(source)|$elapsed>60s
+  
 
   # Use the noise source.
   noise_on_general 5s,8s
@@ -93,9 +94,8 @@ command observeScanList2()
 
 
     zeroScanOffsets
-    zeroScanOffsets
-    track scpfixed
-    until $acquired(source)|$elapsed>60s
+  slew az=-250
+  until $acquired(source)|$elapsed>60s
 
     Boolean start = true
     do Count i=1,5,1{
@@ -112,7 +112,7 @@ command observeScanList2()
 	  mark add, f0
           scan $scanlist.name_nodead
        }
-       until $acquired(scan)
+       until $acquired(scan)|$elapsed>4m
        mark remove, f0
     }
   }
@@ -139,8 +139,8 @@ command observeScanList3()
   }
   # Return to az=0.  This doesn't affect the elevation offset.
   zeroScanOffsets
-  track ncp
-  until $acquired(source)	
+  slew az=-250
+  until $acquired(source)|$elapsed>60s
 
   # Use the noise source.
   noise_on_general 5s,8s
@@ -153,9 +153,8 @@ command observeScanList3()
 
 
     zeroScanOffsets
-    zeroScanOffsets
-    track ncp
-    until $acquired(source)
+  slew az=-250
+  until $acquired(source)|$elapsed>60s
 
     Boolean start = true
     do Count i=1,5,1{
@@ -172,7 +171,7 @@ command observeScanList3()
 	  mark add, f0
           scan $scanlist.name_nodead
        }
-       until $acquired(scan)
+       until $acquired(scan)|$elapsed>4m
        mark remove, f0
     }
   }
@@ -200,8 +199,8 @@ command observeScanList4()
   
   # Return to az=0.  This doesn't affect the elevation offset.
   zeroScanOffsets
-  track ncp
-  until $acquired(source)	
+  slew az=-250
+  until $acquired(source)|$elapsed>60s
 
   # Use the noise source.
   noise_on_general 5s,8s
@@ -215,8 +214,8 @@ command observeScanList4()
 
     zeroScanOffsets
     zeroScanOffsets
-    track ncp
-    until $acquired(source)
+  slew az=-250
+  until $acquired(source)|$elapsed>60s
 
     Boolean start = true
     do Count i=1,5,1{
@@ -233,7 +232,7 @@ command observeScanList4()
 	  mark add, f0
           scan $scanlist.name_nodead
        }
-       until $acquired(scan)
+       until $acquired(scan)|$elapsed>4m
        mark remove, f0
     }
   }
@@ -261,8 +260,8 @@ command observeScanList5()
 
   # Return to az=0.  This doesn't affect the elevation offset.
   zeroScanOffsets
-  track ncp
-  until $acquired(source)	
+  slew az=-250
+  until $acquired(source)|$elapsed>60s
 
   # Use the noise source.
   noise_on_general 5s,8s
@@ -276,8 +275,8 @@ command observeScanList5()
 
     zeroScanOffsets
     zeroScanOffsets
-    track ncp
-    until $acquired(source)
+  slew az=-250
+  until $acquired(source)|$elapsed>60s
 
     Boolean start = true
     do Count i=1,5,1{
@@ -294,7 +293,7 @@ command observeScanList5()
 	  mark add, f0
           scan $scanlist.name_nodead
        }
-       until $acquired(scan)
+       until $acquired(scan)|$elapsed>4m
        mark remove, f0
     }
   }

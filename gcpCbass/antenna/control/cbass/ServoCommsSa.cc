@@ -74,6 +74,10 @@ ServoCommsSa::ServoCommsSa(SpecificShare* share, string name, bool sim) :
   az_tacho2_                = 0;
   el_tacho1_                = 0;
   el_tacho2_                = 0;
+  az_pid1_			=0;
+  az_pid2_			=0;
+  el_pid1_			=0;
+  el_pid2_			=0;
 
   utc_         =   findReg("utc");
   azPositions_ =   findReg("fast_az_pos");
@@ -96,6 +100,10 @@ ServoCommsSa::ServoCommsSa(SpecificShare* share, string name, bool sim) :
   az_tacho2_              = findReg("az_tacho2");
   el_tacho1_              = findReg("el_tacho1");
   el_tacho2_              = findReg("el_tacho2");
+  az_pid1_              = findReg("az_pid1");
+  az_pid2_              = findReg("az_pid2");
+  el_pid1_              = findReg("el_pid1");
+  el_pid2_              = findReg("el_pid2");
 
 
   antennaHalted_	  = 0;
@@ -819,6 +827,10 @@ void ServoCommsSa::queryAntPositions()
     static float aztacho2[SERVO_POSITION_SAMPLES_PER_FRAME];
     static float alttacho1[SERVO_POSITION_SAMPLES_PER_FRAME];
     static float alttacho2[SERVO_POSITION_SAMPLES_PER_FRAME];
+    static float azPid1[SERVO_POSITION_SAMPLES_PER_FRAME];
+    static float azPid2[SERVO_POSITION_SAMPLES_PER_FRAME];
+    static float elPid1[SERVO_POSITION_SAMPLES_PER_FRAME];
+    static float elPid2[SERVO_POSITION_SAMPLES_PER_FRAME];
     
     for (unsigned i=0; i < 5; i++){
       azPos[i] = command.responseValue_[i];
@@ -831,6 +843,10 @@ void ServoCommsSa::queryAntPositions()
       aztacho2[i] = (float)command.responseValue_[i+35];
       alttacho1[i] = (float)command.responseValue_[i+40];
       alttacho2[i] = (float)command.responseValue_[i+45];
+      azPid1[i] = (float)command.responseValue_[i+50];
+      azPid2[i] = (float)command.responseValue_[i+55];
+      elPid1[i] = (float)command.responseValue_[i+60];
+      elPid2[i] = (float)command.responseValue_[i+65];
 	//COUT("time "<<timeSec[i]);
     };
 
@@ -846,7 +862,11 @@ void ServoCommsSa::queryAntPositions()
       share_->writeReg(az_tacho1_,    aztacho1);
       share_->writeReg(az_tacho2_,    aztacho2);
       share_->writeReg(el_tacho1_,    alttacho1);
-      share_->writeReg(el_tacho2_,    alttacho1);
+      share_->writeReg(el_tacho2_,    alttacho2);
+      share_->writeReg(az_pid1_,    azPid1);
+      share_->writeReg(az_pid2_,    azPid2);
+      share_->writeReg(el_pid1_,    elPid1);
+      share_->writeReg(el_pid2_,    elPid2);
     }
 
     // Write them out as debug:
@@ -881,6 +901,10 @@ void ServoCommsSa::queryAntPositions(gcp::util::TimeVal& currTime)
     static float aztacho2[SERVO_POSITION_SAMPLES_PER_FRAME];
     static float alttacho1[SERVO_POSITION_SAMPLES_PER_FRAME];
     static float alttacho2[SERVO_POSITION_SAMPLES_PER_FRAME];
+    static float azPid1[SERVO_POSITION_SAMPLES_PER_FRAME];
+    static float azPid2[SERVO_POSITION_SAMPLES_PER_FRAME];
+    static float elPid1[SERVO_POSITION_SAMPLES_PER_FRAME];
+    static float elPid2[SERVO_POSITION_SAMPLES_PER_FRAME];
 	    
     for (unsigned i=0; i < 5; i++){
       azPos[i] = command.responseValue_[i];
@@ -893,6 +917,10 @@ void ServoCommsSa::queryAntPositions(gcp::util::TimeVal& currTime)
       aztacho2[i] = (float)command.responseValue_[i+35];
       alttacho1[i] = (float)command.responseValue_[i+40];
       alttacho2[i] = (float)command.responseValue_[i+45];
+      azPid1[i] = (float)command.responseValue_[i+50];
+      azPid2[i] = (float)command.responseValue_[i+55];
+      elPid1[i] = (float)command.responseValue_[i+60];
+      elPid2[i] = (float)command.responseValue_[i+65];
     };
     
     // Write them to shared memory
@@ -907,7 +935,11 @@ void ServoCommsSa::queryAntPositions(gcp::util::TimeVal& currTime)
       share_->writeReg(az_tacho1_,    aztacho1);
       share_->writeReg(az_tacho2_,    aztacho2);
       share_->writeReg(el_tacho1_,    alttacho1);
-      share_->writeReg(el_tacho2_,    alttacho1);
+      share_->writeReg(el_tacho2_,    alttacho2);
+      share_->writeReg(az_pid1_,    azPid1);
+      share_->writeReg(az_pid2_,    azPid2);
+      share_->writeReg(el_pid1_,    elPid1);
+      share_->writeReg(el_pid2_,    elPid2);
       
       // Fill the UTC register with appropriate time values
       
@@ -1172,9 +1204,9 @@ void ServoCommsSa::finishInitialization()
     	vals[1] = 4.;   //Position I
 	vals[2] = 5.;  //Position D
 	vals[3] = 1.;  //Kf
-	vals[4] = 0.005; //Vf
+	vals[4] = 0.3; //Vf
 	vals[5] = 1.0; //P_2
-	vals[6] = 0.7; //i_2
+	vals[6] = 0.0; //i_2
 
   issueCommand(ServoCommandSa::LOAD_LOOP_PARAMS_A, vals);
   wait(100000000);
@@ -1189,13 +1221,13 @@ void ServoCommsSa::finishInitialization()
   issueCommand(ServoCommandSa::LOAD_LOOP_PARAMS_B, vals);
   wait(100000000);
 
-  	vals[0] = 2000.;
-    	vals[1] = 1.;
-	vals[2] = 1.;
+  	vals[0] = 14000.;
+    	vals[1] = 4.;
+	vals[2] = 5.;
 	vals[3] = 1.;
-	vals[4] = 0.05;
+	vals[4] = 4.0;
 	vals[5] = 1.;
-	vals[6] = 0.7;
+	vals[6] = 0.0;
   issueCommand(ServoCommandSa::LOAD_LOOP_PARAMS_C, vals);
   wait(100000000);  
 	
@@ -1215,12 +1247,12 @@ void ServoCommsSa::finishInitialization()
 	vals[5] = 0.8;
 	vals[6] = 0.4; */
   	vals[0] = 2000.;
-    	vals[1] = 1.;
-	vals[2] = 0;
+    	vals[1] = 4.;
+	vals[2] = 5;
 	vals[3] = 1.;
 	vals[4] = 0.3;
 	vals[5] = 1.;
-	vals[6] = 0.7;
+	vals[6] = 0.0;
  
   issueCommand(ServoCommandSa::LOAD_LOOP_PARAMS_D, vals);
   wait(100000000);

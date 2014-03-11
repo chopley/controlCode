@@ -44,8 +44,9 @@
 
 #define CC_TO_SEC 128/250000000                                   
 
-
-#define DEFAULT_NUMBER_BYTES_PER_TRANSFER 15632
+#define DEFAULT_NUMBER_BYTES_PER_TRANSFER 17680
+//define DEFAULT_NUMBER_BYTES_PER_TRANSFER 15760
+//fine DEFAULT_NUMBER_BYTES_PER_TRANSFER 15632
 //#define DEFAULT_NUMBER_BYTES_PER_TRANSFER 15472
 //#define DEFAULT_NUMBER_BYTES_PER_TRANSFER 15432
 
@@ -164,6 +165,7 @@ namespace gcp {
 	std::vector<int> seconds_;    // roach NTP second
 	std::vector<int> useconds_;    // roach NTP usecond
 	std::vector<int> switchstatus_;
+	std::vector<float> Coeffs_;
 	int tstop_;     // stop time of integration
 	int intLength_; // integration length in clock cycles
 	int mode_;      // backend mode (polarization or power);
@@ -234,6 +236,21 @@ struct UDPCBASSpkt {
   int secondIntegration[kDataperPacket]; //4*10=40
   int tsecond[10];
   int tusecond[10];
+  int coeffs[32*16]; // 2048 byte
+//  int amp2real[32]; // 128 byte
+//  int amp3real[32]; // 128 byte
+//  int amp4real[32]; // 128 byte
+//  int amp5real[32]; // 128 byte
+//  int amp6real[32]; // 128 byte
+//  int amp7real[32]; // 128 byte
+//  int amp0imag[32]; // 128 byte
+//  int amp1imag[32]; // 128 byte
+//  int amp2imag[32]; // 128 byte
+//  int amp3imag[32]; // 128 byte
+//  int amp4imag[32]; // 128 byte
+ // int amp5imag[32]; // 128 byte
+//  int amp6imag[32]; // 128 byte
+//  int amp7imag[32]; // 128 byte
 };
 
 

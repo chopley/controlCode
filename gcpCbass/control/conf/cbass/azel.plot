@@ -1,7 +1,8 @@
-add_plot 422 100 {actual az/el} 0 0.00461479106982155 1 1 maximum 20.0 array.frame.utc.date {} {
-  graph -106.894798353572 -74.2286337192245 az {{antenna0.tracker.actual[0][0]} {}} {} 0 1 1 0
-  graph 28.0620804990787 50.7334417549563 el {{antenna0.tracker.actual[1][0]} {}} {} 0 1 1 0
-  graph -30.9103497070313 30.7803165039062 AzErr {{antenna0.servo.fast_az_err[0][0]} {} {}} {} 0 1 1 0
-  graph -15.6345188232422 5.52619997558594 ElError {{antenna0.servo.fast_el_err[0][0]} {}} {} 0 1 1 0
-  graph 5698.1390625 9578.0796875 Roach1RR {{antenna0.roach1.RRfreq[0][0]} {} {}} {} 0 1 1 0
+add_plot 281 53 {actual az/el} 0 0.0142598528047809 1 1 maximum 20.0 array.frame.utc.date {} {
+  graph 2.64088007464721 28.7750166070035 az {{antenna0.tracker.actual[0][0]} {}} {} 0 1 1 0
+  graph 8.03992091601585 31.2917486498941 el {{antenna0.tracker.actual[1][0]} {}} {} 0 1 1 0
+  graph -18.7323534179688 18.8808983398438 AzErr {{antenna0.servo.fast_az_err[0][0]} {} {}} {} 0 1 1 0
+  graph -20.8623763671875 20.4311810546875 ElError {{antenna0.servo.fast_el_err[0][0]} {}} {} 0 1 1 0
+  graph -101633.34296875 4022270.42109375 Roach1RR {{antenna0.roach2.RRfreq[0][0]} {} {} {}} {} 0 1 1 0
+  graph 103274.05 106946.95 {} {{antenna0.roach2.RR[32][0]} {}} {} 0 1 1 0
 } normal 0 0.0 1

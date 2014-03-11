@@ -1,4 +1,4 @@
-add_page 130 76 Status black red yellow 10 11 {13 10 12 13 10 10 10 10 10 10 10 10 10 10 10 10 10} {} 0 {} 0 {
+add_page 486 129 Status black red yellow 10 11 {13 10 12 13 10 10 10 10 10 10 10 10 10 10 10 10 10} {} 0 {} 0 {
   label 0 0 midnightblue paleturquoise center {Array frame}
   label 0 1 midnightblue paleturquoise center {Antenna frame}
   label 0 4 midnightblue paleturquoise center Azimuth
@@ -17,8 +17,8 @@ add_page 130 76 Status black red yellow 10 11 {13 10 12 13 10 10 10 10 10 10 10 
   register 1 0 black green center array.frame.record integer 0 0 unknown,false,true 0 0 0.0 0.0 0 1
   register 1 1 black green center antenna0.frame.record integer 0 0 unknown,false,true 0 0 0.0 0.0 0 1
   label 1 3 midnightblue paleturquoise center Position
-  register 1 4 black green center {antenna0.servo.slow_az_pos[0]} fixed_point 2 0 unknown,false,true 1 0 2 2 0 1
-  register 1 5 black green center {antenna0.servo.slow_el_pos[0]} fixed_point 2 0 unknown,false,true 1 0 2 2 0 1
+  register 1 4 black green center {antenna0.servo.slow_az_pos[0]} fixed_point 3 0 unknown,false,true 1 0 2 2 0 1
+  register 1 5 black green center {antenna0.servo.slow_el_pos[0]} fixed_point 3 0 unknown,false,true 1 0 2 2 0 1
   register 1 7 black green center {antenna0.tracker.equat_off[0][0]} sexagesimal 2 0 {} 0 0 0.0 0.0 0 1
   register 1 8 black green center {antenna0.tracker.equat_off[1][0]} sexagesimal 2 0 {} 0 0 0.0 0.0 0 1
   label 1 11 midnightblue paleturquoise center {Lid Open}
@@ -70,8 +70,8 @@ add_page 130 76 Status black red yellow 10 11 {13 10 12 13 10 10 10 10 10 10 10 
   register 3 21 black green center {antenna0.receiver.drainVoltage[1]} fixed_point 2 0 {} 0 0 0.65 0.75 0 1
   register 3 22 black green center {antenna0.receiver.drainVoltage[2]} fixed_point 2 0 {} 0 0 0.45 0.55 0 1
   register 3 23 black green center {antenna0.receiver.drainVoltage[3]} fixed_point 2 0 {} 0 0 0.45 0.55 0 1
-  register 4 0 black green center {antenna0.servo.fast_az_err[0][0]} fixed_point 2 0 unknown,false,true 1 0 2 2 0 1
-  register 4 1 black green center {antenna0.servo.fast_el_err[0][0]} fixed_point 2 0 unknown,false,true 1 0 2 2 0 1
+  register 4 0 black green center {antenna0.servo.fast_az_err[0][0]} fixed_point 3 0 unknown,false,true 1 0 2 2 0 1
+  register 4 1 black green center {antenna0.servo.fast_el_err[0][0]} fixed_point 3 0 unknown,false,true 1 0 2 2 0 1
   label 4 3 midnightblue paleturquoise center {Scan Offset}
   register 4 4 black green center {antenna0.tracker.scan_off[0][0]} sexagesimal 1 0 {} 0 0 0.0 0.0 0 1
   register 4 5 black green center {antenna0.tracker.scan_off[1][0]} sexagesimal 1 0 {} 0 0 0.0 0.0 0 1
@@ -118,6 +118,10 @@ add_page 130 76 Status black red yellow 10 11 {13 10 12 13 10 10 10 10 10 10 10 
   register 6 15 black green center {array.weather.relativeHumidity[0]} floating 15 0 {} 0 0 0.0 0.0 0 1
   register 6 16 black green center {array.weather.windSpeed[0]} floating 15 0 {} 0 0 0.0 0.0 0 1
   register 6 17 black green center {array.weather.pressure[0]} fixed_point 5 0 {} 0 0 0.0 0.0 0 1
+  label 6 20 midnightblue paleturquoise center Az1
+  label 6 21 midnightblue paleturquoise center Az2
+  label 6 22 midnightblue paleturquoise center El1
+  label 6 23 midnightblue paleturquoise center El2
   label 7 0 midnightblue paleturquoise center Version
   register 7 1 black green center {antenna0.roach1.version[0][0]} floating 10 0 {} 0 0 0.0 0.0 0 1
   register 7 2 black green center {antenna0.roach2.version[0][0]} floating 10 0 {} 0 0 0.0 0.0 0 1
@@ -128,11 +132,16 @@ add_page 130 76 Status black red yellow 10 11 {13 10 12 13 10 10 10 10 10 10 10 
   label 7 12 midnightblue paleturquoise center LNA3
   label 7 13 midnightblue paleturquoise center LNA4
   label 7 14 midnightblue paleturquoise center ColdLoad
+  label 7 19 midnightblue paleturquoise center {Motor PID}
+  register 7 20 black green center {antenna0.servo.az_pid1[0][0]} floating 15 0 {} 0 0 0.0 0.0 0 1
+  register 7 21 black green center {antenna0.servo.az_pid2[0][0]} floating 15 0 {} 0 0 0.0 0.0 0 1
+  register 7 22 black green center {antenna0.servo.el_pid1[0][0]} floating 15 0 {} 0 0 0.0 0.0 0 1
+  register 7 23 black green center {antenna0.servo.el_pid2[0][0]} floating 15 0 {} 0 0 0.0 0.0 0 1
   register 8 10 black green center {antenna0.thermal.lsTemperatureSensors[4]} floating 5 0 {} 0 1 0.0 15 0 1
   register 8 11 black green center {antenna0.thermal.lsTemperatureSensors[5]} floating 5 0 {} 0 1 0.0 15 0 1
   register 8 12 black green center {antenna0.thermal.lsTemperatureSensors[6]} floating 5 0 {} 0 1 0.0 15 0 1
   register 8 13 black green center {antenna0.thermal.lsTemperatureSensors[7]} floating 5 0 {} 0 1 0.0 15 0 1
-  register 8 14 black green center {antenna0.thermal.ccTemperatureLoad[0][0]} fixed_point 4 0 {} 0 1 10 20 0 1
+  register 8 14 black green center {antenna0.thermal.ccTemperatureLoad[0][0]} fixed_point 5 0 {} 0 1 10 20 0 1
   label 9 0 midnightblue paleturquoise center Backlog
   register 9 1 black green center {antenna0.roach1.buffBacklog[0][0]} floating 15 0 {} 0 0 0.0 0.0 0 1
   register 9 2 black green center {antenna0.roach2.buffBacklog[0][0]} floating 15 0 {} 0 0 0.0 0.0 0 1

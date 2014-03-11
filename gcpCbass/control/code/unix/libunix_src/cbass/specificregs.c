@@ -454,6 +454,17 @@ static RegBlockTemp cbassServo[] = {
   RegBlockTemp("Fast El Tacho2",
 	       "el_tacho2",             "", REG_FAST|REG_FLOAT, 0, 1, SERVO_POSITION_SAMPLES_PER_FRAME),
 
+  RegBlockTemp("AZ Pid1",
+	       "az_pid1",             "", REG_FAST|REG_FLOAT, 0, 1, SERVO_POSITION_SAMPLES_PER_FRAME),
+
+  RegBlockTemp("AZ Pid2",
+	       "az_pid2",             "", REG_FAST|REG_FLOAT, 0, 1, SERVO_POSITION_SAMPLES_PER_FRAME),
+
+  RegBlockTemp("EL Pid1",
+	       "el_pid1",             "", REG_FAST|REG_FLOAT, 0, 1, SERVO_POSITION_SAMPLES_PER_FRAME),
+
+  RegBlockTemp("EL Pid2",
+	       "el_pid2",             "", REG_FAST|REG_FLOAT, 0, 1, SERVO_POSITION_SAMPLES_PER_FRAME),
   // All Entries from the Status Register
   // These should be booleans, but i can't have an array of booleans apparently.
 
@@ -627,6 +638,10 @@ static RegBlockTemp cbassRoach1[] = {
 
   RegBlockTemp("Roach FPGA Clock",
 	       "fpgaClockStamp", "", REG_FAST|REG_FLOAT, 0, 1, RECEIVER_SAMPLES_PER_FRAME),
+  
+  RegBlockTemp("Roach Coefficients",
+	       "roachCof", "", REG_FLOAT, 0, 64*2, 1),
+  
 };
 
 /**.......................................................................
@@ -721,6 +736,9 @@ static RegBlockTemp cbassRoach2[] = {
 
   RegBlockTemp("Roach FPGA Clock",
 	       "fpgaClockStamp", "", REG_FAST|REG_FLOAT, 0, 1, RECEIVER_SAMPLES_PER_FRAME),
+  
+  RegBlockTemp("Roach Coefficients",
+	       "roachCof", "", REG_FLOAT, 0, 64*2, 1),
 };
 
 //-----------------------------------------------------------------------

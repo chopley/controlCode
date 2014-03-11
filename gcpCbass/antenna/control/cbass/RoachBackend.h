@@ -199,6 +199,7 @@ namespace gcp {
 	std::vector<int> res2_;      // reserved 4 bytes                                                       
 	std::vector<int> seconds_;      // seconds from the roach                                                       
 	std::vector<int> useconds_;      // useconds from the roach                                                       
+	std::vector<float> Coeffs_;
 
 #if(0) // 3D stuff
 	std::vector<std::vector< std::vector<float> > > LL_;
@@ -253,6 +254,7 @@ namespace gcp {
 	RegMapBlock* roachNTPSeconds_;
 	RegMapBlock* roachNTPuSeconds_;       
 	RegMapBlock* roachFPGAClockStamp_;       
+	RegMapBlock* roachCoffs_;       
 
 
       }; // End class RoachBackend

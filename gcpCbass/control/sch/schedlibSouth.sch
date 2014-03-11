@@ -88,7 +88,8 @@
 #   05-MAY-2010:  MAS added Feature bit f16 for NCP survey.
 #   18-NOV-2010:  OGK added the restore_nominal_biases function.
 #   02-MAR-2011:  OGK moved restore_nominal_biases function to biasCombinations.sch
-# 	21-JAN-2013:  MP add 'until ($acquired(source) | $elapsed > 3m)' in various places as $acquired doesn't seem to be working poperly
+#   21-JAN-2013:  MP add 'until ($acquired(source) | $elapsed > 3m)' in various places as $acquired 
+#                    doesn't seem to be working poperly
 #------------------------------------------------------
 #######################################################
 
@@ -114,7 +115,6 @@ command init_obs(String logline) {
 
   # recalibrate the encoders
 #  servoInitializeAntenna
-
 }
 
 
@@ -148,8 +148,8 @@ command terminate(String logline){
 # Does a pointing cross on a source in distinct 0.125 deg steps.
 #======================================================================
 
-command do_point_cross(Source src)
-{
+command do_point_cross(Source src){
+
   # tag the log file and mark the "pointing_cross" bit
   log "Starting command do_point_cross: ", $date
   offset az=0, el=0
@@ -158,7 +158,7 @@ command do_point_cross(Source src)
   # track the source
   log "do_point_cross: starting to track source: ", $date
   track $src
-#  until $acquired(source)
+  # until $acquired(source)
   until ($acquired(source) | $elapsed > 3m)
   mark add, f6
 
@@ -415,7 +415,6 @@ command do_point_raster(Source src, PointingOffset maxOff, Sexagesimal del, Scan
   zeroScanOffsets
 
   log "Exiting command do_point_raster: ", $date
-
 }
 
 
@@ -476,8 +475,6 @@ mark remove, f5
 zeroScanOffsets
 
 }
-
-
 #======================================================================
 #A command to turn the noise injection source on, take some data, and
 #turn it off.  Spend some more time with it off.
@@ -508,6 +505,40 @@ until $acquired(mark)
 until $elapsed>1s
 
 }
+#======================================================================
+#A command to turn the noise injection source on, take some data, and
+#turn it off.  Spend some more time with it off.
+#======================================================================
+command noise_on_source_off(Interval time, Source src, Features feat, PointingOffset azoff)
+{
+
+
+# track the source
+track $src
+until $acquired(source)| $elapsed>1m
+until $elapsed>3s
+mark add, f12
+mark add, $feat
+noise_on($time)
+mark remove, $feat
+
+# slew off the source
+offset az=$azoff
+until $acquired(source)  | $elapsed>1m
+until $elapsed>3s
+mark add, f0
+noise_on($time)
+mark remove, f0
+
+mark remove, f12
+
+offset az=0
+until $acquired(source)| $elapsed>1m
+until $elapsed>1s
+
+}
+
+
 
 
 #======================================================================
@@ -576,3 +607,97 @@ until $elapsed>1s
 
 }
 
+#======================================================================
+# Does a pointing cross on a source in scan going 1degs/s 
+#  allowing the scan to be centred about some offset position
+#======================================================================
+
+command do_point_scan_with_offsets(Source src, PointingOffset azoff, PointingOffset eloff)
+{
+  # tag the log file and mark the "pointing_scan" bit
+  log "Starting command do_point_scan: ", $date
+
+  log "do_point_scan: track source: ", $date
+  offset az=$azoff, el=$eloff
+  track $src
+#  until $acquired(source)
+  until ($acquired(source) | $elapsed > 1m)
+
+  log "do_point_scan: mark add: ", $date
+  # add the bit indicating we have good data:
+  mark add, f0+f7
+  until $acquired(mark)
+  
+  # do the scan 
+
+  log "do_point_scan: scan source: ", $date
+  scan point_cross_10daz_10del_0.5ds
+
+  # wait for scan to end then remove the mark
+  until ( $acquired(scan) | $elapsed>110s )
+	
+  log "do_point_scan: mark remove: ", $date
+  mark remove, f0+f7
+  until $acquired(mark)
+
+  log "do_point_scan: zero offsets: ", $date
+  zeroScanOffsets
+  log "do_point_scan: track source: ", $date
+  track $src
+#  until $acquired(source)
+  until ($acquired(source) | $elapsed > 1m)
+
+  log "Exiting command do_point_scan: ", $date
+}
+
+#======================================================================
+# Does a pointing cross on a source in user-defined steps.
+#======================================================================
+
+command do_point_cross_general(Source src, PointingOffset theta, PointingOffset dtheta, Interval dwell, PointingOffset xoff, PointingOffset yoff)
+{
+
+  # tag the log file and mark the "pointing_cross" bit
+  log "Starting command do_point_cross_general: ", $date
+  offset az=0, el=0
+  sky_offset x=0, y=0
+
+  # track the source
+  log "do_point_cross: starting to track source: ", $date
+  track $src
+  # until $acquired(source)
+  until ($acquired(source) | $elapsed > 1m)
+  mark add, f6
+
+  offset az=$xoff
+  PointingOffset xymin = -$theta
+  PointingOffset xymax = $theta+.001
+  log "do_point_cross: starting to do a pointing offset (y): ", $date
+  do PointingOffset yoff= $xymin,$xymax,$dtheta {
+	#sky_offset y=$yoff
+        offset el=$yoff
+	until ($acquired(source)|$elapsed > 3s)
+	mark add, f0
+	until $elapsed > $dwell
+	mark remove, f0
+  }
+  log "do_point_cross_general: zeroing offset (y): ", $date
+  #sky_offset y=0
+  offset el=$yoff
+
+  log "do_point_cross_general: starting to do a pointing offset (x): ", $date
+  do PointingOffset xoff= $xymin,$xymax,$dtheta {
+	#sky_offset x=$xoff
+	offset az=$xoff
+	until ($acquired(source)|$elapsed > 3s)
+	mark add, f0
+	until $elapsed > $dwell
+	mark remove, f0
+  }
+  log "do_point_cross_general: zeroing offset (x): ", $date
+  mark remove, f6
+  #sky_offset x=0
+  offset az=0, el=0
+
+  log "Exiting command do_point_cross: ", $date
+}

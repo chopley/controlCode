@@ -185,6 +185,10 @@ namespace gcp {
 	RegMapBlock* az_tacho2_;               
 	RegMapBlock* el_tacho1_;               
 	RegMapBlock* el_tacho2_;               
+	RegMapBlock* az_pid1_;               
+	RegMapBlock* az_pid2_;               
+	RegMapBlock* el_pid1_;               
+	RegMapBlock* el_pid2_;               
 
 	/**
 	 * The set of file descriptors to be watched for readability.

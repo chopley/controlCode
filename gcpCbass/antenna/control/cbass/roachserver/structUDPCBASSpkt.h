@@ -37,6 +37,22 @@ struct UDPCBASSpkt {
   int secondIntegration[kDataperPacket]; //4*10=40
   int tsecond[10]; // 40 byte
   int tusecond[10]; // 40 byte
+  int coeffs[32*16];// 128 byte
+//int amp1real[32]; // 128 byte
+//int amp2real[32]; // 128 byte
+//int amp3real[32]; // 128 byte
+//int amp4real[32]; // 128 byte
+//int amp5real[32]; // 128 byte
+//int amp6real[32]; // 128 byte
+//int amp7real[32]; // 128 byte
+//int amp0imag[32]; // 128 byte
+//int amp1imag[32]; // 128 byte
+//int amp2imag[32]; // 128 byte
+//int amp3imag[32]; // 128 byte
+//int amp4imag[32]; // 128 byte
+//int amp5imag[32]; // 128 byte
+//int amp6imag[32]; // 128 byte
+//int amp7imag[32]; // 128 byte
 };
 
 struct tempDataPacket{

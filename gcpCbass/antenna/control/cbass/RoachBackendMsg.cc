@@ -63,6 +63,14 @@ int RoachBackendMsg::packetizeNetworkMsg()
   mode_       = ntohl(packet_.reserved1);
   res2_       = ntohl(packet_.reserved2);
 
+//read in the sky/load and Q/U separation coefficients
+//need to worry about converting the unsigned int back to signed
+    for (j=0;j<4*64*2;j++){
+	 Coeffs_[j] =  (long)((ntohl(packet_.coeffs[j])));
+	if(Coeffs_[j]>=4294967296/2){
+	 Coeffs_[j] = (long)(Coeffs_[j]-4294967296);
+	} 
+    };
   //  COUT("DATA"<< ntohl(packet_.buffBacklog));
   for(i=0;i<NUM_ROACH_INTEGRATION_PER_TRANSFER;i++){
     bufferBacklog_[i]   = ntohl(packet_.buffBacklog[i]);
@@ -218,6 +226,7 @@ void RoachBackendMsg::Assign3DVectorMemory()
   tstart_.resize(NUM_ROACH_INTEGRATION_PER_TRANSFER);
   switchstatus_.resize(NUM_ROACH_INTEGRATION_PER_TRANSFER);
   seconds_.resize(NUM_ROACH_INTEGRATION_PER_TRANSFER);
+  Coeffs_.resize(4*64*2);
   // Set up sizes.
   LL_.resize(NUM_ROACH_INTEGRATION_PER_TRANSFER);
   for (int i = 0; i < NUM_ROACH_INTEGRATION_PER_TRANSFER; ++i) {
@@ -276,6 +285,7 @@ void RoachBackendMsg::Assign2DVectorMemory()
   switchstatus_.resize(NUM_ROACH_INTEGRATION_PER_TRANSFER);
   seconds_.resize(NUM_ROACH_INTEGRATION_PER_TRANSFER);
   useconds_.resize(NUM_ROACH_INTEGRATION_PER_TRANSFER);
+  Coeffs_.resize(4*64*2);//there are four channels, each with 64 spectral channels on each roach and each have real+imag coefficients
 
   // Set up sizes.
   LL_.resize(NUM_ROACH_INTEGRATION_PER_TRANSFER);
