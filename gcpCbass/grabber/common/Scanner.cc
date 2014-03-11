@@ -425,13 +425,11 @@ void Scanner::processMsg(ScannerMsg* msg)
     //------------------------------------------------------------
 
     if(msg->body.configure.mask & gcp::control::FG_TAKE_FLATFIELD) {
-      COUT("Saving image as flatfield: " << msg->body.configure.channelMask);
       sendImages(msg->body.configure.channelMask, true);
 
     }
     
     if(msg->body.configure.mask & gcp::control::FG_TAKE_IMAGE) {
-      COUT("Taking image: " << msg->body.configure.channelMask);
       sendImages(msg->body.configure.channelMask, false);
     }
 
