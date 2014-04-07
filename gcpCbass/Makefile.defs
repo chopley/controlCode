@@ -55,7 +55,7 @@ export CCINC
 
 # The C++ compiler
 
-CC = g++
+CC = g++-4.4
 
 export CC
 
