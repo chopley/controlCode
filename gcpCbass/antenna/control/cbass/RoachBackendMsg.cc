@@ -66,10 +66,9 @@ int RoachBackendMsg::packetizeNetworkMsg()
 //read in the sky/load and Q/U separation coefficients
 //need to worry about converting the unsigned int back to signed
     for (j=0;j<4*64*2;j++){
-	 Coeffs_[j] =  (long)((ntohl(packet_.coeffs[j])));
-	if(Coeffs_[j]>=4294967296/2){
-	 Coeffs_[j] = (long)(Coeffs_[j]-4294967296);
-	} 
+//	 Coeffs_[j] =  (ntohl(packet_.coeffs[j]));//I first read in the data with ntohl
+//	 Coeffs_[j] = (long) Coeffs_[j] ; //I then cast to a long. Somehow this works with the endianness conversion over the network to preserve the correct numbers
+	 Coeffs_[j] = 0 ; //I then cast to a long. Somehow this works with the endianness conversion over the network to preserve the correct numbers
     };
   //  COUT("DATA"<< ntohl(packet_.buffBacklog));
   for(i=0;i<NUM_ROACH_INTEGRATION_PER_TRANSFER;i++){
@@ -80,7 +79,7 @@ int RoachBackendMsg::packetizeNetworkMsg()
   }
   for(i=0;i<NUM_ROACH_INTEGRATION_PER_TRANSFER;i++){
     tstart_[i] = ntohl(packet_.tstart[i]);
-    //COUT("starts" <<i << "---"  << tstart_[i]);
+    COUT("starts" <<i << "---"  << tstart_[i]);
   }
   
   for(i=0;i<NUM_ROACH_INTEGRATION_PER_TRANSFER; i++){

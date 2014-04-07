@@ -46,11 +46,11 @@ AntennaMaster::AntennaMaster(string host,
 			     bool simPmac,
 			     bool simGpib,
 			     bool simDlp,
-			     bool argSimBackend,
 			     bool argUsePrio, 
 			     bool simLna,
 			     bool simAdc,
-			     bool simRoach)
+			     bool simRoach1,
+			     bool simRoach2)
 {
   // Before we do anything that might throw an exception, initialize
   // data members to the point where ~AntennaMaster() can safely be
@@ -64,10 +64,10 @@ AntennaMaster::AntennaMaster(string host,
   simPmac_      = simPmac;
   simGpib_      = simGpib;
   simDlp_       = simDlp;
-  simBackend_   = argSimBackend;
   simLna_       = simLna;
   simAdc_       = simAdc;
-  simRoach_     = simRoach;
+  simRoach1_     = simRoach1;
+  simRoach2_     = simRoach2;
   usePrio_      = argUsePrio;
 
   antNum_       = 0;
@@ -111,10 +111,8 @@ AntennaMaster::AntennaMaster(string host,
   }
 
  
-  if(!simRoach_) {
-    threads_.push_back(new Thread(&startAntennaRoach,   &cleanAntennaRoach, 
+  threads_.push_back(new Thread(&startAntennaRoach,   &cleanAntennaRoach, 
     				  &pingAntennaRoach,    "AntennaRoach",   3, 1));
-  }
 
 
   threads_.push_back(new Thread(&startAntennaSignal,  &cleanAntennaSignal,
@@ -603,7 +601,7 @@ THREAD_START(AntennaMaster::startAntennaRoach)
     thread = master->getThread("AntennaRoach");
 
     // Initialize communications with the outside world
-    master->roachTask_  = new gcp::antenna::control::AntennaRoach(master, master->simBackend());
+    master->roachTask_  = new gcp::antenna::control::AntennaRoach(master, master->simRoach1(), master->simRoach2());
     
     // Set our internal thread pointer pointing to the AntennaRoach thread
     master->roachTask_->thread_ = thread;
@@ -1444,9 +1442,14 @@ bool AntennaMaster::simAdc()
   return simAdc_;
 }
 
-bool AntennaMaster::simRoach()
+bool AntennaMaster::simRoach1()
 {
-  return simRoach_;
+  return simRoach1_;
+}
+
+bool AntennaMaster::simRoach2()
+{
+  return simRoach2_;
 }
 
 bool AntennaMaster::simDlp()
@@ -1454,8 +1457,4 @@ bool AntennaMaster::simDlp()
   return simDlp_;
 }
 
-bool AntennaMaster::simBackend()
-{
-  return simBackend_;
-}
 

@@ -40,7 +40,7 @@ volatile int changeMode=0;
 volatile int closeThread1=0;
 volatile int closeThread2=0;
 volatile int VERSION=1;
-volatile long Coffs[32*16];
+volatile int Coffs[32*16];
 pthread_mutex_t lock_testThread;
 pthread_mutex_t lock_packRoach;
 pthread_mutex_t lock_changeMode;
@@ -1103,11 +1103,11 @@ void *packROACHpacket_thread(void *arg){
 			cbassPKT.version=VERSION; //version numbers of the Polarisation begin at 0
 			cbassPKT.tend=t1.tv_usec;
 			cbassPKT.int_count=acc_new;
-			for(i=0;i<=32*16-1;i++){
-				cbassPKT.coeffs[i]=Coffs[i];
-			}
+		//or(i=0;i<=32*16-1;i++){
+		//cbassPKT.coeffs[i]=Coffs[i];
+		//
 		//	cbassPKT.buffBacklog=25;
-#if(0)
+#if(1)
 			for(i=0;i<=9;i++){
 				printf("stat %d %d %d %d\n",i,cbassPKT.tstart[i],cbassPKT.data_switchstatus[i],cbassPKT.data_ch0even[i*vectorLength+10]);
 			}
@@ -1118,7 +1118,7 @@ void *packROACHpacket_thread(void *arg){
 	//FIRST WAIT FOR THE ROACH BEFORE SENDING ANY DATA
 		gettimeofday(&t2,NULL);
 		
-		//usleep(100);
+	//	usleep(100);
 		jaccCntr=0;
 		while((acc_new==acc_old) && (jaccCntr<20000000)){
 			fp = fopen(path_acc_cnt, "r"); 
@@ -1153,7 +1153,7 @@ void *packROACHpacket_thread(void *arg){
 				
 		tDiff[packedDataCounter]=(int)timeStamp-(int)tDiff[packedDataCounter];
 	  	if(tDiff[packedDataCounter]<=0){
-			//printf("PPS Acc %d Time %d:%d \n",timeStamp,t2.tv_sec,t2.tv_usec);
+			printf("PPS Acc %d Time %d:%d \n",timeStamp,t2.tv_sec,t2.tv_usec);
 			if(timeStamp!=2499976){
 		//		printf("1PPS Not connected %d %d %d %d %d\n",timeStamp,acc_cntr,acc_new,tDiff[packedDataCounter],statusBit);
 			}
@@ -1579,10 +1579,10 @@ void *packROACHpacket_threadPower(void *arg){
 			//printf("adding to the circular buffer %d\n",cbassPKT.int_count);	
 			//mcpy(
 			//printf("acc count 2  %lu  %lu %lu %lu %lu %lu %lu %lu %lu %lu %lu %lu %d\n",acc_new,cbassPKT.tstart[0],cbassPKT.tstart[1],cbassPKT.tstart[2],cbassPKT.tstart[3],cbassPKT.tstart[4],cbassPKT.tstart[5],cbassPKT.tstart[6],cbassPKT.tstart[7],cbassPKT.tstart[8],cbassPKT.tstart[9]);
-			for(i=0;i<320;i++){
+	//		for(i=0;i<320;i++){
 		//		printf("%d %lu %lu \n",i,(cbassPKT.data_ch1even[i]),(cbassPKT.data_ch2even[i]));
 		
-				}	
+	//			}	
 			//printf("Time Diff %d %d %d %d %f\n",t1.tv_sec,t1.tv_usec,t2.tv_sec,t2.tv_usec,tottimediff);
 		}
 	//FIRST WAIT FOR THE ROACH BEFORE SENDING ANY DATA
@@ -1793,9 +1793,9 @@ int encodeNetwork(struct UDPCBASSpkt *pkt){
 		pkt->tstart[i]=htonl(pkt->tstart[i]);
 		pkt->tsecond[i]=htonl(pkt->tsecond[i]);
 	}
-	for(i=0;i<=32*16-1;i++){
-		pkt->coeffs[i]=htonl(pkt->coeffs[i]);
-	}
+//	for(i=0;i<=32*16-1;i++){
+//		pkt->coeffs[i]=htonl(pkt->coeffs[i]+65536); //convert to positive numbers for the network transmission- Adding 65536 to little endian seems to magically make things come out correct on the other side
+//	}
  	//printf("%f %d\n",(float)pkt->data_ch0odd[300],pkt->data_ch0odd[300]);       
 	//printf("encode %04x\n",pkt->data_ch0odd[300]);
 	for(i=0;i<=kDataperPacket*vectorLength;i++){
@@ -2031,7 +2031,7 @@ int gainCorrectionPower(struct tempDataPacket *pack,int MSBshift){
 void readCoeffs(){
 
 	int readStat[20];
-	extern volatile long Coffs[32*16];
+	extern volatile int Coffs[32*16];
 	int k;
 	FILE *fp,*fpreg;
 	extern char *job[5];
@@ -2051,7 +2051,23 @@ void readCoeffs(){
 	i=0;
 	sprintf(path_timeStamp, "/proc/%s/hw/ioreg/Subsystem1_timeStamp", job[1]);
 	sprintf(path_acc_cnt, "/proc/%s/hw/ioreg/Subsystem1_readAccumulation", job[1]);
-	
+//order of the coeffs is as follows
+//0-31 amp0 real	
+//32-63 amp1 real
+//64-95 amp2 real
+//96-127 amp3real
+//128-159 amp4real
+//160-191 amp5real
+//192-223 amp6real
+//224-255 amp7real
+//256-287 amp0imag
+//288-319 amp1iimag
+//320-351 amp2imag
+//352-383 amp3imag
+//384-415 amp4imag
+//416-447 amp5imag
+//488-479 amp6imag
+//480-512 amp7imag
 	while(i<16){
 		printf("i=%d\n",i);
 		sprintf(path_to_registerNames[i],"/proc/%s/hw/ioreg/%s",job[1],registerNames[i]);
@@ -2060,7 +2076,8 @@ void readCoeffs(){
 		j=0;
 		readStat[0]=fread(&ampcoffs[0],sizeof(int),32,fpreg);
 		for(k=0;k<32;k++){
-			Coffs[32*i+k]=ampcoffs[k];
+	//		Coffs[32*i+k]=ampcoffs[k];
+			Coffs[32*i+k]=+5000;
 			printf("Coffs %ld \n",Coffs[32*i+k]);
 		}
 		
@@ -2264,7 +2281,7 @@ int main(int argc, char *argv[])
 		printf("\n mutex init buffer failed\n");
 		return 1;
 	    }
-	readCoeffs();
+	//readCoeffs();
 	pthread_create(&commandThread_id,NULL,command_thread,NULL);
 	if(VERSION==1){
 		pthread_create(&packROACHpacket_thread_id,NULL,packROACHpacket_thread,NULL);

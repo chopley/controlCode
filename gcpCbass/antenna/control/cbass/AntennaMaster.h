@@ -191,11 +191,11 @@ namespace gcp {
 		      bool simPmac=false,
 		      bool simGpib=false,
 		      bool simDlp=false,
-		      bool simBackend=true,
 		      bool priv=true,
 		      bool simLna=false,
 		      bool simAdc=false,
-		      bool simRoach=false);
+		      bool simRoach1=false,
+		      bool simRoach2=false);
 	
 	/**
 	 * Destructor
@@ -414,8 +414,9 @@ namespace gcp {
 	bool simLna();
 	bool simAdc();
 	bool simDlp();
-	bool simBackend();
-	bool simRoach();
+	bool simRoach1();
+	bool simRoach2();
+
 
 	private:
 
@@ -442,11 +443,8 @@ namespace gcp {
 
 	// True if simulating a roach
 
-	bool simRoach_;
-
-	// True is simulating a backend
-
-	bool simBackend_;
+	bool simRoach1_;
+	bool simRoach2_;
 
 	/**
 	 * True if using thread priorities

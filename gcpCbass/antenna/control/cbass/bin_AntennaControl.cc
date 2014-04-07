@@ -25,10 +25,11 @@ KeyTabEntry Program::keywords[] = {
   { "simpmac",      "f",                        "b", "Simulate having a PMAC?"},
   { "simgpib",      "f",                        "b", "Simulate having a GPIB network?"},
   { "simdlp",       "f",                        "b", "Simulate having a DLP temperature sensor bus?"},
-  { "simbackend",   "f",                        "b", "Simulate having a backend?"},
   { "useprio",      "f",                        "b", "Run in privileged mode?"},
   { "simlna",       "f",                        "b", "Simulate having a LNA temperature sensor bus?"},
   { "simadc",       "f",                        "b", "Simulate the Labjack ADC?"},
+  { "simroach1",    "f",                        "b", "Simulate having roach1?"},
+  { "simroach2",    "f",                        "b", "Simulate having roach2?"},
   { END_OF_KEYWORDS},
 };
 
@@ -49,11 +50,11 @@ int Program::main(void)
 		       Program::getbParameter("simpmac"),
 		       Program::getbParameter("simgpib"),
 		       Program::getbParameter("simdlp"),
-		       Program::getbParameter("simbackend"),
 		       Program::getbParameter("useprio"),
 		       Program::getbParameter("simlna"),
-		       Program::getbParameter("simadc"))
-    ;
+		       Program::getbParameter("simadc"),
+		       Program::getbParameter("simroach1"),
+		       Program::getbParameter("simroach2"));
 
   return 0;
 }

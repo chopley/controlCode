@@ -7,7 +7,9 @@ FIXED scanStart -18 45
 FIXED ncpfixed  0 37:14:02
 FIXED scpfixed  -180 25:53:23.105
 FIXED colltower  27.85 10.2
-  
+FIXED trigpoint   16.0 6.5
+#FIXED trigpoint  17 11:30:00
+#FIXED trigpointOpp  -163 11.5
 FIXED SES5 315 50
 
  
@@ -1428,13 +1430,13 @@ J2000 npole2000   00:00:00.0     90:00:00
 
 # Planets.
 
-EPHEM sun      $CBASS_DIR/control/ephem/sun.ephem
-EPHEM venus    $CBASS_DIR/control/ephem/venus.ephem
-EPHEM mars     $CBASS_DIR/control/ephem/mars.ephem
-EPHEM jupiter  $CBASS_DIR/control/ephem/jupiter.ephem
-EPHEM saturn   $CBASS_DIR/control/ephem/saturn.ephem
-EPHEM uranus   $CBASS_DIR/control/ephem/uranus.ephem
-EPHEM moon     $CBASS_DIR/control/ephem/moon.ephem
+EPHEM sun      $CBASS_DIR/control/ephem/sun_15yr.ephem
+EPHEM venus    $CBASS_DIR/control/ephem/venus_15yr.ephem
+EPHEM mars     $CBASS_DIR/control/ephem/mars_15yr.ephem
+EPHEM jupiter  $CBASS_DIR/control/ephem/jupiter_15yr.ephem
+EPHEM saturn   $CBASS_DIR/control/ephem/saturn_15yr.ephem
+EPHEM uranus   $CBASS_DIR/control/ephem/uranus_15yr.ephem
+EPHEM moon     $CBASS_DIR/control/ephem/moon_15yr.ephem
 
 # The VLA catalog of calibrators.
 

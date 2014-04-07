@@ -801,8 +801,8 @@ void RoachBackend::getData()
       TL1_[currentIndex_][j] = command_.TL1_[i][j];
       TL2_[currentIndex_][j] = command_.TL2_[i][j];
     };
-	for(j=0;j<128;j++){
-	Coeffs_[j]= command_.Coeffs_[j];
+	for(j=0;j<32*8*2;j++){ //64 channels, four channels, real and imaginary- this is implemented on the roach as 32 even channels even and 32 odd channels-> the four channels now become 8 channels and we still have real an imaginary 
+ 		Coeffs_[j]= command_.Coeffs_[j];
 	}
 #if(0) 
     COUT(" LL_: "  << LL_[currentIndex_][32] << "switchStat " << switchstatus_[currentIndex_] << "tstart_ " << tstart_[currentIndex_]);
@@ -1139,7 +1139,7 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
   static float channel[CHANNELS_PER_ROACH];
   
   static float buffBacklog[RECEIVER_SAMPLES_PER_FRAME];
-  static float Coeffs[CHANNELS_PER_ROACH*2];
+  static float Coeffs[CHANNELS_PER_ROACH*4*2];
 
   // zero our average containers
   for (i=0;i<CHANNELS_PER_ROACH;i++){
@@ -1248,9 +1248,11 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
   share_->writeReg(roachFPGAClockStamp_, &fpgaClockStamp[0]);
   // next the  averages:
   // first the frequency
+#if 0
+  // sjcm:  this might be messed up, but I don't see how
   index = prevSecStart_;
-    for(j=0;j<CHANNELS_PER_ROACH;j++){
-  	for (i=0;i<RECEIVER_SAMPLES_PER_FRAME;i++){
+  for(j=0;j<CHANNELS_PER_ROACH;j++){
+    for (i=0;i<RECEIVER_SAMPLES_PER_FRAME;i++){
       LLfreqAvg[i]  += (LL_[index][j]/CHANNELS_PER_ROACH);
       RRfreqAvg[i]  += (RR_[index][j]/CHANNELS_PER_ROACH);
       QfreqAvg[i]   += (Q_[index][j]/CHANNELS_PER_ROACH);
@@ -1262,20 +1264,38 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
     if(index >= RING_BUFFER_LENGTH){
       index = 0;
     }
-    
   };
+
+#endif // try this instead.
+  index = prevSecStart_;  
+  for (i=0;i<RECEIVER_SAMPLES_PER_FRAME;i++){
+    for(j=0;j<CHANNELS_PER_ROACH;j++){
+      LLfreqAvg[i]  += (LL_[index][j]/( (float) (CHANNELS_PER_ROACH) ));
+      RRfreqAvg[i]  += (RR_[index][j]/( (float) (CHANNELS_PER_ROACH) ));
+      QfreqAvg[i]   += (Q_[index][j]/( (float) (CHANNELS_PER_ROACH) ));
+      UfreqAvg[i]   += (U_[index][j]/( (float) (CHANNELS_PER_ROACH) ));
+      TL1freqAvg[i] += (TL1_[index][j]/( (float) (CHANNELS_PER_ROACH) ));
+      TL2freqAvg[i] += (TL2_[index][j]/( (float) (CHANNELS_PER_ROACH) ));
+    }
+    index++;
+    if(index >= RING_BUFFER_LENGTH){
+      index = 0;
+    }
+  };
+  
+
 
   // now the time
   for (i=0;i<CHANNELS_PER_ROACH;i++){
     index = prevSecStart_;
     for(j=0;j<RECEIVER_SAMPLES_PER_FRAME;j++){
-      LLtimeAvg[i]  += (LL_[index][i]/RECEIVER_SAMPLES_PER_FRAME);
-      RRtimeAvg[i]  += (RR_[index][i]/RECEIVER_SAMPLES_PER_FRAME);
-      QtimeAvg[i]   += (Q_[index][i]/RECEIVER_SAMPLES_PER_FRAME);
-      UtimeAvg[i]   += (U_[index][i]/RECEIVER_SAMPLES_PER_FRAME);
-      TL1timeAvg[i] += (TL1_[index][i]/RECEIVER_SAMPLES_PER_FRAME);
-      TL2timeAvg[i] += (TL2_[index][i]/RECEIVER_SAMPLES_PER_FRAME);
-      Coeffs[i] = (float)Coeffs_[i]; 
+      LLtimeAvg[i]  += (LL_[index][i]/(float)RECEIVER_SAMPLES_PER_FRAME);
+      RRtimeAvg[i]  += (RR_[index][i]/(float)RECEIVER_SAMPLES_PER_FRAME);
+      QtimeAvg[i]   += (Q_[index][i]/(float)RECEIVER_SAMPLES_PER_FRAME);
+      UtimeAvg[i]   += (U_[index][i]/(float)RECEIVER_SAMPLES_PER_FRAME);
+      TL1timeAvg[i] += (TL1_[index][i]/(float)RECEIVER_SAMPLES_PER_FRAME);
+      TL2timeAvg[i] += (TL2_[index][i]/(float)RECEIVER_SAMPLES_PER_FRAME);
+ //     Coeffs[i] = (float)Coeffs_[i]-65536; 
       index++;
       if(index >= RING_BUFFER_LENGTH){
 	index = 0;
@@ -1410,7 +1430,7 @@ void RoachBackend::Assign3DRingMemory()
   intLength_.resize(RING_BUFFER_LENGTH);
   mode_.resize(RING_BUFFER_LENGTH);
   res2_.resize(RING_BUFFER_LENGTH);
-  Coeffs_.resize(64*2);
+  Coeffs_.resize(32*8*2);
 
 #if(0)
   LL_.resize(RING_BUFFER_LENGTH);
@@ -1482,7 +1502,7 @@ void RoachBackend::Assign2DRingMemory()
   mode_.resize(RING_BUFFER_LENGTH);
   res2_.resize(RING_BUFFER_LENGTH);
 
-  Coeffs_.resize(64*2);
+  Coeffs_.resize(32*8*2);
 
   LL_.resize(RING_BUFFER_LENGTH);
   for (int i = 0; i < RING_BUFFER_LENGTH; ++i) {

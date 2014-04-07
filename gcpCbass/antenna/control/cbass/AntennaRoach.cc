@@ -29,7 +29,7 @@ AntennaRoach* AntennaRoach::antennaRoach_ = 0;
 /**.......................................................................
  * Create an AntennaRoach class
  */
-AntennaRoach::AntennaRoach(AntennaMaster* parent, bool simRoach) :
+AntennaRoach::AntennaRoach(AntennaMaster* parent, bool simRoach1, bool simRoach2) :
   SpecificTask(), gcp::util::GenericTask<AntennaRoachMsg>::GenericTask()
 { 
   // Initialize internal pointers
@@ -39,24 +39,30 @@ AntennaRoach::AntennaRoach(AntennaMaster* parent, bool simRoach) :
   antennaRoach_ = 0;
   roach1_    = 0;
   roach2_    = 0;
-  sim_       = simRoach;
+  simRoach1_ = simRoach1;
+  simRoach2_ = simRoach2;
 
   // Keep a pointer to the parent task resources
+  //  COUT("simroach1, 2: " << simRoach1 << " , " < simRoach2);
   
   parent_ = parent;
-
   if(parent_){
     share_  = parent->getShare();
-    roach1_ = new RoachBackend(share_, "roach1", simRoach, "pumba", 1);
-    roach2_ = new RoachBackend(share_, "roach2", simRoach, "timon", 1);
-//CJC- switch the ROACHES around to see if the dropouts correspond to hardware or GCP
-   // roach1_ = new RoachBackend(share_, "roach1", simRoach, "timon", 1);
-   // roach2_ = new RoachBackend(share_, "roach2", simRoach, "pumba", 1);
+    if(!simRoach1){
+      COUT("starting roach1");
+      roach1_ = new RoachBackend(share_, "roach1", false, "pumba", 1);
+    }
+    if(!simRoach2){
+      COUT("starting roach2");
+      roach2_ = new RoachBackend(share_, "roach2", false, "timon", 1);
+    }
   } else {
-    roach1_ = new RoachBackend(simRoach, "pumba");
-    roach2_ = new RoachBackend(simRoach, "timon");
-   // roach1_ = new RoachBackend(simRoach, "timon");
-   // roach2_ = new RoachBackend(simRoach, "pumba");
+    if(!simRoach1){
+      roach1_ = new RoachBackend(false, "pumba");
+    }
+    if(!simRoach2){
+      roach2_ = new RoachBackend(false, "timon");
+    }
   };
 
   antennaRoach_ = this;
@@ -74,9 +80,11 @@ AntennaRoach::AntennaRoach(AntennaMaster* parent) :
   antennaRoach_ = 0;
   roach1_    = 0;
   roach2_    = 0;
+  simRoach1_ = false;
+  simRoach2_ = false;
 
   // Keep a pointer to the parent task resources
-  
+
   parent_ = parent;
 
   if(parent_){
@@ -117,117 +125,124 @@ void AntennaRoach::processMsg(AntennaRoachMsg* msg)
   delay.tv_sec  =       0;
   delay.tv_nsec = 2000000;
 	
-  
-  if(sim_){
-    return;
-  }
-
   switch (msg->type) {
   case AntennaRoachMsg::CONNECT:
-    CTOUT("in AntennaRoach: got CONNECT command");
-    // if we're connected, don't do it.
-    if(!roach1_->connected_){
-      // try to connect
-      roach1_->connect();
-      if(roach1_->connected_){
-	COUT("just connected to the first roach");
-	//	sendRoachConnectedMsg(true);
+    if(roach1_) {
+      if(!roach1_->connected_){
+	// try to connect
+	roach1_->connect();
+	if(roach1_->connected_){
+	  COUT("just connected to the first roach");
+	  sendRoachConnectedMsg(true);
+	}
       }
     }
-#if(HAVE_ROACH2)
-    if(!roach2_->connected_){
-      // try to connect
-      roach2_->connect();
-      if(roach2_->connected_){
-	COUT("just connected to the second roach");
+    if(roach2_) {
+      if(!roach2_->connected_){
+	// try to connect
+	roach2_->connect();
+	if(roach2_->connected_){
+	  COUT("just connected to the second roach");
+	  sendRoachConnectedMsg(true);
+	}
       }
     }
-#endif
-    if(roach1_->connected_ & roach2_->connected_){
-      sendRoachConnectedMsg(true);
-    } else {
-      sendRoachConnectedMsg(false);      
+
+    if(!simRoach1_ & !simRoach2_) {
+      if(roach1_->connected_ & roach2_->connected_){
+	sendRoachConnectedMsg(true);
+      } else {
+	sendRoachConnectedMsg(false);      
+      }
     }
     break;
 
   case AntennaRoachMsg::DISCONNECT:
-    CTOUT("in AntennaRoach: got DISCONNECT command");
-    roach1_->disconnect();
-    if(!roach1_->connected_){
-      COUT("just disconnected from roach1");
-    }
-#if(HAVE_ROACH2)
-    roach2_->disconnect();
-    if(!roach2_->connected_){
-      COUT("just disconnected from roach2");
-    }
-#endif
-    if( (!roach1_->connected_) & (!roach2_->connected_)){
-      sendRoachConnectedMsg(false);
-    } else {
-      sendRoachConnectedMsg(true);      
+    if(roach1_){
+      roach1_->disconnect();
+      if(!roach1_->connected_){
+	COUT("just disconnected from roach1");
+      }
     }
 
+    if(roach2_){
+      roach2_->disconnect();
+      if(!roach2_->connected_){
+	COUT("just disconnected from roach2");
+      }
+    }
 
+    if(!simRoach1_ & !simRoach2_) {
+      if( (!roach1_->connected_) & (!roach2_->connected_)){
+	sendRoachConnectedMsg(false);
+      } else {
+	sendRoachConnectedMsg(true);      
+      }
+    }
     break;
     
   case AntennaRoachMsg::READ_DATA:
     //    CTOUT("in AntennaRoach: got READ_DATA command");
-    if(roach1_->roachIsConnected()){
-      try{
-	nanosleep(&delay, 0);
-	roach1_->getData();
-      } catch(...) {
-	// we're not connected
-	roach1_->disconnect();
-	sendRoachConnectedMsg(false);
-      }  
-      //check to see if still connected -- shoudlbe obsolte right now.
-      if(roach1_->missedCommCounter_ > BACKEND_MISSED_COMM_LIMIT){
-	ReportSimpleError("Roach1 not communicating.  Killing connection");
-	CTOUT("Roach1 not communicating.  Killing connection");
-	roach1_->disconnect();
-	sendRoachConnectedMsg(false);
+    if(roach1_){
+      if(roach1_->roachIsConnected()){
+	try{
+	  nanosleep(&delay, 0);
+	  roach1_->getData();
+	} catch(...) {
+	  // we're not connected
+	  roach1_->disconnect();
+	  sendRoachConnectedMsg(false);
+	}  
+	//check to see if still connected -- shoudlbe obsolte right now.
+	if(roach1_->missedCommCounter_ > BACKEND_MISSED_COMM_LIMIT){
+	  ReportSimpleError("Roach1 not communicating.  Killing connection");
+	  CTOUT("Roach1 not communicating.  Killing connection");
+	  roach1_->disconnect();
+	  sendRoachConnectedMsg(false);
+	};
+      } else { 
+	COUT("AntennaRoach: roach1 not connected, not reading data");
       };
-    } else { 
-      COUT("AntennaRoach: roach1 not connected, not reading data");
-    };
-#if(HAVE_ROACH2)
-    if(roach2_->roachIsConnected()){
-      try {
-	nanosleep(&delay, 0);
-	roach2_->getData();
-      } catch(...) {
-	roach2_->disconnect();
-	sendRoachConnectedMsg(false);
-      }
-      //check to see if still connected
-      if(roach2_->missedCommCounter_ > BACKEND_MISSED_COMM_LIMIT){
-	ReportSimpleError("Roach2 not communicating.  Killing connection");
-	roach2_->disconnect();
-	sendRoachConnectedMsg(false);
-      };
-    } else {
-      COUT("AntennaRoach::roach2 not connected, not reading data");
     }
-#endif
+
+    if(roach2_){
+      if(roach2_->roachIsConnected()){
+	try {
+	  nanosleep(&delay, 0);
+	  roach2_->getData();
+	} catch(...) {
+	  roach2_->disconnect();
+	  sendRoachConnectedMsg(false);
+	}
+	//check to see if still connected
+	if(roach2_->missedCommCounter_ > BACKEND_MISSED_COMM_LIMIT){
+	  ReportSimpleError("Roach2 not communicating.  Killing connection");
+	  roach2_->disconnect();
+	  sendRoachConnectedMsg(false);
+	};
+      } else {
+	COUT("AntennaRoach::roach2 not connected, not reading data");
+      }
+    }
     break;
     
   case AntennaRoachMsg::WRITE_DATA:
     currTime.setTime(msg->currTime_);
-    if(roach1_->roachIsConnected()) {
-      roach1_->writeData(currTime);
-    } else {
-      CTOUT("AntennaRoach:: roach1 not connected, not writing data");
+    if(roach1_){
+      if(roach1_->roachIsConnected()) {
+	roach1_->writeData(currTime);
+      } else {
+	CTOUT("AntennaRoach:: roach1 not connected, not writing data");
+      }
     }
-#if(HAVE_ROACH2)
-    currTime.setTime(msg->currTime_);
-    if(roach2_->roachIsConnected()){
-      roach2_->writeData(currTime);
-    } else {
-      CTOUT("AntennaRoach:: roach2 not connected, not writing data");
-    };
-#endif
+    if(roach2_){
+      currTime.setTime(msg->currTime_);
+      if(roach2_->roachIsConnected()){
+	roach2_->writeData(currTime);
+      } else {
+	CTOUT("AntennaRoach:: roach2 not connected, not writing data");
+      };
+    }
     break;
     
   case AntennaRoachMsg::ROACH_CMD:
@@ -270,73 +285,79 @@ void AntennaRoach::executeRoachCmd(AntennaRoachMsg* msg)
 
   switch(msg->body.roach.roachNum){
   case 0:
-    // it's a message for the first roach
-    if(!roach1_->connected_){
-      COUT("First roach not connected.   Will not execute");
-    } else {
-      // pack the command
-      COUT("stringsize: " << os.str().size());
-      roach1_->command_.packRoachCmdMsg(os.str());
-      COUT("COMMAND TO SEND to roach 1: " << roach1_->command_.messageToSend_);
-      try{
-	roach1_->issueCommand(roach1_->command_);
-      } catch (...) {
-	COUT("ROACH1 NOT CONNECTED");
-	roach1_->disconnect();
-	sendRoachConnectedMsg(false);
+    if(roach1_){
+      // it's a message for the first roach
+      if(!roach1_->connected_){
+	COUT("First roach not connected.   Will not execute");
+      } else {
+	// pack the command
+	COUT("stringsize: " << os.str().size());
+	roach1_->command_.packRoachCmdMsg(os.str());
+	COUT("COMMAND TO SEND to roach 1: " << roach1_->command_.messageToSend_);
+	try{
+	  roach1_->issueCommand(roach1_->command_);
+	} catch (...) {
+	  COUT("ROACH1 NOT CONNECTED");
+	  roach1_->disconnect();
+	  sendRoachConnectedMsg(false);
+	}
       }
     }
     break;
-
+    
   case 1:
     // it's a message for the second roach
-    if(!roach2_->connected_){
-      COUT("Second roach not connected.   Will not execute");
-    } else {
-      // pack the command
-      roach2_->command_.packRoachCmdMsg(os.str());
-      COUT("roach2 COMMAND TO SEND: " << roach2_->command_.messageToSend_);
-      try{
-	roach2_->issueCommand(roach2_->command_);
-      } catch (...) {
-	COUT("ROACH2 NOT CONNECTED");
-	roach2_->disconnect();
-	sendRoachConnectedMsg(false);
-      }
+    if(roach2_){
+      if(!roach2_->connected_){
+	COUT("Second roach not connected.   Will not execute");
+      } else {
+	// pack the command
+	roach2_->command_.packRoachCmdMsg(os.str());
+	COUT("roach2 COMMAND TO SEND: " << roach2_->command_.messageToSend_);
+	try{
+	  roach2_->issueCommand(roach2_->command_);
+	} catch (...) {
+	  COUT("ROACH2 NOT CONNECTED");
+	  roach2_->disconnect();
+	  sendRoachConnectedMsg(false);
+	}
+      };
     };
     break;
-
+    
   case 2:
-    if(!roach1_->connected_){
-      COUT("First roach not connected.   Will not execute");
-    } else {
-      // pack the command
-      roach1_->command_.packRoachCmdMsg(os.str());
-      try{
-	roach1_->issueCommand(roach1_->command_);
-      } catch (...) {
-	COUT("ROACH1 NOT CONNECTED");
-	roach1_->disconnect();
-	sendRoachConnectedMsg(false);
+    if(roach1_){
+      if(!roach1_->connected_){
+	COUT("First roach not connected.   Will not execute");
+      } else {
+	// pack the command
+	roach1_->command_.packRoachCmdMsg(os.str());
+	try{
+	  roach1_->issueCommand(roach1_->command_);
+	} catch (...) {
+	  COUT("ROACH1 NOT CONNECTED");
+	  roach1_->disconnect();
+	  sendRoachConnectedMsg(false);
+	}
       }
     }
 
     // it's a message for the second roach
-    if(!roach2_->connected_){
-      COUT("Second roach not connected.   Will not execute");
-    } else {
-      // pack the command
-      roach2_->command_.packRoachCmdMsg(os.str());
-      try{
-	roach2_->issueCommand(roach2_->command_);
-      } catch (...) {
-	COUT("ROACH2 NOT CONNECTED");
-	roach2_->disconnect();
-	sendRoachConnectedMsg(false);
-      }
+    if(roach2_){
+      if(!roach2_->connected_){
+	COUT("Second roach not connected.   Will not execute");
+      } else {
+	// pack the command
+	roach2_->command_.packRoachCmdMsg(os.str());
+	try{
+	  roach2_->issueCommand(roach2_->command_);
+	} catch (...) {
+	  COUT("ROACH2 NOT CONNECTED");
+	  roach2_->disconnect();
+	  sendRoachConnectedMsg(false);
+	}
+      };
     };
-
-
   }  
   return;
 }

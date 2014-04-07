@@ -639,8 +639,9 @@ static RegBlockTemp cbassRoach1[] = {
   RegBlockTemp("Roach FPGA Clock",
 	       "fpgaClockStamp", "", REG_FAST|REG_FLOAT, 0, 1, RECEIVER_SAMPLES_PER_FRAME),
   
+  
   RegBlockTemp("Roach Coefficients",
-	       "roachCof", "", REG_FLOAT, 0, 64*2, 1),
+	      "roachCof", "", REG_FLOAT, 0, 32*8*2, 1), //32 channels (channels are split into odd and even) * 8 (4 total signal chains and odd/even of both) * 2 (for real/imaginary coefficients
   
 };
 
@@ -738,7 +739,7 @@ static RegBlockTemp cbassRoach2[] = {
 	       "fpgaClockStamp", "", REG_FAST|REG_FLOAT, 0, 1, RECEIVER_SAMPLES_PER_FRAME),
   
   RegBlockTemp("Roach Coefficients",
-	       "roachCof", "", REG_FLOAT, 0, 64*2, 1),
+	       "roachCof", "", REG_FLOAT, 0, 32*8*2, 1), //32 channels (channels are split into odd and even) * 8 (4 total signal chains and odd/even of both) * 2 (for real/imaginary coefficients
 };
 
 //-----------------------------------------------------------------------

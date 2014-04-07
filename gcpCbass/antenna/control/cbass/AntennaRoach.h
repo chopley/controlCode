@@ -48,7 +48,7 @@ namespace gcp {
 	 * Constructor. 
 	 */
 	AntennaRoach(AntennaMaster* parent);
-	AntennaRoach(AntennaMaster* parent, bool simRoach);
+	AntennaRoach(AntennaMaster* parent, bool simRoach1, bool simRoach2);
 	
 	/**
 	 * Destructor.
@@ -62,7 +62,8 @@ namespace gcp {
 	RoachBackend* roach1_;
 	RoachBackend* roach2_;
 
-	bool sim_;
+	bool simRoach1_;
+	bool simRoach2_;
 
 	private:
 
