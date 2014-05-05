@@ -1144,7 +1144,9 @@ void *packROACHpacket_thread(void *arg){
 		statusBit=globalStatus;*/
 		cbassPKT.buffBacklog[packedDataCounter]=bufferptr->count;
 		cbassPKT.tstart[packedDataCounter]=timeStamp;//packet timestamp
-		cbassPKT.tsecond[packedDataCounter]=t2.tv_sec-1381491125;//packet timestamp in ROACH second time
+//		cbassPKT.tsecond[packedDataCounter]=t2.tv_sec-1381491125;//packet timestamp in ROACH second time
+		cbassPKT.tsecond[packedDataCounter]=t2.tv_sec-1398483573;//packet timestamp in ROACH second time //updated 26/4/2014
+
 	//	cbassPKT.tsecond[packedDataCounter]=t2.tv_sec;//packet timestamp in ROACH second time
 		cbassPKT.tusecond[packedDataCounter]=t2.tv_usec;//packet timestamp in ROACH second time
 		//cbassPKT.tsecond[packedDataCounter]=packedDataCounter;//packet timestamp in ROACH second time
