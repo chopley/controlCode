@@ -809,7 +809,7 @@ void RoachBackend::getData()
 #endif
     // check that we're on to a new second                                              
     if(thisTime < prevTime_) {
-      COUT("thisTime, prevTime " << thisTime << "  ," << prevTime_);
+     // COUT("thisTime, prevTime " << thisTime << "  ," << prevTime_);
       prevSecEnd_   = currentIndex_ - 1;
       if(prevSecEnd_ < 0)
 	prevSecEnd_ = (RING_BUFFER_LENGTH-1);  // it's an index, starting from zero.     

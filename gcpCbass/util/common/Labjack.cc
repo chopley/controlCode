@@ -119,7 +119,7 @@ bool Labjack::connect(int serialNumber)
 	//	COUT("THIS SERIAL: " << serial);
 	if( serial == localID ){ 
 	  hDevice_  = hDevice_;
-	  COUT("Found our device");
+	  //COUT("Found our device");
 	  //now we get the calibration information that we watn
 	  getCalibrationInfo();
 	  connected_ = true;
@@ -151,7 +151,7 @@ bool Labjack::connect(int serialNumber)
 void Labjack::disconnect()
 {
   // Before we are connected, the fd will be initialized to -1
-  CTOUT("Disconnecting the labjack device");
+  //CTOUT("Disconnecting the labjack device");
   if(connected_ ==true){
     LJUSB_CloseDevice(hDevice_);
     connected_ = false;

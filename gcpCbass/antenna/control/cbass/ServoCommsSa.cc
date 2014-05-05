@@ -469,7 +469,7 @@ int ServoCommsSa::readTCPPort(ServoCommandSa& command)
 
     waitResponseRet=waitForResponse();
 
-	COUT("waitResponseRet = "<<waitResponseRet);
+	//COUT("waitResponseRet = "<<waitResponseRet);
     ioctl_state=ioctl(fd_, FIONREAD, &nbyte);
     
     for(i=0;i < nbyte;i++) {

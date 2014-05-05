@@ -79,7 +79,7 @@ int RoachBackendMsg::packetizeNetworkMsg()
   }
   for(i=0;i<NUM_ROACH_INTEGRATION_PER_TRANSFER;i++){
     tstart_[i] = ntohl(packet_.tstart[i]);
-    COUT("starts" <<i << "---"  << tstart_[i]);
+   // COUT("starts" <<i << "---"  << tstart_[i]);
   }
   
   for(i=0;i<NUM_ROACH_INTEGRATION_PER_TRANSFER; i++){
