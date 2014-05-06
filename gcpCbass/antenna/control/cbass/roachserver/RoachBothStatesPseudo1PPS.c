@@ -644,9 +644,11 @@ void *packROACHpacket_thread(void *arg){
         struct UDPCBASSpkt pkt;
         struct timeval t1,t2;
 	double timediff,timediff_usec,tottimediff;
+	char path_sync_max[128];			// Path to acc_num counter data
 	char path_acc_cnt[128];			// Path to acc_num counter data
 	char path_acc_len[128];			// Path to acc_num counter data
 	char path_cnt_rst[128];			// Path to acc_num counter data
+	char path_sync_rst[128];			// Path to sync rst
 	char path_sync_en[128];			// Path to acc_num counter data
 	char path_ctrl_sw[128];			// Path to acc_num counter data
 	char path_timeStamp[128];			// Path to acc_num counter data
@@ -744,10 +746,12 @@ void *packROACHpacket_thread(void *arg){
 
 	if(VERSION==1){
 		sprintf(path_acc_cnt, "/proc/%s/hw/ioreg/Subsystem1_readAccumulation", job[1]);
+		sprintf(path_sync_max, "/proc/%s/hw/ioreg/sync_max", job[1]);
 		sprintf(path_acc_len, "/proc/%s/hw/ioreg/acc_len", job[1]);
 		sprintf(path_cnt_rst, "/proc/%s/hw/ioreg/cnt_rst", job[1]);
 		sprintf(path_sync_en, "/proc/%s/hw/ioreg/sync_en", job[1]);
 		sprintf(path_sync_cnt, "/proc/%s/hw/ioreg/sync_en", job[1]);
+		sprintf(path_sync_rst, "/proc/%s/hw/ioreg/sync_rst", job[1]);
 		sprintf(path_timeStamp, "/proc/%s/hw/ioreg/Subsystem1_timeStamp", job[1]);
 		sprintf(path_channel1evenMSB, "/proc/%s/hw/ioreg/Subsystem1_ch1_msb", job[1]);
 		sprintf(path_channel2evenMSB, "/proc/%s/hw/ioreg/Subsystem1_ch3_msb", job[1]);
@@ -802,6 +806,7 @@ void *packROACHpacket_thread(void *arg){
 		sprintf(path_cnt_rst, "/proc/%s/hw/ioreg/cnt_rst", job[1]);
 		sprintf(path_sync_en, "/proc/%s/hw/ioreg/sync_en", job[1]);
 		sprintf(path_sync_cnt, "/proc/%s/hw/ioreg/sync_en", job[1]);
+		sprintf(path_sync_rst, "/proc/%s/hw/ioreg/sync_rst", job[1]);
 		sprintf(path_timeStamp, "/proc/%s/hw/ioreg/Subsystem1_timeStamp", job[1]);
 	///////////////////////////////////////
 		sprintf(path_channel1evenMSB, "/proc/%s/hw/ioreg/Subsystem1_ch1_msb", job[1]);
@@ -841,10 +846,10 @@ void *packROACHpacket_thread(void *arg){
 		sprintf(path_acc_sync_delay, "/proc/%s/hw/ioreg/acc_sync_delay", job[1]);
 		sprintf(path_ctrl_sw, "/proc/%s/hw/ioreg/ctrl_sw", job[1]);
 		sprintf(path_enablePhaseSwitch, "/proc/%s/hw/ioreg/enablePhaseSwitch", job[1]);
-		sprintf(path_phaseFrequency, "/proc/%s/hw/ioreg/phaseFrequency", job[1]);
+		sprintf(path_phaseFrequency, "/proc/%s/hw/ioreg/phaseFrequency", job[1]);//comment out
 		sprintf(path_demodPhaseSwitch1, "/proc/%s/hw/ioreg/demodPhaseSwitch1", job[1]);
 		sprintf(path_phaseDelay2, "/proc/%s/hw/ioreg/phaseDelay2", job[1]);
-		sprintf(path_Demod_transL, "/proc/%s/hw/ioreg/Demod_transL", job[1]);
+		sprintf(path_Demod_transL, "/proc/%s/hw/ioreg/Demod_transL", job[1]);//comment out
 		sprintf(path_status, "/proc/%s/hw/ioreg/statusReadout", job[1]);
 		sprintf(path_demodulate, "/proc/%s/hw/ioreg/demodPhaseSwitch1", job[1]);
 	}
@@ -864,6 +869,15 @@ void *packROACHpacket_thread(void *arg){
 	if(VERSION==1){	
 		fp = fopen(path_gpioMode, "w"); 
 		writeVal=0;
+		fwrite(&writeVal, 4, 1, fp);
+		fclose(fp);
+//if(timeStamp>=249996800){
+
+//              if(timeStamp>=240096000){
+
+
+		fp = fopen(path_sync_max, "w"); 
+		writeVal=249996900;
 		fwrite(&writeVal, 4, 1, fp);
 		fclose(fp);
 	}
@@ -924,20 +938,20 @@ void *packROACHpacket_thread(void *arg){
 		fwrite(&writeVal, 4, 1, fp);
 		fclose(fp);
 		
-		fp = fopen(path_phaseFrequency, "w"); 
-		writeVal=600;
-		fwrite(&writeVal, 4, 1, fp);
-		fclose(fp);
+	//	fp = fopen(path_phaseFrequency, "w"); 
+	//	writeVal=600;
+	//	fwrite(&writeVal, 4, 1, fp);
+	//	fclose(fp);
 
 		fp = fopen(path_phaseDelay2, "w"); 
 		writeVal=30;
 		fwrite(&writeVal, 4, 1, fp);
 		fclose(fp);
 		
-		fp = fopen(path_Demod_transL, "w"); 
-		writeVal=7;
-		fwrite(&writeVal, 4, 1, fp);
-		fclose(fp);
+//		fp = fopen(path_Demod_transL, "w"); 
+//		writeVal=7;
+//		fwrite(&writeVal, 4, 1, fp);
+//		fclose(fp);
 	 
 		fp = fopen(path_cnt_rst, "w"); 
 	//	writeVal=0;
@@ -1144,6 +1158,19 @@ void *packROACHpacket_thread(void *arg){
 		statusBit=globalStatus;*/
 		cbassPKT.buffBacklog[packedDataCounter]=bufferptr->count;
 		cbassPKT.tstart[packedDataCounter]=timeStamp;//packet timestamp
+		//if(timeStamp>=249996800){
+
+//		if(timeStamp>=240096000){
+//			//implement 1PPS override
+//			fp = fopen(path_cnt_rst, "w");
+//				printf("timeStamp > than\n"); 
+//				writeVal=4294967296;
+//				fwrite(&writeVal, 4, 1, fp);
+//				writeVal=0;
+//				fwrite(&writeVal, 4, 1, fp);
+//			fclose(fp);
+
+	//	}
 //		cbassPKT.tsecond[packedDataCounter]=t2.tv_sec-1381491125;//packet timestamp in ROACH second time
 		cbassPKT.tsecond[packedDataCounter]=t2.tv_sec-1398483573;//packet timestamp in ROACH second time //updated 26/4/2014
 
@@ -1323,7 +1350,7 @@ void *packROACHpacket_thread(void *arg){
 		}
 
 
-		}
+	}	
 	cb_free(bufferptr); //free the circular buffer
 
 
@@ -1470,10 +1497,10 @@ void *packROACHpacket_threadPower(void *arg){
 	sprintf(path_acc_sync_delay, "/proc/%s/hw/ioreg/acc_sync_delay", job[1]);
 	sprintf(path_ctrl_sw, "/proc/%s/hw/ioreg/ctrl_sw", job[1]);
 	sprintf(path_enablePhaseSwitch, "/proc/%s/hw/ioreg/enablePhaseSwitch", job[1]);
-	sprintf(path_phaseFrequency, "/proc/%s/hw/ioreg/phaseFrequency", job[1]);
-	sprintf(path_demodPhaseSwitch1, "/proc/%s/hw/ioreg/demodPhaseSwitch1", job[1]);
+	sprintf(path_phaseFrequency, "/proc/%s/hw/ioreg/phaseFrequency", job[1]); //comment out
+	sprintf(path_demodPhaseSwitch1, "/proc/%s/hw/ioreg/demodPhaseSwitch1", job[1]); 
 	sprintf(path_phaseDelay2, "/proc/%s/hw/ioreg/phaseDelay2", job[1]);
-	sprintf(path_Demod_transL, "/proc/%s/hw/ioreg/Demod_transL", job[1]);
+	sprintf(path_Demod_transL, "/proc/%s/hw/ioreg/Demod_transL", job[1]); //comment out
 	sprintf(path_status, "/proc/%s/hw/ioreg/statusReadout", job[1]);
 	sprintf(path_demodulate, "/proc/%s/hw/ioreg/demodPhaseSwitch1", job[1]);
 
@@ -1515,20 +1542,20 @@ void *packROACHpacket_threadPower(void *arg){
 	fwrite(&writeVal, 4, 1, fp);
 	fclose(fp);
 	
-	fp = fopen(path_phaseFrequency, "w"); 
-	writeVal=600;
-	fwrite(&writeVal, 4, 1, fp);
-	fclose(fp);
+//	fp = fopen(path_phaseFrequency, "w"); 
+//	writeVal=600;
+//	fwrite(&writeVal, 4, 1, fp);
+//	fclose(fp);
 
 	fp = fopen(path_phaseDelay2, "w"); 
 	writeVal=30;
 	fwrite(&writeVal, 4, 1, fp);
 	fclose(fp);
 	
-	fp = fopen(path_Demod_transL, "w"); 
-	writeVal=7;
-	fwrite(&writeVal, 4, 1, fp);
-	fclose(fp);
+//	fp = fopen(path_Demod_transL, "w"); 
+//	writeVal=7;
+//	fwrite(&writeVal, 4, 1, fp);
+//	fclose(fp);
  
 	fp = fopen(path_cnt_rst, "w"); 
 //	writeVal=0;
@@ -2166,8 +2193,8 @@ int main(int argc, char *argv[])
 	signal(SIGINT, cleanup);
 //define the names of the bof files used here- you also need to update a few instances later in the code that don't have the /boffiles/ prepended to the string- I need to fix this in due course.
 	//old one before 1PPS fix char* polProg="/boffiles/rx_10dec_stat_2013_Jan_11_1059.bof&";
-	char* polProg="/boffiles/rx_10dec_stat_2013_Jan_11_1059.bof&";
-//	char* polProg="/boffiles/rx_20140328_2014_Apr_01_1156.bof&";
+//	char* polProg="/boffiles/rx_10dec_stat_2013_Jan_11_1059.bof&";
+	char* polProg="/boffiles/rx_20140505_2014_May_06_1048.bof&";
 	char* powerProg="/boffiles/rx_10dec_stat_pow_2013_Jan_11_1408.bof&";
 ////
 	job[1]=argv[1];//global variable for access in the loop
@@ -2198,7 +2225,7 @@ int main(int argc, char *argv[])
 	}
 	//look for the appropriate PID
 	if(VERSION==1){
-		system("pidof -s rx_10dec_stat_2013_Jan_11_1059.bof > pid.txt");
+		system("pidof -s rx_20140505_2014_May_06_1048.bof > pid.txt");
 		//system("pidof -s rx_20140328_2014_Apr_01_1156.bof > pid.txt");
 	}
 	else if(VERSION==10000){
@@ -2243,7 +2270,7 @@ int main(int argc, char *argv[])
 	sleep(1);
 ////////////////////////////////////////////
 	if(VERSION==1){
-		system("pidof -s rx_10dec_stat_2013_Jan_11_1059.bof > pid.txt");
+		system("pidof -s rx_20140505_2014_May_06_1048.bof > pid.txt");
 		//system("pidof -s rx_20140328_2014_Apr_01_1156.bof > pid.txt");
 	}
 	else if(VERSION==10000){
