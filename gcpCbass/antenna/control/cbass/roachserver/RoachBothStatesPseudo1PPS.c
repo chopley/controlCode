@@ -1105,6 +1105,10 @@ void *packROACHpacket_thread(void *arg){
 		pthread_mutex_lock(&lock_packRoach);
 			closeThread2=0;
 		pthread_mutex_unlock(&lock_packRoach);
+	
+	for(i=0;i<=32*16-1;i++){
+			cbassPKT.coeffs[i]=Coffs[i];
+		}
 
 	while(1){
 		packedDataCounter++;
@@ -1117,9 +1121,6 @@ void *packROACHpacket_thread(void *arg){
 			cbassPKT.version=VERSION; //version numbers of the Polarisation begin at 0
 			cbassPKT.tend=t1.tv_usec;
 			cbassPKT.int_count=acc_new;
-		//or(i=0;i<=32*16-1;i++){
-		//cbassPKT.coeffs[i]=Coffs[i];
-		//
 		//	cbassPKT.buffBacklog=25;
 #if(1)
 			for(i=0;i<=9;i++){
@@ -1930,8 +1931,8 @@ int gainCorrection(struct tempDataPacket *pack,int MSBshift){
 		oddMSBch3[i]=(oddMSBch3[i]<<(MSBshift))|temp3>>(32-MSBshift);
 		oddMSBch4[i]=(oddMSBch4[i]<<(MSBshift))|temp4>>(32-MSBshift);
 		oddMSBch5[i]=(oddMSBch5[i]<<(MSBshift))|temp5>>(32-MSBshift);
-		oddMSBch1[i]+=65535;
-		oddMSBch2[i]+=65535;
+		oddMSBch1[i]+=65535; //this is to make sure the number is sent positive
+		oddMSBch2[i]+=65535;//this is to make sure the number is sent positive
 		temp0=(unsigned int)evenLSBch0[i];
 		temp1=(unsigned int)evenLSBch1[i];
 		temp2=(unsigned int)evenLSBch2[i];
@@ -1944,8 +1945,8 @@ int gainCorrection(struct tempDataPacket *pack,int MSBshift){
 		evenMSBch3[i]=(evenMSBch3[i]<<(MSBshift))|temp3>>(32-MSBshift);
 		evenMSBch4[i]=(evenMSBch4[i]<<(MSBshift))|temp4>>(32-MSBshift);
 		evenMSBch5[i]=(evenMSBch5[i]<<(MSBshift))|temp5>>(32-MSBshift);
-		evenMSBch1[i]+=65535;
-		evenMSBch2[i]+=65535;
+		evenMSBch1[i]+=65535;//this is to make sure the number is sent positive
+		evenMSBch2[i]+=65535;//this is to make sure the number is sent positive
 	}
 //	printf("LL = %d Q %d U %d \n",oddMSBch0[5],oddMSBch1[5],oddMSBch2[5]);
 	evenMSBch0[0]=0; //zero the DC Bin of Ch0
@@ -2105,8 +2106,9 @@ void readCoeffs(){
 		j=0;
 		readStat[0]=fread(&ampcoffs[0],sizeof(int),32,fpreg);
 		for(k=0;k<32;k++){
-	//		Coffs[32*i+k]=ampcoffs[k];
-			Coffs[32*i+k]=+5000;
+			Coffs[32*i+k]=ampcoffs[k];
+//			Coffs[32*i+k]=-6000; //is was a test piece of code
+			Coffs[32*i+k]+=65535; //I add this to make sure the number I sent will be positive. I subtract it on the other side.
 			printf("Coffs %ld \n",Coffs[32*i+k]);
 		}
 		
@@ -2314,7 +2316,7 @@ int main(int argc, char *argv[])
 		printf("\n mutex init buffer failed\n");
 		return 1;
 	    }
-	//readCoeffs();
+	readCoeffs();
 	pthread_create(&commandThread_id,NULL,command_thread,NULL);
 	if(VERSION==1){
 		pthread_create(&packROACHpacket_thread_id,NULL,packROACHpacket_thread,NULL);

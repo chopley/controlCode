@@ -802,7 +802,7 @@ void RoachBackend::getData()
       TL2_[currentIndex_][j] = command_.TL2_[i][j];
     };
 	for(j=0;j<32*8*2;j++){ //64 channels, four channels, real and imaginary- this is implemented on the roach as 32 even channels even and 32 odd channels-> the four channels now become 8 channels and we still have real an imaginary 
- 		Coeffs_[j]= command_.Coeffs_[j];
+ 		Coeffs_[j]= command_.Coeffs_[j]-65535;
 	}
 #if(0) 
     COUT(" LL_: "  << LL_[currentIndex_][32] << "switchStat " << switchstatus_[currentIndex_] << "tstart_ " << tstart_[currentIndex_]);
@@ -1295,13 +1295,18 @@ void RoachBackend::writeData(gcp::util::TimeVal& currTime)
       UtimeAvg[i]   += (U_[index][i]/(float)RECEIVER_SAMPLES_PER_FRAME);
       TL1timeAvg[i] += (TL1_[index][i]/(float)RECEIVER_SAMPLES_PER_FRAME);
       TL2timeAvg[i] += (TL2_[index][i]/(float)RECEIVER_SAMPLES_PER_FRAME);
- //     Coeffs[i] = (float)Coeffs_[i]-65536; 
       index++;
       if(index >= RING_BUFFER_LENGTH){
 	index = 0;
       }
     }
   };
+
+  for(i=0;i<=511;i++){
+
+      Coeffs[i] = Coeffs_[i];
+     // Coeffs[i] -=5000; //subtract off 10 000 which is used from the roach side to avoid any negative numbers being sent over network 
+}
 
   // write the registers
   share_->writeReg(roachLLfreq_,  &LLfreqAvg[0]);

@@ -2165,7 +2165,9 @@ int main(int argc, char *argv[])
 	pthread_attr_t tattr;
 	signal(SIGINT, cleanup);
 //define the names of the bof files used here- you also need to update a few instances later in the code that don't have the /boffiles/ prepended to the string- I need to fix this in due course.
+	//old one before 1PPS fix char* polProg="/boffiles/rx_10dec_stat_2013_Jan_11_1059.bof&";
 	char* polProg="/boffiles/rx_10dec_stat_2013_Jan_11_1059.bof&";
+//	char* polProg="/boffiles/rx_20140328_2014_Apr_01_1156.bof&";
 	char* powerProg="/boffiles/rx_10dec_stat_pow_2013_Jan_11_1408.bof&";
 ////
 	job[1]=argv[1];//global variable for access in the loop
@@ -2197,6 +2199,7 @@ int main(int argc, char *argv[])
 	//look for the appropriate PID
 	if(VERSION==1){
 		system("pidof -s rx_10dec_stat_2013_Jan_11_1059.bof > pid.txt");
+		//system("pidof -s rx_20140328_2014_Apr_01_1156.bof > pid.txt");
 	}
 	else if(VERSION==10000){
 		system("pidof -s rx_10dec_stat_pow_2013_Jan_11_1408.bof > pid.txt");
@@ -2241,6 +2244,7 @@ int main(int argc, char *argv[])
 ////////////////////////////////////////////
 	if(VERSION==1){
 		system("pidof -s rx_10dec_stat_2013_Jan_11_1059.bof > pid.txt");
+		//system("pidof -s rx_20140328_2014_Apr_01_1156.bof > pid.txt");
 	}
 	else if(VERSION==10000){
 		system("pidof -s rx_10dec_stat_pow_2013_Jan_11_1408.bof > pid.txt");
