@@ -1,4 +1,4 @@
-add_page 486 129 Status black red yellow 10 11 {13 10 12 13 10 10 10 10 10 10 10 10 10 10 10 10 10} {} 0 {} 0 {
+add_page 1 156 Status black red yellow 10 11 {13 10 12 13 10 10 10 10 10 10 10 10 10 10 10 10 10} {} 0 {} 0 {
   label 0 0 midnightblue paleturquoise center {Array frame}
   label 0 1 midnightblue paleturquoise center {Antenna frame}
   label 0 4 midnightblue paleturquoise center Azimuth
@@ -77,6 +77,8 @@ add_page 486 129 Status black red yellow 10 11 {13 10 12 13 10 10 10 10 10 10 10
   register 4 5 black green center {antenna0.tracker.scan_off[1][0]} sexagesimal 1 0 {} 0 0 0.0 0.0 0 1
   register 4 7 black green center {antenna0.tracker.equat_geoc[0][0]} sexagesimal 2 0 {} 0 0 0.0 0.0 0 1
   register 4 8 black green center {antenna0.tracker.equat_geoc[1][0]} sexagesimal 2 0 {} 0 0 0.0 0.0 0 1
+  label 4 11 midnightblue paleturquoise center azWrapSwitch
+  register 4 12 black green center {antenna0.servo.az_wrap_switch[0]} enum 0 0 {zone 0, zone 1} 1 0 0.0 0.0 0 1
   label 4 13 midnightblue paleturquoise center Status
   register 4 14 black green center {antenna0.servo.servo_status[0][0]} bit 0 0 {good, bad} 0 0 0.0 0.0 0 1
   register 4 15 black green center {antenna0.servo.servo_status[0][1]} bit 0 0 {good, bad} 0 0 0.0 0.0 0 1

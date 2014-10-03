@@ -349,12 +349,12 @@ void ServoCommandSa::checkOneOutput()
  */
 void ServoCommandSa::interpretStatusResponse(const char* response)
 {
-  /* This status response takes form of 20 values
-     The first 18 are ones,zeros, the last 2 go from 0 to 2.
+  /* This status response takes form of 21 values
+     The first 19 are ones,zeros, the last 2 go from 0 to 2.
   */
 
   int i;
-  for (i=0; i<18; i++) {
+  for (i=0; i<19; i++) {
     if( *(response + 4 + i) == '1') {
       responseValue_[i] = 1;
     } else {
@@ -363,7 +363,7 @@ void ServoCommandSa::interpretStatusResponse(const char* response)
   };
   
   // last two
-  for (i=18;i<20;i++) {
+  for (i=19;i<21;i++) {
     if( *(response + 4 + i) == '0') {
       responseValue_[i] = 0;
     } else if( *(response + 4 + i) == '1') {

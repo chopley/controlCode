@@ -68,6 +68,7 @@ ServoCommsSa::ServoCommsSa(SpecificShare* share, string name, bool sim) :
   servoBrakes_  	 = 0;
   driveLids_ 	         = 0;
   azWrap_                = 0;
+  azWrapSwitch_                = 0;
   servoSeconds_                = 0;
   servouSeconds_                = 0;
   az_tacho1_                = 0;
@@ -93,7 +94,8 @@ ServoCommsSa::ServoCommsSa(SpecificShare* share, string name, bool sim) :
   servoCircuitBreakers_= findReg("circuit_breaker");
   servoBrakes_         = findReg("mechanical_brakes");
   driveLids_           = findReg("drive_lids");
-  azWrap_              = findReg("az_no_wrap");
+  azWrap_              = findReg("az_no_wrap"); //stored in the kernel on startup
+  azWrapSwitch_              = findReg("az_wrap_switch"); //read from the limit switch
   servoSeconds_              = findReg("ntpSecond");
   servouSeconds_              = findReg("ntpUSecond");
   az_tacho1_              = findReg("az_tacho1");
@@ -1158,7 +1160,8 @@ void ServoCommsSa::recordStatusResponse(ServoCommandSa& command)
       // now for the last three
       share_->writeReg(servoBrakes_, (bool) command.responseValue_[16]);
       share_->writeReg(driveLids_,   (bool) command.responseValue_[17]);
-      share_->writeReg(azWrap_,             command.responseValue_[18]);
+      share_->writeReg(azWrapSwitch_,(bool) command.responseValue_[18]); //this is read back from gpio
+      share_->writeReg(azWrap_,             command.responseValue_[19]); //this is instantiated at kernel loading
     }
 
   };

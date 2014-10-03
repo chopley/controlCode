@@ -179,6 +179,7 @@ namespace gcp {
 	RegMapBlock* servoBrakes_; 	    
 	RegMapBlock* driveLids_;	    
 	RegMapBlock* azWrap_;               
+	RegMapBlock* azWrapSwitch_;               
 	RegMapBlock* servoSeconds_;               
 	RegMapBlock* servouSeconds_;               
 	RegMapBlock* az_tacho1_;               

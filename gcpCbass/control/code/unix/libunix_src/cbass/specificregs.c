@@ -485,6 +485,9 @@ static RegBlockTemp cbassServo[] = {
 
   RegBlockTemp("",
 	       "drive_lids",              "", REG_BOOL, 0, 1), 
+  
+  RegBlockTemp("",
+	       "az_wrap_switch",              "", REG_BOOL, 0, 1), 
 
   RegBlockTemp("",
 	       "az_no_wrap",              "", REG_FLOAT, 0, 1), 
