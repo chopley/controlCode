@@ -19,7 +19,9 @@ scan_catalog "$CBASS_DIR/control/scan/cbass_scan.cat"
 ut1utc "$CBASS_DIR/control/ephem/ut1utc.ephem"
 
 # Location of HartRAO (long, lat, altitude (meters))
-site 27:41:07.415, -25:53:23.105, 1415
+#site 27:41:07.415, -25:53:23.105, 1415
+# Location of Klerefontein (long, lat, altitude (meters))
+site 21:58:49.332, -30:58:17.184, 1371
 
 
 # Specify the horizon to be used by the "show" command.
