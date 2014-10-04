@@ -715,7 +715,7 @@ void ServoCommsSa::queryStatus()
   command = issueCommand(ServoCommandSa::QUERY_STATUS);
 
   // Set whether the alarm is on
-  alarmStatus_ = (bool) command.responseValue_[19];
+  alarmStatus_ = (bool) command.responseValue_[20];
 
   if(antennaHalted_){
 	  ReportMessage("Antenna Halted-- need to reengage servo");
@@ -774,7 +774,7 @@ void ServoCommsSa::queryStatus(gcp::util::TimeVal& currTime)
 
 
   // Set whether the alarm is on
-  alarmStatus_ = (bool) command.responseValue_[19];
+  alarmStatus_ = (bool) command.responseValue_[20];
 
   if(antennaHalted_){
 	  ReportMessage("Antenna Halted-- need to reengage servo");
@@ -1116,7 +1116,7 @@ bool ServoCommsSa::isPartOneComplete()
 
 
   /* if the last value of the status is not 1, it's not complete */
-  bool buzzOff = command_.responseValue_[19] == 0;
+  bool buzzOff = command_.responseValue_[20] == 0;
   
   complete = complete & buzzOff;
 
