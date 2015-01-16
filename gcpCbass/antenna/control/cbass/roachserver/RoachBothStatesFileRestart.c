@@ -1103,13 +1103,13 @@ void *packROACHpacket_thread(void *arg){
 			cbassPKT.version=VERSION; //version numbers of the Polarisation begin at 0
 			cbassPKT.tend=t1.tv_usec;
 			cbassPKT.int_count=acc_new;
-		//or(i=0;i<=32*16-1;i++){
-		//cbassPKT.coeffs[i]=Coffs[i];
-		//
+		for(i=0;i<=32*16-1;i++){
+			cbassPKT.coeffs[i]=Coffs[i];
+		}
 		//	cbassPKT.buffBacklog=25;
 #if(1)
 			for(i=0;i<=9;i++){
-				printf("stat %d %d %d %d\n",i,cbassPKT.tstart[i],cbassPKT.data_switchstatus[i],cbassPKT.data_ch0even[i*vectorLength+10]);
+		//		printf("stat %d %d %d %d\n",i,cbassPKT.tstart[i],cbassPKT.data_switchstatus[i],cbassPKT.data_ch0even[i*vectorLength+10]);
 			}
 #endif
 			encodeNetwork(&cbassPKT);
@@ -1146,6 +1146,9 @@ void *packROACHpacket_thread(void *arg){
 		cbassPKT.tstart[packedDataCounter]=timeStamp;//packet timestamp
 //		cbassPKT.tsecond[packedDataCounter]=t2.tv_sec-1381491125;//packet timestamp in ROACH second time
 		cbassPKT.tsecond[packedDataCounter]=t2.tv_sec-1398483573;//packet timestamp in ROACH second time //updated 26/4/2014
+		while(cbassPKT.tsecond[packedDataCounter]>17200000){
+			cbassPKT.tsecond[packedDataCounter]-=17200000;
+		}
 
 	//	cbassPKT.tsecond[packedDataCounter]=t2.tv_sec;//packet timestamp in ROACH second time
 		cbassPKT.tusecond[packedDataCounter]=t2.tv_usec;//packet timestamp in ROACH second time
@@ -2078,8 +2081,8 @@ void readCoeffs(){
 		j=0;
 		readStat[0]=fread(&ampcoffs[0],sizeof(int),32,fpreg);
 		for(k=0;k<32;k++){
-	//		Coffs[32*i+k]=ampcoffs[k];
-			Coffs[32*i+k]=+5000;
+			Coffs[32*i+k]=ampcoffs[k];
+			Coffs[32*i+k]+=65535;
 			printf("Coffs %ld \n",Coffs[32*i+k]);
 		}
 		
@@ -2287,7 +2290,7 @@ int main(int argc, char *argv[])
 		printf("\n mutex init buffer failed\n");
 		return 1;
 	    }
-	//readCoeffs();
+	readCoeffs();
 	pthread_create(&commandThread_id,NULL,command_thread,NULL);
 	if(VERSION==1){
 		pthread_create(&packROACHpacket_thread_id,NULL,packROACHpacket_thread,NULL);
