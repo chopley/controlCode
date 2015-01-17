@@ -1,0 +1,17 @@
+######################################################
+#-----------------------------------------------------
+#   CBASS scan catalog
+#
+#------------------------------------------------------
+#######################################################
+
+
+#-----------------------------
+# AZ .scan files (sorted by AZ range):
+#-----------------------------
+
+NORMAL az-45el-scan $CBASS_DIR/control/scan/cbass_az_scan.scan
+NORMAL az-full-scan $CBASS_DIR/control/scan/full_az_scan_cbass.scan
+NORMAL az-full2     $CBASS_DIR/control/scan/full_az_test2.scan
+NORMAL az-10reps    $CBASS_DIR/control/scan/full_az_10reps.scan
+CONTINUOUS az-scan-repeat $CBASS_DIR/control/scan/full_az_repeat_scan.scan

@@ -1,0 +1,210 @@
+? az_20d_1ds_scan.scan
+? full_az_scan_2ds.scan
+? stat.txt
+===================================================================
+File: az_scan.scan     	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/scan/az_scan.scan,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: big_sun_scan.scan	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/scan/big_sun_scan.scan,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: cbass_az_scan.scan	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/scan/cbass_az_scan.scan,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: cbass_largeSource.scan	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/scan/cbass_largeSource.scan,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: cbass_scan.cat   	Status: Up-to-date
+
+   Working revision:	1.8
+   Repository revision:	1.8	/sw/cvsroot/cbass/gcpCbass/control/scan/cbass_scan.cat,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: circle1.scan     	Status: Up-to-date
+
+   Working revision:	1.2
+   Repository revision:	1.2	/sw/cvsroot/cbass/gcpCbass/control/scan/circle1.scan,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: cw_source_raster.scan	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/scan/cw_source_raster.scan,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: el_70d_05ds_down_scan.scan	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/scan/el_70d_05ds_down_scan.scan,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: el_70d_05ds_up_scan.scan	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/scan/el_70d_05ds_up_scan.scan,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: full_az_10reps.scan	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/scan/full_az_10reps.scan,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: full_az_repeat_scan.scan	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/scan/full_az_repeat_scan.scan,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: full_az_scan_cbass.scan	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/scan/full_az_scan_cbass.scan,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: junk.txt         	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/scan/junk.txt,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: point_scan_10daz_10del_1ds.scan	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/scan/point_scan_10daz_10del_1ds.scan,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: point_scan_20daz_20del_1ds.scan	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/scan/point_scan_20daz_20del_1ds.scan,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: scanfile_charles.scan	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/scan/scanfile_charles.scan,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: scanfile_charles1.scan	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/scan/scanfile_charles1.scan,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: scanfile_charles_one_dir.scan	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/scan/scanfile_charles_one_dir.scan,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: scurve1.scan     	Status: Up-to-date
+
+   Working revision:	1.1.1.1
+   Repository revision:	1.1.1.1	/sw/cvsroot/cbass/gcpCbass/control/scan/scurve1.scan,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: short_az_scan.scan	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/scan/short_az_scan.scan,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: source_az1ds_az10d_el0.5_el10d.scan	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/scan/source_az1ds_az10d_el0.5_el10d.scan,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: source_scan.scan 	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/scan/source_scan.scan,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
+===================================================================
+File: source_scan_charles.scan	Status: Up-to-date
+
+   Working revision:	1.1
+   Repository revision:	1.1	/sw/cvsroot/cbass/gcpCbass/control/scan/source_scan_charles.scan,v
+   Sticky Tag:		(none)
+   Sticky Date:		(none)
+   Sticky Options:	(none)
+
