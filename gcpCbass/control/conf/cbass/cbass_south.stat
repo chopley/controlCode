@@ -1,4 +1,4 @@
-add_page 1 156 Status black red yellow 10 11 {13 10 12 13 10 10 10 10 10 10 10 10 10 10 10 10 10} {} 0 {} 0 {
+add_page 25 183 Status black red yellow 10 11 {13 10 12 13 10 10 10 10 10 10 10 10 10 10 10 10 10} {} 0 {} 0 {
   label 0 0 midnightblue paleturquoise center {Array frame}
   label 0 1 midnightblue paleturquoise center {Antenna frame}
   label 0 4 midnightblue paleturquoise center Azimuth
@@ -110,7 +110,7 @@ add_page 1 156 Status black red yellow 10 11 {13 10 12 13 10 10 10 10 10 10 10 1
   register 6 2 black green center {antenna0.roach2.intCount[0][0]} integer 8 0 {} 0 0 0.0 0.0 0 1
   register 6 3 black green center {antenna0.servo.ntpSecond[0][0]} floating 15 0 {} 0 0 0.0 0.0 0 1
   register 6 4 black green center {antenna0.servo.ntpUSecond[0][0]} floating 15 0 {} 0 0 0.0 0.0 0 1
-  register 6 6 black green center {antenna0.koekblik.adc[5]} floating 2 0 {} 0 1 0.5 1 0 1
+  register 6 6 black green center {antenna0.koekblik.adc[4]} floating 3 0 {} 0 1 0.5 1.3 0 1
   label 6 9 midnightblue paleturquoise center TEMPS
   register 6 10 black green center {antenna0.thermal.lsTemperatureSensors[0]} floating 5 0 {} 0 1 0.0 80 0 1
   register 6 11 black green center {antenna0.thermal.lsTemperatureSensors[1]} floating 5 0 {} 0 1 0.0 15 0 1

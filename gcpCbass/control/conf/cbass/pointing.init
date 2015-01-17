@@ -22,26 +22,34 @@ encoder_limits  -270, 160, 15, 84, 0, 0  # in degrees
 #  residuals were 1.5 arcminutes.
 
 # New Models from 07 Oct 2014 by HMH, tracking only 1 star.
+# HMH, tracking 1 star on 16 Jan 2015
 
 #-------------------------------------------------------------
 # Common Pointing
 #-------------------------------------------------------------
 #encoder_zeros  3.0884, 4.2570, 0
 #encoder_zeros  4.0, -0.3, 0
-encoder_zeros  8.7265, 2.3288, 0
+#encoder_zeros  8.7265, 2.3288, 0
+encoder_zeros  6.7436, 1.1568, 0
 
 #tilts  0.0795, -0.0163, -0.0290
-tilts  -0.0322, -0.0079, -0.1298
+#tilts  -0.0322, -0.0079, -0.1298
+tilts  -0.0394, 0.0160, 2.1215
 
 #-------------------------------------------------------------
 # Optical Pointing
 #-------------------------------------------------------------
 add_signals {done} #define signals for optical pointing
 #collimate_fixed optical, -0.7474, 0.0000, ptel=0+1+2
-collimate_fixed optical, -2.7276, 0.0000, ptel=0+1+2
+#collimate_fixed optical, -2.7276, 0.0000, ptel=0+1+2
+collimate_fixed optical, -0.0123, 0.0000, ptel=0+1+2
+
 
 #flexure optical, -0.0293, -0.1163, ptel=0+1+2
-flexure optical, -0.1378, -0.0542, ptel=0+1+2
+#flexure optical, -0.1378, -0.0542, ptel=0+1+2
+flexure optical, -0.0793, 0.0508, ptel=0+1+2
+
+
 #-------------------------------------------------------------
 # Radio Pointing -- THE FOLLOWING VALUES ARE BOGUS!!!  
 #             NO RADIO DATA HAS BEEN TAKEN.
