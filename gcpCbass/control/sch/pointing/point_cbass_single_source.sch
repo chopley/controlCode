@@ -23,8 +23,8 @@ setOpticalCameraRotation angle=278
 configureFrameGrabber flatfield=none
 setOpticalCameraFov fov=120, chan=chan1
 setOpticalCameraAspect aspect=0.75, chan=chan1
-setOpticalCameraXImDir inverted, chan=chan1
-setOpticalCameraYImDir inverted, chan=chan1
+setOpticalCameraXImDir upright, chan=chan1
+setOpticalCameraYImDir upright, chan=chan1
 addSearchBox 8, 9, 501, 472, true, chan=chan1
 
 open grabber

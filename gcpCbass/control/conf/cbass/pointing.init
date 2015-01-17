@@ -21,20 +21,27 @@ encoder_limits  -270, 160, 15, 84, 0, 0  # in degrees
 #  of the night of 15-may-2013.  This was only on 2 sources, and fit
 #  residuals were 1.5 arcminutes.
 
+# New Models from 07 Oct 2014 by HMH, tracking only 1 star.
+
 #-------------------------------------------------------------
 # Common Pointing
 #-------------------------------------------------------------
 #encoder_zeros  3.0884, 4.2570, 0
-encoder_zeros  4.0, -0.3, 0
-tilts  0.0795, -0.0163, -0.0290
+#encoder_zeros  4.0, -0.3, 0
+encoder_zeros  8.7265, 2.3288, 0
+
+#tilts  0.0795, -0.0163, -0.0290
+tilts  -0.0322, -0.0079, -0.1298
 
 #-------------------------------------------------------------
 # Optical Pointing
 #-------------------------------------------------------------
 add_signals {done} #define signals for optical pointing
-collimate_fixed optical, -0.7474, 0.0000, ptel=0+1+2
-flexure optical, -0.0293, -0.1163, ptel=0+1+2
+#collimate_fixed optical, -0.7474, 0.0000, ptel=0+1+2
+collimate_fixed optical, -2.7276, 0.0000, ptel=0+1+2
 
+#flexure optical, -0.0293, -0.1163, ptel=0+1+2
+flexure optical, -0.1378, -0.0542, ptel=0+1+2
 #-------------------------------------------------------------
 # Radio Pointing -- THE FOLLOWING VALUES ARE BOGUS!!!  
 #             NO RADIO DATA HAS BEEN TAKEN.
@@ -56,8 +63,8 @@ setOpticalCameraRotation angle=279
 configureFrameGrabber flatfield=image
 setOpticalCameraFov fov=120, chan=chan1
 setOpticalCameraAspect aspect=0.75, chan=chan1
-setOpticalCameraXImDir inverted, chan=chan1
-setOpticalCameraYImDir inverted, chan=chan1
+setOpticalCameraXImDir upright, chan=chan1
+setOpticalCameraYImDir upright, chan=chan1
 addSearchBox 8, 9, 501, 472, true, chan=chan1
 addSearchBox 173, 142, 197, 171, false, chan=chan1
 addSearchBox 63, 402, 74, 423, false, chan=chan1

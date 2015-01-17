@@ -8,6 +8,7 @@ FIXED ncpfixed  0 37:14:02
 FIXED scpfixed  -180 25:53:23.105
 FIXED colltower  27.85 10.2
 FIXED trigpoint   16.0 6.5
+FIXED trigpoint2  16.3 6.1
 #FIXED trigpoint  17 11:30:00
 #FIXED trigpointOpp  -163 11.5
 FIXED SES5 315 50

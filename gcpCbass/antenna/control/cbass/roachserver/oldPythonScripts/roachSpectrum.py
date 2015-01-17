@@ -224,7 +224,7 @@ def diodeState(state):
     return state	
    
 def initialiseCoefficients():
-	a=100*numpy.ones(32)	
+	a=10*numpy.ones(32)	
 	b=1*numpy.zeros(32)	
 	bramw(fpga,'amp_EQ0_coeff_real', a, 32)
 	bramw(fpga,'amp_EQ1_coeff_real', a, 32)
@@ -712,7 +712,7 @@ try:
 			print 'Skipped.'
 
 		print 'Configuring accumulation period...',
-		fpga.write_int('acc_len',78125)
+		fpga.write_int('acc_len',4*781250)
 		#fpga.write_int('acc_len',1781250)
 #		fpga.write_int('acc_len',1000000)
 		#fpga.write_int('acc_len',500000)
@@ -834,6 +834,9 @@ try:
 			prev_integration=integration
 			#integration=updateIntegration()
 #			time.sleep(0.001)
+			updateIntegration()
+			updateIntegration()
+			updateIntegration()
 			Channel1=readIntegration64bit('Subsystem1_ch1','Subsystem1_ch2')
 			Channel2=readIntegration64bit('Subsystem1_ch3','Subsystem1_ch4')
 			Channel3=readIntegration64bit('Subsystem1_ch5','Subsystem1_ch6')

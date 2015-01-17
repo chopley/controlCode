@@ -711,6 +711,7 @@ void *packROACHpacket_thread(void *arg){
 	char path_status[128];			// Path to acc_num counter data
 	char path_noiseDiode[128];			// Path to acc_num counter data
 	char path_sync_cnt[128];			// Path to acc_num counter data
+	char path_no_PPS_cnt[128];			// Path to acc_num counter data
 	char path_gpioMode[128];			// Path to acc_num counter data
 	char path_demodulate[128];			// Path to acc_num counter data
 	char path_acc_sync_delay[128];			// Path to acc_num counter data
@@ -799,6 +800,7 @@ void *packROACHpacket_thread(void *arg){
 		sprintf(path_status, "/proc/%s/hw/ioreg/statusReadout", job[1]);
 		sprintf(path_gpioMode, "/proc/%s/hw/ioreg/gpioMode", job[1]);
 		sprintf(path_demodulate, "/proc/%s/hw/ioreg/demodPhaseSwitch1", job[1]);
+		sprintf(path_no_PPS_cnt, "/proc/%s/hw/ioreg/no_PPS_cnt", job[1]);
 	}
 	else if(VERSION==10000){
 		sprintf(path_acc_cnt, "/proc/%s/hw/ioreg/Subsystem1_readAccumulation", job[1]);
@@ -878,6 +880,7 @@ void *packROACHpacket_thread(void *arg){
 
 		fp = fopen(path_sync_max, "w"); 
 		writeVal=249996900;
+		//	writeVal=2459969;
 		fwrite(&writeVal, 4, 1, fp);
 		fclose(fp);
 	}
@@ -1122,7 +1125,7 @@ void *packROACHpacket_thread(void *arg){
 			cbassPKT.tend=t1.tv_usec;
 			cbassPKT.int_count=acc_new;
 		//	cbassPKT.buffBacklog=25;
-#if(1)
+#if(0)
 			for(i=0;i<=9;i++){
 				printf("stat %d %d %d %d\n",i,cbassPKT.tstart[i],cbassPKT.data_switchstatus[i],cbassPKT.data_ch0even[i*vectorLength+10]);
 			}
@@ -1144,6 +1147,10 @@ void *packROACHpacket_thread(void *arg){
 		acc_old = acc_new;
 		
 		tDiff[packedDataCounter]=timeStamp;
+		//sprintf(path_no_PPS_cnt, "/proc/%s/hw/ioreg/no_PPS_cnt", job[1]);
+	//p1 = fopen(path_no_PPS_cnt, "r"); 
+	//fread(&timeStamp, 4, 1, fp1);
+	//close(fp1);
 		fp1 = fopen(path_timeStamp, "r"); 
 			fread(&timeStamp, 4, 1, fp1);
 		fclose(fp1);
@@ -2078,7 +2085,6 @@ void readCoeffs(){
 
 	unsigned int i=0;
 	unsigned int j=0;
-	i=0;
 	sprintf(path_timeStamp, "/proc/%s/hw/ioreg/Subsystem1_timeStamp", job[1]);
 	sprintf(path_acc_cnt, "/proc/%s/hw/ioreg/Subsystem1_readAccumulation", job[1]);
 //order of the coeffs is as follows
@@ -2098,18 +2104,19 @@ void readCoeffs(){
 //416-447 amp5imag
 //488-479 amp6imag
 //480-512 amp7imag
+	i=0;
 	while(i<16){
 		printf("i=%d\n",i);
 		sprintf(path_to_registerNames[i],"/proc/%s/hw/ioreg/%s",job[1],registerNames[i]);
 	//	printf("%s\n",path_to_registerNames[i]);
 		fpreg=fopen(path_to_registerNames[i],"r");
 		j=0;
-		readStat[0]=fread(&ampcoffs[0],sizeof(int),32,fpreg);
+		readStat[0]=fread(&ampcoffs[0],4,32,fpreg);
 		for(k=0;k<32;k++){
 			Coffs[32*i+k]=ampcoffs[k];
 //			Coffs[32*i+k]=-6000; //is was a test piece of code
-			Coffs[32*i+k]+=65535; //I add this to make sure the number I sent will be positive. I subtract it on the other side.
 			printf("Coffs %ld \n",Coffs[32*i+k]);
+			Coffs[32*i+k]+=65535; //I add this to make sure the number I sent will be positive. I subtract it on the other side.
 		}
 		
 		fclose(fpreg);
@@ -2129,10 +2136,12 @@ void initCoeffs(){
 	char path_timeStamp[128];			// Path to acc_num counter data
 	char path_acc_cnt[128];			// Path to acc_num counter data
 	//sprintf(path_amp0realcoffs, "/proc/%s/hw/ioreg/amp_EQ0_coeff_real", job[1]);
-	unsigned int ampcoffs[35];
+	unsigned long ampcoffs[35];
         int acc_new,acc_old,acc_cntr,timeStamp;
 	printf("%s\n",&filenames[0]);	
-
+	char *p = "\000\001\002";
+	unsigned long w[3] = { 0x17070809, 0x07070707, 0x99999999 }; 
+	unsigned char coffs[500];
 	unsigned int i=0;
 	unsigned int j=0;
 	i=0;
@@ -2150,14 +2159,27 @@ void initCoeffs(){
 		while(fgets(line, 80, fp) != NULL)
 			{ /* get a line, up to 80 chars from fr.  done if NULL */
 			 sscanf(line, "%ld", &ampcoffs[j]);
-	//		 printf("%d %d\n",j,ampcoffs[j]);
+			// ampcoffs[j]=j;
+			 printf("File coffs %d %d\n",j,ampcoffs[j]);
 			 j++;
 			}
-		//printf("j=%d\n",j);
+		
+		for(j=0;j<=32;j++){
+			printf("ampcoffs[j] =%d %d \n",ampcoffs[j],sizeof(ampcoffs[0]));
+		}
 		fclose(fp);
 		//printf("j=%d\n",j);
 		//copy the coefficients to a register
-		fwrite(&ampcoffs[0], 32*4, 1, fpreg);
+		ampcoffs[0]=100;
+		ampcoffs[1]=101;
+		ampcoffs[2]=102;
+		ampcoffs[3]=103;
+	        memcpy(&coffs,&ampcoffs,4*32);
+	//	fwrite(w,  4, 1, fpreg);
+	//	fseek(fpreg,8,0);
+		fwrite(&ampcoffs[0],  32*4, 1, fpreg);
+		//write(fpreg,ampcoffs, 32*4);
+	//	sleep(1);
 		fclose(fpreg);
 		//printf("j=%d\n",j);
 		i++;
@@ -2196,7 +2218,7 @@ int main(int argc, char *argv[])
 //define the names of the bof files used here- you also need to update a few instances later in the code that don't have the /boffiles/ prepended to the string- I need to fix this in due course.
 	//old one before 1PPS fix char* polProg="/boffiles/rx_10dec_stat_2013_Jan_11_1059.bof&";
 //	char* polProg="/boffiles/rx_10dec_stat_2013_Jan_11_1059.bof&";
-	char* polProg="/boffiles/rx_20140505_2014_May_06_1048.bof&";
+	char* polProg="/boffiles/rx_20140505_2014_May_08_1234.bof&";
 	char* powerProg="/boffiles/rx_10dec_stat_pow_2013_Jan_11_1408.bof&";
 ////
 	job[1]=argv[1];//global variable for access in the loop
@@ -2227,7 +2249,7 @@ int main(int argc, char *argv[])
 	}
 	//look for the appropriate PID
 	if(VERSION==1){
-		system("pidof -s rx_20140505_2014_May_06_1048.bof > pid.txt");
+		system("pidof -s rx_20140505_2014_May_08_1234.bof > pid.txt");
 		//system("pidof -s rx_20140328_2014_Apr_01_1156.bof > pid.txt");
 	}
 	else if(VERSION==10000){
@@ -2272,7 +2294,7 @@ int main(int argc, char *argv[])
 	sleep(1);
 ////////////////////////////////////////////
 	if(VERSION==1){
-		system("pidof -s rx_20140505_2014_May_06_1048.bof > pid.txt");
+		system("pidof -s rx_20140505_2014_May_08_1234.bof > pid.txt");
 		//system("pidof -s rx_20140328_2014_Apr_01_1156.bof > pid.txt");
 	}
 	else if(VERSION==10000){
@@ -2316,6 +2338,7 @@ int main(int argc, char *argv[])
 		printf("\n mutex init buffer failed\n");
 		return 1;
 	    }
+	sleep(1);
 	readCoeffs();
 	pthread_create(&commandThread_id,NULL,command_thread,NULL);
 	if(VERSION==1){

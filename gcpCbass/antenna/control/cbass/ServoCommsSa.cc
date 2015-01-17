@@ -849,7 +849,7 @@ void ServoCommsSa::queryAntPositions()
       azPid2[i] = (float)command.responseValue_[i+55];
       elPid1[i] = (float)command.responseValue_[i+60];
       elPid2[i] = (float)command.responseValue_[i+65];
-	//COUT("time "<<timeSec[i]);
+	COUT("time "<<timeSec[i]);
     };
 
     // Write them to shared memory
