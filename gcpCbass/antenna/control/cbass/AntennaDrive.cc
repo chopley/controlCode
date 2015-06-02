@@ -229,7 +229,6 @@ void AntennaDrive::sendDriveDoneMsg(unsigned int seq)
 
   netMsg->setAntId(parent_->getAnt()->getId());
   netMsg->packDriveDoneMsg(seq);
-
   parent_->forwardMasterMsg(&msg);
 }
 

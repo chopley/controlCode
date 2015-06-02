@@ -477,7 +477,7 @@ const TimeVal TimeVal::operator-(const TimeVal& tVal)
     deltaSec--;
   }
   if(tVal.seconds_ > seconds_){
-    CTOUT("Result in Timeval operator will be negative"<<tVal.seconds_);
+    //    CTOUT("Result in Timeval operator will be negative"<<tVal.seconds_);
 	deltaSec=0;
 	deltaNsec=0;
 	}

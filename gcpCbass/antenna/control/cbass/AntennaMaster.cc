@@ -703,6 +703,7 @@ void AntennaMaster::sendHeartBeat()
  */
 void AntennaMaster::processMsg(AntennaMasterMsg* msg)
 {
+
   switch (msg->type) {
   case AntennaMasterMsg::CONTROL_MSG:    // Message for the
 					 // AntennaControl thread
@@ -732,7 +733,7 @@ void AntennaMaster::processMsg(AntennaMasterMsg* msg)
   case AntennaMasterMsg::ROACH_MSG:         // Message for the
 					 // AntennaRoach thread
     forwardRoachMsg(msg);
-    COUT("Roach Message forwarded");
+    //    COUT("Roach Message forwarded");
     break;
 
   case AntennaMasterMsg::ROACH_CONNECTED:   // Add or remove handler to
@@ -742,7 +743,6 @@ void AntennaMaster::processMsg(AntennaMasterMsg* msg)
     DBPRINT(true, Debug::DEBUG3, "Got a receiver connected message: "
 	    << msg->body.roachConnected.connected);
 
-    COUT("Roach Connected Message");
     sendAddHandlerMsg("connect", &sendConnectRoachMsg, 
 		      !msg->body.roachConnected.connected);
     break;
@@ -751,7 +751,7 @@ void AntennaMaster::processMsg(AntennaMasterMsg* msg)
     DBPRINT(true, Debug::DEBUG3, "Got a receiver timer message: "
 	    << msg->body.roachTimer.on);
 
-    COUT("roach timers turning on");
+    //    COUT("roach timers turning on");
     
     sendAddHandlerMsg("roach", &sendReadoutRoachMsg,  
 		      msg->body.roachConnected.connected);

@@ -155,7 +155,6 @@ ScanCacheOffset& Scan::nextOffsetTimeJump(gcp::util::TimeVal& mjd)
     
     // If time has jumped, increment by the equivalent number of scan
     // steps
-
     if(nStep > 1) {
       for(unsigned iStep=0; iStep < nStep; iStep++) {
 	mjdLast_.incrementMilliSeconds(offsets_.msPerStep);

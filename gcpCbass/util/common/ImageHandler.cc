@@ -275,7 +275,8 @@ void ImageHandler::installNewImage(unsigned short* image, unsigned int utc[2],
 	  max = val;
       }
     }
-  
+
+#if(0)  
     // Now write a crosshair into the image buffer for archiving.  We
     // will do this by setting a 1-pixel wide row and column to the
     // maximum pixel value found.
@@ -308,7 +309,8 @@ void ImageHandler::installNewImage(unsigned short* image, unsigned int utc[2],
 	imageToArchive_[ind] = (max > 0 ? max-1 : 0);
       }
     }
-  
+#endif  
+
     haveImage_ = true;
 
   } catch(...) {

@@ -30,11 +30,13 @@ encoder_limits  -270, 160, 15, 84, 0, 0  # in degrees
 #encoder_zeros  3.0884, 4.2570, 0
 #encoder_zeros  4.0, -0.3, 0
 #encoder_zeros  8.7265, 2.3288, 0
-encoder_zeros  6.7436, 1.1568, 0
+#encoder_zeros  6.7436, 1.1568, 0
+#encoder_zeros  8.6788, 1.2392, 0
 
 #tilts  0.0795, -0.0163, -0.0290
 #tilts  -0.0322, -0.0079, -0.1298
-tilts  -0.0394, 0.0160, 2.1215
+#tilts  -0.0394, 0.0160, 2.1215
+#tilts  -0.0130, 0.0044, -0.0019
 
 #-------------------------------------------------------------
 # Optical Pointing
@@ -42,19 +44,64 @@ tilts  -0.0394, 0.0160, 2.1215
 add_signals {done} #define signals for optical pointing
 #collimate_fixed optical, -0.7474, 0.0000, ptel=0+1+2
 #collimate_fixed optical, -2.7276, 0.0000, ptel=0+1+2
-collimate_fixed optical, -0.0123, 0.0000, ptel=0+1+2
-
+#collimate_fixed optical, -0.0123, 0.0000, ptel=0+1+2
+#collimate_fixed optical, -2.8536, 0.0000, ptel=0+1+2
 
 #flexure optical, -0.0293, -0.1163, ptel=0+1+2
 #flexure optical, -0.1378, -0.0542, ptel=0+1+2
-flexure optical, -0.0793, 0.0508, ptel=0+1+2
+#flexure optical, -0.0793, 0.0508, ptel=0+1+2
+#flexure optical, 0.0004, 0.1190, ptel=0+1+2
+
+
+#-------------------------------------------------------------
+# Optical Pointing Parameters Set by HMH during Jan 2015:
+
+# The following are the parameters that correspond to the current radio 
+# pointing parameters. Make sure these are the ones in use until the 
+# radio parameters are updated!
+
+#encoder_zeros  8.6788, 1.2392, 0
+#tilts  -0.0130, 0.0044, -0.0019
+#collimate_fixed optical, -2.8536, 0.0000, ptel=0+1+2
+#flexure optical, 0.0004, 0.1190, ptel=0+1+2
+
+# These parameters are an updated optical parameter set, but have not been used
+# for radio pointing, so don't use them yet...
+
+#encoder_zeros  8.7084, 2.0822, 0
+#tilts  -0.0125, 0.0054, -0.0373
+#collimate_fixed optical, 0.7838, 0.0000, ptel=0+1+2
+#flexure optical, -0.1090, -0.0085, ptel=0+1+2
+
+# Parameters from Refined run 10 Feb:
+#encoder_zeros  8.6884, 1.9941, 0
+#tilts  -0.0130, 0.0050, -0.0266
+#collimate_fixed optical, 0.8129, 0.0000, ptel=0+1+2
+#flexure optical, -0.1954, 0.0017, ptel=0+1+2
+
+
+# Parameters from Global run 24 Feb:
+#encoder_zeros  8.6379, 2.0123, 0
+#tilts  -0.0154, 0.0046, -0.0283
+#collimate_fixed optical, 0.8269, 0.0000, ptel=0+1+2
+#flexure optical, -0.1791, 0.0181, ptel=0+1+2
+
+
+# Parameters from Global run 25 Feb:
+encoder_zeros  8.6725, 2.0227, 0
+tilts  -0.0180, 0.0057, -0.0275
+collimate_fixed optical, 0.8097, 0.0000, ptel=0+1+2
+flexure optical, -0.1655, 0.0259, ptel=0+1+2
+
+
 
 
 #-------------------------------------------------------------
 # Radio Pointing -- THE FOLLOWING VALUES ARE BOGUS!!!  
 #             NO RADIO DATA HAS BEEN TAKEN.
 #-------------------------------------------------------------
-collimate_fixed radio, -0.7474, 0.0000
+#collimate_fixed radio, -0.7474, 0.0000
+collimate_fixed radio, 0.124, 1.8
 flexure radio, -0.0293, -0.1163
 
 # startup model is radio

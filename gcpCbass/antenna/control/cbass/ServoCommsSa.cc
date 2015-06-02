@@ -217,7 +217,7 @@ ServoCommandSa ServoCommsSa::issueCommand(ServoCommandSa::Request req, std::vect
     try {
       sendCommand(command);
       readStatus = readResponse(command);
-      COUT("RESPONSE Received:  " << readStatus);
+      //      COUT("RESPONSE Received:  " << readStatus);
     } catch(...) {
       // there was en error in waitForResponse
       readStatus = 2;
@@ -230,7 +230,7 @@ ServoCommandSa ServoCommsSa::issueCommand(ServoCommandSa::Request req, std::vect
       if(command.responseValid_==1){
 	tryRead = 0;
 	numTimeOut=0;
-	COUT("RESPONSE IS VALID:  " << command.responseReceived_);
+	//	COUT("RESPONSE IS VALID:  " << command.responseReceived_);
       } else {
 	numTimeOut++;
 	COUT("RESPONSE IS inVALID:  " << command.responseReceived_);

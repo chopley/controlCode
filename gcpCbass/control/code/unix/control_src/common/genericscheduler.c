@@ -921,29 +921,29 @@ CP_THREAD_FN(scheduler_thread)
 	  case gcp::util::NewNetMsg::NET_DRIVE_DONE_MSG:
 	    if(netmsg->drive_done.seq == 
 	       trans->seq(TransactionStatus::TRANS_PMAC)) {
-	      trans->done(TransactionStatus::TRANS_PMAC) |= antenna;
+	      trans->done(TransactionStatus::TRANS_PMAC) = 1;
 	    }
 	    break;
 	  case gcp::util::NewNetMsg::NET_BENCH_DONE_MSG:
 	    if(netmsg->bench_done.seq == 
 	       trans->seq(TransactionStatus::TRANS_BENCH)) {
-	      trans->done(TransactionStatus::TRANS_BENCH) |= antenna;
+	      trans->done(TransactionStatus::TRANS_BENCH) = 1;
 	    }
 	    break;
 	  case gcp::util::NewNetMsg::NET_SETREG_DONE_MSG:
 	    if(netmsg->setreg_done.seq == 
 	       trans->seq(TransactionStatus::TRANS_SETREG)) 
-	      trans->done(TransactionStatus::TRANS_SETREG) |= antenna;
+	      trans->done(TransactionStatus::TRANS_SETREG) = 1;
 	    break;
 	  case gcp::util::NewNetMsg::NET_SCAN_DONE_MSG:
 	    if(netmsg->scan_done.seq == 
 	       trans->seq(TransactionStatus::TRANS_SCAN)) 
-	      trans->done(TransactionStatus::TRANS_SCAN) |= antenna;
+	      trans->done(TransactionStatus::TRANS_SCAN) = 1;
 	    break;
 	  case gcp::util::NewNetMsg::NET_SCRIPT_DONE_MSG:
 	    if(netmsg->scriptDone.seq == 
 	       trans->seq(TransactionStatus::TRANS_SCRIPT)) 
-	      trans->done(TransactionStatus::TRANS_SCRIPT) |= antenna;
+	      trans->done(TransactionStatus::TRANS_SCRIPT) = 1;
 	    break;
 	  default:
 	    processSpecificSchedulerMessage(msg.body.rtcnetmsg.id, 

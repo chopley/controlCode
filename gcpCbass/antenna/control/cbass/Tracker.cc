@@ -1057,10 +1057,6 @@ void Tracker::haltTelescope(TrackerMsg* msg)
 
   scan_.setupForHalt();
 
-  // Send a scan done message
-
-  //  parent_->sendScanDoneMsg(scan_.lastReq());
-
   DBPRINT(true, Debug::DEBUG4, "Exiting HALT command");
 }
 
@@ -1154,7 +1150,7 @@ void Tracker::extendScan(TrackerMsg* msg)
 		     msg->body.scan.ibody, msg->body.scan.iend, 
 		     msg->body.scan.nreps,
 		     msg->body.scan.seq,
-		     10, // MS per evaluation of the scan offsets
+		     1000, // MS per evaluation of the scan offsets
 		     msg->body.scan.msPerSample,
 		     msg->body.scan.add);
 
@@ -2078,8 +2074,9 @@ void Tracker::finalizePointing(double pmra, double pmdec,
 
   // If the scan just finished on this call, report its termination
 
-  if(scan_.justFinished())
+  if(scan_.justFinished()){
     parent_->sendScanDoneMsg(scan_.lastReq());
+  }
 }
 
 void Tracker::finalizePointing(double pmra, double pmdec, 
@@ -2171,8 +2168,9 @@ void Tracker::finalizePointing(double pmra, double pmdec,
 
   // If the scan just finished on this call, report its termination
 
-  if(scan_.justFinished())
+  if(scan_.justFinished()){
     parent_->sendScanDoneMsg(scan_.lastReq());
+  }
 }
 
 /**.......................................................................

@@ -37,7 +37,7 @@ Roach1=cbass.roach()
 Roach2=cbass.roach()
 ND=cbass.roach()
 nIntegrations=781250 #number roach integrations in a sample- 78125 ~10ms integrations
-sleepTime=(nIntegrations/78125)*0.01 # was 0.03
+sleepTime=(nIntegrations/78125)*0.005 # was 0.03
 desiredResponse = 5e12
 nSamples=4; ##number of samples-i.e.  I accumulate nSamples of nIntegrations
 pylab.ion()
@@ -186,7 +186,7 @@ pylab.plot(roach2Polon[1]-roach2Poloff[1])
 
 
 pylab.draw()
-
+#pylab.show()
 
 ##rotate the vectors using the roach coefficients
 j=0
@@ -202,7 +202,7 @@ window= numpy.ones(int(window_size))/float(window_size) # moving average window
 [Coffs1startR1,Coffs2startR1,Coffs3startR1,Coffs4startR1] = Roach1.readCoefficients()
 [Coffs1startR2,Coffs2startR2,Coffs3startR2,Coffs4startR2] = Roach2.readCoefficients()
 totalAngle=0
-angleSize=0.2
+angleSize=0.3
 i=0
 while totalAngle<6.3:
     j=angleSize
@@ -279,24 +279,10 @@ for i in range(64):
     pylab.plot(alpha2LL[i,0:thing])
     pylab.ylim([-1,1])
 
-pylab.figure()
-pylab.title('Alpha at zero angle offset')
-pylab.subplot(4,1,1)
-pylab.plot(alpha1RR[:,0])
-
-pylab.subplot(4,1,2)
-pylab.plot(alpha1LL[:,0])
-
-pylab.subplot(4,1,3)
-pylab.plot(alpha2RR[:,0])
-
-pylab.subplot(4,1,4)
-pylab.plot(alpha2LL[:,0])
-
-
-#pylab.ylim([-2e11,8e11])
-
 pylab.draw()
+
+
+# Now find the phase offset that gives the best alpha
 
 i=0
 location1LL=numpy.zeros(64)
@@ -339,41 +325,151 @@ for i in range(64):
     bestalpha2LL[i] = alpha2LL[i,loc];
   
   
-
+# and rotate the phase of Coeffs 2 and 4 to the best angle
 
 Coffs2R1=Coffs2startR1*numpy.exp(1j*thetaNew1RR)
 Coffs4R1=Coffs4startR1*numpy.exp(1j*thetaNew1LL)
 Coffs2R2=Coffs2startR2*numpy.exp(1j*thetaNew2RR)
 Coffs4R2=Coffs4startR2*numpy.exp(1j*thetaNew2LL)
 
-#Plot out the best alphas so far
+#Plot out the best alphas so far and the phase offset at which we get them
+
+
 
 pylab.figure()
 pylab.subplot(4,1,1)
+pylab.title('Pumba RR')
 pylab.plot(bestalpha1RR)
-pylab.plot(thetaNew1RR)
+pylab.ylim([-1,2])
+#pylab.subplot(8,1,2)
+#pylab.plot(thetaNew1RR)
 
 pylab.subplot(4,1,2)
+pylab.title('Pumba LL')
 pylab.plot(bestalpha1LL)
-pylab.plot(thetaNew1LL)
+pylab.ylim([-1,2])
+#pylab.subplot(8,1,4)
+#pylab.plot(thetaNew1LL)
 
 pylab.subplot(4,1,3)
+pylab.title('Timon RR')
 pylab.plot(bestalpha2RR)
-pylab.plot(thetaNew2RR)
+pylab.ylim([-1,2])
+#pylab.subplot(8,1,6)
+#pylab.plot(thetaNew2RR)
 
 pylab.subplot(4,1,4)
+pylab.title('Timon LL')
 pylab.plot(bestalpha2LL)
-pylab.plot(thetaNew2LL)
+pylab.ylim([-1,2])
+#pylab.subplot(8,1,8)
+#pylab.plot(thetaNew2LL)
+
+pylab.suptitle('Best alphas so far')
+
+#Calculate the gain correction at the best alpha. If the best alpha was >1 then
+# the gain correction should be 1.
+
+gain1RR = (1 + numpy.sqrt(1 - bestalpha1RR**2))/bestalpha1RR
+gain1LL = (1 + numpy.sqrt(1 - bestalpha1LL**2))/bestalpha1LL
+gain2RR = (1 + numpy.sqrt(1 - bestalpha2RR**2))/bestalpha2RR
+gain2LL = (1 + numpy.sqrt(1 - bestalpha2LL**2))/bestalpha2LL
+
+gain1RR[bestalpha1RR>1] = 1
+gain1LL[bestalpha1LL>1] = 1
+gain2RR[bestalpha2RR>1] = 1
+gain2LL[bestalpha2LL>1] = 1
+
+#Plot these out so we can check them...
+
+pylab.figure()
+pylab.suptitle('Gain corrections')
+pylab.subplot(4,1,1)
+pylab.plot(gain1RR)
+pylab.subplot(4,1,2)
+pylab.plot(gain1LL)
+pylab.subplot(4,1,3)
+pylab.plot(gain2RR)
+pylab.subplot(4,1,4)
+pylab.plot(gain2LL)
+
+#Multiply the coefficients by the gain corrections. Coffs 2 is the sky-load 
+# channel in RR and Coffs4 is sky-load in LL.
+
+Coffs2R1 = Coffs2R1/gain1RR
+Coffs4R1 = Coffs4R1/gain1LL
+Coffs2R2 = Coffs2R2*gain2RR
+Coffs4R2 = Coffs4R2/gain2LL
 
 
-
-
+# Write out the new coefficients. Only coeffs 2 and 4 have changed.
 
 Roach1.writeCoefficients(Coffs1startR1,Coffs2R1,Coffs3startR1,Coffs4R1)
 Roach2.writeCoefficients(Coffs1startR2,Coffs2R2,Coffs3startR2,Coffs4R2)
 
+# Read them back just to be sure
 
 [Coffs1R1,Coffs2R1,Coffs3R1,Coffs4R1] = Roach1.readCoefficients()
+
+# Let's check that worked - do the alphas again with our new coefficients
+
+# First get some more data
+
+time.sleep(sleepTime)
+ND.diodeOn()
+time.sleep(sleepTime)
+[roach1Polon,roach2Polon]=updateRoachReadout(nSamples,sleepTime,Roach1,Roach2)
+ND.diodeOff()
+time.sleep(sleepTime)
+[roach1Poloff,roach2Poloff]=updateRoachReadout(nSamples,sleepTime,Roach1,Roach2)
+
+#Now calculate alphas for each of RR,LL on both roaches
+# Re-allocate the alpha variables first
+
+alpha1RR = numpy.zeros(64)
+alpha1LL = numpy.zeros(64)
+alpha2RR = numpy.zeros(64)
+alpha2LL = numpy.zeros(64)
+
+delta1 = roach1Polon[0] - roach1Poloff[0]
+delta2 = roach1Polon[1] - roach1Poloff[1] 
+alpha1RR = (1 - (delta2/delta1))/(1 + (delta2/delta1))
+
+delta1 = roach1Polon[2] - roach1Poloff[2]
+delta2 = roach1Polon[3] - roach1Poloff[3] 
+alpha1LL=(1 - (delta2/delta1))/(1 + (delta2/delta1))
+
+delta1 = roach2Polon[0] - roach2Poloff[0]
+delta2 = roach2Polon[1] - roach2Poloff[1] 
+alpha2RR=(1 - (delta2/delta1))/(1 + (delta2/delta1))
+
+delta1 = roach2Polon[2] - roach2Poloff[2]
+delta2 = roach2Polon[3] - roach2Poloff[3] 
+alpha2LL=(1 - (delta2/delta1))/(1 + (delta2/delta1))
+
+# And let's see what they look like
+
+pylab.figure()
+pylab.suptitle('Alphas after calibration')
+pylab.subplot(4,1,1)
+pylab.plot(alpha1RR)
+pylab.ylim([-1,2])
+
+pylab.subplot(4,1,2)
+pylab.plot(alpha1LL)
+pylab.ylim([-1,2])
+
+pylab.subplot(4,1,3)
+pylab.plot(alpha2RR)
+pylab.ylim([-1,2])
+
+pylab.subplot(4,1,4)
+pylab.plot(alpha2LL)
+pylab.ylim([-1,2])
+
+# Zero out bad channels - this shouldn't be necessary if the calibration is good
+
+
 Coffs1R1[0:7]=0
 Coffs2R1[0:7]=0
 Coffs3R1[0:7]=0
