@@ -4,7 +4,7 @@
 #
 #------------------------------------------------------
 #######################################################
-
+NORMAL testpt $CBASS_DIR/control/scan/testpt.scan
 
 #-----------------------------
 # az scan files.  in nomenclature:  az - speed - range - full/half - repeats - scan
@@ -124,7 +124,7 @@ NORMAL raster_elscan_jl $CBASS_DIR/control/scan/raster_elscan_jl.scan
 NORMAL source_raster_8x4x0.1_slow_jl $CBASS_DIR/control/scan/source_raster_8x4x0.1_slow_jl.scan
 NORMAL source_raster_5x4x0.05_1ds $CBASS_DIR/control/scan/source_raster_5x4x0.05_1ds_hcc.scan
 NORMAL source_raster_8x1x0.2_slow $CBASS_DIR/control/scan/source_raster_8x1x0.2_slow.scan
-
+NORMAL source_raster_15x10x0.1d $CBASS_DIR/control/scan/raster_10d_10d_1ds_0.1del.scan
 
 #-----------------------------
 # ncp survey scan files (MAS)

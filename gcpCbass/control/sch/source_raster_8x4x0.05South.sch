@@ -48,7 +48,7 @@ while($elapsed<$time) {
       # Do scan
       mark add, f9	
       scan source_raster_8x4x0.05South, nreps=1 
-      until ( $acquired(scan) | ($elapsed > 21m) )
+      until ( $acquired(scan) | ($elapsed > 16m) )
       mark remove, f9
 
       zeroScanOffsets   	# zero offsets

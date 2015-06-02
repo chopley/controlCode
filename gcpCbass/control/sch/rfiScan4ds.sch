@@ -9,7 +9,7 @@ halt
 noise_on(5s)
 # these first steps are to ensure that the telescope is at the right
 # place in the wrap
-encoder_limits -270,130,5,85,0,0
+encoder_limits -270,130,6,85,0,0
 slew az=0, el=20
 until $acquired(source)|$elapsed>60s
 slew az=-100, el=20
