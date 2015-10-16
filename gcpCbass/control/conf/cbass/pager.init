@@ -15,7 +15,7 @@ pagerEmailAddress clear
 #-----------------------------------------------------------------------
 # Set email addresses to be notified when the pager is activated
 #-----------------------------------------------------------------------
-
+pagerEmailAddress add, email="charlescopley@gmail.com"
 #pagerEmailAddress add, email="cbass@astro.caltech.edu"
 #pagerEmailAddress add, email="rgk@ovro.caltech.edu"
 #pagerEmailAddress add, email="rgk@isp.com"
@@ -60,7 +60,8 @@ pager clear
 ## Page if data aren't received for any antenna
 ##-----------------------------------------------------------------------
 #
-#addPagerRegister antenna0.frame.received, 2,      2, nFrame=200#, comment="No data are being received from an antenna. \n"
+addPagerRegister antenna0.frame.received, 2,      2, nFrame=200#, comment="No data are being received from an antenna. \n"
+addPagerRegister antenna0.frame.record, 0,      0, nFrame=10,outOfRange=false#, comment="Antenna control process is down. \n"
 #
 ##-----------------------------------------------------------------------
 ## Page of computer box temps being too high
@@ -77,6 +78,7 @@ pager clear
 ##---------------------------------------------------------------------
 ## cryostat cold
 ##-----------------------------------------------------------------------
+addPagerRegister array.weather.windSpeed[0], 0,     40, nFrame=300, outOfRange=true#, comment="Wind Speed is picking up on cbass.\n"
 #addPagerRegister antenna0.thermal.lsTemperatureSensors[0], 0,     40, nFrame=100, outOfRange=true#, comment="Cryostat is warming up!  C#heck on compressor.\n"
 #addPagerRegister antenna0.thermal.lsTemperatureSensors[1], 0,     40, nFrame=100, outOfRange=true#, comment="Cryostat is warming up!  C#heck on compressor.\n"
 #addPagerRegister antenna0.thermal.lsTemperatureSensors[2], 0,     40, nFrame=100, outOfRange=true#, comment="Cryostat is warming up!  C#heck on compressor.\n"
@@ -99,6 +101,6 @@ pager clear
 #
 #
 #
-#pager enable
+pager enable
 #
 #

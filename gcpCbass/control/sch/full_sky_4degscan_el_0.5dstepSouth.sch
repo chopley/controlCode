@@ -16,10 +16,10 @@ slew az=-250, el=20
 until $acquired(source)|$elapsed>60s
 
 do PointingOffset elVal = 5.5, 83.1, 0.5 {
-    engageServo on
+   engageServo on
    slew az=-250, el=$elVal
   # slew el=$elVal
-   until $acquired(source)|$elapsed>60s
+   until $acquired(source)|$elapsed>5s
    
   #noise_on(5s)
 

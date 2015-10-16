@@ -15,7 +15,7 @@ encoder_cals 1000000000, 1000000000, 0  # Az,el counts per turn
 # az positive limits:  soft 494.2, hard 497ish
 # el negative limits:  soft 13.4 , hard 10.9
 # el positive limits:  soft 84.5 , hard 86
-encoder_limits  -270, 160, 15, 84, 0, 0  # in degrees  
+encoder_limits  -280, 130, 15, 84, 0, 0  # in degrees  
 
 # Pointing models derived by MOI and SJCM from optical pointing data
 #  of the night of 15-may-2013.  This was only on 2 sources, and fit
@@ -86,15 +86,29 @@ add_signals {done} #define signals for optical pointing
 #collimate_fixed optical, 0.8269, 0.0000, ptel=0+1+2
 #flexure optical, -0.1791, 0.0181, ptel=0+1+2
 
+#These are dummy variables put in by CJC for blank optical pointing observations
+#encoder_zeros  8.6725, 2.0227, 0
+#tilts  0, 0, 0
+#collimate_fixed optical, 0.0, 0.0000, ptel=0+1+2
+#flexure optical, 0, 0.00, ptel=0+1+2
 
 # Parameters from Global run 25 Feb:
-encoder_zeros  8.6725, 2.0227, 0
-tilts  -0.0180, 0.0057, -0.0275
-collimate_fixed optical, 0.8097, 0.0000, ptel=0+1+2
-flexure optical, -0.1655, 0.0259, ptel=0+1+2
+#encoder_zeros  8.6725, 2.0227, 0
+#tilts  -0.0180, 0.0057, -0.0275
+#collimate_fixed optical, 0.8097, 0.0000, ptel=0+1+2
+#flexure optical, -0.1655, 0.0259, ptel=0+1+2
 
+# Parameters from Global run 06 July:
+#encoder_zeros  8.6381, 2.1157, 0
+#tilts  -0.0130, 0.0158, 0.0345
+#collimate_fixed optical, 0.8731, 0.0000, ptel=0+1+2
+#flexure optical, -0.0242, 0.0827, ptel=0+1+2
 
-
+# Charles adjusted the encoder zeroesParameters from Global run 06 July:
+encoder_zeros  0.0000, 0.000, 0
+tilts  -0.0130, 0.0158, 0.0345
+collimate_fixed optical, 0.8731, 0.0000, ptel=0+1+2
+flexure optical, -0.0242, 0.0827, ptel=0+1+2
 
 #-------------------------------------------------------------
 # Radio Pointing -- THE FOLLOWING VALUES ARE BOGUS!!!  

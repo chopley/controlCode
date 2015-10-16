@@ -42,6 +42,7 @@ command observeScanList1()
 
       # Fire the noise diode.
       noise_on_general 5s,8s
+      engageServo on
        if ($start) {
           # do the scan with 10s dead time
           mark add, f0
@@ -102,6 +103,7 @@ command observeScanList2()
 
       # Fire the noise diode.
       noise_on_general 5s,8s
+      engageServo on
        if ($start) {
           # do the scan with 10s dead time
           mark add, f0
@@ -161,6 +163,7 @@ command observeScanList3()
 
       # Fire the noise diode.
       noise_on_general 5s,8s
+      engageServo on
        if ($start) {
           # do the scan with 10s dead time
           mark add, f0
@@ -222,6 +225,7 @@ command observeScanList4()
 
       # Fire the noise diode.
       noise_on_general 5s,8s
+      engageServo on
        if ($start) {
           # do the scan with 10s dead time
           mark add, f0
@@ -283,6 +287,7 @@ command observeScanList5()
 
       # Fire the noise diode.
       noise_on_general 5s,8s
+      engageServo on
        if ($start) {
           # do the scan with 10s dead time
           mark add, f0
