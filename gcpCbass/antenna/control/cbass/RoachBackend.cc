@@ -469,8 +469,8 @@ int RoachBackend::readTCPPort(RoachBackendMsg& command)
       // find out how many bytes are available to read.
       bytesWaiting      = port.getNbyte(fd_);
       if( (bytesReceived+bytesWaiting) > command_.numBytesExpected_) {
-	ReportSimpleError("Roach sending back too many bytes -- disconnecting");
-	ThrowError("RoachBackend::Roach sending back too many bytes -- disconnecting");
+	ReportSimpleError("Roach sending back too many bytes -- disconnecting "<<bytesReceived+bytesWaiting<<" Expecting "<<command_.numBytesExpected_);
+	ThrowError("RoachBackend::Roach sending back too many bytes -- disconnecting"<<bytesReceived + bytesWaiting<<" Expecting "<<command_.numBytesExpected_);
 	stopLoop=1;
 	return 0; //return a 0 for this one- this will then count up for a bit before disconnecting
       }

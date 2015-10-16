@@ -232,7 +232,7 @@ ServoCommandSa ServoCommsSa::issueCommand(ServoCommandSa::Request req, std::vect
 	numTimeOut=0;
 	//	COUT("RESPONSE IS VALID:  " << command.responseReceived_);
       } else {
-	numTimeOut++;
+	numTimeOut=3;
 	COUT("RESPONSE IS inVALID:  " << command.responseReceived_);
       };
       break;
@@ -248,8 +248,8 @@ ServoCommandSa ServoCommsSa::issueCommand(ServoCommandSa::Request req, std::vect
 		COUT("Not communicating in ServocommsSa.cc");
       break;
     };
-    if(numTimeOut>5){
-      COUT("timed out more than five times");
+    if(numTimeOut>2){
+      COUT("timed out more than two times");
       ThrowError(" Port timeout on response CJC");
       numTimeOut=0;
       disconnect();		
