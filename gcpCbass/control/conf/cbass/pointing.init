@@ -15,7 +15,9 @@ encoder_cals 1000000000, 1000000000, 0  # Az,el counts per turn
 # az positive limits:  soft 494.2, hard 497ish
 # el negative limits:  soft 13.4 , hard 10.9
 # el positive limits:  soft 84.5 , hard 86
-encoder_limits  -280, 130, 15, 84, 0, 0  # in degrees  
+encoder_limits  -280, 145, 15, 84, 0, 0  # in degrees need to look at these wrt to soft limit values set in servoCode/controller/telescope_constants.h . Those values control the maximum angle that can be given to the servocontrolle#
+#MAX_AX_VAL_FLOAT, MIN_AZ_VAL_FLOAT, MAX_ALT_VAL_FLOAT, and MIN_AZ_VAL_FLOAT
+#if a value that is greater than these values is given to the servo, it will eiteher (in the case of azimuth add or subtract 260 to get it into the correct range, or (in the case of elevation prevent the command from being issued), In gcpCbass however this the unwrapping of the azimuth values is not done ie.e slew az=-300!=slew az=60. So we basically move that feature into the servo for now
 
 # Pointing models derived by MOI and SJCM from optical pointing data
 #  of the night of 15-may-2013.  This was only on 2 sources, and fit
@@ -105,17 +107,29 @@ add_signals {done} #define signals for optical pointing
 #flexure optical, -0.0242, 0.0827, ptel=0+1+2
 
 # Charles adjusted the encoder zeroesParameters from Global run 06 July:
-encoder_zeros  0.0000, 0.000, 0
-tilts  -0.0130, 0.0158, 0.0345
-collimate_fixed optical, 0.8731, 0.0000, ptel=0+1+2
-flexure optical, -0.0242, 0.0827, ptel=0+1+2
+#encoder_zeros  0.0000, 0.000, 0
+#tilts  -0.0130, 0.0158, 0.0345
+#collimate_fixed optical, 0.8731, 0.0000, ptel=0+1+2
+#flexure optical, -0.0242, 0.0827, ptel=0+1+2
+
+# Pointing Parameters updated by HMH 
+# Parameters from Gross run 12 Oct 2015:
+encoder_zeros  0.9656, 0.6241, 0
+tilts  0.0314, 0.0567, -0.3410
+collimate_fixed optical, 0.4290, 0.0000, ptel=0+1+2
+flexure optical, 0.1367, 0.1854, ptel=0+1+2
+
+
+
 
 #-------------------------------------------------------------
 # Radio Pointing -- THE FOLLOWING VALUES ARE BOGUS!!!  
 #             NO RADIO DATA HAS BEEN TAKEN.
 #-------------------------------------------------------------
 #collimate_fixed radio, -0.7474, 0.0000
-collimate_fixed radio, 0.124, 1.8
+#collimate_fixed radio, 0.124, 1.8
+#collimate_fixed radio, 0.5, 1.0 ##CJC 29/10/2015
+collimate_fixed radio, 0.5, 1.5 ##CJC 26/11/2015
 flexure radio, -0.0293, -0.1163
 
 # startup model is radio

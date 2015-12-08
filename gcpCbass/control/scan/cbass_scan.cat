@@ -6,6 +6,14 @@
 #######################################################
 NORMAL testpt $CBASS_DIR/control/scan/testpt.scan
 
+
+### Bicep 2 scans
+NORMAL daz-25d-1ds $CBASS_DIR/control/scan/daz-25d-1ds.scan
+NORMAL daz-40d-1ds $CBASS_DIR/control/scan/daz-40d-1ds.scan
+
+###
+
+
 #-----------------------------
 # az scan files.  in nomenclature:  az - speed - range - full/half - repeats - scan
 #-----------------------------

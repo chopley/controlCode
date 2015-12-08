@@ -5,6 +5,7 @@
 import ~cbassuser/cbass/gcpCbass/control/sch/schedlibSouth.sch
 
 import ~cbassuser/cbass/gcpCbass/control/sch/scanlibSouth.sch
+encoder_limits  -280, 145, 15, 84, 0, 0  
 
 ## define the list of scans
 #group Scanlist {
@@ -81,8 +82,7 @@ import ~cbassuser/cbass/gcpCbass/control/sch/scanlibSouth.sch
 init_obs("beginning of cbass survey schedule")
 
 
-setCryoSkyTemp 1,12
-
+setCryoSkyTemp 1,13
 # slew to the start location.
 slew az=0,el=30
 until $acquired(source)|$elapsed>3m
@@ -92,7 +92,7 @@ until $acquired(source)|$elapsed>1m
 track scpfixed
 until $acquired(source)|$elapsed>1m
 offset el=$elOffset
-slew az=-250
+slew az=-240
 until $acquired(source)|$elapsed>1m
 until $elapsed>10s
 

@@ -35,6 +35,12 @@ FIXED ctalk35b5  178.0 79.5
 FIXED ctalk35    116.5 75.5
 
 FIXED crosstalk01 145.0 75.0
+# added these fixed sources for bicep2 scans- 2/12/2015
+FIXED   az-142-el-30   142.5   30
+FIXED	  az-180-el-60   180     60
+FIXED	  az-217-el-30   217.5   30
+
+J2000 Bicep2    0 -45 +0:0:00.0000 -0:0:00.019 # Centre of Bicep 2 region I think?
 
 #----------------------------------------------------------------------------
 # Bright star catalog entries with visual magnitudes <= 5.
