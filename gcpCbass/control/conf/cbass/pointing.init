@@ -114,13 +114,25 @@ add_signals {done} #define signals for optical pointing
 
 # Pointing Parameters updated by HMH 
 # Parameters from Gross run 12 Oct 2015:
-encoder_zeros  0.9656, 0.6241, 0
-tilts  0.0314, 0.0567, -0.3410
-collimate_fixed optical, 0.4290, 0.0000, ptel=0+1+2
-flexure optical, 0.1367, 0.1854, ptel=0+1+2
+#encoder_zeros  0.9656, 0.6241, 0
+#tilts  0.0314, 0.0567, -0.3410
+#collimate_fixed optical, 0.4290, 0.0000, ptel=0+1+2
+#flexure optical, 0.1367, 0.1854, ptel=0+1+2
+
+# Pointing Parameters updated by HMH
+# Parameters from refined run 16 Dec 2015:
+#encoder_zeros  0.6614, 1.3196, 0
+#tilts  -0.0111, 0.0131, 0.0364
+#collimate_fixed optical, 0.4328, 0.0000, ptel=0+1+2
+#flexure optical, -0.0188, 0.1021, ptel=0+1+2
 
 
-
+# Pointing Parameters updated by HMH
+# Parameters from global run 18 Dec 2015:
+encoder_zeros  0.7136, 1.2389, 0
+tilts  -0.0180, 0.0023, -0.0180
+collimate_fixed optical, 0.3653, 0.0000, ptel=0+1+2
+flexure optical, -0.0803, 0.0924, ptel=0+1+2
 
 #-------------------------------------------------------------
 # Radio Pointing -- THE FOLLOWING VALUES ARE BOGUS!!!  
@@ -129,7 +141,8 @@ flexure optical, 0.1367, 0.1854, ptel=0+1+2
 #collimate_fixed radio, -0.7474, 0.0000
 #collimate_fixed radio, 0.124, 1.8
 #collimate_fixed radio, 0.5, 1.0 ##CJC 29/10/2015
-collimate_fixed radio, 0.5, 1.5 ##CJC 26/11/2015
+#collimate_fixed radio, 0.5, 1.5 ##CJC 26/11/2015
+collimate_fixed radio, 0.5, 0.5 ##CJC 26/02/2016
 flexure radio, -0.0293, -0.1163
 
 # startup model is radio

@@ -38,7 +38,7 @@ while($Temp<=$endTemp){
 	until $elapsed>1m
 	Temp=$Temp+$dTemp
 }
-setCryoSkyTemp 1,12
+setCryoSkyTemp 1,13
 slew az=-90, el=83
 encoder_limits -270,130,10,84,0,0
 terminate("Ending schedule: coldLoadStep")

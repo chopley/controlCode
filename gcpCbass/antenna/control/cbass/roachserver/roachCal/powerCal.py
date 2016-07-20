@@ -4,6 +4,9 @@ Created on Sat Sep 21 04:51:46 2013
 
 @author: cbassuser
 """
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot
 
 import copy,pylab,time,numpy,cbass,sys,os,struct# first import the interaction module
 

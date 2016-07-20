@@ -7,15 +7,19 @@ halt
 noise_on(5s)
 # these first steps are to ensure that the telescope is at the right
 # place in the wrap
-encoder_limits -270,130,5,85,0,0
+encoder_limits -270,130,3,85,0,0
 slew az=0, el=20
 until $acquired(source)|$elapsed>60s
 slew az=-100, el=20
 until $acquired(source)|$elapsed>60s
 slew az=-250, el=20
 until $acquired(source)|$elapsed>60s
+slew az=-250, el=10
+until $acquired(source)|$elapsed>60s
+slew az=-250, el=5
+until $acquired(source)|$elapsed>60s
 
-do PointingOffset elVal = 5.5, 83.1, 0.5 {
+do PointingOffset elVal = 3, 83.1, 0.5 {
    engageServo on
    slew az=-250, el=$elVal
   # slew el=$elVal

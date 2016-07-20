@@ -10,7 +10,7 @@ slew az=-90, el=85
 until $acquired(source)|$elapsed>90s
 while($elapsed<$time){
 
-setCryoSkyTemp 1,12
+setCryoSkyTemp 1,13
 until $elapsed>10m
 generalRoachCommand PHASESHIFT, 0 ,1
 until $elapsed>10s

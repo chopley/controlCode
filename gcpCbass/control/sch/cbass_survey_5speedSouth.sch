@@ -81,7 +81,6 @@ encoder_limits  -280, 145, 15, 84, 0, 0
 # initialize
 init_obs("beginning of cbass survey schedule")
 
-
 setCryoSkyTemp 1,13
 # slew to the start location.
 slew az=0,el=30

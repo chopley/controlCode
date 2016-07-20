@@ -4,6 +4,9 @@ Created on Sat Sep 21 04:55:33 2013
 
 @author: cbassuser
 """
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot
 
 
 def updateRoachReadout(nSamples,sleepTime,Roach1,Roach2):

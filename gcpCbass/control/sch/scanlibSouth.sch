@@ -22,6 +22,11 @@ command observeScanList1()
   slew az=-250
   until $acquired(source)|$elapsed>60s
 
+#Angela Added 6 June 2016 to be sure to be on source
+  track scpfixed
+  until $acquired(source)|$elapsed>60s
+#
+ 
   # Use the noise source.
   noise_on_general 5s,8s
 
@@ -36,6 +41,13 @@ command observeScanList1()
     zeroScanOffsets
   slew az=-250
   until $acquired(source)|$elapsed>60s
+
+#Angela Added 6 June 2016 to be sure to be on source
+  track scpfixed
+  until $acquired(source)|$elapsed>60s
+#
+
+
 
     Boolean start = true
     do Count i=1,5,1{
@@ -82,6 +94,11 @@ command observeScanList2()
   zeroScanOffsets
   slew az=-250
   until $acquired(source)|$elapsed>60s
+
+#Angela Added 6 June 2016 to be sure to be on source
+  track scpfixed
+  until $acquired(source)|$elapsed>60s
+#
   
 
   # Use the noise source.
@@ -97,6 +114,11 @@ command observeScanList2()
     zeroScanOffsets
   slew az=-250
   until $acquired(source)|$elapsed>60s
+
+#Angela Added 6 June 2016 to be sure to be on source
+  track scpfixed
+  until $acquired(source)|$elapsed>60s
+#
 
     Boolean start = true
     do Count i=1,5,1{
@@ -144,6 +166,11 @@ command observeScanList3()
   slew az=-250
   until $acquired(source)|$elapsed>60s
 
+#Angela Added 6 June 2016 to be sure to be on source
+  track scpfixed
+  until $acquired(source)|$elapsed>60s
+#
+
   # Use the noise source.
   noise_on_general 5s,8s
 
@@ -157,6 +184,11 @@ command observeScanList3()
     zeroScanOffsets
   slew az=-250
   until $acquired(source)|$elapsed>60s
+
+#Angela Added 6 June 2016 to be sure to be on source
+  track scpfixed
+  until $acquired(source)|$elapsed>60s
+#
 
     Boolean start = true
     do Count i=1,5,1{
@@ -205,6 +237,12 @@ command observeScanList4()
   slew az=-250
   until $acquired(source)|$elapsed>60s
 
+#Angela Added 6 June 2016 to be sure to be on source
+  track scpfixed
+  until $acquired(source)|$elapsed>60s
+#
+
+
   # Use the noise source.
   noise_on_general 5s,8s
 
@@ -219,6 +257,12 @@ command observeScanList4()
     zeroScanOffsets
   slew az=-250
   until $acquired(source)|$elapsed>60s
+
+#Angela Added 6 June 2016 to be sure to be on source
+  track scpfixed
+  until $acquired(source)|$elapsed>60s
+#
+
 
     Boolean start = true
     do Count i=1,5,1{
@@ -267,6 +311,11 @@ command observeScanList5()
   slew az=-250
   until $acquired(source)|$elapsed>60s
 
+#Angela Added 6 June 2016 to be sure to be on source
+  track scpfixed
+  until $acquired(source)|$elapsed>60s
+#
+
   # Use the noise source.
   noise_on_general 5s,8s
 
@@ -281,6 +330,11 @@ command observeScanList5()
     zeroScanOffsets
   slew az=-250
   until $acquired(source)|$elapsed>60s
+
+#Angela Added 6 June 2016 to be sure to be on source
+  track scpfixed
+  until $acquired(source)|$elapsed>60s
+#
 
     Boolean start = true
     do Count i=1,5,1{

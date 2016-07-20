@@ -112,7 +112,8 @@ command init_obs(String logline) {
   sky_offset x=0, y=0
   radec_offset ra=0, dec=0
   zeroScanOffsets
-
+  pager enable
+  engageServo on
   # recalibrate the encoders
 #  servoInitializeAntenna
 }

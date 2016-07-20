@@ -5,15 +5,26 @@ FIXED neutral   90 15 0
 FIXED trans     161.02 0.08
 FIXED scanStart -18 45
 FIXED ncpfixed  0 37:14:02
-FIXED scpfixed  -180 25:53:23.105
+#FIXED scpfixed  -180 25:53:23.105 HartRAO
+FIXED scpfixed  -180 30:57:59.976
 FIXED colltower  27.85 10.2
 FIXED trigpoint   16.0 6.5
 FIXED trigpoint2  16.3 6.1
 #FIXED trigpoint  17 11:30:00
 #FIXED trigpointOpp  -163 11.5
-FIXED SES5 315 50
 
- 
+#NominalSatellite Positions
+FIXED SES5 315 50
+FIXED SES5-2 325 48.5
+FIXED SES5-3 329.7 49.5
+FIXED ASTRA4E 12.3 53.2
+FIXED INSAT3D 73.5 17.1
+FIXED GSAT-10 74.1 16.2
+FIXED XM2     294.1 26.5
+FIXED SES6  285.0 14.9
+FIXED ASTRA1E 17.5 52.5
+FIXED INSAT3C 68.1 23.9
+
 FIXED roofant0  155   10:48
 FIXED roofant2  152   10:48
 FIXED roofant3  144.5 10:48
@@ -41,6 +52,36 @@ FIXED	  az-180-el-60   180     60
 FIXED	  az-217-el-30   217.5   30
 
 J2000 Bicep2    0 -45 +0:0:00.0000 -0:0:00.019 # Centre of Bicep 2 region I think?
+
+
+##Sources from the PMN catalog for southern sources
+J2000 J1115-6115 11:15:5.0 -61:15:40 #94122
+J2000 J1024-5746 10:24:16.0 -57:46:28 #89207
+J2000 J1111-6118 11:11:55.0 -61:18:52 #86770
+J2000 J1622-5005 16:22:12.0 -50:5:51 #77325
+J2000 J1325-4257 13:25:43.0 -42:57:59 #66077
+J2000 J0859-4730 8:9:5.3 -47:30:00 #100053
+J2000 J1820-1609 8:0:17.6 -16:9:2 #92133
+
+## Sources added from combined_vla_pmn.cat
+J2000 J1229+0203 2:9:5.6 2:3:0
+J2000 J1044-5938 0:4:49.5 -59:38:5
+J2000 J1325-4302 3:5:18.2 -43:2:2
+J2000 J1709-4135 7:9:34.3 -41:35:4
+J2000 J1720-3857 7:0:6.7 -38:57:2
+J2000 J1746-2848 7:6:11.9 -28:48:3
+J2000 J1544-5406 5:4:47.2 -54:6:4
+J2000 J1043-5935 10:43:32.0 -59:35:30
+J2000 J1312-6234 13:12:27.0 -62:34:45 
+J2000 J1553-5435 5:3:3.1 -54:35:1
+J2000 J1814-1755 8:4:15.1 -17:55:5
+J2000 J1746-2852 7:6:37.9 -28:52:1
+J2000 J1809-2019 8:9:25.3 -20:19:0
+
+
+
+
+
 
 #----------------------------------------------------------------------------
 # Bright star catalog entries with visual magnitudes <= 5.
